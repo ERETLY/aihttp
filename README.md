@@ -168,7 +168,7 @@ Only the two ahttp rows can click; the baselines score 0/20 on the task suite be
 
 ### Time
 
-Wall-clock numbers from one machine, relative at best.
+Wall-clock numbers from one machine, relative at best. Live and scan come from `benchmark/time-results.json` (`2026-11-01T05:58:12.040Z`).
 
 **Checkout.** Average per step over five local snapshots. The hosted readers cannot run it.
 
@@ -184,18 +184,22 @@ Wall-clock numbers from one machine, relative at best.
 
 | Method | Hacker News | Wikipedia | Lobsters | GitHub | MDN |
 |---|---:|---:|---:|---:|---:|
-| ahttp | 1,248 ms | 4,419 ms | 1,988 ms | 2,469 ms | 1,471 ms |
-| Jina Reader | 1,477 ms | 851 ms | 413 ms | 2,908 ms | 526 ms |
-| Firecrawl | 1,321 ms | 919 ms | 318 ms | 569 ms | 315 ms |
+| ahttp | 1,847 ms | 4,379 ms | 2,151 ms | 2,430 ms | 1,430 ms |
+| ahttp self | 1,456 ms | 1,499 ms | 1,595 ms | 2,413 ms | 855 ms |
+| Jina Reader | 1,179 ms | 1,506 ms | 748 ms | 756 ms | 427 ms |
+| Firecrawl | 1,320 ms | 1,576 ms | 1,169 ms | 1,589 ms | 468 ms |
 
-Single runs, not medians. ahttp also fetches linked stylesheets and builds action ids; the hosted readers return Markdown only. `ahttp self` has no live row because it runs on a page that is already open.
+Single runs, not medians. `ahttp` fetches the page and its linked stylesheets in Node and scans it. `ahttp self` loads the page in Chromium with the userscript injected and takes a snapshot. The hosted readers return Markdown only.
 
-**Scan.** One snapshot per pinned page, static backend and self file:
+**Scan.** One snapshot per pinned page. Raw HTML, the accessibility tree and `ahttp self` run in Chromium on the page served from localhost; Markdown and `ahttp` run in Node.
 
 | Method | Hacker News | Wikipedia | Lobsters | GitHub | MDN |
 |---|---:|---:|---:|---:|---:|
-| ahttp | 24 ms | 2,989 ms | 9 ms | 19 ms | 12 ms |
-| ahttp self | 24 ms | 199 ms | 19 ms | 34 ms | 17 ms |
+| Raw HTML | 26 ms | 212 ms | 20 ms | 38 ms | 14 ms |
+| Markdown | 274 ms | 869 ms | 398 ms | 205 ms | 252 ms |
+| Accessibility tree | 87 ms | 288 ms | 71 ms | 92 ms | 77 ms |
+| ahttp | 39 ms | 3,165 ms | 4 ms | 18 ms | 13 ms |
+| ahttp self | 25 ms | 194 ms | 25 ms | 34 ms | 19 ms |
 
 Hosted readers have no separate scan step; their time is in Live time.
 
@@ -211,12 +215,13 @@ Hosted readers have no separate scan step; their time is in Live time.
 Reproduce (needs Chromium):
 
 ```bash
-npm run bench          # benchmark/run.js
-npm run bench:self     # benchmark/self.js
+npm run bench          # tokens, checkout, tasks: benchmark/run.js
+npm run bench:self     # userscript in Chromium: benchmark/self.js
+npm run bench:time     # scan and live timings: benchmark/time.js
 npm run bench:render   # rewrite the block above
 ```
 
-`AHTTP_JINA=0` and `AHTTP_FIRECRAWL=0` skip the hosted readers, `AHTTP_LIVE=0` skips the live ahttp timing. Keys are read from `JINA_API_KEY` and `FIRECRAWL_API_KEY` and never written to disk. Firecrawl is skipped without a key.
+Keys are read from `JINA_API_KEY` and `FIRECRAWL_API_KEY` and never written to disk. `bench` calls Jina without a key (`AHTTP_JINA=0` skips it) and skips Firecrawl without one (`AHTTP_FIRECRAWL=0` skips it explicitly). `bench:time` times a hosted reader only when its key is set.
 
 ## MCP server
 
