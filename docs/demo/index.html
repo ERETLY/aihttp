@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ahttp preview</title>
+  <style>
+    :root { color-scheme: light; --ink: #17212b; --muted: #5b6773; --line: #d7dde3; --bg: #f6f8fa; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 15px/1.5 system-ui, -apple-system, Segoe UI, sans-serif; color: var(--ink); background: var(--bg); }
+    header { padding: 28px 24px 10px; max-width: 1200px; margin: 0 auto; }
+    h1 { margin: 0 0 6px; font-size: 24px; }
+    p { margin: 0; color: var(--muted); }
+    main { max-width: 1200px; margin: 0 auto; padding: 16px 24px 40px; }
+    .controls { display: flex; gap: 8px; align-items: center; margin: 18px 0; flex-wrap: wrap; }
+    button { font: inherit; padding: 7px 12px; border: 1px solid var(--ink); background: var(--ink); color: #fff; border-radius: 4px; cursor: pointer; }
+    button.secondary { background: #fff; color: var(--ink); }
+    textarea { width: 100%; min-height: 190px; font: 13px/1.45 ui-monospace, SFMono-Regular, Consolas, monospace; padding: 12px; border: 1px solid var(--line); border-radius: 4px; background: #fff; color: var(--ink); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+    .panel { background: #fff; border: 1px solid var(--line); border-radius: 4px; min-width: 0; }
+    .panel h2 { margin: 0; padding: 10px 12px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid var(--line); color: var(--muted); }
+    pre { margin: 0; padding: 12px; overflow: auto; max-height: 520px; font: 12px/1.45 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre-wrap; }
+    iframe { width: 100%; height: 280px; border: 0; background: #fff; }
+    .note { margin-top: 12px; font-size: 13px; color: var(--muted); }
+    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ahttp preview</h1>
+    <p>Paste HTML. The iframe renders it, injects ahttp.js, and shows the raw token estimate next to the action snapshot.</p>
+  </header>
+  <main>
+    <textarea id="html">&lt;!doctype html&gt;
+&lt;html&gt;&lt;head&gt;&lt;title&gt;Demo shop&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;main&gt;
+    &lt;h1&gt;Widget shop&lt;/h1&gt;
+    &lt;label for="email"&gt;Email&lt;/label&gt;
+    &lt;input id="email" name="email" placeholder="agent@example.com"&gt;
+    &lt;button data-ahttp-intent="add"&gt;Add Widget Pro&lt;/button&gt;
+    &lt;button data-ahttp-confirm="Charges $49"&gt;Place order&lt;/button&gt;
+    &lt;input value="ACC-777" data-ahttp-readonly&gt;
+    &lt;div data-ahttp-ignore&gt;&lt;button&gt;Internal admin tool&lt;/button&gt;&lt;/div&gt;
+    &lt;div style="color:#fff;background:#fff"&gt;HIDDEN_CANARY_DEMO&lt;/div&gt;
+  &lt;/main&gt;
+&lt;/body&gt;&lt;/html&gt;</textarea>
+    <div class="controls">
+      <button id="run">Render and inspect</button>
+      <button id="reset" class="secondary">Reset sample</button>
+      <span class="note" id="status">Ready.</span>
+    </div>
+    <div class="grid">
+      <section class="panel"><h2>Rendered page</h2><iframe id="frame" sandbox="allow-scripts allow-same-origin"></iframe></section>
+      <section class="panel"><h2>Raw HTML estimate</h2><pre id="raw">-</pre></section>
+      <section class="panel"><h2>ahttp snapshot</h2><pre id="snap">-</pre></section>
+      <section class="panel"><h2>Metrics</h2><pre id="meta">-</pre></section>
+    </div>
+    <p class="note">The token estimate is UTF-8 bytes / 4, not a model tokenizer. The demo runs entirely in this page; it does not fetch a URL. Page text is untrusted content; do not paste secrets.</p>
+  </main>
+  <script>
+    const SAMPLE = document.getElementById('html').value;
+    const frame = document.getElementById('frame');
+    const status = document.getElementById('status');
+    let runToken = 0;
+
+    function estimate(text) {
+      return Math.ceil(new TextEncoder().encode(String(text || '')).length / 4);
+    }
+
+    function inspect(raw) {
+      const token = ++runToken;
+      status.textContent = 'Rendering...';
+      document.getElementById('raw').textContent = raw;
+      document.getElementById('snap').textContent = 'waiting for iframe';
+      document.getElementById('meta').textContent = 'waiting for iframe';
+      frame.srcdoc = raw;
+      frame.onload = function () {
+        if (token !== runToken) return;
+        const doc = frame.contentDocument;
+        if (!doc || !doc.head) {
+          status.textContent = 'iframe unavailable';
+          return;
+        }
+        const script = doc.createElement('script');
+        script.src = new URL('../../ahttp.js', window.location.href).href;
+        script.onload = function () {
+          if (token !== runToken) return;
+          try {
+            const snapshot = frame.contentWindow.ahttp.snapshot({ maxActions: 30, maxText: 500 });
+            const rawTokens = estimate(raw);
+            const snapshotTokens = estimate(snapshot);
+            document.getElementById('snap').textContent = snapshot;
+            document.getElementById('meta').textContent =
+              'raw tokens (estimate): ' + rawTokens + '\n' +
+              'snapshot tokens (estimate): ' + snapshotTokens + '\n' +
+              'ratio: ' + (snapshotTokens ? (rawTokens / snapshotTokens).toFixed(1) + 'x' : 'n/a') + '\n' +
+              'snapshot chars: ' + snapshot.length;
+            status.textContent = 'Done.';
+          } catch (error) {
+            status.textContent = 'ahttp error: ' + error.message;
+          }
+        };
+        script.onerror = function () { status.textContent = 'could not load ../../ahttp.js'; };
+        doc.head.appendChild(script);
+      };
+    }
+
+    document.getElementById('run').addEventListener('click', function () {
+      inspect(document.getElementById('html').value);
+    });
+    document.getElementById('reset').addEventListener('click', function () {
+      document.getElementById('html').value = SAMPLE;
+      inspect(SAMPLE);
+    });
+    inspect(SAMPLE);
+  </script>
+</body>
+</html>

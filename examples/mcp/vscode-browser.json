@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "ahttp": {
+      "command": "node",
+      "args": ["/absolute/path/to/ahttp/bin/ahttp-mcp.js", "--browser"],
+      "env": {
+        "AHTTP_AUTH_TOKEN": "replace-with-a-short-lived-token"
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head><title>Owner Mode</title></head>
+<body>
+<main>
+  <h1>Acme Console</h1>
+  <div style="font-size:0">HIDDEN_CANARY_OWNER</div>
+  <button data-ahttp-intent="checkout_submit" onclick="document.getElementById('r').textContent='charged'">Charge card</button>
+  <button data-ahttp-intent="support_lookup" onclick="document.getElementById('r').textContent='lookup'">Lookup order</button>
+  <button data-ahttp-intent="delete_account" onclick="document.getElementById('r').textContent='deleted'">Delete account</button>
+  <button data-ahttp-intent="export_data" onclick="document.getElementById('r').textContent='exported'">Export data</button>
+  <label for="note">Internal note</label>
+  <input id="note" name="note" value="ready">
+  <a href="#docs" data-ahttp-intent="docs_link">Docs</a>
+  <p id="r">idle</p>
+</main>
+<script>
+window.__moCount = 0;
+(function () {
+  var Orig = window.MutationObserver;
+  window.MutationObserver = function (cb) {
+    window.__moCount++;
+    return new Orig(cb);
+  };
+  window.MutationObserver.prototype = Orig.prototype;
+})();
+</script>
+<script src="ahttp.js"
+        data-ahttp-owner="acme"
+        data-ahttp-private="true"
+        data-ahttp-key-hash="03f99ad2bb8f470ab4a6b65dd51dca8f63c4a36d52a66b22d706c14dbfec5983"
+        data-ahttp-allow="checkout_submit,support_lookup,note,docs_link,delete_account"
+        data-ahttp-deny="delete_account"
+        data-ahttp-confirm="checkout_submit"
+        data-ahttp-max-actions="5"></script>
+</body>
+</html>

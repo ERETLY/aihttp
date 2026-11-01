@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head><title>Security</title></head>
+<body>
+<main>
+  <h1>Security</h1>
+  <div data-ahttp-ignore><button>Internal admin tool</button><p>internal note</p></div>
+  <button data-ahttp-intent="checkout_submit" onclick="document.getElementById('r').textContent='paid'">Pay now</button>
+  <button data-ahttp-confirm="Deletes every account permanently" onclick="document.getElementById('r').textContent='deleted'">Delete Account</button>
+  <label for="acct">Account number</label>
+  <input id="acct" name="acct" value="ACC-777" data-ahttp-readonly>
+  <div style="color:#ffffff;background-color:#ffffff">HIDDEN_CANARY_WHITE_ON_WHITE</div>
+  <div style="font-size:0">HIDDEN_CANARY_FONT_SIZE_ZERO</div>
+  <div style="position:absolute;left:-9999px">HIDDEN_CANARY_OFFSCREEN</div>
+  <div style="opacity:0.01">HIDDEN_CANARY_OPACITY</div>
+  <div style="display:none">normal hidden menu</div>
+  <div id="r">idle</div>
+</main>
+<script>
+window.__moCount = 0;
+(function () {
+  var Orig = window.MutationObserver;
+  window.MutationObserver = function (cb) {
+    window.__moCount++;
+    return new Orig(cb);
+  };
+  window.MutationObserver.prototype = Orig.prototype;
+})();
+window.__origFetch = function () { return Promise.resolve({ ok: true, status: 200 }); };
+window.fetch = window.__origFetch;
+</script>
+</body>
+</html>

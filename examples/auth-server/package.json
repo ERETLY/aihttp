@@ -1,0 +1,13 @@
+{
+  "name": "ahttp-auth-example",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Reference server-verified ahttp authorization endpoint",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

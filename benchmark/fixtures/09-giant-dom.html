@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head><title>Giant DOM</title></head>
+<body>
+<main>
+  <h1>Catalog</h1>
+  <label for="q">Filter</label>
+  <input id="q" name="q" placeholder="Filter items">
+  <div id="list"></div>
+  <div id="tail">
+    <button id="finish" onclick="document.getElementById('done').textContent='done'">Finish</button>
+    <p id="done">idle</p>
+  </div>
+</main>
+<script>
+var html = [];
+for (var i = 0; i < 750; i++) {
+  html.push(
+    '<div class="card"><h3>Item ' + i + '</h3><span>Price ' + (i % 50) + '</span>' +
+    '<a href="/item/' + i + '">Open item ' + i + '</a>' +
+    '<button>Buy ' + i + '</button></div>'
+  );
+}
+document.getElementById('list').innerHTML = html.join('');
+</script>
+</body>
+</html>

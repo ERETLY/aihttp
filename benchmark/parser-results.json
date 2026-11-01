@@ -1,0 +1,247 @@
+{
+  "generatedAt": "2026-10-31T08:14:37.040Z",
+  "node": "v26.13.0",
+  "parser": "mini-dom vs linkedom (parse5-based)",
+  "cases": [
+    {
+      "case": "01-react-store.html",
+      "bytes": 3638,
+      "mini": {
+        "elements": 5,
+        "buttons": 0,
+        "inputs": 0,
+        "text": 3030
+      },
+      "linkedom": {
+        "elements": 6,
+        "buttons": 0,
+        "inputs": 0,
+        "text": 3030
+      },
+      "miniError": null,
+      "linkedomError": null,
+      "miniMs": 0.07,
+      "linkedomMs": 0.19
+    },
+    {
+      "case": "02-div-hell.html",
+      "bytes": 1289,
+      "mini": {
+        "elements": 20,
+        "buttons": 0,
+        "inputs": 0,
+        "text": 74
+      },
+      "linkedom": {
+        "elements": 21,
+        "buttons": 0,
+        "inputs": 0,
+        "text": 74
+      },
+      "miniError": null,
+      "linkedomError": null,
+      "miniMs": 0.15,
+      "linkedomMs": 0.26
+    },
+    {
+      "case": "03-shadow-dom.html",
+      "bytes": 1025,
+      "mini": {
+        "elements": 7,
+        "buttons": 0,
+        "inputs": 0,
+        "text": 804
+      },
+      "linkedom": {
+        "elements": 8,
+        "buttons": 0,
+        "inputs": 0,
+        "text": 804
+      },
+      "miniError": null,
+      "linkedomError": null,
+      "miniMs": 0.04,
+      "linkedomMs": 0.1
+    },
+    {
+      "case": "04-async-modal.html",
+      "bytes": 1108,
+      "mini": {
+        "elements": 13,
+        "buttons": 2,
+        "inputs": 0,
+        "text": 723
+      },
+      "linkedom": {
+        "elements": 14,
+        "buttons": 2,
+        "inputs": 0,
+        "text": 723
+      },
+      "miniError": null,
+      "linkedomError": null,
+      "miniMs": 0.05,
+      "linkedomMs": 0.13
+    },
+    {
+      "case": "05-security.html",
+      "bytes": 1358,
+      "mini": {
+        "elements": 19,
+        "buttons": 3,
+        "inputs": 1,
+        "text": 548
+      },
+      "linkedom": {
+        "elements": 20,
+        "buttons": 3,
+        "inputs": 1,
+        "text": 548
+      },
+      "miniError": null,
+      "linkedomError": null,
+      "miniMs": 0.07,
+      "linkedomMs": 0.15
+    },
+    {
+      "case": "06-data-grid.html",
+      "bytes": 2063,
+      "mini": {
+        "elements": 19,
+        "buttons": 3,
+        "inputs": 1,
+        "text": 1553
+      },
+      "linkedom": {
+        "elements": 20,
+        "buttons": 3,
+        "inputs": 1,
+        "text": 1553
+      },
+      "miniError": null,
+      "linkedomError": null,
+      "miniMs": 0.05,
+      "linkedomMs": 0.13
+    },
+    {
+      "case": "07-icon-only.html",
+      "bytes": 986,
+      "mini": {
+        "elements": 24,
+        "buttons": 4,
+        "inputs": 2,
+        "text": 70
+      },
+      "linkedom": {
+        "elements": 25,
+        "buttons": 4,
+        "inputs": 2,
+        "text": 70
+      },
+      "miniError": null,
+      "linkedomError": null,
+      "miniMs": 0.07,
+      "linkedomMs": 0.18
+    },
+    {
+      "case": "08-contenteditable.html",
+      "bytes": 1004,
+      "mini": {
+        "elements": 12,
+        "buttons": 1,
+        "inputs": 0,
+        "text": 649
+      },
+      "linkedom": {
+        "elements": 13,
+        "buttons": 1,
+        "inputs": 0,
+        "text": 649
+      },
+      "miniError": null,
+      "linkedomError": null,
+      "miniMs": 0.04,
+      "linkedomMs": 0.09
+    },
+    {
+      "case": "09-giant-dom.html",
+      "bytes": 712,
+      "mini": {
+        "elements": 12,
+        "buttons": 1,
+        "inputs": 1,
+        "text": 322
+      },
+      "linkedom": {
+        "elements": 13,
+        "buttons": 1,
+        "inputs": 1,
+        "text": 322
+      },
+      "miniError": null,
+      "linkedomError": null,
+      "miniMs": 0.05,
+      "linkedomMs": 0.1
+    },
+    {
+      "case": "ecommerce.html",
+      "bytes": 2584,
+      "mini": {
+        "elements": 11,
+        "buttons": 0,
+        "inputs": 0,
+        "text": 2149
+      },
+      "linkedom": {
+        "elements": 12,
+        "buttons": 0,
+        "inputs": 0,
+        "text": 2149
+      },
+      "miniError": null,
+      "linkedomError": null,
+      "miniMs": 0.06,
+      "linkedomMs": 0.09
+    },
+    {
+      "case": "table-malformed.html",
+      "bytes": 56,
+      "mini": {
+        "elements": 7,
+        "buttons": 0,
+        "inputs": 0,
+        "text": 11
+      },
+      "linkedom": {
+        "elements": 5,
+        "buttons": 0,
+        "inputs": 0,
+        "text": 0
+      },
+      "miniError": null,
+      "linkedomError": null,
+      "miniMs": 0.01,
+      "linkedomMs": 0.04
+    },
+    {
+      "case": "unclosed.html",
+      "bytes": 58,
+      "mini": {
+        "elements": 7,
+        "buttons": 1,
+        "inputs": 0,
+        "text": 15
+      },
+      "linkedom": {
+        "elements": 5,
+        "buttons": 1,
+        "inputs": 0,
+        "text": 0
+      },
+      "miniError": null,
+      "linkedomError": null,
+      "miniMs": 0.02,
+      "linkedomMs": 0.03
+    }
+  ]
+}

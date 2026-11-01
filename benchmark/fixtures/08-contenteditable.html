@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head><title>Editable Chat</title></head>
+<body>
+<main>
+  <h1>Support chat</h1>
+  <div id="chat" aria-live="polite"><p>Agent: ready</p></div>
+  <label id="lbl">Message</label>
+  <div id="box" contenteditable="true" aria-labelledby="lbl"></div>
+  <button id="close">Close panel</button>
+  <div id="panel">panel open</div>
+</main>
+<script>
+var box = document.getElementById('box');
+box.addEventListener('keydown', function (e) {
+  if (e.key === 'Enter' && box.textContent.trim()) {
+    var line = document.createElement('p');
+    line.textContent = 'you: ' + box.textContent.trim();
+    document.getElementById('chat').appendChild(line);
+    box.textContent = '';
+  }
+});
+document.getElementById('close').addEventListener('click', function () {
+  document.getElementById('panel').textContent = 'panel closed';
+});
+window.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') document.getElementById('panel').textContent = 'panel closed';
+});
+</script>
+</body>
+</html>

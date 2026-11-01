@@ -1,0 +1,113 @@
+{
+  "name": "ahttp",
+  "version": "0.1.0",
+  "description": "Small, executable page snapshots for LLM agents. Zero-dependency browser file, CLI and MCP server.",
+  "main": "ahttp.js",
+  "browser": "ahttp.js",
+  "types": "ahttp.d.ts",
+  "type": "commonjs",
+  "author": "ERETLY",
+  "homepage": "https://github.com/ERETLY/ahttp",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ERETLY/ahttp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ERETLY/ahttp/issues"
+  },
+  "exports": {
+    ".": {
+      "types": "./ahttp.d.ts",
+      "import": "./ahttp.js",
+      "require": "./ahttp.js",
+      "default": "./ahttp.js"
+    },
+    "./min": {
+      "types": "./ahttp.d.ts",
+      "default": "./ahttp.min.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "ahttp": "./bin/ahttp-cli.js",
+    "ahttp-mcp": "./bin/ahttp-mcp.js"
+  },
+  "files": [
+    "ahttp.js",
+    "ahttp.min.js",
+    "ahttp.d.ts",
+    "bin/",
+    "lib/",
+    "self/",
+    "docs/",
+    "llms.txt",
+    "README.md",
+    "SECURITY.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node scripts/build-min.js && node scripts/build-self.js",
+    "build:self": "node scripts/build-self.js",
+    "bench": "node benchmark/run.js",
+    "bench:self": "node benchmark/self.js",
+    "bench:pinned": "node benchmark/fetch-pinned.js",
+    "bench:render": "node scripts/render-bench.js --write",
+    "test": "node --test",
+    "test:bench": "node benchmark/run.js",
+    "typecheck": "tsc -p tsconfig.json",
+    "lint": "eslint .",
+    "pack:check": "npm pack --dry-run",
+    "smoke": "node scripts/smoke-runtime.js",
+    "start": "node bin/ahttp-cli.js"
+  },
+  "keywords": [
+    "ai-agents",
+    "mcp",
+    "mcp-server",
+    "llm",
+    "llms-txt",
+    "browser-automation",
+    "web-scraping",
+    "tool-calling",
+    "agentic-web",
+    "owner-mode",
+    "access-control",
+    "server-auth",
+    "dom",
+    "accessibility",
+    "userscript",
+    "tampermonkey",
+    "no-server",
+    "self-hosted",
+    "javascript"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "playwright": ">=1.40.0"
+  },
+  "peerDependenciesMeta": {
+    "playwright": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@mozilla/readability": "^0.6.0",
+    "dom-accessibility-api": "^0.7.0",
+    "eslint": "^9.39.1",
+    "globals": "^16.5.0",
+    "gpt-tokenizer": "^4.1.0",
+    "jsdom": "^26.1.0",
+    "linkedom": "^0.18.14",
+    "playwright": "^1.64.1",
+    "terser": "^5.51.2",
+    "turndown": "^7.2.4",
+    "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "minimatch": "11.0.1"
+  },
+  "license": "MIT"
+}

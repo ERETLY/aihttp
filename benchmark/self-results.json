@@ -1,0 +1,69 @@
+{
+  "generatedAt": "2026-11-01T05:50:00.592Z",
+  "version": "0.1.0",
+  "engine": "self/ahttp.user.js in Chromium",
+  "pages": [
+    {
+      "name": "Hacker News",
+      "url": "https://news.ycombinator.com",
+      "tokens": 1170,
+      "actions": 230,
+      "scanMs": 24,
+      "loadMs": 30,
+      "status": 200
+    },
+    {
+      "name": "Wikipedia (HTTP)",
+      "url": "https://en.wikipedia.org/wiki/HTTP",
+      "tokens": 1148,
+      "actions": 1617,
+      "scanMs": 199,
+      "loadMs": 42,
+      "status": 200
+    },
+    {
+      "name": "Lobsters",
+      "url": "https://lobste.rs",
+      "tokens": 1116,
+      "actions": 193,
+      "scanMs": 19,
+      "loadMs": 81,
+      "status": 200
+    },
+    {
+      "name": "GitHub (torvalds/linux)",
+      "url": "https://github.com/torvalds/linux",
+      "tokens": 4208,
+      "actions": 199,
+      "scanMs": 34,
+      "loadMs": 101,
+      "status": 200
+    },
+    {
+      "name": "MDN (HTTP)",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
+      "tokens": 1242,
+      "actions": 147,
+      "scanMs": 17,
+      "loadMs": 54,
+      "status": 200
+    }
+  ],
+  "checkout": {
+    "tokens": 289,
+    "stepTokens": [
+      39,
+      60,
+      66,
+      75,
+      49
+    ],
+    "avgLatencyMs": 84.89,
+    "success": true
+  },
+  "tasks": {
+    "tokens": 5104,
+    "success": 20,
+    "tasks": 20
+  }
+}

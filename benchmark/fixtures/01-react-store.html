@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<head><title>React Store</title></head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  var state = {
+    query: '', cart: 0, promo: '', promoApplied: false, promoMsg: '',
+    email: '', err: '', order: ''
+  };
+  var products = [
+    { id: 'p1', name: 'Widget Pro', price: 49 },
+    { id: 'p2', name: 'Widget Mini', price: 19 },
+    { id: 'p3', name: 'Gadget X', price: 99 }
+  ];
+  var app = document.getElementById('app');
+
+  function visible() {
+    return products.filter(function (p) {
+      return p.name.toLowerCase().indexOf(state.query.toLowerCase()) >= 0;
+    });
+  }
+
+  function bindControlled(el, key) {
+    var desc = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+    var tracked = el.value;
+    Object.defineProperty(el, 'value', {
+      configurable: true,
+      get: function () { return desc.get.call(this); },
+      set: function (v) { desc.set.call(this, v); tracked = String(v); }
+    });
+    el._valueTracker = {
+      getValue: function () { return tracked; },
+      setValue: function (v) { tracked = String(v); }
+    };
+    el.addEventListener('input', function () {
+      if (el._valueTracker.getValue() === el.value) return;
+      state[key] = el.value;
+      render();
+    });
+  }
+
+  function render() {
+    app.innerHTML =
+      '<h1>Store</h1>' +
+      '<label for="q">Search products</label>' +
+      '<input id="q" name="q" value="' + state.query + '">' +
+      '<div id="list">' + visible().map(function (p) {
+        return '<div class="card"><span>' + p.name + ' - $' + p.price + '</span>' +
+          '<button data-add="' + p.id + '">Add ' + p.name + '</button></div>';
+      }).join('') + '</div>' +
+      '<p id="cart">Cart: ' + state.cart + ' item(s)</p>' +
+      '<label for="promo">Promo code</label>' +
+      '<input id="promo" name="promo" value="' + state.promo + '">' +
+      '<button data-action="apply">Apply promo</button>' +
+      '<p id="promoMsg">' + (state.promoApplied ? 'Promo applied: 20% off' : state.promoMsg) + '</p>' +
+      '<label for="email">Email</label>' +
+      '<input id="email" name="email" value="' + state.email + '">' +
+      '<p id="err">' + state.err + '</p>' +
+      '<button data-action="checkout">Place order</button>' +
+      '<p id="order">' + state.order + '</p>';
+    bindControlled(document.getElementById('q'), 'query');
+    bindControlled(document.getElementById('promo'), 'promo');
+    bindControlled(document.getElementById('email'), 'email');
+  }
+
+  app.addEventListener('click', function (e) {
+    var target = e.target.closest('[data-add],[data-action]');
+    if (!target) return;
+    if (target.hasAttribute('data-add')) {
+      state.cart++;
+      render();
+      return;
+    }
+    var action = target.getAttribute('data-action');
+    if (action === 'apply') {
+      if (state.promo.trim() === 'AGENT20') {
+        state.promoApplied = true;
+        state.promoMsg = '';
+      } else {
+        state.promoApplied = false;
+        state.promoMsg = 'Invalid promo code';
+      }
+      render();
+    }
+    if (action === 'checkout') {
+      if (!state.email.trim()) {
+        state.err = 'Email is required';
+        state.order = '';
+      } else if (state.cart === 0) {
+        state.err = 'Cart is empty';
+        state.order = '';
+      } else {
+        state.err = '';
+        state.order = 'Order placed for ' + state.email + ' (' + state.cart + ' items, ' +
+          (state.promoApplied ? '20% off' : 'no discount') + ')';
+        state.cart = 0;
+      }
+      render();
+    }
+  });
+
+  window.__forceRender = render;
+  window.__storeState = state;
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head><title>Div Hell</title></head>
+<body>
+<main>
+  <div id="menu" style="cursor:pointer" onclick="document.getElementById('menuOut').textContent='menu opened'">Menu <span><b>Open</b></span></div>
+  <div id="menuOut">idle</div>
+
+  <div id="dd" style="cursor:pointer" onclick="document.getElementById('opts').hidden=false">Choose plan <span>v</span></div>
+  <div id="opts" hidden>
+    <div style="cursor:pointer" onclick="document.getElementById('dd').textContent='Plan: Pro'">Pro</div>
+    <div style="cursor:pointer" onclick="document.getElementById('dd').textContent='Plan: Team'">Team</div>
+    <div style="cursor:pointer" onclick="document.getElementById('dd').textContent='Plan: Free'">Free</div>
+  </div>
+
+  <div class="tabs">
+    <div style="cursor:pointer" onclick="document.getElementById('tabOut').textContent='Tab One'">One</div>
+    <div style="cursor:pointer" onclick="document.getElementById('tabOut').textContent='Tab Two'">Two</div>
+  </div>
+  <div id="tabOut">none</div>
+
+  <div id="chk" style="cursor:pointer" onclick="this.dataset.on = this.dataset.on === '1' ? '0' : '1'; document.getElementById('chkOut').textContent = this.dataset.on === '1' ? 'checked' : 'unchecked'">Checkbox</div>
+  <div id="chkOut">unchecked</div>
+</main>
+</body>
+</html>

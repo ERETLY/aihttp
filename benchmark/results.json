@@ -1,0 +1,1830 @@
+{
+  "generatedAt": "2026-11-01T05:13:00.818Z",
+  "version": "0.1.0",
+  "node": "v26.13.0",
+  "platform": "win32",
+  "arch": "x64",
+  "tokenEstimate": "gpt-tokenizer 4.1.0 countTokens (o200k_base)",
+  "tokenizer": "gpt-tokenizer@4.1.0/o200k_base",
+  "torture": [
+    {
+      "index": 1,
+      "id": "react-store",
+      "name": "React synthetic state and full DOM remount",
+      "pass": true,
+      "passed": 12,
+      "total": 12,
+      "ms": 699,
+      "checks": [
+        {
+          "name": "initial controls discovered",
+          "pass": true,
+          "actual": "8"
+        },
+        {
+          "name": "search input registered",
+          "pass": true
+        },
+        {
+          "name": "promo input registered",
+          "pass": true
+        },
+        {
+          "name": "checkout button registered",
+          "pass": true
+        },
+        {
+          "name": "filter re-render shows matching product",
+          "pass": true,
+          "actual": "- a2 button \"Add Widget Pro\"\n- a3 button \"Add Widget Mini\"\n~ a9 \"Search products\" \"\" -> \"Gadget\"\n- text \"Widget Pro - $49\"\n- text \"Widget Mini - $19\""
+        },
+        {
+          "name": "filter re-render removes other products",
+          "pass": true
+        },
+        {
+          "name": "cart count updates after add",
+          "pass": true,
+          "actual": "+ text \"Cart: 1 item(s)\"\n- text \"Cart: 0 item(s)\""
+        },
+        {
+          "name": "React _valueTracker bypass delivered the input value",
+          "pass": true,
+          "actual": "+ text \"Promo applied: 20% off\""
+        },
+        {
+          "name": "empty email validation surfaced",
+          "pass": true,
+          "actual": "+ text \"Email is required\""
+        },
+        {
+          "name": "checkout completes after controlled remount",
+          "pass": true
+        },
+        {
+          "name": "stale id resolved after full DOM remount",
+          "pass": true,
+          "actual": "{\"ok\":true,\"action\":{\"id\":\"a50\",\"method\":\"click\",\"kind\":\"click\",\"label\":\"Place order\",\"tag\":\"button\",\"role\":\"button\"},\"method\":\"click\",\"url\":\"https://01reactsto"
+        },
+        {
+          "name": "relocated node actually received the click",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "id": "div-hell",
+      "name": "Pure div UI with nested deduplication",
+      "pass": true,
+      "passed": 7,
+      "total": 7,
+      "ms": 448,
+      "checks": [
+        {
+          "name": "five controls, nested spans deduplicated",
+          "pass": true,
+          "actual": "Menu Open | Choose plan v | One | Two | Checkbox"
+        },
+        {
+          "name": "one action for the nested menu wrapper",
+          "pass": true
+        },
+        {
+          "name": "inline onclick executed",
+          "pass": true
+        },
+        {
+          "name": "custom dropdown options appear after open",
+          "pass": true
+        },
+        {
+          "name": "custom option click applied",
+          "pass": true,
+          "actual": "Plan: Pro"
+        },
+        {
+          "name": "div tab switched",
+          "pass": true
+        },
+        {
+          "name": "div checkbox toggled",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "id": "shadow-dom",
+      "name": "Nested open shadow DOM",
+      "pass": true,
+      "passed": 6,
+      "total": 6,
+      "ms": 186,
+      "checks": [
+        {
+          "name": "two nested open shadow roots traversed",
+          "pass": true,
+          "actual": "2"
+        },
+        {
+          "name": "input inside nested shadow registered",
+          "pass": true
+        },
+        {
+          "name": "label inside shadow root resolved",
+          "pass": true,
+          "actual": "Card number"
+        },
+        {
+          "name": "button inside nested shadow registered",
+          "pass": true
+        },
+        {
+          "name": "action inside nested shadow root executed",
+          "pass": true,
+          "actual": "+ text \"paid 4242\"\n- text \"idle\""
+        },
+        {
+          "name": "shadow DOM state mutated",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "id": "async-modal",
+      "name": "Async fetch, delayed modal and toast",
+      "pass": true,
+      "passed": 7,
+      "total": 7,
+      "ms": 600,
+      "checks": [
+        {
+          "name": "delayed modal detected in diff",
+          "pass": true,
+          "actual": "{\"opened\":\"Checkout Confirm your order Session loaded Confirm\"}"
+        },
+        {
+          "name": "snapshot isolates the active modal",
+          "pass": true
+        },
+        {
+          "name": "delayed toast captured",
+          "pass": true,
+          "actual": "+ a2 button \"Confirm\"\n- a1 button \"Open checkout\"\n+ modal \"Checkout Confirm your order Session loaded Confirm\"\n+ text \"Checkout\"\n+ text \"Confirm your order\"\n+ text \"Session loaded\"\n- text \"Async flow\"\n- text \"idle\""
+        },
+        {
+          "name": "settle waited for the delayed UI",
+          "pass": true,
+          "actual": "515ms"
+        },
+        {
+          "name": "settle completed within the timeout",
+          "pass": true,
+          "actual": "515ms"
+        },
+        {
+          "name": "fetch call intercepted",
+          "pass": true,
+          "actual": "1"
+        },
+        {
+          "name": "modal action executed and captured",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "id": "security",
+      "name": "Guardrails, prompt injection and dormant mode",
+      "pass": true,
+      "passed": 23,
+      "total": 23,
+      "ms": 28,
+      "checks": [
+        {
+          "name": "engine dormant before first call",
+          "pass": true
+        },
+        {
+          "name": "no MutationObserver created at load",
+          "pass": true,
+          "actual": "0"
+        },
+        {
+          "name": "fetch untouched at load",
+          "pass": true
+        },
+        {
+          "name": "engine woke on first snapshot",
+          "pass": true
+        },
+        {
+          "name": "observer installed after wake",
+          "pass": true,
+          "actual": "1"
+        },
+        {
+          "name": "all hidden injection text stripped",
+          "pass": true
+        },
+        {
+          "name": "data-ahttp-ignore subtree removed",
+          "pass": true
+        },
+        {
+          "name": "sanitized trap count reported",
+          "pass": true,
+          "actual": "4"
+        },
+        {
+          "name": "data-ahttp-intent wins over visible text",
+          "pass": true,
+          "actual": "checkout_submit"
+        },
+        {
+          "name": "data-ahttp-confirm exposed in JSON",
+          "pass": true
+        },
+        {
+          "name": "warning text preserved",
+          "pass": true,
+          "actual": "Deletes every account permanently"
+        },
+        {
+          "name": "unguarded act blocked",
+          "pass": true
+        },
+        {
+          "name": "blocked action did not run",
+          "pass": true
+        },
+        {
+          "name": "confirm=true allowed",
+          "pass": true
+        },
+        {
+          "name": "confirmed action ran",
+          "pass": true
+        },
+        {
+          "name": "fetch restored after act",
+          "pass": true
+        },
+        {
+          "name": "readonly write blocked",
+          "pass": true
+        },
+        {
+          "name": "readonly value unchanged",
+          "pass": true
+        },
+        {
+          "name": "readonly value readable",
+          "pass": true
+        },
+        {
+          "name": "tools() adds confirm for guarded actions",
+          "pass": true
+        },
+        {
+          "name": "tools() marks guarded actions",
+          "pass": true
+        },
+        {
+          "name": "scope filter returns one region",
+          "pass": true
+        },
+        {
+          "name": "query filter narrows actions",
+          "pass": true,
+          "actual": "1"
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "id": "data-grid",
+      "name": "Complex data grid: filter, sort, pagination",
+      "pass": true,
+      "passed": 8,
+      "total": 8,
+      "ms": 304,
+      "checks": [
+        {
+          "name": "initial page summary",
+          "pass": true
+        },
+        {
+          "name": "grid controls compact",
+          "pass": true,
+          "actual": "4"
+        },
+        {
+          "name": "filter input registered",
+          "pass": true
+        },
+        {
+          "name": "filter narrows rows",
+          "pass": true,
+          "actual": "~ a1 \"Filter\" \"\" -> \"User 1\"\n+ text \"Showing 1-10 of 11 - page 1/2\"\n+ text \"User 11\"\n+ text \"70\"\n+ text \"User 12\"\n+ text \"User 13\"\n+ text \"44\"\n+ text \"User 14\"\n+ text \"81\"\n+ text \"User 15\"\n+ text \"18\"\n+ text \"User 16\"\n+ text \"55\"\n- text \"Sh"
+        },
+        {
+          "name": "sort button executed",
+          "pass": true
+        },
+        {
+          "name": "pagination advanced",
+          "pass": true,
+          "actual": "+ text \"Showing 11-11 of 11 - page 2/2\"\n+ text \"User 1\"\n- text \"Showing 1-10 of 11 - page 1/2\"\n- text \"User 17\"\n- text \"92\"\n- text \"idle\"\n- text \"User 14\"\n- text \"81\"\n- text \"idle\"\n- text \"User 11\""
+        },
+        {
+          "name": "page indicator updated",
+          "pass": true
+        },
+        {
+          "name": "grid snapshot remains compact",
+          "pass": true,
+          "actual": "251"
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "id": "icon-only",
+      "name": "Icon-only legacy HTML and adjacent labels",
+      "pass": true,
+      "passed": 7,
+      "total": 7,
+      "ms": 202,
+      "checks": [
+        {
+          "name": "svg title used as label",
+          "pass": true,
+          "actual": "Save document | Download report | Print page | Card number | Expiry date | Submit payment"
+        },
+        {
+          "name": "aria-label used as label",
+          "pass": true
+        },
+        {
+          "name": "title attribute used as label",
+          "pass": true
+        },
+        {
+          "name": "adjacent text labels the card input",
+          "pass": true,
+          "actual": "Save document | Download report | Print page | Card number | Expiry date | Submit payment"
+        },
+        {
+          "name": "adjacent text labels the expiry input",
+          "pass": true
+        },
+        {
+          "name": "icon-only button executed",
+          "pass": true
+        },
+        {
+          "name": "input without id filled",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "id": "contenteditable",
+      "name": "Contenteditable with Enter and Escape",
+      "pass": true,
+      "passed": 7,
+      "total": 7,
+      "ms": 248,
+      "checks": [
+        {
+          "name": "contenteditable registered",
+          "pass": true
+        },
+        {
+          "name": "aria-labelledby resolved",
+          "pass": true,
+          "actual": "Message"
+        },
+        {
+          "name": "contenteditable filled",
+          "pass": true
+        },
+        {
+          "name": "Enter handler fired",
+          "pass": true
+        },
+        {
+          "name": "contenteditable cleared by the app",
+          "pass": true
+        },
+        {
+          "name": "new chat line visible in snapshot",
+          "pass": true,
+          "actual": "~ a1 \"Message\" \"hello agent\" -> \"\"\n+ text \"you: hello agent\""
+        },
+        {
+          "name": "Escape reached the window listener",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "id": "giant-dom",
+      "name": "Giant DOM stress, folding and scan latency",
+      "pass": true,
+      "passed": 10,
+      "total": 10,
+      "ms": 389,
+      "checks": [
+        {
+          "name": "3500+ element nodes traversed",
+          "pass": true,
+          "actual": "3759"
+        },
+        {
+          "name": "median native DOM scan (advisory)",
+          "pass": true,
+          "actual": "13ms; advisory budget 150ms; reference machine 25ms"
+        },
+        {
+          "name": "default snapshot stays compact",
+          "pass": true,
+          "actual": "3224 chars"
+        },
+        {
+          "name": "first repeated action preserved",
+          "pass": true
+        },
+        {
+          "name": "repeated link family folded",
+          "pass": true,
+          "actual": "+7 similar link"
+        },
+        {
+          "name": "query disables folding",
+          "pass": true
+        },
+        {
+          "name": "query exposes folded actions",
+          "pass": true
+        },
+        {
+          "name": "action executed on the giant page",
+          "pass": true,
+          "actual": "~ a1 \"Filter\" \"\" -> \"Item 7\""
+        },
+        {
+          "name": "jsdom reference traversal completed",
+          "pass": true,
+          "actual": "3759 nodes in 125ms"
+        },
+        {
+          "name": "scan samples",
+          "pass": true,
+          "actual": "13,13,13,16,33"
+        }
+      ]
+    }
+  ],
+  "web": [
+    {
+      "name": "Hacker News",
+      "url": "https://news.ycombinator.com",
+      "source": "pinned",
+      "status": "ok",
+      "pinnedSha256": "8d423d868a5544a5d3543dbf8a6dd4040f75d7eb19c2d4d589bf070b1f6c33c6",
+      "pinnedFetchedAt": "2026-10-31T08:07:49.078Z",
+      "httpStatus": 200,
+      "rawBytes": 34839,
+      "rawTokens": 11771,
+      "snapshotBytes": 3513,
+      "snapshotTokens": 1162,
+      "ratio": 10.1,
+      "markdownTokens": 5136,
+      "markdownRatio": 4.4,
+      "jinaTokens": 5536,
+      "jinaStatus": "ok",
+      "firecrawlTokens": 5291,
+      "firecrawlStatus": "ok",
+      "axTokens": 10099,
+      "axStatus": "ok",
+      "axRatio": 8.7,
+      "actions": 230,
+      "shown": 60,
+      "omitted": 170,
+      "groups": 4,
+      "controls": 1,
+      "nodes": 745,
+      "sanitized": 0,
+      "shadowRoots": 0,
+      "scanMs": 24,
+      "fetchMs": 0,
+      "parseMs": 0,
+      "totalMs": 5,
+      "liveMs": {
+        "ahttp": 1248,
+        "jina": 1477,
+        "firecrawl": 1321
+      },
+      "layout": "css"
+    },
+    {
+      "name": "Wikipedia (HTTP)",
+      "url": "https://en.wikipedia.org/wiki/HTTP",
+      "source": "pinned",
+      "status": "ok",
+      "pinnedSha256": "49b8b92fa5fb9c1e2f2ac47df8a43a0e173d5b045c1feba86fae8a2577897cda",
+      "pinnedFetchedAt": "2026-10-31T08:07:49.796Z",
+      "httpStatus": 200,
+      "rawBytes": 604882,
+      "rawTokens": 191129,
+      "snapshotBytes": 4138,
+      "snapshotTokens": 1136,
+      "ratio": 168.2,
+      "markdownTokens": 26579,
+      "markdownRatio": 23.4,
+      "jinaTokens": 27977,
+      "jinaStatus": "ok",
+      "firecrawlTokens": 39364,
+      "firecrawlStatus": "ok",
+      "axTokens": 73404,
+      "axStatus": "ok",
+      "axRatio": 64.6,
+      "actions": 1617,
+      "shown": 60,
+      "omitted": 1557,
+      "groups": 0,
+      "controls": 10,
+      "nodes": 4944,
+      "sanitized": 0,
+      "shadowRoots": 0,
+      "scanMs": 2989,
+      "fetchMs": 0,
+      "parseMs": 0,
+      "totalMs": 51,
+      "liveMs": {
+        "ahttp": 4419,
+        "jina": 851,
+        "firecrawl": 919
+      },
+      "layout": "css"
+    },
+    {
+      "name": "Lobsters",
+      "url": "https://lobste.rs",
+      "source": "pinned",
+      "status": "ok",
+      "pinnedSha256": "211d87f33cbaed2c3047d87d6ed4da998a0c72508b13afa89ed04dfbfa45e877",
+      "pinnedFetchedAt": "2026-10-31T08:07:50.543Z",
+      "httpStatus": 200,
+      "rawBytes": 56731,
+      "rawTokens": 17909,
+      "snapshotBytes": 3110,
+      "snapshotTokens": 1105,
+      "ratio": 16.2,
+      "markdownTokens": 6542,
+      "markdownRatio": 5.9,
+      "jinaTokens": 6293,
+      "jinaStatus": "ok",
+      "firecrawlTokens": 7433,
+      "firecrawlStatus": "ok",
+      "axTokens": 5918,
+      "axStatus": "ok",
+      "axRatio": 5.4,
+      "actions": 193,
+      "shown": 60,
+      "omitted": 133,
+      "groups": 1,
+      "controls": 0,
+      "nodes": 638,
+      "sanitized": 0,
+      "shadowRoots": 0,
+      "scanMs": 9,
+      "fetchMs": 0,
+      "parseMs": 0,
+      "totalMs": 3,
+      "liveMs": {
+        "ahttp": 1988,
+        "jina": 413,
+        "firecrawl": 318
+      },
+      "layout": "css"
+    },
+    {
+      "name": "GitHub (torvalds/linux)",
+      "url": "https://github.com/torvalds/linux",
+      "source": "pinned",
+      "status": "ok",
+      "pinnedSha256": "2b608af3459dbd2611a0e031ffc6954374cd2a305ca11b861f9bc59eda5c201a",
+      "pinnedFetchedAt": "2026-10-31T08:07:51.478Z",
+      "httpStatus": 200,
+      "rawBytes": 293132,
+      "rawTokens": 105767,
+      "snapshotBytes": 19241,
+      "snapshotTokens": 4198,
+      "ratio": 25.2,
+      "markdownTokens": 1387,
+      "markdownRatio": 0.3,
+      "jinaTokens": 1342,
+      "jinaStatus": "ok",
+      "firecrawlTokens": 42589,
+      "firecrawlStatus": "ok",
+      "axTokens": 5404,
+      "axStatus": "ok",
+      "axRatio": 1.3,
+      "actions": 199,
+      "shown": 60,
+      "omitted": 139,
+      "groups": 0,
+      "controls": 1,
+      "nodes": 1412,
+      "sanitized": 0,
+      "shadowRoots": 0,
+      "scanMs": 19,
+      "fetchMs": 0,
+      "parseMs": 0,
+      "totalMs": 18,
+      "liveMs": {
+        "ahttp": 2469,
+        "jina": 2908,
+        "firecrawl": 569
+      },
+      "layout": "css"
+    },
+    {
+      "name": "MDN (HTTP)",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
+      "source": "pinned",
+      "status": "ok",
+      "pinnedSha256": "3e2c02c4e8c0fca767a8f5516c5082173787ff6277c99bcfa890188d4dad3708",
+      "pinnedFetchedAt": "2026-10-31T08:07:52.051Z",
+      "httpStatus": 200,
+      "rawBytes": 222231,
+      "rawTokens": 59787,
+      "snapshotBytes": 4208,
+      "snapshotTokens": 1149,
+      "ratio": 52,
+      "markdownTokens": 3008,
+      "markdownRatio": 2.6,
+      "jinaTokens": 3180,
+      "jinaStatus": "ok",
+      "firecrawlTokens": 3850,
+      "firecrawlStatus": "ok",
+      "axTokens": 7381,
+      "axStatus": "ok",
+      "axRatio": 6.4,
+      "actions": 234,
+      "shown": 60,
+      "omitted": 174,
+      "groups": 0,
+      "controls": 0,
+      "nodes": 760,
+      "sanitized": 0,
+      "shadowRoots": 0,
+      "scanMs": 12,
+      "fetchMs": 0,
+      "parseMs": 5,
+      "totalMs": 17,
+      "liveMs": {
+        "ahttp": 1471,
+        "jina": 526,
+        "firecrawl": 315
+      },
+      "layout": "css"
+    }
+  ],
+  "comparison": {
+    "scenario": "ecommerce-checkout-5-steps",
+    "methodology": "Chromium drives benchmark/fixtures/ecommerce.html. ahttp.js is injected into the live page and executes the five steps. Raw HTML, Readability+Turndown Markdown, and Playwright ariaSnapshot are sampled after each step from the same live DOM state. Token counts use gpt-tokenizer 4.1.0 countTokens (o200k_base). Static methods cannot execute actions; their success rate is zero by construction.",
+    "browser": "Playwright Chromium",
+    "browserVersion": "156.0.8078.4",
+    "steps": 5,
+    "success": true,
+    "totalTokenRatio": 13.8,
+    "ahttpVsAx": 1.2,
+    "methods": [
+      {
+        "key": "raw",
+        "name": "Raw HTML (DOM serialization)",
+        "steps": 5,
+        "stepTokens": [
+          762,
+          822,
+          822,
+          833,
+          744
+        ],
+        "totalTokens": 3983,
+        "avgStepTokens": 797,
+        "avgLatencyMs": 4.51,
+        "actionable": false,
+        "guardrails": false,
+        "spa": false
+      },
+      {
+        "key": "markdown",
+        "name": "Readability + Turndown Markdown",
+        "steps": 5,
+        "stepTokens": [
+          10,
+          9,
+          9,
+          12,
+          28
+        ],
+        "totalTokens": 68,
+        "avgStepTokens": 14,
+        "avgLatencyMs": 12.85,
+        "actionable": false,
+        "guardrails": false,
+        "spa": false
+      },
+      {
+        "key": "axtree",
+        "name": "Playwright ariaSnapshot (Chromium)",
+        "steps": 5,
+        "stepTokens": [
+          43,
+          77,
+          81,
+          88,
+          57
+        ],
+        "totalTokens": 346,
+        "avgStepTokens": 69,
+        "avgLatencyMs": 3.94,
+        "actionable": false,
+        "guardrails": false,
+        "spa": true
+      },
+      {
+        "key": "ahttp",
+        "name": "ahttp.js in Chromium",
+        "steps": 5,
+        "stepTokens": [
+          39,
+          60,
+          66,
+          75,
+          49
+        ],
+        "totalTokens": 289,
+        "avgStepTokens": 58,
+        "avgLatencyMs": 86.46,
+        "actionable": true,
+        "guardrails": true,
+        "spa": true
+      }
+    ]
+  },
+  "tasks": {
+    "methodology": "Scripted agent, not an LLM. Twenty local tasks are driven in Chromium with ahttp action ids. Raw HTML and Playwright ariaSnapshot are sampled after each step as observation-only baselines. Token counts use gpt-tokenizer 4.1.0 countTokens (o200k_base).",
+    "tasks": 20,
+    "ahttpSuccess": 20,
+    "ahttpSuccessRate": 100,
+    "staticSuccess": 0,
+    "ahttpTokens": 5104,
+    "rawTokens": 25896,
+    "axTokens": 5360,
+    "rawToAhttp": 5.1,
+    "axToAhttp": 1.1,
+    "results": [
+      {
+        "id": 1,
+        "name": "click-chain-1",
+        "steps": 1,
+        "completedSteps": 1,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 90,
+        "rawTokens": 470,
+        "axTokens": 94,
+        "ahttpStepTokens": [
+          90
+        ],
+        "rawStepTokens": [
+          470
+        ],
+        "axStepTokens": [
+          94
+        ],
+        "avgLatencyMs": 6.09
+      },
+      {
+        "id": 2,
+        "name": "click-chain-2",
+        "steps": 2,
+        "completedSteps": 2,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 180,
+        "rawTokens": 948,
+        "axTokens": 188,
+        "ahttpStepTokens": [
+          90,
+          90
+        ],
+        "rawStepTokens": [
+          474,
+          474
+        ],
+        "axStepTokens": [
+          94,
+          94
+        ],
+        "avgLatencyMs": 4.1
+      },
+      {
+        "id": 3,
+        "name": "click-chain-3",
+        "steps": 3,
+        "completedSteps": 3,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 270,
+        "rawTokens": 1434,
+        "axTokens": 282,
+        "ahttpStepTokens": [
+          90,
+          90,
+          90
+        ],
+        "rawStepTokens": [
+          478,
+          478,
+          478
+        ],
+        "axStepTokens": [
+          94,
+          94,
+          94
+        ],
+        "avgLatencyMs": 3.64
+      },
+      {
+        "id": 4,
+        "name": "click-chain-4",
+        "steps": 4,
+        "completedSteps": 4,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 360,
+        "rawTokens": 1928,
+        "axTokens": 376,
+        "ahttpStepTokens": [
+          90,
+          90,
+          90,
+          90
+        ],
+        "rawStepTokens": [
+          482,
+          482,
+          482,
+          482
+        ],
+        "axStepTokens": [
+          94,
+          94,
+          94,
+          94
+        ],
+        "avgLatencyMs": 3.51
+      },
+      {
+        "id": 5,
+        "name": "search-1",
+        "steps": 2,
+        "completedSteps": 2,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 192,
+        "rawTokens": 960,
+        "axTokens": 196,
+        "ahttpStepTokens": [
+          96,
+          96
+        ],
+        "rawStepTokens": [
+          480,
+          480
+        ],
+        "axStepTokens": [
+          98,
+          98
+        ],
+        "avgLatencyMs": 4.33
+      },
+      {
+        "id": 6,
+        "name": "search-2",
+        "steps": 2,
+        "completedSteps": 2,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 192,
+        "rawTokens": 960,
+        "axTokens": 196,
+        "ahttpStepTokens": [
+          96,
+          96
+        ],
+        "rawStepTokens": [
+          480,
+          480
+        ],
+        "axStepTokens": [
+          98,
+          98
+        ],
+        "avgLatencyMs": 4.01
+      },
+      {
+        "id": 7,
+        "name": "search-3",
+        "steps": 2,
+        "completedSteps": 2,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 192,
+        "rawTokens": 960,
+        "axTokens": 196,
+        "ahttpStepTokens": [
+          96,
+          96
+        ],
+        "rawStepTokens": [
+          480,
+          480
+        ],
+        "axStepTokens": [
+          98,
+          98
+        ],
+        "avgLatencyMs": 4.12
+      },
+      {
+        "id": 8,
+        "name": "search-4",
+        "steps": 2,
+        "completedSteps": 2,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 192,
+        "rawTokens": 960,
+        "axTokens": 196,
+        "ahttpStepTokens": [
+          96,
+          96
+        ],
+        "rawStepTokens": [
+          480,
+          480
+        ],
+        "axStepTokens": [
+          98,
+          98
+        ],
+        "avgLatencyMs": 4.38
+      },
+      {
+        "id": 9,
+        "name": "modal-1",
+        "steps": 2,
+        "completedSteps": 2,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 196,
+        "rawTokens": 946,
+        "axTokens": 212,
+        "ahttpStepTokens": [
+          98,
+          98
+        ],
+        "rawStepTokens": [
+          473,
+          473
+        ],
+        "axStepTokens": [
+          106,
+          106
+        ],
+        "avgLatencyMs": 5.24
+      },
+      {
+        "id": 10,
+        "name": "modal-2",
+        "steps": 3,
+        "completedSteps": 3,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 294,
+        "rawTokens": 1431,
+        "axTokens": 318,
+        "ahttpStepTokens": [
+          98,
+          98,
+          98
+        ],
+        "rawStepTokens": [
+          477,
+          477,
+          477
+        ],
+        "axStepTokens": [
+          106,
+          106,
+          106
+        ],
+        "avgLatencyMs": 3.74
+      },
+      {
+        "id": 11,
+        "name": "modal-3",
+        "steps": 4,
+        "completedSteps": 4,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 392,
+        "rawTokens": 1924,
+        "axTokens": 424,
+        "ahttpStepTokens": [
+          98,
+          98,
+          98,
+          98
+        ],
+        "rawStepTokens": [
+          481,
+          481,
+          481,
+          481
+        ],
+        "axStepTokens": [
+          106,
+          106,
+          106,
+          106
+        ],
+        "avgLatencyMs": 3.41
+      },
+      {
+        "id": 12,
+        "name": "modal-4",
+        "steps": 5,
+        "completedSteps": 5,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 490,
+        "rawTokens": 2425,
+        "axTokens": 530,
+        "ahttpStepTokens": [
+          98,
+          98,
+          98,
+          98,
+          98
+        ],
+        "rawStepTokens": [
+          485,
+          485,
+          485,
+          485,
+          485
+        ],
+        "axStepTokens": [
+          106,
+          106,
+          106,
+          106,
+          106
+        ],
+        "avgLatencyMs": 3.42
+      },
+      {
+        "id": 13,
+        "name": "select-1",
+        "steps": 2,
+        "completedSteps": 2,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 180,
+        "rawTokens": 956,
+        "axTokens": 188,
+        "ahttpStepTokens": [
+          90,
+          90
+        ],
+        "rawStepTokens": [
+          478,
+          478
+        ],
+        "axStepTokens": [
+          94,
+          94
+        ],
+        "avgLatencyMs": 3.63
+      },
+      {
+        "id": 14,
+        "name": "select-2",
+        "steps": 2,
+        "completedSteps": 2,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 180,
+        "rawTokens": 956,
+        "axTokens": 188,
+        "ahttpStepTokens": [
+          90,
+          90
+        ],
+        "rawStepTokens": [
+          478,
+          478
+        ],
+        "axStepTokens": [
+          94,
+          94
+        ],
+        "avgLatencyMs": 4.13
+      },
+      {
+        "id": 15,
+        "name": "select-3",
+        "steps": 2,
+        "completedSteps": 2,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 180,
+        "rawTokens": 956,
+        "axTokens": 188,
+        "ahttpStepTokens": [
+          90,
+          90
+        ],
+        "rawStepTokens": [
+          478,
+          478
+        ],
+        "axStepTokens": [
+          94,
+          94
+        ],
+        "avgLatencyMs": 4.05
+      },
+      {
+        "id": 16,
+        "name": "select-4",
+        "steps": 2,
+        "completedSteps": 2,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 180,
+        "rawTokens": 956,
+        "axTokens": 188,
+        "ahttpStepTokens": [
+          90,
+          90
+        ],
+        "rawStepTokens": [
+          478,
+          478
+        ],
+        "axStepTokens": [
+          94,
+          94
+        ],
+        "avgLatencyMs": 3.63
+      },
+      {
+        "id": 17,
+        "name": "pagination-1",
+        "steps": 2,
+        "completedSteps": 2,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 192,
+        "rawTokens": 946,
+        "axTokens": 200,
+        "ahttpStepTokens": [
+          96,
+          96
+        ],
+        "rawStepTokens": [
+          473,
+          473
+        ],
+        "axStepTokens": [
+          100,
+          100
+        ],
+        "avgLatencyMs": 4.3
+      },
+      {
+        "id": 18,
+        "name": "pagination-2",
+        "steps": 3,
+        "completedSteps": 3,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 288,
+        "rawTokens": 1431,
+        "axTokens": 300,
+        "ahttpStepTokens": [
+          96,
+          96,
+          96
+        ],
+        "rawStepTokens": [
+          477,
+          477,
+          477
+        ],
+        "axStepTokens": [
+          100,
+          100,
+          100
+        ],
+        "avgLatencyMs": 3.4
+      },
+      {
+        "id": 19,
+        "name": "pagination-3",
+        "steps": 4,
+        "completedSteps": 4,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 384,
+        "rawTokens": 1924,
+        "axTokens": 400,
+        "ahttpStepTokens": [
+          96,
+          96,
+          96,
+          96
+        ],
+        "rawStepTokens": [
+          481,
+          481,
+          481,
+          481
+        ],
+        "axStepTokens": [
+          100,
+          100,
+          100,
+          100
+        ],
+        "avgLatencyMs": 3.32
+      },
+      {
+        "id": 20,
+        "name": "pagination-4",
+        "steps": 5,
+        "completedSteps": 5,
+        "success": true,
+        "error": null,
+        "ahttpTokens": 480,
+        "rawTokens": 2425,
+        "axTokens": 500,
+        "ahttpStepTokens": [
+          96,
+          96,
+          96,
+          96,
+          96
+        ],
+        "rawStepTokens": [
+          485,
+          485,
+          485,
+          485,
+          485
+        ],
+        "axStepTokens": [
+          100,
+          100,
+          100,
+          100,
+          100
+        ],
+        "avgLatencyMs": 3.16
+      }
+    ]
+  },
+  "owner": [
+    {
+      "name": "hashKey matches Node SHA-256",
+      "pass": true,
+      "actual": "03f99ad2bb8f470ab4a6b65dd51dca8f63c4a36d52a66b22d706c14dbfec5983"
+    },
+    {
+      "name": "no observer before any owner API call",
+      "pass": true,
+      "actual": "0"
+    },
+    {
+      "name": "static hash is detected as a soft gate, not owner auth",
+      "pass": true,
+      "actual": "gate"
+    },
+    {
+      "name": "page starts locked",
+      "pass": true,
+      "actual": "true"
+    },
+    {
+      "name": "locked page stays dormant",
+      "pass": true,
+      "actual": "dormant"
+    },
+    {
+      "name": "owner id exposed without secrets",
+      "pass": true,
+      "actual": "acme"
+    },
+    {
+      "name": "status does not leak the key hash",
+      "pass": true
+    },
+    {
+      "name": "status did not wake the engine",
+      "pass": true,
+      "actual": "0"
+    },
+    {
+      "name": "text snapshot reports gate_key_required",
+      "pass": true
+    },
+    {
+      "name": "gate action error labels the soft gate",
+      "pass": true
+    },
+    {
+      "name": "locked snapshot exposes no actions or content",
+      "pass": true,
+      "actual": "ahttp 0.1.0 | gate-locked | owner=acme\n[LOCKED] gate_key_required\nThis page expo"
+    },
+    {
+      "name": "locked JSON has no actions",
+      "pass": true
+    },
+    {
+      "name": "locked snapshot did not wake the engine",
+      "pass": true,
+      "actual": "0"
+    },
+    {
+      "name": "locked tools() returns no schema",
+      "pass": true
+    },
+    {
+      "name": "wrong owner key rejected",
+      "pass": true
+    },
+    {
+      "name": "failed unlock did not wake the engine",
+      "pass": true,
+      "actual": "0"
+    },
+    {
+      "name": "correct owner key unlocks",
+      "pass": true
+    },
+    {
+      "name": "unlocked snapshot is readable",
+      "pass": true
+    },
+    {
+      "name": "observer installed after unlock and first scan",
+      "pass": true,
+      "actual": "1"
+    },
+    {
+      "name": "allow list limits the action surface",
+      "pass": true,
+      "actual": "checkout_submit | support_lookup | Internal note | docs_link"
+    },
+    {
+      "name": "allowed intents visible",
+      "pass": true
+    },
+    {
+      "name": "deny wins even when the intent is also allowed",
+      "pass": true
+    },
+    {
+      "name": "actions outside the allow list are hidden",
+      "pass": true
+    },
+    {
+      "name": "policy hidden count reported",
+      "pass": true,
+      "actual": "2"
+    },
+    {
+      "name": "snapshot meta names the owner",
+      "pass": true
+    },
+    {
+      "name": "policy confirm is exposed in JSON",
+      "pass": true
+    },
+    {
+      "name": "policy warning text present",
+      "pass": true,
+      "actual": "Owner policy requires explicit confirmation for this action"
+    },
+    {
+      "name": "tools schema contains only allowed ids",
+      "pass": true,
+      "actual": "4"
+    },
+    {
+      "name": "tools schema adds confirm for policy-protected actions",
+      "pass": true
+    },
+    {
+      "name": "denied intent cannot be executed by name",
+      "pass": true
+    },
+    {
+      "name": "denied action did not run",
+      "pass": true
+    },
+    {
+      "name": "policy confirm blocks without confirm flag",
+      "pass": true
+    },
+    {
+      "name": "confirmed policy action executes",
+      "pass": true
+    },
+    {
+      "name": "second allowed action executes",
+      "pass": true
+    },
+    {
+      "name": "allow list can match a field by name",
+      "pass": true
+    },
+    {
+      "name": "allowed field is writable",
+      "pass": true
+    },
+    {
+      "name": "configure switches the policy to read-only",
+      "pass": true
+    },
+    {
+      "name": "reconfiguring a private page relocks it",
+      "pass": true
+    },
+    {
+      "name": "read-only policy is reported in the snapshot",
+      "pass": true
+    },
+    {
+      "name": "read-only policy blocks writes",
+      "pass": true
+    },
+    {
+      "name": "read-only policy allows reads",
+      "pass": true
+    },
+    {
+      "name": "read-only policy permits link navigation",
+      "pass": true
+    },
+    {
+      "name": "lock() drops the runtime and relocks",
+      "pass": true
+    },
+    {
+      "name": "snapshot is locked after lock()",
+      "pass": true
+    },
+    {
+      "name": "unlock works again after lock()",
+      "pass": true
+    },
+    {
+      "name": "global config supports private mode",
+      "pass": true
+    },
+    {
+      "name": "plaintext key mode unlocks on localhost",
+      "pass": true
+    },
+    {
+      "name": "plaintext-key owner page serves actions",
+      "pass": true
+    },
+    {
+      "name": "plaintext keys are rejected outside localhost",
+      "pass": true
+    },
+    {
+      "name": "public access mode is open",
+      "pass": true
+    },
+    {
+      "name": "public access serves actions",
+      "pass": true
+    },
+    {
+      "name": "dev access is locked outside localhost",
+      "pass": true
+    },
+    {
+      "name": "dev-only lock reports the reason",
+      "pass": true
+    },
+    {
+      "name": "dev access is open on localhost",
+      "pass": true
+    },
+    {
+      "name": "dev access serves actions locally",
+      "pass": true
+    },
+    {
+      "name": "server auth mode detected",
+      "pass": true
+    },
+    {
+      "name": "server session is not verified before authorize",
+      "pass": true
+    },
+    {
+      "name": "unlock refuses when server auth is configured",
+      "pass": true
+    },
+    {
+      "name": "server rejects an invalid token",
+      "pass": true
+    },
+    {
+      "name": "failed server auth stays locked",
+      "pass": true
+    },
+    {
+      "name": "server token authorizes the page",
+      "pass": true
+    },
+    {
+      "name": "authorize sends credentials for cookie sessions",
+      "pass": true
+    },
+    {
+      "name": "bearer token sent only to the auth endpoint",
+      "pass": true
+    },
+    {
+      "name": "status reports a verified server session",
+      "pass": true
+    },
+    {
+      "name": "short-lived session expiry recorded",
+      "pass": true
+    },
+    {
+      "name": "status does not leak the auth token",
+      "pass": true
+    },
+    {
+      "name": "server policy limits the action surface",
+      "pass": true,
+      "actual": "checkout_submit"
+    },
+    {
+      "name": "server policy confirmation applied",
+      "pass": true
+    },
+    {
+      "name": "snapshot does not leak the auth token",
+      "pass": true
+    },
+    {
+      "name": "configure relocks the page",
+      "pass": true
+    },
+    {
+      "name": "authorizeAction hook blocks the mutation",
+      "pass": true,
+      "actual": "backend denies this action"
+    },
+    {
+      "name": "short ttl session authorized",
+      "pass": true
+    },
+    {
+      "name": "expired server session relocks the page",
+      "pass": true
+    },
+    {
+      "name": "expired session reports server_auth_required",
+      "pass": true
+    },
+    {
+      "name": "non-TLS auth endpoints are rejected",
+      "pass": true,
+      "actual": "{\"ok\":false,\"locked\":true,\"error\":\"insecure_auth_endpoint\"}"
+    },
+    {
+      "name": "pages without config stay public",
+      "pass": true
+    }
+  ],
+  "mcp": {
+    "pass": true,
+    "checks": [
+      {
+        "name": "initialize handshake",
+        "pass": true,
+        "actual": "ahttp-mcp"
+      },
+      {
+        "name": "protocol version negotiated",
+        "pass": true,
+        "actual": "2025-11-25"
+      },
+      {
+        "name": "tools capability advertised",
+        "pass": true
+      },
+      {
+        "name": "three tools listed",
+        "pass": true,
+        "actual": "ahttp_open,ahttp_snapshot,ahttp_act"
+      },
+      {
+        "name": "tool names are correct",
+        "pass": true,
+        "actual": "ahttp_open,ahttp_snapshot,ahttp_act"
+      },
+      {
+        "name": "ahttp_open succeeded",
+        "pass": true
+      },
+      {
+        "name": "snapshot contains page heading",
+        "pass": true
+      },
+      {
+        "name": "snapshot exposes the email input",
+        "pass": true
+      },
+      {
+        "name": "hidden prompt injection filtered in the MCP result",
+        "pass": true
+      },
+      {
+        "name": "ahttp_act fill succeeded",
+        "pass": true
+      },
+      {
+        "name": "diff reports the new value",
+        "pass": true,
+        "actual": "~ a2 \"Email\" \"\" -> \"agent@example.com\""
+      },
+      {
+        "name": "guarded action blocked over MCP",
+        "pass": true
+      },
+      {
+        "name": "block response explains confirmation",
+        "pass": true
+      },
+      {
+        "name": "navigation action succeeded",
+        "pass": true
+      },
+      {
+        "name": "new page snapshot returned after navigation",
+        "pass": true
+      },
+      {
+        "name": "navigation recorded in the result",
+        "pass": true
+      },
+      {
+        "name": "ahttp_snapshot reads the current page",
+        "pass": true
+      },
+      {
+        "name": "stdio stdout carries JSON-RPC only",
+        "pass": true
+      },
+      {
+        "name": "private page requires an owner key over MCP",
+        "pass": true
+      },
+      {
+        "name": "missing owner key error explains the gate",
+        "pass": true
+      },
+      {
+        "name": "owner-key MCP process initialized",
+        "pass": true
+      },
+      {
+        "name": "owner key opens the private page",
+        "pass": true
+      },
+      {
+        "name": "private snapshot contains allowed content",
+        "pass": true
+      },
+      {
+        "name": "denied action is absent from the private snapshot",
+        "pass": true
+      },
+      {
+        "name": "allowed action is present in the private snapshot",
+        "pass": true
+      },
+      {
+        "name": "policy confirmation enforced over MCP",
+        "pass": true
+      },
+      {
+        "name": "owner confirmation token issued",
+        "pass": true
+      },
+      {
+        "name": "confirmed owner action executed over MCP",
+        "pass": true
+      },
+      {
+        "name": "denied intent rejected by name over MCP",
+        "pass": true
+      },
+      {
+        "name": "server-auth page requires a token over MCP",
+        "pass": true
+      },
+      {
+        "name": "missing server token error explains the gate",
+        "pass": true
+      },
+      {
+        "name": "server-auth MCP process initialized",
+        "pass": true
+      },
+      {
+        "name": "server token authorizes the page over MCP",
+        "pass": true
+      },
+      {
+        "name": "server-auth snapshot contains allowed content",
+        "pass": true
+      },
+      {
+        "name": "server deny policy hides the dangerous action",
+        "pass": true
+      },
+      {
+        "name": "server policy confirmation enforced over MCP",
+        "pass": true
+      },
+      {
+        "name": "server confirmation token issued",
+        "pass": true
+      },
+      {
+        "name": "confirmed server-authorized action executed over MCP",
+        "pass": true
+      }
+    ],
+    "passed": 38,
+    "total": 38,
+    "ms": 298,
+    "stderr": [
+      "ahttp-mcp 0.1.0 ready (stdio, http backend, private targets allowed)"
+    ]
+  },
+  "summary": {
+    "torturePassed": 9,
+    "tortureTotal": 9,
+    "ownerPassed": 76,
+    "ownerTotal": 76,
+    "ownerPass": true,
+    "mcpPassed": 38,
+    "mcpTotal": 38,
+    "mcpPass": true,
+    "webPassed": 5,
+    "webTotal": 5,
+    "tasksPassed": 20,
+    "tasksTotal": 20,
+    "tasksPass": true,
+    "allPass": true
+  }
+}

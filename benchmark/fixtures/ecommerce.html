@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head><title>Nimbus Store Checkout</title></head>
+<body>
+<main>
+  <h1>Nimbus Store</h1>
+  <div id="app"></div>
+  <div id="confirm" hidden>
+    <h2>Order confirmed</h2>
+    <p id="summary"></p>
+    <a href="/invoice">Download invoice</a>
+  </div>
+</main>
+<script>
+var state = { step: 'plans', email: '', promo: '', cart: 0, promoApplied: false, error: '' };
+var app = document.getElementById('app');
+
+function render() {
+  if (state.step === 'plans') {
+    app.innerHTML =
+      '<h2>Choose a plan</h2>' +
+      '<div class="plan"><span>Pro plan - $49/month</span><button data-act="choose">Choose Pro</button></div>' +
+      '<div class="plan"><span>Team plan - $99/month</span><button data-act="choose-team">Choose Team</button></div>' +
+      '<a href="/pricing">Compare plans</a>';
+  } else if (state.step === 'cart') {
+    app.innerHTML =
+      '<h2>Your cart</h2>' +
+      '<p>Pro plan ($49/month)</p>' +
+      '<button data-act="checkout">Checkout</button>';
+  } else {
+    app.innerHTML =
+      '<h2>Checkout</h2>' +
+      '<label for="email">Email</label><input id="email" name="email" value="' + state.email + '">' +
+      '<label for="promo">Promo code</label><input id="promo" name="promo" value="' + state.promo + '">' +
+      '<button data-act="promo">Apply promo</button>' +
+      '<p id="err">' + state.error + '</p>' +
+      '<p id="discount">' + (state.promoApplied ? 'Promo AGENT20 applied' : 'No discount') + '</p>' +
+      '<button data-act="place">Place order</button>';
+  }
+}
+
+app.addEventListener('click', function (e) {
+  var target = e.target.closest('[data-act]');
+  if (!target) return;
+  var act = target.getAttribute('data-act');
+  if (act === 'choose' || act === 'choose-team') { state.step = 'cart'; render(); }
+  if (act === 'checkout') { state.step = 'form'; render(); }
+  if (act === 'promo') {
+    state.email = document.getElementById('email').value;
+    state.promo = document.getElementById('promo').value;
+    state.promoApplied = state.promo.trim() === 'AGENT20';
+    state.error = state.promoApplied ? '' : 'Invalid promo code';
+    render();
+  }
+  if (act === 'place') {
+    state.email = document.getElementById('email').value;
+    if (!state.email) { state.error = 'Email is required'; render(); return; }
+    state.step = 'done';
+    document.getElementById('app').innerHTML = '';
+    document.getElementById('confirm').hidden = false;
+    document.getElementById('summary').textContent = 'Order confirmed for ' + state.email + (state.promoApplied ? ' with 20% off' : '');
+  }
+});
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head><title>Icon Only</title></head>
+<body>
+<main>
+  <h1>Legacy icons</h1>
+  <button id="save" onclick="document.getElementById('r').textContent='saved'">
+    <svg width="16" height="16" viewBox="0 0 16 16"><title>Save document</title><path d="M2 2h10l2 2v10H2z"/></svg>
+  </button>
+  <button aria-label="Download report" onclick="document.getElementById('r').textContent='downloaded'">
+    <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 2v8l3-3"/></svg>
+  </button>
+  <button title="Print page" onclick="document.getElementById('r').textContent='printed'">
+    <svg width="16" height="16" viewBox="0 0 16 16"><path d="M4 4h8v8H4z"/></svg>
+  </button>
+  <form>
+    <div><span>Card number</span><input name="card"></div>
+    <div><span>Expiry date</span><input name="expiry"></div>
+    <button type="button" onclick="document.getElementById('r').textContent='submitted'">Submit payment</button>
+  </form>
+  <p id="r">idle</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head><title>Async Modal</title></head>
+<body>
+<main>
+  <h1>Async flow</h1>
+  <button id="go">Open checkout</button>
+  <p id="out">idle</p>
+  <div id="dlg" role="dialog" aria-modal="true" hidden>
+    <h2>Checkout</h2>
+    <p>Confirm your order</p>
+    <div id="toast" role="status"></div>
+    <button id="confirm">Confirm</button>
+  </div>
+</main>
+<script>
+window.fetch = function () {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      resolve({ ok: true, status: 200, json: function () { return Promise.resolve({ ok: true }); } });
+    }, 120);
+  });
+};
+window.__fetchRef = window.fetch;
+document.getElementById('go').addEventListener('click', function () {
+  window.fetch('/api/checkout').then(function () {
+    setTimeout(function () {
+      document.getElementById('dlg').hidden = false;
+      document.getElementById('toast').textContent = 'Session loaded';
+    }, 60);
+  });
+});
+document.getElementById('confirm').addEventListener('click', function () {
+  document.getElementById('toast').textContent = 'Order confirmed';
+});
+</script>
+</body>
+</html>

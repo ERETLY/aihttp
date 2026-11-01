@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Hacker News",
+    "url": "https://news.ycombinator.com",
+    "file": "hacker-news.html",
+    "bytes": 34839,
+    "sha256": "8d423d868a5544a5d3543dbf8a6dd4040f75d7eb19c2d4d589bf070b1f6c33c6",
+    "httpStatus": 200,
+    "fetchedAt": "2026-10-31T08:07:49.078Z",
+    "fetchMs": 918
+  },
+  {
+    "name": "Wikipedia (HTTP)",
+    "url": "https://en.wikipedia.org/wiki/HTTP",
+    "file": "wikipedia-http.html",
+    "bytes": 604882,
+    "sha256": "49b8b92fa5fb9c1e2f2ac47df8a43a0e173d5b045c1feba86fae8a2577897cda",
+    "httpStatus": 200,
+    "fetchedAt": "2026-10-31T08:07:49.796Z",
+    "fetchMs": 717
+  },
+  {
+    "name": "Lobsters",
+    "url": "https://lobste.rs",
+    "file": "lobsters.html",
+    "bytes": 56750,
+    "sha256": "211d87f33cbaed2c3047d87d6ed4da998a0c72508b13afa89ed04dfbfa45e877",
+    "httpStatus": 200,
+    "fetchedAt": "2026-10-31T08:07:50.543Z",
+    "fetchMs": 747
+  },
+  {
+    "name": "GitHub (torvalds/linux)",
+    "url": "https://github.com/torvalds/linux",
+    "file": "github-linux.html",
+    "bytes": 293132,
+    "sha256": "2b608af3459dbd2611a0e031ffc6954374cd2a305ca11b861f9bc59eda5c201a",
+    "httpStatus": 200,
+    "fetchedAt": "2026-10-31T08:07:51.478Z",
+    "fetchMs": 935
+  },
+  {
+    "name": "MDN (HTTP)",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
+    "file": "mdn-http.html",
+    "bytes": 222231,
+    "sha256": "3e2c02c4e8c0fca767a8f5516c5082173787ff6277c99bcfa890188d4dad3708",
+    "httpStatus": 200,
+    "fetchedAt": "2026-10-31T08:07:52.051Z",
+    "fetchMs": 573
+  }
+]

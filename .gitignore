@@ -1,0 +1,12 @@
+node_modules/
+coverage/
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.env
+.env.*
+benchmark/.cache/
+benchmark/last-run.log
+*.cpuprofile
+scratch-*

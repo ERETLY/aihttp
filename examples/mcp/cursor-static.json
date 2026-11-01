@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ahttp": {
+      "command": "node",
+      "args": ["/absolute/path/to/ahttp/bin/ahttp-mcp.js"]
+    }
+  }
+}

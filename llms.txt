@@ -1,0 +1,141 @@
+# ahttp
+
+> ahttp turns a live DOM into a compact, executable action graph and returns a semantic diff after each step. It is a zero-dependency browser file plus a Node CLI and MCP server. Version 0.1.0 is pre-1.0.
+
+Status: single-maintainer, no independent adoption and no third-party security audit. The repository's own suites pass; that is not external validation. The API can change.
+
+Repository: https://github.com/ERETLY/ahttp
+Engine: https://github.com/ERETLY/ahttp/blob/main/ahttp.js
+Types: https://github.com/ERETLY/ahttp/blob/main/ahttp.d.ts
+Benchmark data: https://github.com/ERETLY/ahttp/blob/main/benchmark/results.json
+Security: https://github.com/ERETLY/ahttp/blob/main/docs/SECURITY.md
+
+## What it does
+
+- Reads visible controls and text from the live DOM, including open shadow roots and same-origin iframes.
+- Assigns short action ids and folds repeated links.
+- Executes click, fill, select, toggle, keyboard, hover and scroll actions.
+- Waits for network and DOM work to settle, then returns a diff and a fresh snapshot.
+- Lets a site owner declare `data-ahttp-intent`, `data-ahttp-confirm`, `data-ahttp-readonly`, `data-ahttp-ignore`, access mode and policy.
+- Stays dormant until the first API call.
+
+It is not a general browser agent, a screenshot system, or a security boundary.
+
+## Backends
+
+Static MCP backend: fetches HTML, parses it with a small built-in DOM, and does not execute page JavaScript. It is the lightweight option for server-rendered pages.
+
+Browser backend: `--browser` uses Playwright/Chromium; `--cdp <url>` attaches to a running Chrome. It executes page JavaScript and is the option for SPAs. Playwright is an optional peer dependency.
+
+## MCP
+
+JSON-RPC 2.0 over stdio. Legacy handshake through `2025-11-25`; modern `2026-07-28` `server/discover` and per-request `_meta` with explicit `pageId`.
+
+Tools:
+
+- `ahttp_open({ url, maxActions? })`
+- `ahttp_snapshot({ pageId?, scope?, query?, maxActions?, maxText?, includeText?, verbose?, format? })`
+- `ahttp_act({ pageId?, id, value?, key?, confirmationToken? })`
+
+Guarded actions return a one-time, expiring `confirmationToken` and perform no DOM event. The caller must repeat the same call with the token. This is an accident barrier, not a human-approval proof.
+
+Run `ahttp-mcp --allow-private` only for trusted targets. The default guard rejects loopback, private, link-local, metadata and non-HTTP targets, revalidates redirects, caps size and enforces timeouts.
+
+## CLI
+
+```bash
+node bin/ahttp-cli.js <url> [--json] [--query text] [--scope main] [--max-actions 60] [--max-text 1400]
+node bin/ahttp-cli.js <url> --allow-private
+node bin/ahttp-cli.js <url> --auth-token <short-lived-token>
+node bin/ahttp-cli.js <url> --unlock <soft-gate-key>
+node bin/ahttp-cli.js --hash-key <key>
+```
+
+The CLI's token counts use `ceil(UTF-8 bytes / 4)` as a quick estimate. The benchmark uses a real tokenizer.
+
+## API
+
+```js
+ahttp.snapshot(options)          // text or JSON action graph
+ahttp.act(id, payload, options)  // execute, settle, diff, snapshot
+ahttp.tools()                    // JSON Schema for function calling
+ahttp.status()                   // dormant or active state
+ahttp.sleep()                    // disconnect observers, restore globals
+ahttp.wake()                     // explicit wake
+ahttp.configure(options)         // access and policy
+ahttp.authorize(options)         // server-verified session
+ahttp.unlock(key)                // static soft gate
+ahttp.lock()                     // drop runtime and relock
+ahttp.hashKey(value)             // SHA-256 for data-ahttp-key-hash
+ahttp.installWebMCP(options)     // opt-in draft document.modelContext adapter
+```
+
+Snapshot options: `format`, `scope`, `query`, `maxActions` (default 60), `maxText` (default 1,400), `includeText`, `interactiveOnly`, `force`, `group`, `compact`, `verbose`.
+
+Act payloads: string or `{ value }`; `{ checked }`; `{ key }`; `{ read: true }`; `{ confirm: true }`; `{ hover: true }`; `{ scroll: true }`. Options include `settle`, `timeout`, `quiet`, `minWait`, `diff`, `snapshot`, `maxActions`.
+
+Result: `{ ok, action, method, url, latencyMs, diff, snapshot, snapshotMeta, meta }`. Errors are returned with `ok: false` and an `error` code.
+
+## Declarative contract
+
+```html
+<script src="ahttp.min.js"></script>
+
+<button data-ahttp-intent="checkout_submit">Pay now</button>
+<button data-ahttp-confirm="Charges $49.00">Pay</button>
+<input value="ACC-777" data-ahttp-readonly>
+<div data-ahttp-ignore>Internal tools</div>
+```
+
+`data-ahttp-confirm` is enforced by `ahttp.act`; it is not a sandbox against direct DOM code.
+
+## Access modes
+
+- `public`: open to any agent.
+- `dev`: open only on localhost, `127.0.0.1`, `::1`, or `file:`.
+- `gate`: static SHA-256 hash. The hash is in the page. A soft gate, not authentication.
+- `owner`: server-verified session and short-lived policy. The production path.
+
+The server that performs a mutation must authorize the agent, tenant, object and intent again. Client-side checks are not an authorization boundary.
+
+## Security posture
+
+- Page text is wrapped as `[text: untrusted]`; `includeText: false` removes it.
+- Hidden-text filtering is heuristic.
+- The static backend does not execute page JavaScript.
+- The browser backend validates HTTP requests at the Playwright route layer. DNS rebinding remains a risk in browser mode.
+- The MCP confirmation token is not a human-approval proof.
+- Do not publish exploit details in a public issue.
+
+## Measured results
+
+Pinned pages, real tokenizer `gpt-tokenizer@4.1.0/o200k_base`, Chromium 156 accessibility snapshots:
+
+| Page | Raw HTML | ahttp | Chromium AX | Readability Markdown |
+|---|---:|---:|---:|---:|
+| Hacker News | 11,771 | 1,162 | 10,099 | 5,136 |
+| Wikipedia HTTP | 191,129 | 1,136 | 73,404 | 26,579 |
+| Lobsters | 17,909 | 1,105 | 5,918 | 6,542 |
+| GitHub torvalds/linux | 105,767 | 4,198 | 5,404 | 1,387 |
+| MDN HTTP | 59,787 | 1,149 | 7,381 | 3,008 |
+
+Five-step checkout in Chromium: raw 3,983 tokens, Readability Markdown 68, Chromium AX 346, ahttp 289. ahttp completes the task and stays below the accessibility snapshot; Markdown is smaller still but drops every control.
+
+Twenty-task scripted suite: ahttp 20/20 tasks, 5,104 tokens; raw HTML 25,896; Chromium AX 5,360. ahttp uses 4.8% fewer tokens than the accessibility snapshot, which cannot execute the tasks. This is a scripted agent, not an LLM benchmark.
+
+Torture suite: 9/9 stands. Owner/gate suite: 76/76. MCP: 38/38. Pinned web: 5/5. These are repository checks, not independent validation.
+
+## Limitations
+
+- `mini-dom` is not an HTML5 tree builder. Use browser mode when exact parsing matters.
+- External stylesheets are fetched by the static backend (up to 8 links, 2 MB each); `@import` is followed to three levels and common media conditions are evaluated.
+- Closed shadow roots and cross-origin iframes are inaccessible.
+- Accessible names are a subset of the specification.
+- Stale-node relocation is heuristic.
+- Hidden-text detection is heuristic.
+- The task benchmark is scripted; no LLM task benchmark was run.
+- No npm publication, MCP Inspector run, or independent security review yet.
+
+## License
+
+MIT. See `LICENSE`. You can fork and maintain your own version.

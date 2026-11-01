@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head><title>Shadow</title></head>
+<body>
+<main>
+  <h1>Shadow payment</h1>
+  <div id="host"></div>
+</main>
+<script>
+class XInner extends HTMLElement {
+  constructor() {
+    super();
+    var root = this.attachShadow({ mode: 'open' });
+    root.innerHTML =
+      '<label for="card">Card number</label>' +
+      '<input id="card" name="card" placeholder="4242 4242 4242 4242">' +
+      '<button id="pay">Pay now</button>' +
+      '<p id="res">idle</p>';
+    root.getElementById('pay').addEventListener('click', function () {
+      root.getElementById('res').textContent = 'paid ' + root.getElementById('card').value;
+    });
+  }
+}
+class XOuter extends HTMLElement {
+  constructor() {
+    super();
+    var root = this.attachShadow({ mode: 'open' });
+    root.innerHTML = '<h2>Payment</h2><x-inner></x-inner>';
+  }
+}
+customElements.define('x-inner', XInner);
+customElements.define('x-outer', XOuter);
+document.getElementById('host').appendChild(document.createElement('x-outer'));
+</script>
+</body>
+</html>

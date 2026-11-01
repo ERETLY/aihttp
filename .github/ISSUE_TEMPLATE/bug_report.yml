@@ -1,0 +1,50 @@
+name: Bug report
+description: Report a reproducible defect
+title: "[bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include secrets, tokens, private URLs, or third-party data.
+        Security problems belong in a private advisory: https://github.com/ERETLY/ahttp/security/advisories/new
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Output of `node bin/ahttp-cli.js --version`, or the commit.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Node version, and whether the browser backend is used.
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Minimal reproduction
+      description: The exact command or script. Remove secrets.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+      description: Paste the output and the exit code.
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional context
+      description: Does it reproduce on a pinned fixture? Does it reproduce in browser mode?
