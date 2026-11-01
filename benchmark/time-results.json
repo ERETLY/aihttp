@@ -1,0 +1,106 @@
+{
+  "generatedAt": "2026-11-01T05:58:12.040Z",
+  "version": "0.1.0",
+  "node": "v26.13.0",
+  "platform": "win32",
+  "arch": "x64",
+  "scan": [
+    {
+      "name": "Hacker News",
+      "url": "https://news.ycombinator.com",
+      "raw": 25.6,
+      "markdown": 273.7,
+      "jina": null,
+      "firecrawl": null,
+      "axtree": 87,
+      "ahttp": 39,
+      "self": 25.1
+    },
+    {
+      "name": "Wikipedia (HTTP)",
+      "url": "https://en.wikipedia.org/wiki/HTTP",
+      "raw": 212.1,
+      "markdown": 869.3,
+      "jina": null,
+      "firecrawl": null,
+      "axtree": 288.3,
+      "ahttp": 3165,
+      "self": 194.1
+    },
+    {
+      "name": "Lobsters",
+      "url": "https://lobste.rs",
+      "raw": 19.9,
+      "markdown": 398.4,
+      "jina": null,
+      "firecrawl": null,
+      "axtree": 71,
+      "ahttp": 4,
+      "self": 24.5
+    },
+    {
+      "name": "GitHub (torvalds/linux)",
+      "url": "https://github.com/torvalds/linux",
+      "raw": 37.9,
+      "markdown": 205.2,
+      "jina": null,
+      "firecrawl": null,
+      "axtree": 92,
+      "ahttp": 18,
+      "self": 34.3
+    },
+    {
+      "name": "MDN (HTTP)",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
+      "raw": 14.1,
+      "markdown": 252.2,
+      "jina": null,
+      "firecrawl": null,
+      "axtree": 76.8,
+      "ahttp": 13,
+      "self": 18.9
+    }
+  ],
+  "live": [
+    {
+      "name": "Hacker News",
+      "url": "https://news.ycombinator.com",
+      "ahttp": 1846.6,
+      "self": 1455.5,
+      "jina": 1178.5,
+      "firecrawl": 1319.9
+    },
+    {
+      "name": "Wikipedia (HTTP)",
+      "url": "https://en.wikipedia.org/wiki/HTTP",
+      "ahttp": 4379.4,
+      "self": 1499,
+      "jina": 1505.6,
+      "firecrawl": 1576.1
+    },
+    {
+      "name": "Lobsters",
+      "url": "https://lobste.rs",
+      "ahttp": 2151.2,
+      "self": 1595.4,
+      "jina": 748,
+      "firecrawl": 1168.7
+    },
+    {
+      "name": "GitHub (torvalds/linux)",
+      "url": "https://github.com/torvalds/linux",
+      "ahttp": 2430,
+      "self": 2412.8,
+      "jina": 756.4,
+      "firecrawl": 1589.2
+    },
+    {
+      "name": "MDN (HTTP)",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
+      "ahttp": 1429.5,
+      "self": 854.9,
+      "jina": 426.6,
+      "firecrawl": 467.6
+    }
+  ]
+}

@@ -7,6 +7,7 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const RESULTS = path.join(ROOT, 'benchmark', 'results.json');
 const SELF_RESULTS = path.join(ROOT, 'benchmark', 'self-results.json');
+const TIME_RESULTS = path.join(ROOT, 'benchmark', 'time-results.json');
 const README = path.join(ROOT, 'README.md');
 const START = '<!-- BENCH:START -->';
 const END = '<!-- BENCH:END -->';
@@ -18,6 +19,11 @@ function load() {
 function loadSelf() {
   if (!fs.existsSync(SELF_RESULTS)) return null;
   return JSON.parse(fs.readFileSync(SELF_RESULTS, 'utf8'));
+}
+
+function loadTime() {
+  if (!fs.existsSync(TIME_RESULTS)) return null;
+  return JSON.parse(fs.readFileSync(TIME_RESULTS, 'utf8'));
 }
 
 // Headers that start with ':' are right-aligned (the colon is dropped).
@@ -128,17 +134,16 @@ function checkoutTimeTable(comparison, self) {
   return table(['Method', ':Time per step'], rows);
 }
 
-function liveTimeTable(web) {
-  const defs = [['ahttp', 'ahttp'], ['Jina Reader', 'jina'], ['Firecrawl', 'firecrawl']];
+// One row per method, one column per site. Methods with no value anywhere are left out.
+function timingTable(web, entries, defs) {
   const rows = [];
   for (const def of defs) {
-    if (!web.some((site) => site.liveMs && site.liveMs[def[1]] != null)) continue;
-    const row = [def[0]];
-    for (const site of web) {
-      const value = site.liveMs ? site.liveMs[def[1]] : null;
-      row.push(value == null ? 'n/a' : ms(value));
-    }
-    rows.push(row);
+    const values = web.map((site) => {
+      const entry = entries.find((item) => shortSite(item.name) === shortSite(site.name));
+      return entry && entry[def[1]] != null ? entry[def[1]] : null;
+    });
+    if (values.every((value) => value == null)) continue;
+    rows.push([def[0]].concat(values.map((value) => value == null ? 'n/a' : ms(value))));
   }
   if (!rows.length) return null;
   const headers = ['Method'];
@@ -146,21 +151,30 @@ function liveTimeTable(web) {
   return table(headers, rows);
 }
 
-function scanTimeTable(web, self) {
-  const headers = ['Method'];
-  for (const site of web) headers.push(':' + shortSite(site.name));
-  const rows = [['ahttp'].concat(web.map((site) => site.scanMs == null ? 'n/a' : ms(site.scanMs)))];
-  if (self && self.pages) {
-    rows.push(['ahttp self'].concat(web.map((site) => {
-      const match = selfPage(self, site);
-      return match && match.scanMs != null ? ms(match.scanMs) : 'n/a';
-    })));
-  }
-  return table(headers, rows);
+function liveTimeTable(web, time) {
+  return timingTable(web, time.live || [], [
+    ['ahttp', 'ahttp'],
+    ['ahttp self', 'self'],
+    ['Jina Reader', 'jina'],
+    ['Firecrawl', 'firecrawl']
+  ]);
 }
 
-function render(results, selfResults) {
+function scanTimeTable(web, time) {
+  return timingTable(web, time.scan || [], [
+    ['Raw HTML', 'raw'],
+    ['Markdown', 'markdown'],
+    ['Jina Reader', 'jina'],
+    ['Firecrawl', 'firecrawl'],
+    ['Accessibility tree', 'axtree'],
+    ['ahttp', 'ahttp'],
+    ['ahttp self', 'self']
+  ]);
+}
+
+function render(results, selfResults, timeResults) {
   const self = selfResults === undefined ? loadSelf() : selfResults;
+  const time = timeResults === undefined ? loadTime() : timeResults;
   const lines = [];
   const comparison = results.comparison && !results.comparison.error ? results.comparison : null;
   const web = (results.web || []).filter((site) => site.status === 'ok');
@@ -184,7 +198,7 @@ function render(results, selfResults) {
 
     lines.push('### Time');
     lines.push('');
-    lines.push('Wall-clock numbers from one machine, relative at best.');
+    lines.push('Wall-clock numbers from one machine, relative at best.' + (time ? ' Live and scan come from `benchmark/time-results.json` (`' + time.generatedAt + '`).' : ''));
     lines.push('');
 
     const checkout = checkoutTimeTable(comparison, self);
@@ -195,22 +209,25 @@ function render(results, selfResults) {
       lines.push('');
     }
 
-    const live = liveTimeTable(web);
+    const live = time ? liveTimeTable(web, time) : null;
     if (live) {
-      lines.push('**Live.** URL to content, one request per page, ' + results.generatedAt.slice(0, 10) + ':');
+      lines.push('**Live.** URL to content, one request per page, ' + time.generatedAt.slice(0, 10) + ':');
       lines.push('');
       lines.push(live);
       lines.push('');
-      lines.push('Single runs, not medians. ahttp also fetches linked stylesheets and builds action ids; the hosted readers return Markdown only. `ahttp self` has no live row because it runs on a page that is already open.');
+      lines.push('Single runs, not medians. `ahttp` fetches the page and its linked stylesheets in Node and scans it. `ahttp self` loads the page in Chromium with the userscript injected and takes a snapshot. The hosted readers return Markdown only.');
       lines.push('');
     }
 
-    lines.push('**Scan.** One snapshot per pinned page, static backend and self file:');
-    lines.push('');
-    lines.push(scanTimeTable(web, self));
-    lines.push('');
-    lines.push('Hosted readers have no separate scan step; their time is in Live time.');
-    lines.push('');
+    const scan = time ? scanTimeTable(web, time) : null;
+    if (scan) {
+      lines.push('**Scan.** One snapshot per pinned page. Raw HTML, the accessibility tree and `ahttp self` run in Chromium on the page served from localhost; Markdown and `ahttp` run in Node.');
+      lines.push('');
+      lines.push(scan);
+      lines.push('');
+      lines.push('Hosted readers have no separate scan step; their time is in Live time.');
+      lines.push('');
+    }
   }
 
   lines.push('### Caveats');

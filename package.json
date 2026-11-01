@@ -50,6 +50,7 @@
     "build:self": "node scripts/build-self.js",
     "bench": "node benchmark/run.js",
     "bench:self": "node benchmark/self.js",
+    "bench:time": "node benchmark/time.js",
     "bench:pinned": "node benchmark/fetch-pinned.js",
     "bench:render": "node scripts/render-bench.js --write",
     "test": "node --test",
