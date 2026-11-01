@@ -26,4 +26,4 @@ First public snapshot.
 ### Benchmarks
 
 - Compared with raw HTML, Readability Markdown, the Chromium accessibility tree, Jina Reader and Firecrawl.
-- Checkout, live and scan timings are generated into the README from `benchmark/results.json`.
+- `npm run bench:time` measures scan and live time for every method; the README timing tables are generated from `benchmark/time-results.json`.
