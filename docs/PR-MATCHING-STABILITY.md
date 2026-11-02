@@ -1,7 +1,9 @@
 # PR: matching stability, regression corpus and onboarding
 
-Branch: `feat/matching-stability`  
-Base: `main` (`4d397c8`)  
+Branch: `feat/matching-stability`
+
+Base: `main` (`4d397c8`)
+
 Scope: ahttp `0.1.0`, additive API only.
 
 ## Problem
@@ -142,7 +144,7 @@ still have no runtime dependencies.
 ## Verification
 
 ```text
-npm test                 # 80 tests, 80 pass
+npm test                 # 81 tests, 81 pass
 npm run test:corpus      # 27 cases, 27 pass, 0 fail, 0 pending
 npm run typecheck        # clean
 npm run lint             # clean
