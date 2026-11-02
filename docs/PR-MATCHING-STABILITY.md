@@ -29,7 +29,7 @@ without reading code.
 | Docs | `README.md`, `docs/API.md`, `docs/MATCHING.md`, `docs/ARCHITECTURE.md` | user and maintainer docs |
 
 The full map, snapshot shape and diff shape are in
-[docs/ARCHITECTURE.md](ARCHITECTURE.md).
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Plan delivered
 
@@ -119,7 +119,7 @@ The three genuine behavioral failures before the change:
   `thresholds`) and dispatches no event. `confirm` cannot override it.
 - Candidate order is score, then DOM order, for deterministic replies.
 
-Weights and rationale: [docs/MATCHING.md](MATCHING.md).
+Weights and rationale: [docs/MATCHING.md](docs/MATCHING.md).
 
 ### Post-check
 
