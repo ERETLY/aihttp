@@ -1,0 +1,28 @@
+{
+  "id": "shadow-dom-host-slot",
+  "html": "fixtures/shadow-slot.html",
+  "url": "https://corpus.test/shadow-slot",
+  "notes": "host + slot; the light-DOM button stays reachable",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ],
+      "expectText": [
+        "Slotted"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "slotted light-DOM button",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "slotted"
+        }
+      }
+    }
+  ]
+}

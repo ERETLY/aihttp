@@ -1,0 +1,20 @@
+{
+  "id": "hidden-aria-hidden",
+  "html": "fixtures/hidden-aria.html",
+  "url": "https://corpus.test/hidden-aria",
+  "notes": "aria-hidden subtree is absent from the snapshot",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ],
+      "expectText": [
+        "Visible"
+      ],
+      "expectNotText": [
+        "Secret"
+      ]
+    }
+  ]
+}

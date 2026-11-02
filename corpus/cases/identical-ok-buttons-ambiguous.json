@@ -1,0 +1,35 @@
+{
+  "id": "identical-ok-buttons-ambiguous",
+  "html": "fixtures/identical-ok.html",
+  "url": "https://corpus.test/confirm",
+  "notes": "two visually identical OK buttons; rerender and act on the old id",
+  "pending": "phase-2: expect structured ambiguous, baseline clicks a guess",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ]
+    },
+    {
+      "action": "rerender",
+      "selector": "#app",
+      "html": "<button onclick=\"window.__mark('one')\">OK</button><button onclick=\"window.__mark('two')\">OK</button>"
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "first OK button",
+      "expectStatus": "ambiguous",
+      "expectEffect": {
+        "candidates": 2,
+        "noMutation": true,
+        "pageText": {
+          "selector": "#out",
+          "equals": "idle"
+        }
+      }
+    }
+  ]
+}

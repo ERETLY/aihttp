@@ -358,6 +358,20 @@ npm run build            # regenerate ahttp.min.js and self/ahttp.user.js
 
 `npm test` skips the Playwright test when Chromium is missing. `AHTTP_REQUIRE_BROWSER=1` turns that skip into a failure; CI sets it. The giant-DOM scan time warns above `AHTTP_GIANT_MS` (default 150 ms) and never fails the run.
 
+### Matching corpus
+
+`npm test` runs the local regression corpus. To run or filter it directly:
+
+```bash
+npm run test:corpus
+node corpus/runner.js --filter=login
+```
+
+The runner prints `case | match | diff | tokens | status`, writes
+`bench/results.json`, and exits non-zero on a failure. Cases and fixtures live in
+`corpus/`; the format is in [corpus/README.md](corpus/README.md). Everything runs
+in jsdom against local HTML: no network, no live site, no browser required.
+
 ```text
 ahttp.js                  browser engine, no runtime dependencies
 ahttp.min.js              generated minified build

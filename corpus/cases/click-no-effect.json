@@ -1,0 +1,28 @@
+{
+  "id": "click-no-effect",
+  "html": "fixtures/no-effect.html",
+  "url": "https://corpus.test/no-effect",
+  "notes": "click succeeds but the expected change never happens",
+  "pending": "phase-3: expect status no_effect",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "Save button that is not wired",
+      "expectStatus": "no_effect",
+      "expectEffect": {
+        "empty": true,
+        "pageText": {
+          "selector": "#out",
+          "equals": "idle"
+        }
+      }
+    }
+  ]
+}

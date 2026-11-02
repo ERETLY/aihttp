@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Virtual list</title></head>
+<body>
+<main>
+<div id="list">
+<a href="#1" onclick="event.preventDefault(); window.__mark('1')">Item 1</a>
+<a href="#2" onclick="event.preventDefault(); window.__mark('2')">Item 2</a>
+<a href="#3" onclick="event.preventDefault(); window.__mark('3')">Item 3</a>
+</div>
+<button onclick="window.__next()">Next</button>
+<p id="out">idle</p>
+<script>
+window.__mark = function (v) { document.getElementById("out").textContent = v; };
+window.__next = function () {
+  document.getElementById("list").innerHTML = '<a href="#4" onclick="event.preventDefault(); window.__mark(\'4\')">Item 4</a><a href="#5" onclick="event.preventDefault(); window.__mark(\'5\')">Item 5</a><a href="#6" onclick="event.preventDefault(); window.__mark(\'6\')">Item 6</a>';
+  window.__mark("next");
+};
+</script>
+</main>
+</body>
+</html>

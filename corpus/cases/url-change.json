@@ -1,0 +1,25 @@
+{
+  "id": "url-change",
+  "html": "fixtures/url-change.html",
+  "url": "https://corpus.test/checkout",
+  "notes": "pushState changes the URL; the diff reports it",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "Finish button",
+      "expectEffect": {
+        "urlChanged": true,
+        "diffContains": [
+          "url "
+        ]
+      }
+    }
+  ]
+}

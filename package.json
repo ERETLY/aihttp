@@ -55,6 +55,7 @@
     "bench:render": "node scripts/render-bench.js --write",
     "test": "node --test",
     "test:bench": "node benchmark/run.js",
+    "test:corpus": "node corpus/runner.js",
     "typecheck": "tsc -p tsconfig.json",
     "lint": "eslint .",
     "pack:check": "npm pack --dry-run",

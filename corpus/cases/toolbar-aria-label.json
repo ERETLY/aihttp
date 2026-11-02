@@ -1,0 +1,32 @@
+{
+  "id": "toolbar-aria-label",
+  "html": "fixtures/toolbar-aria.html",
+  "url": "https://corpus.test/editor",
+  "notes": "icon-only toolbar; accessible names come from aria-label",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2",
+        "a3"
+      ],
+      "expectText": [
+        "Bold",
+        "Italic",
+        "Underline"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a2",
+      "targetHint": "Italic button by aria-label",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "Italic"
+        }
+      }
+    }
+  ]
+}

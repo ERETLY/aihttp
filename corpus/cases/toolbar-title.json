@@ -1,0 +1,30 @@
+{
+  "id": "toolbar-title",
+  "html": "fixtures/toolbar-title.html",
+  "url": "https://corpus.test/toolbar",
+  "notes": "icon-only toolbar with title but no aria-label",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ],
+      "expectText": [
+        "Copy link",
+        "Download"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "Copy link button by title",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "copied"
+        }
+      }
+    }
+  ]
+}

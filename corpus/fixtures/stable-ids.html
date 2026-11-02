@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Stable</title></head>
+<body>
+<main>
+<button onclick="window.__mark('one')">One</button>
+<button onclick="window.__mark('two')">Two</button>
+<p id="out">idle</p>
+<script>
+window.__mark = function (value) { var out = document.getElementById("out"); if (out) out.textContent = value; };
+</script>
+</main>
+</body>
+</html>

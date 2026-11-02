@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Users</title></head>
+<body>
+<main>
+<h1>Users</h1>
+<table><tbody id="rows">
+<tr><td>Alpha</td><td><button data-row="Alpha" onclick="window.__del(this)">Delete</button></td></tr>
+<tr><td>Beta</td><td><button data-row="Beta" onclick="window.__del(this)">Delete</button></td></tr>
+<tr><td>Gamma</td><td><button data-row="Gamma" onclick="window.__del(this)">Delete</button></td></tr>
+</tbody></table>
+<p id="out">idle</p>
+<script>
+window.__mark = function (v) { document.getElementById("out").textContent = v; };
+window.__del = function (btn) { var tr = btn.closest("tr"); var name = btn.getAttribute("data-row"); if (tr) tr.remove(); window.__mark("Deleted " + name); };
+</script>
+</main>
+</body>
+</html>

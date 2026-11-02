@@ -1,0 +1,35 @@
+{
+  "id": "identical-delete-buttons-ambiguous",
+  "html": "fixtures/identical-delete.html",
+  "url": "https://corpus.test/rows",
+  "notes": "two identical Delete buttons in rows; no stable anchor after rerender",
+  "pending": "phase-2: expect structured ambiguous, baseline clicks a guess",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ]
+    },
+    {
+      "action": "rerender",
+      "selector": "#rows",
+      "html": "<tr><td>Alpha</td><td><button onclick=\"window.__del(this)\">Delete</button></td></tr><tr><td>Beta</td><td><button onclick=\"window.__del(this)\">Delete</button></td></tr>"
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "Delete button in the Alpha row",
+      "expectStatus": "ambiguous",
+      "expectEffect": {
+        "candidates": 2,
+        "noMutation": true,
+        "pageText": {
+          "selector": "#out",
+          "equals": "idle"
+        }
+      }
+    }
+  ]
+}

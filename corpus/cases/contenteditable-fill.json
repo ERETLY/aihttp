@@ -1,0 +1,26 @@
+{
+  "id": "contenteditable-fill",
+  "html": "fixtures/contenteditable.html",
+  "url": "https://corpus.test/note",
+  "notes": "contenteditable is a fill target",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ]
+    },
+    {
+      "action": "fill",
+      "expectedId": "a1",
+      "value": "hello",
+      "targetHint": "Note editor",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "hello"
+        }
+      }
+    }
+  ]
+}

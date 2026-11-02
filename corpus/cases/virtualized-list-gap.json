@@ -1,0 +1,42 @@
+{
+  "id": "virtualized-list-gap",
+  "html": "fixtures/virtualized.html",
+  "url": "https://corpus.test/list",
+  "notes": "item 2 is unmounted after Next; no stable anchor, so do not guess",
+  "pending": "phase-2: expect structured not_found for an unmounted virtualized row",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2",
+        "a3",
+        "a4"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a4",
+      "targetHint": "Next page button",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "next"
+        }
+      }
+    },
+    {
+      "action": "click",
+      "expectedId": "a2",
+      "targetHint": "Item 2 link that no longer exists",
+      "expectStatus": "not_found",
+      "expectEffect": {
+        "noMutation": true,
+        "pageText": {
+          "selector": "#out",
+          "equals": "next"
+        }
+      }
+    }
+  ]
+}

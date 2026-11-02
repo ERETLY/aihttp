@@ -1,0 +1,31 @@
+{
+  "id": "placeholder-stable-after-label-change",
+  "html": "fixtures/placeholder.html",
+  "url": "https://corpus.test/placeholder",
+  "notes": "placeholder survives a label change when id and name are gone",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ]
+    },
+    {
+      "action": "rerender",
+      "selector": "#app",
+      "html": "<input placeholder=\"Search products\" aria-label=\"Find\" oninput=\"window.__mark('q:' + this.value)\">"
+    },
+    {
+      "action": "fill",
+      "expectedId": "a1",
+      "value": "shoes",
+      "targetHint": "search field by placeholder",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "q:shoes"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "table-repeated-delete-rerender",
+  "html": "fixtures/table-delete-testid.html",
+  "url": "https://corpus.test/users-testid",
+  "notes": "React-like row rerender; data-testid keeps the Beta Delete target stable",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2",
+        "a3"
+      ]
+    },
+    {
+      "action": "rerender",
+      "selector": "#rows",
+      "html": "<tr><td>Alpha</td><td><button data-testid=\"delete-alpha\" data-row=\"Alpha\" onclick=\"window.__del(this)\">Delete</button></td></tr><tr><td>Beta</td><td><button data-testid=\"delete-beta\" data-row=\"Beta\" onclick=\"window.__del(this)\">Delete</button></td></tr><tr><td>Gamma</td><td><button data-testid=\"delete-gamma\" data-row=\"Gamma\" onclick=\"window.__del(this)\">Delete</button></td></tr>"
+    },
+    {
+      "action": "click",
+      "expectedId": "a2",
+      "targetHint": "Delete button in the Beta row",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "Deleted Beta"
+        }
+      }
+    }
+  ]
+}

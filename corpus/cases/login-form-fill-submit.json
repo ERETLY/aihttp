@@ -1,0 +1,42 @@
+{
+  "id": "login-form-fill-submit",
+  "html": "fixtures/login.html",
+  "url": "https://corpus.test/login",
+  "notes": "label + input + submit; fill two fields then click submit",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2",
+        "a3"
+      ]
+    },
+    {
+      "action": "fill",
+      "expectedId": "a1",
+      "value": "agent@example.com",
+      "targetHint": "email input"
+    },
+    {
+      "action": "fill",
+      "expectedId": "a2",
+      "value": "hunter2",
+      "targetHint": "password input"
+    },
+    {
+      "action": "click",
+      "expectedId": "a3",
+      "targetHint": "submit button Sign in",
+      "expectEffect": {
+        "textAdded": [
+          "Welcome back"
+        ],
+        "pageText": {
+          "selector": "#out",
+          "equals": "Welcome back"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "links-same-label-different-href",
+  "html": "fixtures/links.html",
+  "url": "https://corpus.test/links",
+  "notes": "two links share the label Docs; href disambiguates after rerender",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ]
+    },
+    {
+      "action": "rerender",
+      "selector": "#app",
+      "html": "<a href=\"/a\" onclick=\"event.preventDefault(); window.__mark('a')\">Docs</a><a href=\"/b\" onclick=\"event.preventDefault(); window.__mark('b')\">Docs</a>"
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "Docs link to /a",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "a"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "guarded-action-confirm",
+  "html": "fixtures/confirm.html",
+  "url": "https://corpus.test/account",
+  "notes": "data-ahttp-confirm blocks the first call; confirm runs it",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ],
+      "expectText": [
+        "confirm="
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "Delete account button",
+      "expectStatus": "requires_confirmation",
+      "expectEffect": {
+        "requiresConfirmation": true,
+        "noMutation": true,
+        "pageText": {
+          "selector": "#out",
+          "equals": "idle"
+        }
+      }
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "Delete account button",
+      "payload": {
+        "confirm": true
+      },
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "deleted"
+        }
+      }
+    }
+  ]
+}
