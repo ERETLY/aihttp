@@ -177,6 +177,7 @@ declare namespace Ahttp {
       ok: boolean;
       expected: ActExpectation;
       observed: Record<string, unknown>;
+      failures: string[];
     };
     error?: string;
     blocked?: boolean;

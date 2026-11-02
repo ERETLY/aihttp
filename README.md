@@ -140,6 +140,12 @@ A string payload fills the target. An object payload can carry:
 
 If a framework replaces the node, the engine rescans and relocates it by stable anchors: intent, test id, DOM id, name, accessible name, visible text, title, placeholder, alt and href. The old fingerprint is only a low-weight structural signal. If two candidates are too close, the action is not dispatched; `act` returns `status: 'ambiguous'` with the candidates. `confirm: true` does not override that. Weights and thresholds are in [docs/MATCHING.md](docs/MATCHING.md).
 
+Pass `expect` when the action must change something. If the change does not happen, the result keeps `ok: true` but reports `status: 'no_effect'` with the failed rules; re-snapshot instead of retrying the same click.
+
+```js
+await ahttp.act('a2', { expect: { diff: true, textAdded: ['Added to cart'] } });
+```
+
 Actions marked `data-ahttp-confirm` do not run on the first call. The engine returns `requiresConfirmation`; call again with `{ confirm: true }`. This stops accidents. It does not prove a human approved anything.
 
 ## Benchmarks

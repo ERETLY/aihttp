@@ -43,6 +43,7 @@ Returns a promise. `payload` can be a string for a fill, or an object:
 | `scroll` | Scroll the target into view |
 | `confirm` | Accept a guarded action |
 | `targetHint` | Diagnostic text echoed in an `ambiguous` reply; never a selector |
+| `expect` | Post-action expectation; unmet rules return `status: 'no_effect'` |
 | `settle` | Override the settle flag |
 | `timeout` | Settle timeout in ms |
 | `quiet` | Quiet window in ms (default 40, or `networkQuiet` when a request was observed) |
@@ -110,6 +111,33 @@ dispatched and the reply is structured:
 
 `confirm: true` does not override `ambiguous`. See
 [docs/MATCHING.md](MATCHING.md) for the signal weights and thresholds.
+
+### Post-action expectation
+
+An optional `expect` object checks that the action had the intended effect. The
+action still runs; if the check fails, the result keeps `ok: true` but reports
+`status: 'no_effect'` and `effect.failures`:
+
+```js
+const result = await ahttp.act('a2', {
+  expect: { diff: true, textAdded: ['Added to cart'], pageText: { selector: '#cart', includes: ['1 item'] } }
+});
+// { ok: true, status: 'no_effect', warning: '...', effect: { ok: false, failures: [...] } }
+```
+
+| Expect key | Meaning |
+|---|---|
+| `diff` | `true` requires a non-empty diff; `false` requires an empty one |
+| `empty` | Same as `diff`, explicit form |
+| `textAdded` / `textRemoved` | Substrings in the diff text arrays |
+| `added` / `removed` | Substrings in the labels of added/removed actions |
+| `diffContains` | Substrings in `diff.text` |
+| `urlChanged` | Require a URL change (or its absence) |
+| `snapshotContains` | Substrings in the returned snapshot |
+| `pageText` | `{ selector, equals }` or `{ selector, includes }` on the live DOM |
+
+`no_effect` means "the match was executed but the page did not react as the
+caller expected". Re-snapshot before retrying; do not replay the same click.
 
 Errors are returned, not thrown:
 

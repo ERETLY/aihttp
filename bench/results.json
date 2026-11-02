@@ -1,13 +1,13 @@
 {
   "engine": "0.1.0",
   "totals": {
-    "cases": 26,
-    "passed": 25,
+    "cases": 27,
+    "passed": 27,
     "failed": 0,
-    "pending": 1,
-    "match_ok": 25,
-    "diff_ok": 26,
-    "tokens": 903
+    "pending": 0,
+    "match_ok": 27,
+    "diff_ok": 27,
+    "tokens": 961
   },
   "cases": [
     {
@@ -74,10 +74,10 @@
       "id": "click-no-effect",
       "html": "fixtures/no-effect.html",
       "notes": "click succeeds but the expected change never happens",
-      "pending": true,
-      "pending_reason": "phase-3: expect status no_effect",
-      "status": "PENDING",
-      "match_ok": false,
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
       "diff_ok": true,
       "tokens": 26,
       "failures": [],
@@ -96,15 +96,15 @@
         },
         {
           "step": "2:click",
-          "match_ok": false,
+          "match_ok": true,
           "diff_ok": true,
-          "status": "ok",
-          "result_status": "ok",
+          "status": "no_effect",
+          "result_status": "no_effect",
           "checks": [
             {
               "name": "status=no_effect",
-              "pass": false,
-              "detail": "ok"
+              "pass": true,
+              "detail": "no_effect"
             },
             {
               "name": "empty",
@@ -882,6 +882,82 @@
               "name": "pageText #out",
               "pass": true,
               "detail": "saved"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "row-appears-and-disappears",
+      "html": "fixtures/add-remove.html",
+      "notes": "a click adds an action; a second click removes it",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 58,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "added"
+            }
+          ]
+        },
+        {
+          "step": "3:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\"]"
+            }
+          ]
+        },
+        {
+          "step": "4:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "dismissed"
             }
           ]
         }

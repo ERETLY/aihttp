@@ -41,8 +41,8 @@ phase lands.
 | Step | Fields |
 |---|---|
 | `snapshot` | `expectIds`, `expectNotIds`, `expectText`, `expectNotText`, `expectTextOrder`, `expectDiff.contains`, `options` |
-| `click` | `expectedId`, `targetHint`, `payload`, `expectStatus`, `expectEffect`, `options` |
-| `fill` | `expectedId`, `value`, `targetHint`, `expectStatus`, `expectEffect`, `options` |
+| `click` | `expectedId`, `targetHint`, `payload`, `actExpect`, `expectStatus`, `expectEffect`, `options` |
+| `fill` | `expectedId`, `value`, `targetHint`, `actExpect`, `expectStatus`, `expectEffect`, `options` |
 | `rerender` | `selector`, `html` — replaces the container content, like a framework rerender |
 
 `expectedId` is the id printed by the previous snapshot. After a rerender, the
@@ -55,7 +55,11 @@ again.
 ### Expectations
 
 `expectStatus` is `ok` by default. Other values: `ambiguous`, `not_found`,
-`no_effect`, `requires_confirmation`, `error`.
+`no_effect`, `requires_confirmation`, `blocked`, `error`.
+
+`actExpect` is passed to `act` as its `expect` option, so the engine itself
+returns `no_effect` when the rule fails. `expectEffect` is the runner's
+independent assertion on the returned result and the live page.
 
 `expectEffect` keys:
 

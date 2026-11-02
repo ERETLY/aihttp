@@ -225,7 +225,9 @@ async function runCase(testCase) {
         const payload = step.action === 'fill'
           ? { value: String(step.value == null ? '' : step.value) }
           : (step.payload || null);
-        const result = await ahttp.act(step.expectedId, payload, Object.assign({}, ACT_OPTIONS, step.options || {}));
+        const actOptions = Object.assign({}, ACT_OPTIONS, step.options || {});
+        if (step.actExpect) actOptions.expect = step.actExpect;
+        const result = await ahttp.act(step.expectedId, payload, actOptions);
         const expectedStatus = step.expectStatus || (step.action === 'fill' ? 'ok' : 'ok');
         const actualStatus = statusOf(result);
         const status = check('status=' + expectedStatus, actualStatus === expectedStatus, actualStatus);

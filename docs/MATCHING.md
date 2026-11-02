@@ -96,8 +96,8 @@ does not mutate the registry.
 
 Every `act()` result now carries `status`:
 
-`ok`, `ambiguous`, `not_found`, `requires_confirmation`, `blocked`, `locked`,
-`error`, and later `no_effect` (see the post-check section in the README).
+`ok`, `ambiguous`, `not_found`, `no_effect`, `requires_confirmation`,
+`blocked`, `locked`, `error`.
 
 Existing `ok`, `error`, `blocked`, `requiresConfirmation`, `id` and `action`
 fields are unchanged. `status`, `candidates`, `targetHint` and `thresholds` are

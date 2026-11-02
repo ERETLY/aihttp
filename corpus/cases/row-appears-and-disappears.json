@@ -1,0 +1,59 @@
+{
+  "id": "row-appears-and-disappears",
+  "html": "fixtures/add-remove.html",
+  "url": "https://corpus.test/rows",
+  "notes": "a click adds an action; a second click removes it",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "Add row button",
+      "actExpect": {
+        "added": [
+          "Dismiss"
+        ],
+        "textAdded": [
+          "added"
+        ]
+      },
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "added"
+        }
+      }
+    },
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a2",
+      "targetHint": "Dismiss button that was just added",
+      "actExpect": {
+        "removed": [
+          "Dismiss"
+        ],
+        "textAdded": [
+          "dismissed"
+        ]
+      },
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "dismissed"
+        }
+      }
+    }
+  ]
+}

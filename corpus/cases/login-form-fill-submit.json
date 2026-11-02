@@ -28,6 +28,11 @@
       "action": "click",
       "expectedId": "a3",
       "targetHint": "submit button Sign in",
+      "actExpect": {
+        "textAdded": [
+          "Welcome back"
+        ]
+      },
       "expectEffect": {
         "textAdded": [
           "Welcome back"

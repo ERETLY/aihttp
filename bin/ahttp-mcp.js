@@ -396,8 +396,7 @@ async function toolAct(args, ctx) {
     );
   }
   if (!res.ok) {
-    if (res.status === 'ambiguous') {
-      const candidates = Array.isArray(res.candidates) ? res.candidates : [];
+    if (res.status === 'ambiguous') {      const candidates = Array.isArray(res.candidates) ? res.candidates : [];
       const lines = candidates.map(function (candidate, index) {
         const signals = Array.isArray(candidate.signals) && candidate.signals.length
           ? ' [signals: ' + candidate.signals.join(', ') + ']'
@@ -423,6 +422,21 @@ async function toolAct(args, ctx) {
     let text = 'action failed: ' + reason;
     if (res.available && res.available.length) text += '\navailable options: ' + res.available.join(' | ');
     return content(text, true);
+  }
+  if (res.status === 'no_effect') {
+    const diffText = res.diff && res.diff.text ? res.diff.text : 'no visible changes';
+    return content(
+      'NO EFFECT: the action ran but the expected change was not observed. The match may be wrong; re-snapshot before trying another id.\n' +
+      diffText,
+      true,
+      {
+        status: 'no_effect',
+        actionId: res.action && res.action.id ? res.action.id : id,
+        warning: res.warning || null,
+        effect: res.effect || null,
+        pageId: resolved.id
+      }
+    );
   }
   const parts = [];
   parts.push(res.diff && res.diff.text ? res.diff.text : 'no visible changes');

@@ -1459,6 +1459,7 @@
     entry.form = form;
     entry.family = familyOf(el, info, label);
     entry.path = pathOf(el, ctx);
+    entry.order = ctx.actions.length;
     entry.fingerprint = {
       tag: entry.tag, role: entry.role, type: type, kind: entry.kind,
       name: entry.name, testid: entry.testid, test: entry.test, qa: entry.qa,
@@ -1466,7 +1467,6 @@
       placeholder: entry.placeholder, title: entry.title, alt: entry.alt,
       visibleText: entry.visibleText, path: entry.path, order: entry.order
     };
-    entry.order = ctx.actions.length;
     S.registry.set(entry.id, entry);
     ctx.actions.push(entry);
     if (form) ctx.forms.indexOf(form) < 0 && ctx.forms.push(form);
@@ -2645,6 +2645,85 @@
     };
   }
 
+  function docText(selector) {
+    var doc = S.doc || (ENV() && ENV().document);
+    if (!doc || !doc.querySelector || !selector) return null;
+    var node = null;
+    try { node = doc.querySelector(selector); } catch (e) { return null; }
+    return node ? String(node.textContent || '') : null;
+  }
+
+  function containsEvery(haystack, needles) {
+    var text = String(haystack == null ? '' : haystack).toLowerCase();
+    for (var i = 0; i < needles.length; i++) {
+      if (text.indexOf(String(needles[i]).toLowerCase()) < 0) return false;
+    }
+    return true;
+  }
+
+  // A post-action expectation turns a silent no-op into an explicit
+  // status: no_effect. The action still ran; the caller must re-snapshot rather
+  // than retry the same click.
+  function evaluateExpectation(expect, diff, snapshot) {
+    var failures = [];
+    var d = diff || {
+      added: [], removed: [], changed: [], textAdded: [], textRemoved: [],
+      url: null, empty: true, summary: 'no visible changes', text: 'no visible changes'
+    };
+    if (expect.diff === true && d.empty) failures.push('diff: expected a visible change');
+    if (expect.diff === false && !d.empty) failures.push('diff: expected no visible change');
+    if (expect.empty != null && !!d.empty !== !!expect.empty) {
+      failures.push('empty: expected ' + (expect.empty ? 'no change' : 'a change'));
+    }
+    if (expect.urlChanged != null && !!d.url !== !!expect.urlChanged) {
+      failures.push('urlChanged: expected ' + !!expect.urlChanged);
+    }
+    if (expect.textAdded && !containsEvery((d.textAdded || []).join('\n'), expect.textAdded)) {
+      failures.push('textAdded: missing ' + expect.textAdded.join(' | '));
+    }
+    if (expect.textRemoved && !containsEvery((d.textRemoved || []).join('\n'), expect.textRemoved)) {
+      failures.push('textRemoved: missing ' + expect.textRemoved.join(' | '));
+    }
+    if (expect.added && !containsEvery((d.added || []).map(function (x) { return x.label || ''; }).join('\n'), expect.added)) {
+      failures.push('added: missing ' + expect.added.join(' | '));
+    }
+    if (expect.removed && !containsEvery((d.removed || []).map(function (x) { return x.label || ''; }).join('\n'), expect.removed)) {
+      failures.push('removed: missing ' + expect.removed.join(' | '));
+    }
+    if (expect.diffContains && !containsEvery(d.text || '', expect.diffContains)) {
+      failures.push('diffContains: missing ' + expect.diffContains.join(' | '));
+    }
+    if (expect.snapshotContains && !containsEvery(snapshot || '', expect.snapshotContains)) {
+      failures.push('snapshotContains: missing ' + expect.snapshotContains.join(' | '));
+    }
+    var observedText = null;
+    if (expect.pageText && expect.pageText.selector) {
+      observedText = docText(expect.pageText.selector);
+      if (observedText == null) {
+        failures.push('pageText: selector not found ' + expect.pageText.selector);
+      } else if (expect.pageText.equals != null && observedText !== expect.pageText.equals) {
+        failures.push('pageText: expected "' + expect.pageText.equals + '"');
+      } else if (expect.pageText.includes && !containsEvery(observedText, expect.pageText.includes)) {
+        failures.push('pageText: missing ' + expect.pageText.includes.join(' | '));
+      }
+    }
+    return {
+      ok: failures.length === 0,
+      expected: expect,
+      observed: {
+        diffEmpty: !!d.empty,
+        diffSummary: d.summary,
+        textAdded: d.textAdded,
+        textRemoved: d.textRemoved,
+        added: (d.added || []).map(function (x) { return x.label || ''; }),
+        removed: (d.removed || []).map(function (x) { return x.label || ''; }),
+        url: d.url,
+        pageText: observedText
+      },
+      failures: failures
+    };
+  }
+
   function findCustomOption(entry, p) {
     ensureScan(true);
     var scan = S.scan;
@@ -2808,6 +2887,9 @@
         if (p.snapshot != null) o.snapshot = p.snapshot;
         if (p.maxActions != null) o.maxActions = p.maxActions;
       }
+      var expect = null;
+      if (p.expect && typeof p.expect === 'object') expect = p.expect;
+      else if (o.expect && typeof o.expect === 'object') expect = o.expect;
       ensureScan(true);
       var resolved = resolveEntry(id);
       if (resolved.status === 'not_found') {
@@ -2894,7 +2976,7 @@
       var proceed = function () {
         var t0 = now();
         var requestsBefore = S.net.count;
-        var before = o.diff === false ? null : captureState();
+        var before = (o.diff === false && !expect) ? null : captureState();
         var counter = startMutationCounter();
         patchNetwork();
         return Promise.resolve(execute(entry, p, o)).then(function (res) {
@@ -2921,11 +3003,26 @@
             if (res.href) out.href = res.href;
             if (res.available) out.available = res.available;
             if (res.selected) out.selected = res.selected;
-            if (before) out.diff = diffStates(before, captureState());
+            var internalDiff = before ? diffStates(before, captureState()) : null;
+            if (internalDiff && o.diff !== false) out.diff = internalDiff;
             if (o.snapshot !== false) {
               var snap = buildSnapshot({ format: 'text', maxActions: o.maxActions || 60, maxText: 900 });
               out.snapshot = snap;
               out.snapshotMeta = { chars: snap.length, tokens: Math.ceil(snap.length / 4) };
+            }
+            if (expect && out.ok) {
+              var expectSnapshot = out.snapshot || buildSnapshot({ format: 'text', maxActions: o.maxActions || 60, maxText: 900 });
+              var verdict = evaluateExpectation(expect, internalDiff, expectSnapshot);
+              out.effect = {
+                ok: verdict.ok,
+                expected: verdict.expected,
+                observed: verdict.observed,
+                failures: verdict.failures
+              };
+              if (!verdict.ok) {
+                out.status = 'no_effect';
+                out.warning = 'The action ran but the expected change was not observed; the match may be wrong.';
+              }
             }
             return out;
           });

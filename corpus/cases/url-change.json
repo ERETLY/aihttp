@@ -14,6 +14,9 @@
       "action": "click",
       "expectedId": "a1",
       "targetHint": "Finish button",
+      "actExpect": {
+        "urlChanged": true
+      },
       "expectEffect": {
         "urlChanged": true,
         "diffContains": [
