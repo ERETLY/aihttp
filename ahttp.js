@@ -2262,6 +2262,10 @@
     };
   }
 
+  function inCurrentScan(entry) {
+    return !S.scan || !S.scan.actions || S.scan.actions.indexOf(entry) >= 0;
+  }
+
   function relocate(entry) {
     ensureScan(true);
     var fp = entry.fingerprint || {};
@@ -2269,6 +2273,7 @@
     S.registry.forEach(function (cand) {
       if (!cand || cand === entry || !cand.node) return;
       if (!connected(cand.node)) return;
+      if (!inCurrentScan(cand)) return;
       var match = scoreMatch(fp, cand);
       if (match.score <= 0) return;
       if (!hasContentSignal(match.signals)) return;
@@ -2313,7 +2318,9 @@
       });
     }
     if (!entry) return { status: 'not_found', reason: 'unknown_action' };
-    if (entry.node && connected(entry.node)) return { status: 'ok', entry: entry };
+    if (entry.node && connected(entry.node) && inCurrentScan(entry)) {
+      return { status: 'ok', entry: entry };
+    }
     var match = relocate(entry);
     match.entry = entry;
     return match;

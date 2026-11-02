@@ -126,6 +126,17 @@ test('candidate order is stable across repeated ambiguous calls', async () => {
   assert.deepEqual(first.candidates, second.candidates);
 });
 
+test('a connected but now-hidden target is not actionable', async () => {
+  const window = load('<!doctype html><body><main><button id="go">Run</button><p id="out">idle</p></main></body>');
+  const document = window.document;
+  document.getElementById('go').addEventListener('click', function () { document.getElementById('out').textContent = 'clicked'; });
+  window.ahttp.snapshot({ format: 'json' });
+  document.getElementById('go').style.display = 'none';
+  const result = await window.ahttp.act('a1', null, actOptions());
+  assert.equal(result.status, 'not_found');
+  assert.equal(document.getElementById('out').textContent, 'idle');
+});
+
 test('unknown ids and successful actions carry a status', async () => {
   const window = load('<!doctype html><body><main><button>Go</button></main></body>');
   const document = window.document;

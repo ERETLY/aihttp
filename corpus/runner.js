@@ -16,7 +16,12 @@ const { JSDOM } = require('jsdom');
 const { countTokens } = require('gpt-tokenizer');
 
 const ROOT = path.join(__dirname, '..');
-const ENGINE = fs.readFileSync(path.join(ROOT, 'ahttp.js'), 'utf8');
+// AHTTP_ENGINE lets the same corpus run against an older engine for a
+// before/after report. It is not used by npm test.
+const ENGINE_PATH = process.env.AHTTP_ENGINE
+  ? path.resolve(process.env.AHTTP_ENGINE)
+  : path.join(ROOT, 'ahttp.js');
+const ENGINE = fs.readFileSync(ENGINE_PATH, 'utf8');
 const CASES_DIR = path.join(__dirname, 'cases');
 const DEFAULT_RESULTS = path.join(ROOT, 'bench', 'results.json');
 const SNAPSHOT_OPTIONS = { maxActions: 60, maxText: 900 };
@@ -290,6 +295,7 @@ async function runCorpus(options) {
   };
   const result = {
     engine: require(path.join(ROOT, 'package.json')).version,
+    engine_file: ENGINE_PATH === path.join(ROOT, 'ahttp.js') ? 'ahttp.js' : 'override',
     totals: totals,
     cases: results
   };

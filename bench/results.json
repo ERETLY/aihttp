@@ -1,5 +1,6 @@
 {
   "engine": "0.1.0",
+  "engine_file": "ahttp.js",
   "totals": {
     "cases": 27,
     "passed": 27,
