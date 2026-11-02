@@ -1,0 +1,28 @@
+{
+  "id": "shadow-dom-basic",
+  "html": "fixtures/shadow-basic.html",
+  "url": "https://corpus.test/shadow",
+  "notes": "simple open shadow root; records the current supported behavior",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ],
+      "expectText": [
+        "Shadow save"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "button inside the shadow root",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "shadow-saved"
+        }
+      }
+    }
+  ]
+}

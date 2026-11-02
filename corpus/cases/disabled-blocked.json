@@ -1,0 +1,31 @@
+{
+  "id": "disabled-blocked",
+  "html": "fixtures/disabled.html",
+  "url": "https://corpus.test/disabled",
+  "notes": "disabled control is visible in the snapshot but cannot run",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ],
+      "expectText": [
+        "disabled"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "disabled Delete button",
+      "expectStatus": "blocked",
+      "expectEffect": {
+        "error": "disabled",
+        "noMutation": true,
+        "pageText": {
+          "selector": "#out",
+          "equals": "idle"
+        }
+      }
+    }
+  ]
+}

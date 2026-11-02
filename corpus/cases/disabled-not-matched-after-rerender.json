@@ -1,0 +1,32 @@
+{
+  "id": "disabled-not-matched-after-rerender",
+  "html": "fixtures/disabled-rerender.html",
+  "url": "https://corpus.test/disabled-rerender",
+  "notes": "the replacement is disabled; a disabled control must not satisfy an active target",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ]
+    },
+    {
+      "action": "rerender",
+      "selector": "#app",
+      "html": "<button id=\"go\" disabled onclick=\"window.__mark('new')\">Run</button>"
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "active Run button",
+      "expectStatus": "not_found",
+      "expectEffect": {
+        "noMutation": true,
+        "pageText": {
+          "selector": "#out",
+          "equals": "idle"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Shadow</title></head>
+<body>
+<main>
+<div id="host"></div>
+<p id="out">idle</p>
+<script>
+window.__mark = function (v) { document.getElementById("out").textContent = v; };
+var root = document.getElementById("host").attachShadow({ mode: "open" });
+root.innerHTML = "<button>Shadow save</button>";
+root.querySelector("button").addEventListener("click", function () { window.__mark("shadow-saved"); });
+</script>
+</main>
+</body>
+</html>

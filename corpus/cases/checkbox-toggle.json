@@ -1,0 +1,34 @@
+{
+  "id": "checkbox-toggle",
+  "html": "fixtures/checkbox.html",
+  "url": "https://corpus.test/terms",
+  "notes": "checkbox state change shows up in the diff and the snapshot",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ],
+      "expectText": [
+        "unchecked"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "Accept terms checkbox",
+      "expectEffect": {
+        "diffContains": [
+          "false -> true"
+        ],
+        "snapshotContains": [
+          "checked"
+        ],
+        "pageText": {
+          "selector": "#out",
+          "equals": "on"
+        }
+      }
+    }
+  ]
+}

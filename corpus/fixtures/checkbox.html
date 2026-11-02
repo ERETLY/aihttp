@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Terms</title></head>
+<body>
+<main>
+<label><input id="terms" type="checkbox"> Accept terms</label>
+<p id="out">off</p>
+<script>
+window.__mark = function (v) { document.getElementById("out").textContent = v; };
+document.getElementById("terms").addEventListener("change", function () { window.__mark(this.checked ? "on" : "off"); });
+</script>
+</main>
+</body>
+</html>

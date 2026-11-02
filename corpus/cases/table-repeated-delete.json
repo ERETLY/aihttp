@@ -1,0 +1,30 @@
+{
+  "id": "table-repeated-delete",
+  "html": "fixtures/table-delete.html",
+  "url": "https://corpus.test/users",
+  "notes": "three rows with identical Delete buttons; click the second",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2",
+        "a3"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a2",
+      "targetHint": "Delete button in the Beta row",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "Deleted Beta"
+        },
+        "textAdded": [
+          "Deleted Beta"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Rows</title></head>
+<body>
+<main>
+<button onclick="window.__add()">Add row</button>
+<div id="rows"></div>
+<p id="out">idle</p>
+<script>
+window.__mark = function (value) { document.getElementById("out").textContent = value; };
+window.__add = function () {
+  var button = document.createElement("button");
+  button.textContent = "Dismiss";
+  button.addEventListener("click", function () { button.remove(); window.__mark("dismissed"); });
+  document.getElementById("rows").appendChild(button);
+  window.__mark("added");
+};
+</script>
+</main>
+</body>
+</html>

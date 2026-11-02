@@ -1,0 +1,31 @@
+{
+  "id": "react-rerender-id",
+  "html": "fixtures/react-id.html",
+  "url": "https://corpus.test/search",
+  "notes": "container rerender; the DOM id is the stable anchor",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ]
+    },
+    {
+      "action": "rerender",
+      "selector": "#app",
+      "html": "<span>Fresh render</span><input id=\"query\" name=\"q\" aria-label=\"Search\" placeholder=\"Type to search\"><button id=\"search\" onclick=\"window.__mark('searched')\">Search</button>"
+    },
+    {
+      "action": "click",
+      "expectedId": "a2",
+      "targetHint": "Search button after rerender",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "searched"
+        }
+      }
+    }
+  ]
+}

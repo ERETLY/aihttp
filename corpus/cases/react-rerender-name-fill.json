@@ -1,0 +1,31 @@
+{
+  "id": "react-rerender-name-fill",
+  "html": "fixtures/react-name.html",
+  "url": "https://corpus.test/profile",
+  "notes": "rerender changes id and label; the form name stays",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ]
+    },
+    {
+      "action": "rerender",
+      "selector": "#app",
+      "html": "<input name=\"email\" aria-label=\"E-mail\" oninput=\"window.__mark('typed:' + this.value)\">"
+    },
+    {
+      "action": "fill",
+      "expectedId": "a1",
+      "value": "a@b.c",
+      "targetHint": "email field by name",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "typed:a@b.c"
+        }
+      }
+    }
+  ]
+}

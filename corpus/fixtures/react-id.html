@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Search</title></head>
+<body>
+<main>
+<div id="app">
+<input id="query" name="q" aria-label="Search" placeholder="Type to search">
+<button id="search" onclick="window.__mark('searched')">Search</button>
+</div>
+<p id="out">idle</p>
+<script>
+window.__mark = function (value) { var out = document.getElementById("out"); if (out) out.textContent = value; };
+</script>
+</main>
+</body>
+</html>

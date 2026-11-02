@@ -1,0 +1,25 @@
+{
+  "id": "stable-ids",
+  "html": "fixtures/stable-ids.html",
+  "url": "https://corpus.test/stable",
+  "notes": "two snapshots, including a forced rescan, return the same ids",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ]
+    },
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ],
+      "options": {
+        "force": true
+      }
+    }
+  ]
+}

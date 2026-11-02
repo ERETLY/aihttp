@@ -1,0 +1,30 @@
+{
+  "id": "react-rerender-testid-label-change",
+  "html": "fixtures/react-testid.html",
+  "url": "https://corpus.test/settings",
+  "notes": "rerender changes the label but keeps data-testid",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ]
+    },
+    {
+      "action": "rerender",
+      "selector": "#app",
+      "html": "<button data-testid=\"save\" onclick=\"window.__mark('saved')\">Save changes</button>"
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "Save button by data-testid",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "saved"
+        }
+      }
+    }
+  ]
+}

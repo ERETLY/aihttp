@@ -7,11 +7,16 @@ These examples use the local `ahttp.js` in this repository. They are not publish
 ```bash
 npm install
 npx playwright install chromium
+node examples/agent-loop.js                          # local fixture, no network
 node examples/browser/playwright.js https://example.com
 node examples/browser/puppeteer.js https://example.com   # needs: npm install puppeteer
 ```
 
-The Playwright example is run in this repository's test environment. The Puppeteer example needs Puppeteer and is not part of the default test run.
+`agent-loop.js` is the short version of the loop: snapshot, choose a control by
+label, act with an `expect` rule, print the diff. It loads a local fixture in
+Chromium and never touches the network. The Playwright example is run in this
+repository's test environment. The Puppeteer example needs Puppeteer and is not
+part of the default test run.
 
 ## MCP
 

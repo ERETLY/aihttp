@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Shadow slot</title></head>
+<body>
+<main>
+<div id="host"><button onclick="window.__mark('slotted')">Slotted</button></div>
+<p id="out">idle</p>
+<script>
+window.__mark = function (v) { document.getElementById("out").textContent = v; };
+document.getElementById("host").attachShadow({ mode: "open" }).innerHTML = "<slot></slot>";
+</script>
+</main>
+</body>
+</html>
