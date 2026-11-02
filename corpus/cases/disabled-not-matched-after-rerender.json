@@ -3,7 +3,6 @@
   "html": "fixtures/disabled-rerender.html",
   "url": "https://corpus.test/disabled-rerender",
   "notes": "the replacement is disabled; a disabled control must not satisfy an active target",
-  "pending": "phase-2: exclude disabled candidates from relocation",
   "steps": [
     {
       "action": "snapshot",

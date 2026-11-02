@@ -42,6 +42,7 @@ Returns a promise. `payload` can be a string for a fill, or an object:
 | `hover` | Dispatch pointer/mouse hover |
 | `scroll` | Scroll the target into view |
 | `confirm` | Accept a guarded action |
+| `targetHint` | Diagnostic text echoed in an `ambiguous` reply; never a selector |
 | `settle` | Override the settle flag |
 | `timeout` | Settle timeout in ms |
 | `quiet` | Quiet window in ms (default 40, or `networkQuiet` when a request was observed) |
@@ -66,6 +67,7 @@ Result shape:
 ```js
 {
   ok: true,
+  status: 'ok',
   action: { id: 'a4', method: 'click', kind: 'click', label: 'Place order' },
   method: 'click',
   url: 'https://shop.test/checkout',
@@ -81,17 +83,46 @@ Result shape:
 }
 ```
 
+`status` is additive: `ok`, `ambiguous`, `not_found`,
+`requires_confirmation`, `blocked`, `locked`, `error`, and `no_effect` when an
+`expect` rule is supplied and the expected change did not happen.
+
+When a framework replaced the node, `act` relocates it by stable anchors. If the
+old id now matches two controls within the ambiguity margin, no event is
+dispatched and the reply is structured:
+
+```js
+{
+  ok: false,
+  status: 'ambiguous',
+  error: 'ambiguous',
+  id: 'a3',
+  action: { id: 'a3', method: 'click', kind: 'click', label: 'OK' },
+  targetHint: 'first OK button',
+  candidates: [
+    { id: 'a7', role: 'button', name: 'OK', tag: 'button', score: 89, signals: ['name', 'role', 'tag'] },
+    { id: 'a8', role: 'button', name: 'OK', tag: 'button', score: 89, signals: ['name', 'role', 'tag'] }
+  ],
+  thresholds: { accept: 50, ambiguous: 24, margin: 12 },
+  warning: 'Multiple controls match this target; no action was taken.'
+}
+```
+
+`confirm: true` does not override `ambiguous`. See
+[docs/MATCHING.md](MATCHING.md) for the signal weights and thresholds.
+
 Errors are returned, not thrown:
 
 ```js
-{ ok: false, error: 'unknown_action', id: 'a99' }
-{ ok: false, blocked: true, error: 'policy_denied' }
-{ ok: false, blocked: true, requiresConfirmation: true, warning: '...' }
-{ ok: false, blocked: true, error: 'policy_readonly' }
-{ ok: false, blocked: true, error: 'readonly', value: 'ACC-777' }
-{ ok: false, blocked: true, error: 'disabled' }
-{ ok: false, blocked: true, error: 'unauthorized' }
-{ ok: false, error: 'detached_action' }
+{ ok: false, error: 'unknown_action', id: 'a99', status: 'not_found' }
+{ ok: false, error: 'detached_action', status: 'not_found' }
+{ ok: false, error: 'ambiguous', status: 'ambiguous', candidates: [ ... ] }
+{ ok: false, blocked: true, error: 'policy_denied', status: 'blocked' }
+{ ok: false, blocked: true, requiresConfirmation: true, warning: '...', status: 'requires_confirmation' }
+{ ok: false, blocked: true, error: 'policy_readonly', status: 'blocked' }
+{ ok: false, blocked: true, error: 'readonly', value: 'ACC-777', status: 'blocked' }
+{ ok: false, blocked: true, error: 'disabled', status: 'blocked' }
+{ ok: false, blocked: true, error: 'unauthorized', status: 'blocked' }
 ```
 
 ## `ahttp.tools()`

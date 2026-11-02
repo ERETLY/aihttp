@@ -2,11 +2,11 @@
   "engine": "0.1.0",
   "totals": {
     "cases": 26,
-    "passed": 21,
+    "passed": 25,
     "failed": 0,
-    "pending": 5,
-    "match_ok": 22,
-    "diff_ok": 23,
+    "pending": 1,
+    "match_ok": 25,
+    "diff_ok": 26,
     "tokens": 903
   },
   "cases": [
@@ -44,7 +44,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -99,7 +99,7 @@
           "match_ok": false,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=no_effect",
@@ -149,7 +149,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -198,13 +198,13 @@
           "step": "2:click",
           "match_ok": true,
           "diff_ok": true,
-          "status": "error",
-          "result_status": null,
+          "status": "blocked",
+          "result_status": "blocked",
           "checks": [
             {
-              "name": "status=error",
+              "name": "status=blocked",
               "pass": true,
-              "detail": "error"
+              "detail": "blocked"
             },
             {
               "name": "error=disabled",
@@ -229,11 +229,11 @@
       "id": "disabled-not-matched-after-rerender",
       "html": "fixtures/disabled-rerender.html",
       "notes": "the replacement is disabled; a disabled control must not satisfy an active target",
-      "pending": true,
-      "pending_reason": "phase-2: exclude disabled candidates from relocation",
-      "status": "PENDING",
-      "match_ok": false,
-      "diff_ok": false,
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
       "tokens": 28,
       "failures": [],
       "steps": [
@@ -257,25 +257,25 @@
         },
         {
           "step": "3:click",
-          "match_ok": false,
-          "diff_ok": false,
-          "status": "ok",
-          "result_status": null,
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "not_found",
+          "result_status": "not_found",
           "checks": [
             {
               "name": "status=not_found",
-              "pass": false,
-              "detail": "ok"
+              "pass": true,
+              "detail": "not_found"
             },
             {
               "name": "noMutation",
-              "pass": false,
-              "detail": "1"
+              "pass": true,
+              "detail": null
             },
             {
               "name": "pageText #out",
-              "pass": false,
-              "detail": "new"
+              "pass": true,
+              "detail": "idle"
             }
           ]
         }
@@ -315,7 +315,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "requires_confirmation",
-          "result_status": null,
+          "result_status": "requires_confirmation",
           "checks": [
             {
               "name": "status=requires_confirmation",
@@ -344,7 +344,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -436,11 +436,11 @@
       "id": "identical-delete-buttons-ambiguous",
       "html": "fixtures/identical-delete.html",
       "notes": "two identical Delete buttons in rows; no stable anchor after rerender",
-      "pending": true,
-      "pending_reason": "phase-2: expect structured ambiguous, baseline clicks a guess",
-      "status": "PENDING",
-      "match_ok": false,
-      "diff_ok": false,
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
       "tokens": 39,
       "failures": [],
       "steps": [
@@ -464,30 +464,30 @@
         },
         {
           "step": "3:click",
-          "match_ok": false,
-          "diff_ok": false,
-          "status": "ok",
-          "result_status": null,
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ambiguous",
+          "result_status": "ambiguous",
           "checks": [
             {
               "name": "status=ambiguous",
-              "pass": false,
-              "detail": "ok"
+              "pass": true,
+              "detail": "ambiguous"
             },
             {
               "name": "candidates>=2",
-              "pass": false,
-              "detail": "0"
-            },
-            {
-              "name": "noMutation",
-              "pass": false,
+              "pass": true,
               "detail": "2"
             },
             {
+              "name": "noMutation",
+              "pass": true,
+              "detail": null
+            },
+            {
               "name": "pageText #out",
-              "pass": false,
-              "detail": "deleted"
+              "pass": true,
+              "detail": "idle"
             }
           ]
         }
@@ -497,11 +497,11 @@
       "id": "identical-ok-buttons-ambiguous",
       "html": "fixtures/identical-ok.html",
       "notes": "two visually identical OK buttons; rerender and act on the old id",
-      "pending": true,
-      "pending_reason": "phase-2: expect structured ambiguous, baseline clicks a guess",
-      "status": "PENDING",
-      "match_ok": false,
-      "diff_ok": false,
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
       "tokens": 31,
       "failures": [],
       "steps": [
@@ -525,30 +525,30 @@
         },
         {
           "step": "3:click",
-          "match_ok": false,
-          "diff_ok": false,
-          "status": "ok",
-          "result_status": null,
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ambiguous",
+          "result_status": "ambiguous",
           "checks": [
             {
               "name": "status=ambiguous",
-              "pass": false,
-              "detail": "ok"
+              "pass": true,
+              "detail": "ambiguous"
             },
             {
               "name": "candidates>=2",
-              "pass": false,
-              "detail": "0"
+              "pass": true,
+              "detail": "2"
             },
             {
               "name": "noMutation",
-              "pass": false,
-              "detail": "1"
+              "pass": true,
+              "detail": null
             },
             {
               "name": "pageText #out",
-              "pass": false,
-              "detail": "one"
+              "pass": true,
+              "detail": "idle"
             }
           ]
         }
@@ -589,7 +589,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -634,7 +634,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -648,7 +648,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -662,7 +662,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -718,7 +718,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -769,7 +769,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -820,7 +820,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -871,7 +871,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -921,7 +921,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -971,7 +971,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -1101,7 +1101,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -1146,7 +1146,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -1201,7 +1201,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -1251,7 +1251,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -1296,7 +1296,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -1321,9 +1321,9 @@
       "id": "virtualized-list-gap",
       "html": "fixtures/virtualized.html",
       "notes": "item 2 is unmounted after Next; no stable anchor, so do not guess",
-      "pending": true,
-      "pending_reason": "phase-2: expect structured not_found for an unmounted virtualized row",
-      "status": "PENDING",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
       "match_ok": true,
       "diff_ok": true,
       "tokens": 61,
@@ -1346,7 +1346,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "ok",
-          "result_status": null,
+          "result_status": "ok",
           "checks": [
             {
               "name": "status=ok",
@@ -1365,7 +1365,7 @@
           "match_ok": true,
           "diff_ok": true,
           "status": "not_found",
-          "result_status": null,
+          "result_status": "not_found",
           "checks": [
             {
               "name": "status=not_found",

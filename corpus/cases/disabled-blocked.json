@@ -17,7 +17,7 @@
       "action": "click",
       "expectedId": "a1",
       "targetHint": "disabled Delete button",
-      "expectStatus": "error",
+      "expectStatus": "blocked",
       "expectEffect": {
         "error": "disabled",
         "noMutation": true,

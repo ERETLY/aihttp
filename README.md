@@ -138,7 +138,7 @@ A string payload fills the target. An object payload can carry:
 | `settle`, `timeout`, `quiet`, `minWait`, `networkQuiet` | Settle behavior; see [docs/API.md](docs/API.md) |
 | `diff` / `snapshot` | `false` leaves that part out of the reply |
 
-If a framework replaces the node, the engine rescans and relocates it by fingerprint. That match is heuristic: two near-identical controls can be confused.
+If a framework replaces the node, the engine rescans and relocates it by stable anchors: intent, test id, DOM id, name, accessible name, visible text, title, placeholder, alt and href. The old fingerprint is only a low-weight structural signal. If two candidates are too close, the action is not dispatched; `act` returns `status: 'ambiguous'` with the candidates. `confirm: true` does not override that. Weights and thresholds are in [docs/MATCHING.md](docs/MATCHING.md).
 
 Actions marked `data-ahttp-confirm` do not run on the first call. The engine returns `requiresConfirmation`; call again with `{ confirm: true }`. This stops accidents. It does not prove a human approved anything.
 

@@ -3,7 +3,6 @@
   "html": "fixtures/identical-delete.html",
   "url": "https://corpus.test/rows",
   "notes": "two identical Delete buttons in rows; no stable anchor after rerender",
-  "pending": "phase-2: expect structured ambiguous, baseline clicks a guess",
   "steps": [
     {
       "action": "snapshot",

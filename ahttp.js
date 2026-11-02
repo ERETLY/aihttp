@@ -23,6 +23,35 @@
     gridcell: 'click'
   };
   var FORM_KINDS = { fill: 1, select: 1, toggle: 1, file: 1 };
+  // Relocation scoring. Stable, author-controlled anchors dominate; position,
+  // order and the old structural fingerprint can only break ties. A candidate
+  // must clear `accept` to run. Between `ambiguous` and `accept`, or when the
+  // second candidate is within `margin`, the engine returns candidates instead
+  // of guessing. `ambiguous` must stay below `accept`.
+  var MATCH = {
+    weights: {
+      intent: 100,        // data-ahttp-intent: the page author's stable name
+      testid: 90,         // data-testid / data-test / data-qa
+      domId: 80,          // DOM id survives many framework rerenders
+      name: 70,           // form name is authored, not copy
+      accessibleName: 55, // label / aria-labelledby / aria-label / visible name
+      visibleText: 45,    // separate from an aria name when both are present
+      placeholder: 40,    // authored hint; weaker than a name
+      title: 35,          // icon-only controls often carry only a title
+      alt: 35,            // image controls
+      href: 30,           // same link text, different destination
+      role: 8,            // compatibility support, not an identity anchor
+      tag: 6,             // compatibility support, not an identity anchor
+      type: 4,            // input type survives copy changes
+      path: 10,           // capped position tie-breaker
+      order: 4,           // capped DOM-order tie-breaker
+      structural: 6       // former fingerprint, structural part only
+    },
+    accept: 50,   // stable anchor, or a strong text anchor plus role/tag support
+    ambiguous: 24, // below this there is nothing worth showing the agent
+    margin: 12,   // the winner must be clearly ahead of the runner-up
+    maxCandidates: 5
+  };
   var TEXT_BLOCKS = {
     p: 1, li: 1, h1: 1, h2: 1, h3: 1, h4: 1, h5: 1, h6: 1, blockquote: 1,
     pre: 1, td: 1, th: 1, dd: 1, dt: 1, figcaption: 1, caption: 1, summary: 1,
@@ -1408,9 +1437,15 @@
     entry.intent = attr(el, 'data-ahttp-intent') || '';
     entry.name = attr(el, 'name') || '';
     entry.testid = attr(el, 'data-testid') || '';
+    entry.test = attr(el, 'data-test') || '';
+    entry.qa = attr(el, 'data-qa') || '';
     entry.type = type;
     entry.href = href;
     entry.placeholder = attr(el, 'placeholder') || '';
+    entry.title = normText(attr(el, 'title'));
+    entry.alt = normText(attr(el, 'alt'));
+    entry.ariaLabel = normText(attr(el, 'aria-label'));
+    entry.visibleText = normText(textOf(el));
     entry.value = readValue(el, info);
     entry.checked = info.kind === 'toggle' ? el.checked === true : undefined;
     entry.required = el.required === true || hasAttr(el, 'required');
@@ -1425,8 +1460,11 @@
     entry.family = familyOf(el, info, label);
     entry.path = pathOf(el, ctx);
     entry.fingerprint = {
-      tag: entry.tag, role: entry.role, type: type, name: entry.name, testid: entry.testid,
-      id: entry.domId, intent: entry.intent, label: label, href: href, placeholder: entry.placeholder, path: entry.path
+      tag: entry.tag, role: entry.role, type: type, kind: entry.kind,
+      name: entry.name, testid: entry.testid, test: entry.test, qa: entry.qa,
+      id: entry.domId, intent: entry.intent, label: label, href: href,
+      placeholder: entry.placeholder, title: entry.title, alt: entry.alt,
+      visibleText: entry.visibleText, path: entry.path, order: entry.order
     };
     entry.order = ctx.actions.length;
     S.registry.set(entry.id, entry);
@@ -2081,24 +2119,123 @@
     return (h >>> 0).toString(36).slice(0, 5);
   }
 
+  function ciEqual(a, b) {
+    return !!a && !!b && String(a).toLowerCase() === String(b).toLowerCase();
+  }
+
+  // Role/tag/path/order can only support a match. At least one content anchor
+  // must agree, otherwise a virtualized list would turn every recycled row into
+  // a fake "ambiguous" candidate.
+  var CONTENT_SIGNALS = {
+    intent: 1, testid: 1, id: 1, name: 1, href: 1,
+    placeholder: 1, 'placeholder~': 1,
+    title: 1, 'title~': 1, alt: 1, 'alt~': 1,
+    'name~': 1, 'name^': 1, text: 1, 'text~': 1, 'text^': 1
+  };
+
+  function hasContentSignal(signals) {
+    for (var i = 0; i < signals.length; i++) {
+      if (CONTENT_SIGNALS[signals[i]]) return true;
+    }
+    return false;
+  }
+
+  function prefixEither(a, b) {
+    if (!a || !b) return false;
+    a = String(a);
+    b = String(b);
+    return a.indexOf(b) === 0 || b.indexOf(a) === 0;
+  }
+
+  // The accessible label is often derived from a stronger anchor (title,
+  // placeholder, name, id). Do not score the same string twice.
+  function labelIsDerived(fp) {
+    if (!fp.label) return true;
+    return fp.label === fp.intent || fp.label === fp.domId || fp.label === fp.name ||
+      fp.label === fp.testid || fp.label === fp.test || fp.label === fp.qa ||
+      fp.label === fp.placeholder || fp.label === fp.title || fp.label === fp.alt ||
+      fp.label === fp.href;
+  }
+
   function scoreMatch(fp, cand) {
-    var s = 0;
-    if (!cand) return -1;
-    if (fp.intent && cand.intent === fp.intent) s += 100;
-    if (fp.id && cand.domId === fp.id) s += 80;
-    if (fp.name && cand.name === fp.name) s += 60;
-    if (fp.placeholder && cand.placeholder === fp.placeholder) s += 40;
-    if (fp.label && cand.label === fp.label) s += 50;
-    else if (fp.label && cand.label && (cand.label.indexOf(fp.label) === 0 || fp.label.indexOf(cand.label) === 0)) s += 25;
-    if (fp.tag === cand.tag) s += 10;
-    if (fp.role === cand.role) s += 10;
-    if (fp.type && fp.type === cand.type) s += 10;
-    if (fp.href && cand.href === fp.href) s += 20;
+    var weights = MATCH.weights;
+    var score = 0;
+    var signals = [];
+    function hit(name, points) {
+      if (points > 0) {
+        score += points;
+        signals.push(name);
+      }
+    }
+    if (!fp || !cand) return { score: -1, signals: [] };
+    // A different action kind is not the same control. A disabled node is not
+    // an active target: refuse rather than dispatch into a control that is
+    // visibly unable to run.
+    if (fp.kind && cand.kind !== fp.kind) return { score: -1, signals: [] };
+    if (cand.disabled) return { score: -1, signals: [] };
+
+    if (fp.intent && cand.intent === fp.intent) hit('intent', weights.intent);
+    if ((fp.testid && cand.testid === fp.testid) ||
+        (fp.test && cand.test === fp.test) ||
+        (fp.qa && cand.qa === fp.qa)) hit('testid', weights.testid);
+    if (fp.id && cand.domId === fp.id) hit('id', weights.domId);
+    if (fp.name && cand.name === fp.name) hit('name', weights.name);
+    if (fp.href && cand.href === fp.href) hit('href', weights.href);
+
+    if (fp.placeholder && cand.placeholder) {
+      if (fp.placeholder === cand.placeholder) hit('placeholder', weights.placeholder);
+      else if (ciEqual(fp.placeholder, cand.placeholder)) hit('placeholder~', weights.placeholder - 8);
+    }
+    if (fp.title && cand.title) {
+      if (fp.title === cand.title) hit('title', weights.title);
+      else if (ciEqual(fp.title, cand.title)) hit('title~', weights.title - 7);
+    }
+    if (fp.alt && cand.alt) {
+      if (fp.alt === cand.alt) hit('alt', weights.alt);
+      else if (ciEqual(fp.alt, cand.alt)) hit('alt~', weights.alt - 7);
+    }
+
+    if (!labelIsDerived(fp) && fp.label && cand.label) {
+      if (fp.label === cand.label) hit('name', weights.accessibleName);
+      else if (ciEqual(fp.label, cand.label)) hit('name~', weights.accessibleName - 5);
+      else if (prefixEither(fp.label, cand.label)) hit('name^', 22);
+    }
+    if (fp.visibleText && fp.visibleText !== fp.label && cand.visibleText) {
+      if (fp.visibleText === cand.visibleText) hit('text', weights.visibleText);
+      else if (ciEqual(fp.visibleText, cand.visibleText)) hit('text~', weights.visibleText - 5);
+      else if (prefixEither(fp.visibleText, cand.visibleText)) hit('text^', 18);
+    }
+
+    if (fp.role && cand.role === fp.role) hit('role', weights.role);
+    if (fp.tag && cand.tag === fp.tag) hit('tag', weights.tag);
+    if (fp.type && cand.type === fp.type) hit('type', weights.type);
+
     if (fp.path && cand.path) {
       var sim = pathSim(fp.path, cand.path);
-      if (sim > 0.34) s += Math.round(20 * sim);
+      if (sim > 0.5) hit('path', Math.round(weights.path * sim));
     }
-    return s;
+    if (fp.order != null && cand.order != null) {
+      var dist = Math.abs(fp.order - cand.order);
+      if (dist === 0) hit('order', weights.order);
+      else if (dist === 1) hit('order', weights.order - 1);
+      else if (dist <= 3) hit('order', 1);
+    }
+    // The old fingerprint is kept as a low-weight structural signal only.
+    if (fp.tag === cand.tag && fp.role === cand.role && (fp.type || '') === (cand.type || '')) {
+      hit('fingerprint', weights.structural);
+    }
+    return { score: score, signals: signals };
+  }
+
+  function adoptEntry(entry, cand) {
+    var keepId = entry.id;
+    for (var key in cand) {
+      if (!Object.prototype.hasOwnProperty.call(cand, key)) continue;
+      if (key === 'id' || key === 'node') continue;
+      entry[key] = cand[key];
+    }
+    entry.id = keepId;
+    entry.staleResolved = true;
   }
 
   function bindEntry(entry, node) {
@@ -2110,51 +2247,61 @@
     if (entry.node && entry.node !== node) S.byNode.delete(entry.node);
     entry.node = node;
     S.byNode.set(node, entry);
-    var nowConnected = true;
-    entry.staleResolved = nowConnected;
+    entry.staleResolved = true;
     return true;
+  }
+
+  function publicCandidate(item) {
+    return {
+      id: item.entry.id,
+      role: item.entry.role,
+      name: item.entry.label,
+      tag: item.entry.tag,
+      score: item.score,
+      signals: item.signals
+    };
   }
 
   function relocate(entry) {
     ensureScan(true);
-    var best = null;
-    var bestScore = 0;
+    var fp = entry.fingerprint || {};
+    var scored = [];
     S.registry.forEach(function (cand) {
       if (!cand || cand === entry || !cand.node) return;
       if (!connected(cand.node)) return;
-      var sc = scoreMatch(entry.fingerprint, cand);
-      if (sc > bestScore) { bestScore = sc; best = cand; }
+      var match = scoreMatch(fp, cand);
+      if (match.score <= 0) return;
+      if (!hasContentSignal(match.signals)) return;
+      scored.push({ entry: cand, score: match.score, signals: match.signals });
     });
-    if (best && bestScore >= 45) {
-      var node = best.node;
-      S.registry.delete(best.id);
+    scored.sort(function (a, b) {
+      if (b.score !== a.score) return b.score - a.score;
+      return (a.entry.order || 0) - (b.entry.order || 0);
+    });
+    var best = scored[0] || null;
+    var second = scored[1] || null;
+    if (!best || best.score < MATCH.ambiguous) {
+      return { status: 'not_found', candidates: [], bestScore: best ? best.score : 0, secondScore: second ? second.score : 0 };
+    }
+    var ahead = !second || (best.score - second.score) >= MATCH.margin;
+    if (best.score >= MATCH.accept && ahead) {
+      var cand = best.entry;
+      var node = cand.node;
+      S.registry.delete(cand.id);
+      adoptEntry(entry, cand);
       bindEntry(entry, node);
-      entry.label = best.label || entry.label;
-      entry.domId = best.domId;
-      entry.value = best.value;
-      entry.checked = best.checked;
-      entry.path = best.path;
-      return true;
+      return { status: 'ok', score: best.score, signals: best.signals };
     }
-    var fp = entry.fingerprint || {};
-    var doc = S.doc;
-    if (doc && doc.querySelector) {
-      var selectors = [];
-      if (fp.intent) selectors.push('[data-ahttp-intent="' + escapeSel(fp.intent) + '"]');
-      if (fp.name) selectors.push('[name="' + escapeSel(fp.name) + '"]');
-      if (fp.placeholder) selectors.push('[placeholder="' + escapeSel(fp.placeholder) + '"]');
-      if (fp.testid) selectors.push('[data-testid="' + escapeSel(fp.testid) + '"]');
-      for (var i = 0; i < selectors.length; i++) {
-        var el = null;
-        try { el = doc.querySelector(selectors[i]); } catch (e) { el = null; }
-        if (el) { bindEntry(entry, el); return true; }
-      }
-    }
-    return false;
+    return {
+      status: 'ambiguous',
+      candidates: scored.slice(0, MATCH.maxCandidates).map(publicCandidate),
+      bestScore: best.score,
+      secondScore: second ? second.score : 0
+    };
   }
 
   function resolveEntry(id) {
-    if (!id) return null;
+    if (!id) return { status: 'not_found', reason: 'unknown_action' };
     var key = String(id).replace(/^\[|\]$/g, '');
     var entry = S.registry.get(key);
     if (!entry) {
@@ -2165,9 +2312,11 @@
         else if (cand.label && String(cand.label).toLowerCase() === lower) entry = cand;
       });
     }
-    if (!entry) return null;
-    if (entry.node && connected(entry.node)) return entry;
-    return relocate(entry) ? entry : null;
+    if (!entry) return { status: 'not_found', reason: 'unknown_action' };
+    if (entry.node && connected(entry.node)) return { status: 'ok', entry: entry };
+    var match = relocate(entry);
+    match.entry = entry;
+    return match;
   }
 
   function normalizePayload(payload) {
@@ -2629,6 +2778,17 @@
     return { id: entry.id, method: method, kind: entry.kind, label: entry.label, tag: entry.tag, role: entry.role };
   }
 
+  function withStatus(result) {
+    if (!result || result.status) return result;
+    if (result.requiresConfirmation) result.status = 'requires_confirmation';
+    else if (result.locked) result.status = 'locked';
+    else if (result.ok) result.status = 'ok';
+    else if (result.error === 'unknown_action' || result.error === 'detached_action') result.status = 'not_found';
+    else if (result.blocked) result.status = 'blocked';
+    else result.status = 'error';
+    return result;
+  }
+
   function act(id, payload, opts) {
     return Promise.resolve().then(function () {
       ensureConfig();
@@ -2649,9 +2809,31 @@
         if (p.maxActions != null) o.maxActions = p.maxActions;
       }
       ensureScan(true);
-      var entry = resolveEntry(id);
-      if (!entry) return { ok: false, error: 'unknown_action', id: String(id) };
-      if (!entry.node) return { ok: false, error: 'detached_action', id: entry.id };
+      var resolved = resolveEntry(id);
+      if (resolved.status === 'not_found') {
+        return {
+          ok: false,
+          error: resolved.reason || 'detached_action',
+          status: 'not_found',
+          id: resolved.entry ? resolved.entry.id : String(id)
+        };
+      }
+      if (resolved.status === 'ambiguous') {
+        var stale = resolved.entry;
+        return {
+          ok: false,
+          error: 'ambiguous',
+          status: 'ambiguous',
+          id: stale.id,
+          action: actionInfo(stale, stale.kind),
+          targetHint: p.targetHint != null ? String(p.targetHint) : (o.targetHint != null ? String(o.targetHint) : (stale.label || null)),
+          candidates: resolved.candidates,
+          thresholds: { accept: MATCH.accept, ambiguous: MATCH.ambiguous, margin: MATCH.margin },
+          warning: 'Multiple controls match this target; no action was taken.'
+        };
+      }
+      var entry = resolved.entry;
+      if (!entry.node) return { ok: false, error: 'detached_action', status: 'not_found', id: entry.id };
       if (!policyAllows(entry)) {
         return {
           ok: false,
@@ -2794,7 +2976,7 @@
           action: actionInfo(entry, entry.kind)
         };
       });
-    });
+    }).then(withStatus);
   }
 
   function status() {

@@ -2,6 +2,7 @@ declare namespace Ahttp {
   type AccessMode = 'public' | 'dev' | 'gate' | 'owner';
   type Region = 'modal' | 'main' | 'chrome';
   type Format = 'text' | 'json';
+  type ActStatus = 'ok' | 'ambiguous' | 'not_found' | 'no_effect' | 'requires_confirmation' | 'blocked' | 'locked' | 'error';
 
   interface SnapshotOptions {
     format?: Format;
@@ -105,6 +106,8 @@ declare namespace Ahttp {
     hover?: boolean;
     scroll?: boolean;
     confirm?: boolean;
+    targetHint?: string;
+    expect?: ActExpectation;
     settle?: boolean;
     timeout?: number;
     quiet?: number;
@@ -113,6 +116,34 @@ declare namespace Ahttp {
     diff?: boolean;
     snapshot?: boolean;
     maxActions?: number;
+  }
+
+  interface ActExpectation {
+    diff?: boolean;
+    textAdded?: string[];
+    textRemoved?: string[];
+    added?: string[];
+    removed?: string[];
+    diffContains?: string[];
+    urlChanged?: boolean;
+    empty?: boolean;
+    snapshotContains?: string[];
+    pageText?: { selector: string; equals?: string; includes?: string[] };
+  }
+
+  interface MatchCandidate {
+    id: string;
+    role: string;
+    name: string;
+    tag: string;
+    score: number;
+    signals: string[];
+  }
+
+  interface MatchThresholds {
+    accept: number;
+    ambiguous: number;
+    margin: number;
   }
 
   interface Diff {
@@ -130,6 +161,7 @@ declare namespace Ahttp {
 
   interface ActResult {
     ok: boolean;
+    status?: ActStatus;
     action?: Record<string, unknown>;
     method?: string;
     url?: string;
@@ -138,6 +170,14 @@ declare namespace Ahttp {
     snapshot?: string;
     snapshotMeta?: { chars: number; tokens: number };
     meta?: { mutations: number; requests: number; settleMs: number };
+    targetHint?: string | null;
+    candidates?: MatchCandidate[];
+    thresholds?: MatchThresholds;
+    effect?: {
+      ok: boolean;
+      expected: ActExpectation;
+      observed: Record<string, unknown>;
+    };
     error?: string;
     blocked?: boolean;
     locked?: boolean;

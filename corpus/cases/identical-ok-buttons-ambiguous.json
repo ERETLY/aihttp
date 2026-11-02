@@ -3,7 +3,6 @@
   "html": "fixtures/identical-ok.html",
   "url": "https://corpus.test/confirm",
   "notes": "two visually identical OK buttons; rerender and act on the old id",
-  "pending": "phase-2: expect structured ambiguous, baseline clicks a guess",
   "steps": [
     {
       "action": "snapshot",
