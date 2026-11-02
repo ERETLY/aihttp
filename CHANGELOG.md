@@ -1,5 +1,32 @@
 # Changelog
 
+## Unreleased
+
+### Matching
+
+- Relocation scores independent anchors: intent, test id, DOM id, name,
+  accessible name, visible text, placeholder, title, alt and href. Role, tag,
+  path, DOM order and the old fingerprint are tie-breakers only.
+- Two thresholds (`accept`, `ambiguous`) and a margin. A near-tie returns
+  `status: 'ambiguous'` with candidates and dispatches no event; `confirm` does
+  not override it.
+- Disabled replacements and kind-mismatched candidates are not active matches.
+
+### Actions
+
+- `act` accepts `expect` and returns `status: 'no_effect'` with failed rules when
+  the expected change does not happen.
+- Every result now carries `status` (`ok`, `ambiguous`, `not_found`,
+  `requires_confirmation`, `blocked`, `locked`, `error`, `no_effect`).
+  Existing fields and error codes are unchanged; this is additive.
+
+### Tests and docs
+
+- Local jsdom corpus with 27 scenarios, `bench/results.json` metrics and no
+  network access.
+- `docs/MATCHING.md`, `docs/ARCHITECTURE.md`, a 30-second quick start, an MCP
+  config block and a runnable `examples/agent-loop.js`.
+
 ## 0.1.0, 2026-11-01
 
 First public snapshot.

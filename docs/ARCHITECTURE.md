@@ -58,14 +58,14 @@ When the stored node is disconnected (React and similar re-renders),
 
 - the engine rescans and scores every connected registered candidate against
   the old entry;
-- a candidate above the accept threshold is bound to the old id;
+- a candidate above `MATCH.accept` and clearly ahead of the second candidate is
+  bound to the old id;
 - ids already printed to an agent stay usable;
-- the old algorithm picks the first candidate above a single threshold, which
-  can silently choose the wrong twin.
+- disabled candidates and candidates with a different `kind` are rejected;
+- a near-tie returns a structured `ambiguous` reply instead of guessing.
 
-The matching-stability work replaces this with independent anchors, a weighted
-score, an accept/ambiguity band, and a structured `ambiguous` reply instead of a
-guess.
+Weights and thresholds are in `MATCH` at the top of `ahttp.js` and explained in
+[docs/MATCHING.md](MATCHING.md).
 
 ## Snapshot format
 
@@ -133,8 +133,7 @@ The regression corpus lives in `corpus/`: one JSON scenario per file, local HTML
 fixtures, no network. `corpus/runner.js` loads a fresh jsdom per case, runs
 snapshot/action steps, checks ids, matches and diffs, and reports
 `match_ok | diff_ok | tokens | status`. `test/corpus.test.js` fails on any
-non-pending mismatch and writes `bench/results.json`.
+mismatch and writes `bench/results.json`.
 
-Known-match work is staged so the corpus can land before the engine changes:
-cases that assert new matching behavior carry a `pending` marker until the
-corresponding phase removes it.
+A case may carry a `pending` marker while a later phase is still being built;
+the runner reports it without failing. No case is pending on this branch.

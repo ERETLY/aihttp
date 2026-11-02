@@ -72,9 +72,9 @@ ahttp.installWebMCP(options)     // opt-in draft document.modelContext adapter
 
 Snapshot options: `format`, `scope`, `query`, `maxActions` (default 60), `maxText` (default 1,400), `includeText`, `interactiveOnly`, `force`, `group`, `compact`, `verbose`.
 
-Act payloads: string or `{ value }`; `{ checked }`; `{ key }`; `{ read: true }`; `{ confirm: true }`; `{ hover: true }`; `{ scroll: true }`. Options include `settle`, `timeout`, `quiet`, `minWait`, `diff`, `snapshot`, `maxActions`.
+Act payloads: string or `{ value }`; `{ checked }`; `{ key }`; `{ read: true }`; `{ confirm: true }`; `{ hover: true }`; `{ scroll: true }`; `{ targetHint }`; `{ expect }`. Options include `settle`, `timeout`, `quiet`, `minWait`, `diff`, `snapshot`, `maxActions`.
 
-Result: `{ ok, action, method, url, latencyMs, diff, snapshot, snapshotMeta, meta }`. Errors are returned with `ok: false` and an `error` code.
+Result: `{ ok, status, action, method, url, latencyMs, diff, snapshot, snapshotMeta, meta }`. Errors are returned with `ok: false` and an `error` code. `status: 'ambiguous'` lists candidates and dispatches nothing; `status: 'no_effect'` means an `expect` rule was not met.
 
 ## Declarative contract
 
@@ -129,9 +129,9 @@ Torture suite: 9/9 stands. Owner/gate suite: 76/76. MCP: 38/38. Pinned web: 5/5.
 
 - `mini-dom` is not an HTML5 tree builder. Use browser mode when exact parsing matters.
 - External stylesheets are fetched by the static backend (up to 8 links, 2 MB each); `@import` is followed to three levels and common media conditions are evaluated.
-- Closed shadow roots and cross-origin iframes are inaccessible.
+- Stale-node relocation is heuristic. Stable anchors are scored; a near-tie returns `ambiguous` and dispatches nothing. `no_effect` flags a click whose expected change did not happen.
 - Accessible names are a subset of the specification.
-- Stale-node relocation is heuristic.
+- Virtualized rows that are unmounted cannot be matched. Closed shadow roots and cross-origin iframes are inaccessible; open shadow roots and same-origin iframes (two levels) are scanned.
 - Hidden-text detection is heuristic.
 - The task benchmark is scripted; no LLM task benchmark was run.
 - No npm publication, MCP Inspector run, or independent security review yet.

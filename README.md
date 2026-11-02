@@ -1,10 +1,57 @@
 # ahttp
 
+[![status: experimental](https://img.shields.io/badge/status-experimental-orange)](#)
+[![version: pre-1.0](https://img.shields.io/badge/version-pre--1.0-lightgrey)](#)
+
 Page snapshots for LLM agents. ahttp scans the DOM, gives every control a short id, and after each action returns a diff instead of the whole page.
 
 It is one browser file with no dependencies, plus a CLI and an MCP server. The server runs on Node with either a small built-in DOM or real Chromium.
 
-Pre-1.0, one maintainer. The API can still change.
+**Experimental, pre-1.0.** One maintainer. The API can still change; additive fields and new options are documented before any breaking change.
+
+## Quick start
+
+### Userscript: first snapshot in about 30 seconds
+
+1. Install [Tampermonkey](https://www.tampermonkey.net/) or Violentmonkey.
+2. Open the raw [`self/ahttp.user.js`](https://raw.githubusercontent.com/ERETLY/ahttp/main/self/ahttp.user.js) and confirm the install. If the client does not offer the install, create a new script and paste the file.
+3. Open any `http(s)` page and press **Alt+Shift+A** (or click the **ahttp** button). The panel shows the snapshot; type an id and press **Act**.
+
+This path needs no clone and no server. The script uses `@grant none` and uploads nothing.
+
+### MCP: one config block
+
+Clone and install once:
+
+```bash
+git clone https://github.com/ERETLY/ahttp.git
+cd ahttp
+npm ci
+npx playwright install chromium
+```
+
+Then paste this into Claude Desktop or Cursor and replace `/absolute/path/to/ahttp`:
+
+```json
+{
+  "mcpServers": {
+    "ahttp": {
+      "command": "node",
+      "args": ["/absolute/path/to/ahttp/bin/ahttp-mcp.js", "--browser"]
+    }
+  }
+}
+```
+
+Restart the client and call `ahttp_open` with a URL. The tools are `ahttp_open`, `ahttp_snapshot` and `ahttp_act`. `--browser` runs page JavaScript; drop it only for static HTML. Owner auth and legacy options are in [MCP server](#mcp-server).
+
+### Agent loop on a local page
+
+```bash
+node examples/agent-loop.js
+```
+
+It prints a snapshot, picks a control by label, clicks it with an `expect` rule, and prints the diff. No network: a local fixture is loaded in Chromium.
 
 ## Example
 
@@ -339,16 +386,39 @@ For the draft WebMCP API, `ahttp.installWebMCP()` registers `ahttp_snapshot` and
 > [!WARNING]
 > CDP mode attaches to a real browser. ahttp creates a fresh context by default; `--cdp-use-existing-profile` lets the agent act inside your signed-in profile and read its cookies. Use a dedicated profile.
 
-## Limitations
+## Known limitations
 
-- Closed shadow roots and cross-origin iframes are unreachable from page JavaScript.
+### Matching and rerenders
+
+- Matching is heuristic, not a proof of identity. Stable anchors (intent, test id, DOM id, name, accessible name, text, title, placeholder, alt, href) are tried first; the fingerprint is a low-weight fallback.
+- Two near-identical controls can land in the ambiguity band. The engine then returns `status: 'ambiguous'` with candidates and dispatches nothing. It does not guess.
+- `confirm: true` does not resolve ambiguity. Re-snapshot, disambiguate with `data-ahttp-intent` or `data-testid`, or use `query`/`scope`.
+- A disabled replacement is not an active target. An action whose expected effect is missing returns `status: 'no_effect'` when an `expect` rule is supplied; re-snapshot instead of retrying.
+- Position and DOM order are tie-breakers only. A virtualized list that unmounts a row produces `not_found`, not a click on a recycled row.
+
+### Shadow DOM and iframes
+
+- Open shadow roots and `<slot>` content are scanned when the page exposes them. Closed shadow roots are unreachable.
+- Same-origin iframe documents are scanned up to two levels deep. Cross-origin iframes are skipped, and the userscript skips all iframes (`@noframes`).
+- Accessible names are a subset of the spec: `aria-owns`, some SVG name rules and references across shadow boundaries are missing. Browser mode includes CSS `::before`/`::after` text and SVG titles.
+- The userscript panel shows one page and does not cross iframe boundaries.
+
+### Virtualized lists
+
+- Only mounted rows exist in the snapshot. An id from a row that was unmounted cannot be matched; the engine returns `not_found`.
+- The engine does not scroll a virtualized container to revive a row. Do that with `scroll` on the container or a page-specific control, then re-snapshot.
+
+### Other
+
 - The hidden-text filter misses text drawn on canvas, set as a background image, or hidden by a stylesheet the page doesn't expose.
 - `mini-dom` (static backend) is a hand-written parser, not an HTML5 tree builder: no foster parenting, no full table algorithm. Use `--browser` when exact parsing matters.
 - The static backend follows `@import` three levels deep (16 sheets) and evaluates `screen`, `print`, `min-width`, `max-width`, `min-height` and `max-height`. Unknown media features count as matching.
-- Accessible names are a subset of the spec: `aria-owns`, some SVG name rules and references across shadow boundaries are missing. Browser mode includes CSS `::before`/`::after` text and SVG titles.
-- Relocation prefers a matching DOM `id` over an ambiguous label, but it is still a heuristic.
 - Legacy MCP clients get implicit page state. Modern clients carry `pageId`.
 - The task benchmark is scripted, not an LLM evaluation.
+
+## Breaking changes
+
+None in 0.1.x. The matching work adds `status`, `candidates`, `targetHint`, `thresholds`, `effect` and `expect`; existing fields, error codes and snapshot lines are unchanged. A change that cannot stay additive bumps the version and is listed here before release.
 
 ## Development
 
