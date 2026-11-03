@@ -63,6 +63,21 @@ separately.
 (text and ids). Scroll stability showed no lost header/nav action in this
 group.
 
+## Results (group 2: TodoMVC, saucedemo, books.toscrape)
+
+| Site | Actions | Scan ms | Text tokens | Raw tokens | Aria tokens | Recall | Scenarios |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| todomvc-react | 12 | 7 | 363 | 942 | 535 | 100% | 1/2 |
+| saucedemo (login page) | 3 | 9 | 86 | 719 | 88 | 100% | 0/2 |
+| books.toscrape | 114 | 48 | 2728 | 9832 | 4657 | 100% | 2/2 |
+
+6 scenarios, 3 passed, 3 failed. Recall 100% on all three. TodoMVC's
+stale-id scenario passed: after a filter rerender, the id from the previous
+snapshot was relocated and clicked. books.toscrape: 114 actions, stable ids
+across top/middle/bottom, `next` on the Nonfiction category is `a115`.
+saucedemo: login, two "Add to cart" clicks and the `2` cart badge all passed;
+the cart link and the sort control did not.
+
 ## What is broken
 
 ### P2
@@ -83,6 +98,34 @@ group.
    `figure` with `onmouseover` is not classified, unlike `onclick`.
    Pending case: `corpus/cases/rw-hover-only.json`
    (`corpus/fixtures/rw-hover-only.html`).
+
+3. **A soft-hidden native toggle named only by a sibling `<label>` is
+   dropped.** TodoMVC React renders
+   `<input class="toggle" type="checkbox" data-testid="todo-item-toggle">`
+   with `opacity:0`, a real 40x40 box and a sibling `<label>Task one</label>`
+   (no `label[for]`, no `aria-label`, no `aria-labelledby`). The snapshot has
+   no checkbox, so the first task cannot be completed; the "Clear completed"
+   path is also unreachable until a task can be completed. Pending case:
+   `corpus/cases/rw-sibling-label-toggle.json`.
+
+4. **A native `<select>` hidden with `opacity:0.001` disappears, leaving a
+   dead proxy button.** saucedemo renders
+   `<span class="select_container"><span class="active_option">Name (A to Z)</span>
+   <select aria-label="Sort products" style="opacity:0.001">...</select></span>`.
+   The select is soft-hidden and dropped; the span is listed as
+   `button "Name (A to Z) Name (A to Z) Name (Z to A) Price (low to high) Price (high to low)"`.
+   Clicking it returns `status: ok` and leaves `select.value` at `az`, so the
+   sort order cannot be changed. Chromium-only repro:
+   `benchmark/realworld/repro/select-opacity/` (jsdom cannot prove the real
+   box, so this is not a corpus case).
+
+5. **An `<a>` without `href` but with `role="button"` is dropped.**
+   saucedemo's cart is
+   `<a class="shopping_cart_link" role="button" aria-label="Cart, empty">`
+   (the label becomes "Cart, 2 items" after adding products). `classify()`
+   returns `null` for every anchor without `href` before it reads the explicit
+   role, so the cart never appears in the snapshot and cannot be opened.
+   Pending case: `corpus/cases/rw-anchor-role-button.json`.
 
 ### P3
 
@@ -111,6 +154,9 @@ group.
   (`Let's have some different text!`, `My default text`, `In a list!`); the
   fixture has no interactive element, so shadow actions are exercised on GitHub
   later.
+- saucedemo lists two `View details for <product>` links per product (image and
+  title). They are real anchors, but identical names make label lookup
+  ambiguous; ids still work. Not a bug.
 - `/iframe`: 22 actions, including the editor inside the same-origin iframe.
 - `/large`: 3 actions (the 50x50 table has no controls). Text compression is
   strong: 1 354 text tokens vs 48 699 raw and 31 451 ariaSnapshot tokens.
@@ -120,17 +166,17 @@ group.
 
 ## Blocked / not tested yet
 
-Nothing blocked in this group. Still to run: TodoMVC, saucedemo,
-books.toscrape.com, httpbin, Wikipedia, Hacker News, GitHub, MDN, a news site
-with a cookie banner, and the MCP smoke path.
+Nothing blocked in these groups. Still to run: httpbin, Wikipedia, Hacker News,
+GitHub, MDN, a news site with a cookie banner, and the MCP smoke path.
 
 ## Honest summary (so far)
 
-- Scenarios: 16/17 passed (94%).
-- Recall: 100% on 17 pages; these pages are small, and the oracle only counts
-  controls visible in the viewport or well-formed below the fold.
-- Compression on this group: text is 5-36x smaller than raw HTML and 1-23x
-  smaller than Playwright ariaSnapshot (the extreme is `/large`).
+- Scenarios: 19/23 passed (83%).
+- Recall: 100% on 20 pages; these pages are small-to-medium, and the oracle
+  only counts controls visible in the viewport or well-formed below the fold.
+- Compression: text is 5-36x smaller than raw HTML and 1-23x smaller than
+  Playwright ariaSnapshot (the extreme is `/large`).
 - No README claims need changing yet. Recommendation for later: state that
-  framesets are not scanned and that hover-only content is reachable only when
-  the hover target is itself an action.
+  framesets are not scanned, that hover-only content is reachable only when
+  the hover target is itself an action, and that an anchor without `href` needs
+  an explicit role.

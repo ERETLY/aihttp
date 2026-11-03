@@ -236,7 +236,7 @@
       "url": "https://www.saucedemo.com/",
       "scenarios": [
         {
-          "name": "public test login, add two, sort, cart",
+          "name": "public test login, add two, cart",
           "steps": [
             { "op": "act", "target": { "selector": "#user-name" }, "payload": { "value": "standard_user" }, "expect": { "status": "ok" } },
             { "op": "act", "target": { "selector": "#password" }, "payload": { "value": "secret_sauce" }, "expect": { "status": "ok" } },
@@ -244,9 +244,18 @@
             { "op": "act", "target": { "role": "button", "name": "Add to cart", "index": 0 }, "expect": { "status": "ok" } },
             { "op": "act", "target": { "role": "button", "name": "Add to cart", "index": 0 }, "expect": { "status": "ok" } },
             { "op": "snapshot", "expect": { "dom": [ { "selector": ".shopping_cart_badge", "prop": "text", "equals": "2" } ] } },
-            { "op": "act", "target": { "tag": "select", "index": 0 }, "payload": { "value": "lohi" },
-              "expect": { "status": "ok", "dom": [ { "selector": ".inventory_item_name", "index": 0, "prop": "text", "equals": "Sauce Labs Onesie" } ] } },
-            { "op": "act", "target": { "tag": "a", "hrefContains": "cart.html" }, "expect": { "status": "ok", "urlContains": "/cart.html", "text": ["Your Cart"] } }
+            { "op": "act", "target": { "selector": ".shopping_cart_link" }, "expect": { "status": "ok", "urlContains": "/cart.html", "text": ["Your Cart"] } }
+          ]
+        },
+        {
+          "name": "change sort order",
+          "steps": [
+            { "op": "goto", "url": "https://www.saucedemo.com/" },
+            { "op": "act", "target": { "selector": "#user-name" }, "payload": { "value": "standard_user" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "selector": "#password" }, "payload": { "value": "secret_sauce" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "selector": "#login-button" }, "expect": { "status": "ok", "urlContains": "/inventory.html" } },
+            { "op": "act", "target": { "tag": "select", "index": 0 }, "payload": { "value": "za" },
+              "expect": { "status": "ok", "dom": [ { "selector": "select", "prop": "value", "equals": "za" } ] } }
           ]
         }
       ]
@@ -265,7 +274,7 @@
           "name": "category and next page",
           "steps": [
             { "op": "goto", "url": "https://books.toscrape.com/" },
-            { "op": "act", "target": { "tag": "a", "name": "Travel" }, "expect": { "status": "ok", "urlContains": "/category/books/travel" } },
+            { "op": "act", "target": { "tag": "a", "name": "Nonfiction" }, "expect": { "status": "ok", "urlContains": "/category/books/nonfiction" } },
             { "op": "act", "target": { "tag": "a", "name": "next" }, "expect": { "status": "ok", "urlContains": "page-2" } }
           ]
         }

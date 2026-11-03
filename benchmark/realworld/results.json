@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-03T07:10:49.210Z",
+  "generatedAt": "2026-11-03T07:19:43.877Z",
   "engine": {
     "version": "0.1.0",
-    "sha": "ec1f988"
+    "sha": "44842ae"
   },
   "runtime": {
     "node": "v26.13.0",
@@ -1872,6 +1872,748 @@
       ],
       "dialogs": [],
       "totalMs": 6728
+    },
+    {
+      "id": "todomvc-react",
+      "url": "https://todomvc.com/examples/react/dist/",
+      "status": "scenario_failures",
+      "httpStatus": 200,
+      "title": "TodoMVC: React",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 12,
+        "actionCap": 0,
+        "scanMs": 7,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 1353,
+        "textTokens": 363,
+        "rawChars": 3289,
+        "rawTokens": 942,
+        "ariaChars": 1968,
+        "ariaTokens": 535,
+        "compressionVsRaw": 0.411371237458194,
+        "compressionVsAria": 0.6875
+      },
+      "checks": {
+        "recall": {
+          "visible": 12,
+          "matched": 12,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 12
+            },
+            {
+              "at": "middle",
+              "y": 1,
+              "actions": 12
+            },
+            {
+              "at": "bottom",
+              "y": 3,
+              "actions": 12
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 12,
+          "secondActions": 12
+        }
+      },
+      "scenarios": [
+        {
+          "name": "add three, toggle, filters, clear",
+          "ok": false,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a11",
+              "action": {
+                "id": "a11",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "New Todo Input",
+                "region": "chrome",
+                "type": "text",
+                "placeholder": "What needs to be done?"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 163,
+              "navigationLost": null,
+              "latencyMs": 525,
+              "ms": 532
+            },
+            {
+              "op": "act",
+              "id": "a11",
+              "action": {
+                "id": "a11",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "New Todo Input",
+                "region": "chrome",
+                "type": "text",
+                "placeholder": "What needs to be done?",
+                "value": "Task one"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 182,
+              "navigationLost": null,
+              "latencyMs": 536,
+              "ms": 542
+            },
+            {
+              "op": "act",
+              "id": "a11",
+              "action": {
+                "id": "a11",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "New Todo Input",
+                "region": "chrome",
+                "type": "text",
+                "placeholder": "What needs to be done?"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 157,
+              "navigationLost": null,
+              "latencyMs": 521,
+              "ms": 528
+            },
+            {
+              "op": "act",
+              "id": "a11",
+              "action": {
+                "id": "a11",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "New Todo Input",
+                "region": "chrome",
+                "type": "text",
+                "placeholder": "What needs to be done?",
+                "value": "Task two"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 176,
+              "navigationLost": null,
+              "latencyMs": 540,
+              "ms": 548
+            },
+            {
+              "op": "act",
+              "id": "a11",
+              "action": {
+                "id": "a11",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "New Todo Input",
+                "region": "chrome",
+                "type": "text",
+                "placeholder": "What needs to be done?"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 159,
+              "navigationLost": null,
+              "latencyMs": 525,
+              "ms": 533
+            },
+            {
+              "op": "act",
+              "id": "a11",
+              "action": {
+                "id": "a11",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "New Todo Input",
+                "region": "chrome",
+                "type": "text",
+                "placeholder": "What needs to be done?",
+                "value": "Task three"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 180,
+              "navigationLost": null,
+              "latencyMs": 539,
+              "ms": 547
+            },
+            {
+              "op": "act",
+              "ok": false,
+              "failures": [
+                "target not in last snapshot: {\"tag\":\"input\",\"type\":\"checkbox\",\"index\":0}"
+              ],
+              "candidates": [],
+              "ms": 7
+            }
+          ],
+          "latencyMs": 3237,
+          "status": "ok"
+        },
+        {
+          "name": "stale ids across a filter rerender",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a11",
+              "action": {
+                "id": "a11",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "New Todo Input",
+                "region": "chrome",
+                "type": "text",
+                "placeholder": "What needs to be done?"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 161,
+              "navigationLost": null,
+              "latencyMs": 520,
+              "ms": 527
+            },
+            {
+              "op": "act",
+              "id": "a11",
+              "action": {
+                "id": "a11",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "New Todo Input",
+                "region": "chrome",
+                "type": "text",
+                "placeholder": "What needs to be done?",
+                "value": "Stale one"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 178,
+              "navigationLost": null,
+              "latencyMs": 540,
+              "ms": 547
+            },
+            {
+              "op": "act",
+              "id": "a14",
+              "action": {
+                "id": "a14",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "Active",
+                "region": "chrome",
+                "href": "#/active"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 183,
+              "navigationLost": null,
+              "latencyMs": 537,
+              "ms": 546
+            },
+            {
+              "op": "act",
+              "id": "a13",
+              "action": {
+                "id": "a13",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "All",
+                "region": "chrome",
+                "href": "#/"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 177,
+              "navigationLost": null,
+              "latencyMs": 543,
+              "ms": 543
+            }
+          ],
+          "latencyMs": 2163,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 9172
+    },
+    {
+      "id": "saucedemo",
+      "url": "https://www.saucedemo.com/",
+      "status": "scenario_failures",
+      "httpStatus": 200,
+      "title": "Swag Labs",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 3,
+        "actionCap": 0,
+        "scanMs": 9,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 318,
+        "textTokens": 86,
+        "rawChars": 2745,
+        "rawTokens": 719,
+        "ariaChars": 333,
+        "ariaTokens": 88,
+        "compressionVsRaw": 0.11584699453551912,
+        "compressionVsAria": 0.954954954954955
+      },
+      "checks": {
+        "recall": {
+          "visible": 3,
+          "matched": 3,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 3
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 3
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 3
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 3,
+          "secondActions": 3
+        }
+      },
+      "scenarios": [
+        {
+          "name": "public test login, add two, cart",
+          "ok": false,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a1",
+              "action": {
+                "id": "a1",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "Username",
+                "region": "main",
+                "type": "text",
+                "name": "user-name",
+                "placeholder": "Username"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 167,
+              "navigationLost": null,
+              "latencyMs": 529,
+              "ms": 538
+            },
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "Password",
+                "region": "main",
+                "type": "password",
+                "name": "password",
+                "placeholder": "Password"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 162,
+              "navigationLost": null,
+              "latencyMs": 519,
+              "ms": 527
+            },
+            {
+              "op": "act",
+              "id": "a3",
+              "action": {
+                "id": "a3",
+                "tag": "input",
+                "role": "button",
+                "kind": "click",
+                "label": "Login",
+                "region": "main",
+                "type": "submit",
+                "name": "login-button",
+                "value": "Login"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 211,
+              "navigationLost": null,
+              "latencyMs": 568,
+              "ms": 575
+            },
+            {
+              "op": "act",
+              "id": "a7",
+              "action": {
+                "id": "a7",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Add to cart",
+                "region": "main",
+                "type": "submit",
+                "name": "add-to-cart-sauce-labs-backpack"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 193,
+              "navigationLost": null,
+              "latencyMs": 569,
+              "ms": 619
+            },
+            {
+              "op": "act",
+              "id": "a10",
+              "action": {
+                "id": "a10",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Add to cart",
+                "region": "main",
+                "type": "submit",
+                "name": "add-to-cart-sauce-labs-bike-light"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 189,
+              "navigationLost": null,
+              "latencyMs": 552,
+              "ms": 583
+            },
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 19,
+              "ms": 11
+            },
+            {
+              "op": "act",
+              "ok": false,
+              "failures": [
+                "target not in last snapshot: {\"selector\":\".shopping_cart_link\"}"
+              ],
+              "candidates": [],
+              "ms": 10
+            }
+          ],
+          "latencyMs": 2863,
+          "status": "ok"
+        },
+        {
+          "name": "change sort order",
+          "ok": false,
+          "steps": [
+            {
+              "op": "goto",
+              "ok": true,
+              "url": "https://www.saucedemo.com/"
+            },
+            {
+              "op": "act",
+              "id": "a1",
+              "action": {
+                "id": "a1",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "Username",
+                "region": "main",
+                "type": "text",
+                "name": "user-name",
+                "placeholder": "Username"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 160,
+              "navigationLost": null,
+              "latencyMs": 517,
+              "ms": 529
+            },
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "Password",
+                "region": "main",
+                "type": "password",
+                "name": "password",
+                "placeholder": "Password"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 159,
+              "navigationLost": null,
+              "latencyMs": 510,
+              "ms": 517
+            },
+            {
+              "op": "act",
+              "id": "a3",
+              "action": {
+                "id": "a3",
+                "tag": "input",
+                "role": "button",
+                "kind": "click",
+                "label": "Login",
+                "region": "main",
+                "type": "submit",
+                "name": "login-button",
+                "value": "Login"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 184,
+              "navigationLost": null,
+              "latencyMs": 539,
+              "ms": 546
+            },
+            {
+              "op": "act",
+              "ok": false,
+              "failures": [
+                "target not in last snapshot: {\"tag\":\"select\",\"index\":0}"
+              ],
+              "candidates": [],
+              "ms": 11
+            }
+          ],
+          "latencyMs": 2841,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 9591
+    },
+    {
+      "id": "books-toscrape",
+      "url": "https://books.toscrape.com/",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "All products | Books to Scrape - Sandbox",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 114,
+        "actionCap": 0,
+        "scanMs": 48,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 9576,
+        "textTokens": 2728,
+        "rawChars": 51004,
+        "rawTokens": 9832,
+        "ariaChars": 16662,
+        "ariaTokens": 4657,
+        "compressionVsRaw": 0.18774998039369462,
+        "compressionVsAria": 0.5747209218581203
+      },
+      "checks": {
+        "recall": {
+          "visible": 114,
+          "matched": 114,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 114
+            },
+            {
+              "at": "middle",
+              "y": 874,
+              "actions": 114
+            },
+            {
+              "at": "bottom",
+              "y": 1749,
+              "actions": 114
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 114,
+          "secondActions": 114
+        }
+      },
+      "scenarios": [
+        {
+          "name": "open first book",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a54",
+              "action": {
+                "id": "a54",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "A Light in the Attic",
+                "region": "main",
+                "href": "catalogue/a-light-in-the-attic_1000/index.html"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 213,
+              "navigationLost": null,
+              "latencyMs": 574,
+              "ms": 610
+            }
+          ],
+          "latencyMs": 610,
+          "status": "ok"
+        },
+        {
+          "name": "category and next page",
+          "ok": true,
+          "steps": [
+            {
+              "op": "goto",
+              "ok": true,
+              "url": "https://books.toscrape.com/"
+            },
+            {
+              "op": "act",
+              "id": "a15",
+              "action": {
+                "id": "a15",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "Nonfiction",
+                "region": "chrome",
+                "href": "catalogue/category/books/nonfiction_13/index.html"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 209,
+              "navigationLost": null,
+              "latencyMs": 561,
+              "ms": 610
+            },
+            {
+              "op": "act",
+              "id": "a115",
+              "action": {
+                "id": "a115",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "next",
+                "region": "main",
+                "href": "page-2.html"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 229,
+              "navigationLost": null,
+              "latencyMs": 593,
+              "ms": 654
+            }
+          ],
+          "latencyMs": 2508,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 7881
     }
   ]
 }
