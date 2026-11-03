@@ -55,11 +55,25 @@ a real anchor.
 | `accept` | 50 | best candidate may run |
 | `ambiguous` | 24 | below this, return `not_found` |
 | `margin` | 12 | winner must be this far ahead of the runner-up |
+| `contentMargin` | 5 | winner must lead every other candidate by this much on content signals alone |
 
-A candidate runs only when `best >= accept` **and**
-`best - second >= margin` (or there is no second candidate). If
-`best >= ambiguous` but either condition fails, the action is not dispatched and
-the reply is `ambiguous`. Otherwise the reply is `not_found`.
+A candidate runs only when `best >= accept`, `best - second >= margin` **and**
+`best.content - max(other.content) >= contentMargin` (the last two apply only
+when there is a second candidate). If `best >= ambiguous` but any condition
+fails, the action is not dispatched and the reply is `ambiguous`. Otherwise the
+reply is `not_found`.
+
+Content signals are the anchors and text matches: intent, test id, id, name,
+accessible name, visible text, placeholder, title, alt and href (exact,
+case-insensitive and prefix variants). Role, tag, type, path, DOM order and the
+fingerprint are not content.
+
+Position, order and the fingerprint can add up to 14 points, which is more than
+`margin`. Without the content check, two controls with the same label could be
+separated by position alone (for example 93 against 79 because the second one
+sits further away in the DOM), and the engine would click the nearer one. With
+it, identical twins are always `ambiguous`. `5` is the smallest real content gap:
+an exact name beats a case-insensitive one by 5, so that case still resolves.
 
 Because position and order are capped at 14 combined, they cannot carry a match
 on their own. A virtualized list that recycles a row produces `not_found`, not a
@@ -79,7 +93,7 @@ click on the wrong row.
     { "id": "a7", "role": "button", "name": "OK", "tag": "button", "score": 89, "signals": ["name", "role", "tag", "path", "order", "fingerprint"] },
     { "id": "a8", "role": "button", "name": "OK", "tag": "button", "score": 89, "signals": ["name", "role", "tag", "path", "order", "fingerprint"] }
   ],
-  "thresholds": { "accept": 50, "ambiguous": 24, "margin": 12 },
+  "thresholds": { "accept": 50, "ambiguous": 24, "margin": 12, "contentMargin": 5 },
   "warning": "Multiple controls match this target; no action was taken."
 }
 ```

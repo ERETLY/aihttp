@@ -148,3 +148,34 @@ test('unknown ids and successful actions carry a status', async () => {
   const done = await window.ahttp.act('a1', null, actOptions());
   assert.equal(done.status, 'ok');
 });
+
+test('position cannot pick between label-identical twins', async () => {
+  const window = load('<!doctype html><body><main id="app"><div><button>OK</button></div></main><footer id="f"></footer></body>');
+  const document = window.document;
+  window.ahttp.snapshot({ format: 'json' });
+  // The second OK is far from the original in DOM order, so it earns almost no
+  // positional points. Before the content margin this clicked the first one.
+  document.getElementById('app').innerHTML = '<div><button>OK</button></div>' +
+    '<button>F1</button><button>F2</button><button>F3</button><button>F4</button><button>F5</button><button>F6</button>';
+  document.getElementById('f').innerHTML = '<button>OK</button>';
+  document.querySelectorAll('button').forEach(function (button) {
+    button.addEventListener('click', function () { document.body.setAttribute('data-clicked', 'yes'); });
+  });
+  const result = await window.ahttp.act('a1', null, actOptions());
+  assert.equal(result.status, 'ambiguous');
+  assert.equal(result.candidates.length, 2);
+  assert.equal(result.thresholds.contentMargin, 5);
+  assert.equal(document.body.getAttribute('data-clicked'), null, 'ambiguous must not dispatch a click');
+});
+
+test('a real content advantage still wins over a close positional score', async () => {
+  const window = load('<!doctype html><body><main id="app"><button>OK</button></main></body>');
+  const document = window.document;
+  window.ahttp.snapshot({ format: 'json' });
+  document.getElementById('app').innerHTML = '<button id="exact">OK</button><button id="lower">ok</button>';
+  document.getElementById('exact').addEventListener('click', function () { document.body.setAttribute('data-clicked', 'exact'); });
+  document.getElementById('lower').addEventListener('click', function () { document.body.setAttribute('data-clicked', 'lower'); });
+  const result = await window.ahttp.act('a1', null, actOptions());
+  assert.equal(result.status, 'ok');
+  assert.equal(document.body.getAttribute('data-clicked'), 'exact');
+});

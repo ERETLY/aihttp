@@ -139,6 +139,14 @@ const result = await ahttp.act('a2', {
 `no_effect` means "the match was executed but the page did not react as the
 caller expected". Re-snapshot before retrying; do not replay the same click.
 
+While an `expect` rule is unmet, `act` keeps re-checking (every 30 ms) until it
+holds or `timeout` (default 1200 ms, counted from the click) runs out. A change
+that arrives 100-400 ms after the quiet window, such as a timer or a debounced
+handler, is reported as `ok`. The cost is on the failure path only: a change
+that never comes returns `no_effect` after the full timeout instead of after the
+short settle. Pass a smaller `timeout` to fail faster; `settle: false` skips the
+wait entirely.
+
 Errors are returned, not thrown:
 
 ```js

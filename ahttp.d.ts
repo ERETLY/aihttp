@@ -144,6 +144,7 @@ declare namespace Ahttp {
     accept: number;
     ambiguous: number;
     margin: number;
+    contentMargin: number;
   }
 
   interface Diff {
