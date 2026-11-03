@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Fieldset</title></head>
+<body>
+<main>
+<fieldset disabled>
+<legend><button onclick="window.__mark('legend')">Legend button</button></legend>
+<button onclick="window.__mark('inner')">Inner button</button>
+</fieldset>
+<button onclick="window.__mark('outside')">Outside button</button>
+<p id="out">idle</p>
+<script>
+window.__mark = function (value) { var out = document.getElementById("out"); if (out) out.textContent = value; };
+</script>
+</main>
+</body>
+</html>

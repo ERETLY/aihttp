@@ -1,0 +1,30 @@
+{
+  "id": "exact-name-beats-case-variant",
+  "html": "fixtures/single-ok.html",
+  "url": "https://corpus.test/single-ok",
+  "notes": "after a rerender there is an exact OK and a lowercase ok; real content evidence still decides, so this is not ambiguous",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ]
+    },
+    {
+      "action": "rerender",
+      "selector": "#app",
+      "html": "<button onclick=\"window.__mark('exact')\">OK</button><button onclick=\"window.__mark('lower')\">ok</button>"
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "the exact OK button",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "exact"
+        }
+      }
+    }
+  ]
+}

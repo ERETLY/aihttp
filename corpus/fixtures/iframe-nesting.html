@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Frames</title></head>
+<body>
+<main>
+<button>Top</button>
+<div id="host"></div>
+<p id="out">idle</p>
+<script>
+window.__mark = function (value) { var out = document.getElementById("out"); if (out) out.textContent = value; };
+</script>
+<script>
+(function () {
+  var doc = document;
+  var host = document.getElementById("host");
+  for (var i = 1; i <= 4; i++) {
+    var f = doc.createElement("iframe");
+    host.appendChild(f);
+    var d = f.contentDocument;
+    d.open();
+    d.write('<body><button onclick="parent.__mark(\'l' + i + '\')">L' + i + '</button><div id="host"></div></body>');
+    d.close();
+    doc = d;
+    host = d.getElementById("host");
+  }
+})();
+</script>
+</main>
+</body>
+</html>

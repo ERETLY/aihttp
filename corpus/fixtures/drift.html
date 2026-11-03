@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Drift</title></head>
+<body>
+<main>
+<div id="app"><button aria-label="Close dialog" onclick="window.__mark('closed')">&times;</button><a href="/a" onclick="event.preventDefault(); window.__mark('docs')">Docs</a></div>
+<p id="out">idle</p>
+<script>
+window.__mark = function (value) { var out = document.getElementById("out"); if (out) out.textContent = value; };
+</script>
+</main>
+</body>
+</html>

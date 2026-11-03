@@ -1,0 +1,19 @@
+{
+  "id": "pointer-events-none-still-listed",
+  "html": "fixtures/pointer-none.html",
+  "url": "https://corpus.test/pointer-events-none-still-listed",
+  "notes": "PINNED CURRENT BEHAVIOUR: pointer-events:none does not hide a control; it is still listed",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ],
+      "expectText": [
+        "Unclickable",
+        "Clickable"
+      ]
+    }
+  ]
+}

@@ -83,3 +83,41 @@ test('a failed expectation does not hide the action error', async () => {
   assert.equal(result.status, 'blocked');
   assert.equal(result.effect, undefined);
 });
+
+test('an expected change that arrives after the quiet window is still ok', async () => {
+  const window = load('<!doctype html><body><main><button id="b">Save</button><p id="out">idle</p></main></body>');
+  const document = window.document;
+  document.getElementById('b').addEventListener('click', function () {
+    window.setTimeout(function () { document.getElementById('out').textContent = 'Saved'; }, 150);
+  });
+  window.ahttp.snapshot({ format: 'json' });
+  // Default settle options: 40 ms quiet window, 1200 ms timeout.
+  const result = await window.ahttp.act('a1', { expect: { textAdded: ['Saved'], pageText: { selector: '#out', equals: 'Saved' } } });
+  assert.equal(result.status, 'ok');
+  assert.equal(result.effect.ok, true);
+  assert.match(result.diff.text, /Saved/);
+  assert.match(result.snapshot, /Saved/);
+});
+
+test('a change that arrives after the timeout is no_effect', async () => {
+  const window = load('<!doctype html><body><main><button id="b">Save</button><p id="out">idle</p></main></body>');
+  const document = window.document;
+  document.getElementById('b').addEventListener('click', function () {
+    window.setTimeout(function () { document.getElementById('out').textContent = 'Saved'; }, 400);
+  });
+  window.ahttp.snapshot({ format: 'json' });
+  const result = await window.ahttp.act('a1', { expect: { textAdded: ['Saved'] }, timeout: 150 });
+  assert.equal(result.ok, true, 'the click ran');
+  assert.equal(result.status, 'no_effect');
+});
+
+test('a satisfied expectation does not wait for the timeout', async () => {
+  const window = load('<!doctype html><body><main><button id="b">Save</button><p id="out">idle</p></main></body>');
+  const document = window.document;
+  document.getElementById('b').addEventListener('click', function () { document.getElementById('out').textContent = 'Saved'; });
+  window.ahttp.snapshot({ format: 'json' });
+  const started = Date.now();
+  const result = await window.ahttp.act('a1', { expect: { textAdded: ['Saved'] } });
+  assert.equal(result.status, 'ok');
+  assert.ok(Date.now() - started < 400, 'took ' + (Date.now() - started) + 'ms');
+});

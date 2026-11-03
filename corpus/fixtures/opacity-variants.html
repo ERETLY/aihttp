@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Opacity</title>
+<style>.ghost{opacity:0.0}.ghost-pct{opacity:0%}</style>
+</head>
+<body>
+<main>
+<button style="opacity:0">Hidden zero</button>
+<button style="opacity:0.0">Hidden zero decimal</button>
+<button style="opacity:0%">Hidden zero percent</button>
+<button style="opacity:.0">Hidden dot zero</button>
+<button class="ghost">Hidden by rule decimal</button>
+<button class="ghost-pct">Hidden by rule percent</button>
+<button style="opacity:0.5">Half visible</button>
+<button>Plain</button>
+<p id="out">idle</p>
+</main>
+</body>
+</html>

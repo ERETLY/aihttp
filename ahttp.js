@@ -50,6 +50,11 @@
     accept: 50,   // stable anchor, or a strong text anchor plus role/tag support
     ambiguous: 24, // below this there is nothing worth showing the agent
     margin: 12,   // the winner must be clearly ahead of the runner-up
+    // Position, DOM order and the fingerprint can add up to 14 points, which is
+    // more than `margin`. So the winner must also lead every other candidate on
+    // content evidence alone. 5 is the smallest real gap: an exact name beats a
+    // case-insensitive one by 5.
+    contentMargin: 5,
     maxCandidates: 5
   };
   var TEXT_BLOCKS = {
@@ -885,7 +890,7 @@
         var visibility = cssProp(st, 'visibility').toLowerCase().trim();
         var opacity = cssProp(st, 'opacity').trim();
         var cursor = cssProp(st, 'cursor').toLowerCase().trim();
-        var hide = display === 'none' || visibility === 'hidden' || visibility === 'collapse' || opacity === '0';
+        var hide = display === 'none' || visibility === 'hidden' || visibility === 'collapse' || isZeroOpacity(opacity);
         var pointer = cursor === 'pointer';
         if (hide || pointer) addRule(rule.selectorText, hide, pointer);
       }
@@ -950,6 +955,66 @@
     if (v == null) return null;
     var m = String(v).trim().match(/^(-?[\d.]+)/);
     return m ? parseFloat(m[1]) : null;
+  }
+
+  // getBoundingClientRect is viewport-relative. The off-screen check below is
+  // about document coordinates, otherwise a scrolled page loses everything
+  // above the fold. Fixed elements keep viewport coordinates by definition.
+  function scrollOffset(win) {
+    var x = 0;
+    var y = 0;
+    try {
+      if (win) {
+        x = win.scrollX != null ? win.scrollX : (win.pageXOffset || 0);
+        y = win.scrollY != null ? win.scrollY : (win.pageYOffset || 0);
+      }
+    } catch (e) {
+      x = 0;
+      y = 0;
+    }
+    return {
+      x: isFinite(x) ? Number(x) : 0,
+      y: isFinite(y) ? Number(y) : 0
+    };
+  }
+
+  // Opacity can be authored as 0, 0.0, .0 or 0%. A browser normalizes computed
+  // values, but the static backend and jsdom only see the authored string.
+  function opacityNum(v) {
+    var s = String(v == null ? '' : v).trim().toLowerCase();
+    if (!s) return NaN;
+    var n = parseFloat(s);
+    if (isNaN(n)) return NaN;
+    return /^[^%]*%/.test(s) ? n / 100 : n;
+  }
+
+  function isZeroOpacity(v) {
+    return opacityNum(v) <= 0;
+  }
+
+  var FORM_CONTROLS = { button: 1, input: 1, select: 1, textarea: 1 };
+
+  function firstLegendOf(fieldset) {
+    var kids = fieldset.childNodes || [];
+    for (var i = 0; i < kids.length; i++) {
+      if (kids[i] && kids[i].nodeType === 1 && tagOf(kids[i]) === 'legend') return kids[i];
+    }
+    return null;
+  }
+
+  // A form control inside <fieldset disabled> is disabled, except inside the
+  // fieldset's first <legend>. The `disabled` property does not reflect this.
+  function inDisabledFieldset(el) {
+    if (!el || !FORM_CONTROLS[tagOf(el)]) return false;
+    var child = el;
+    var parent = parentOf(child);
+    var guard = 0;
+    while (parent && guard++ < 100) {
+      if (tagOf(parent) === 'fieldset' && hasAttr(parent, 'disabled') && firstLegendOf(parent) !== child) return true;
+      child = parent;
+      parent = parentOf(parent);
+    }
+    return false;
   }
 
   function normColor(v) {
@@ -1052,14 +1117,14 @@
     var check = function (s) {
       if (s.display === 'none') return { hidden: true, suspicious: false };
       if (s.visibility === 'hidden' || s.visibility === 'collapse') return { hidden: true, suspicious: false };
-      if (String(s.opacity).trim() === '0') return { hidden: true, suspicious: false };
+      if (isZeroOpacity(s.opacity)) return { hidden: true, suspicious: false };
       var fs = pxNum(s.fontSize);
       if (fs === 0) return { hidden: true, suspicious: true };
       if (s.clip && /rect\(\s*0(px)?[\s,]+0(px)?[\s,]+0(px)?[\s,]+0(px)?\s*\)/i.test(s.clip)) return { hidden: true, suspicious: true };
       if (s.clipPath && /inset\(\s*50%/.test(s.clipPath)) return { hidden: true, suspicious: true };
       var ti = pxNum(s.textIndent);
       if (ti != null && ti <= -999) return { hidden: true, suspicious: true };
-      var op = parseFloat(s.opacity);
+      var op = opacityNum(s.opacity);
       if (!isNaN(op) && op > 0 && op <= 0.05) return { hidden: true, suspicious: true };
       var left = pxNum(s.left);
       var top = pxNum(s.top);
@@ -1076,7 +1141,7 @@
     var inline = st.inline || {};
     var inlineOverrides = (inline.display && String(inline.display).toLowerCase() !== 'none') ||
       (inline.visibility && ['hidden', 'collapse'].indexOf(String(inline.visibility).toLowerCase()) < 0) ||
-      (inline.opacity != null && String(inline.opacity).trim() !== '0');
+      (inline.opacity != null && !isZeroOpacity(inline.opacity));
     if (!inlineOverrides && ctx.css) {
       var css = cssState(el, ctx);
       if (css.hidden) return { hidden: true, suspicious: false };
@@ -1086,7 +1151,10 @@
         var rect = el.getBoundingClientRect ? el.getBoundingClientRect() : null;
         if (rect && el.nodeType === 1) {
           var hasText = countTextNodes(el, 1) > 0;
-          if (hasText && ((!rect.width && !rect.height) || rect.right <= 0 || rect.bottom <= 0)) {
+          var offset = st.position === 'fixed' ? { x: 0, y: 0 } : scrollOffset(ctx.win);
+          if (hasText && ((!rect.width && !rect.height) ||
+              (rect.right + offset.x) <= 0 ||
+              (rect.bottom + offset.y) <= 0)) {
             return { hidden: true, suspicious: true };
           }
         }
@@ -1101,6 +1169,7 @@
     if (tag === 'input' && String(el.type || '').toLowerCase() === 'hidden') return { hidden: true, suspicious: false };
     if (tag === 'dialog' && !hasAttr(el, 'open')) return { hidden: true, suspicious: false };
     if (attr(el, 'aria-hidden') === 'true') return { hidden: true, suspicious: false };
+    if (hasAttr(el, 'inert')) return { hidden: true, suspicious: false };
     var parent = parentOf(el);
     if (parent && tagOf(parent) === 'details' && !parent.open) {
       var first = parent.firstElementChild;
@@ -1118,6 +1187,7 @@
       if (node.hidden) return true;
       if (tag === 'dialog' && !hasAttr(node, 'open')) return true;
       if (attr(node, 'aria-hidden') === 'true') return true;
+      if (hasAttr(node, 'inert')) return true;
       if (tag === 'details' && !node.open && child && tagOf(child) !== 'summary') return true;
       if (hiddenAncestorChain(node, ctx, node === el)) return true;
       child = node;
@@ -1449,7 +1519,7 @@
     entry.value = readValue(el, info);
     entry.checked = info.kind === 'toggle' ? el.checked === true : undefined;
     entry.required = el.required === true || hasAttr(el, 'required');
-    entry.disabled = el.disabled === true || hasAttr(el, 'disabled') || attr(el, 'aria-disabled') === 'true';
+    entry.disabled = el.disabled === true || hasAttr(el, 'disabled') || attr(el, 'aria-disabled') === 'true' || inDisabledFieldset(el);
     entry.readonly = el.readOnly === true || hasAttr(el, 'readonly') || attr(el, 'aria-readonly') === 'true' || !!readonlyGuard;
     entry.readonlyGuard = !!readonlyGuard;
     entry.confirm = confirmWarn || null;
@@ -2160,19 +2230,21 @@
   function scoreMatch(fp, cand) {
     var weights = MATCH.weights;
     var score = 0;
+    var content = 0;
     var signals = [];
     function hit(name, points) {
       if (points > 0) {
         score += points;
+        if (CONTENT_SIGNALS[name]) content += points;
         signals.push(name);
       }
     }
-    if (!fp || !cand) return { score: -1, signals: [] };
+    if (!fp || !cand) return { score: -1, content: 0, signals: [] };
     // A different action kind is not the same control. A disabled node is not
     // an active target: refuse rather than dispatch into a control that is
     // visibly unable to run.
-    if (fp.kind && cand.kind !== fp.kind) return { score: -1, signals: [] };
-    if (cand.disabled) return { score: -1, signals: [] };
+    if (fp.kind && cand.kind !== fp.kind) return { score: -1, content: 0, signals: [] };
+    if (cand.disabled) return { score: -1, content: 0, signals: [] };
 
     if (fp.intent && cand.intent === fp.intent) hit('intent', weights.intent);
     if ((fp.testid && cand.testid === fp.testid) ||
@@ -2224,7 +2296,7 @@
     if (fp.tag === cand.tag && fp.role === cand.role && (fp.type || '') === (cand.type || '')) {
       hit('fingerprint', weights.structural);
     }
-    return { score: score, signals: signals };
+    return { score: score, content: content, signals: signals };
   }
 
   function adoptEntry(entry, cand) {
@@ -2277,7 +2349,7 @@
       var match = scoreMatch(fp, cand);
       if (match.score <= 0) return;
       if (!hasContentSignal(match.signals)) return;
-      scored.push({ entry: cand, score: match.score, signals: match.signals });
+      scored.push({ entry: cand, score: match.score, content: match.content, signals: match.signals });
     });
     scored.sort(function (a, b) {
       if (b.score !== a.score) return b.score - a.score;
@@ -2289,7 +2361,15 @@
       return { status: 'not_found', candidates: [], bestScore: best ? best.score : 0, secondScore: second ? second.score : 0 };
     }
     var ahead = !second || (best.score - second.score) >= MATCH.margin;
-    if (best.score >= MATCH.accept && ahead) {
+    // Position cannot choose between candidates: the winner must also lead every
+    // other candidate on content evidence (names, anchors, text), not only on
+    // the runner-up by total score.
+    var otherContent = 0;
+    for (var i = 1; i < scored.length; i++) {
+      if (scored[i].content > otherContent) otherContent = scored[i].content;
+    }
+    var contentAhead = scored.length < 2 || (best.content - otherContent) >= MATCH.contentMargin;
+    if (best.score >= MATCH.accept && ahead && contentAhead) {
       var cand = best.entry;
       var node = cand.node;
       S.registry.delete(cand.id);
@@ -2671,6 +2751,32 @@
   // A post-action expectation turns a silent no-op into an explicit
   // status: no_effect. The action still ran; the caller must re-snapshot rather
   // than retry the same click.
+  // The settle window ends after a short quiet period, but an expected change can
+  // arrive later (a 100-400 ms timer, a debounced handler). While an `expect`
+  // rule is unmet, keep re-checking until it holds or `timeout` since the click
+  // runs out, so a correct match is not reported as no_effect too early.
+  function expectationHolds(expect, before, o) {
+    ensureScan(true);
+    var diff = before ? diffStates(before, captureState()) : null;
+    var snapshot = buildSnapshot({ format: 'text', maxActions: o.maxActions || 60, maxText: 900 });
+    return evaluateExpectation(expect, diff, snapshot).ok;
+  }
+
+  function waitForExpectation(expect, before, o, t0) {
+    if (!expect || (o && o.settle === false)) return Promise.resolve();
+    var timeout = o && o.timeout != null ? o.timeout : 1200;
+    var deadline = t0 + timeout;
+    return new Promise(function (resolve) {
+      function check() {
+        var holds = false;
+        try { holds = expectationHolds(expect, before, o || {}); } catch (e) { holds = true; }
+        if (holds || now() >= deadline) return resolve();
+        setTimeout(check, 30);
+      }
+      check();
+    });
+  }
+
   function evaluateExpectation(expect, diff, snapshot) {
     var failures = [];
     var d = diff || {
@@ -2917,7 +3023,7 @@
           action: actionInfo(stale, stale.kind),
           targetHint: p.targetHint != null ? String(p.targetHint) : (o.targetHint != null ? String(o.targetHint) : (stale.label || null)),
           candidates: resolved.candidates,
-          thresholds: { accept: MATCH.accept, ambiguous: MATCH.ambiguous, margin: MATCH.margin },
+          thresholds: { accept: MATCH.accept, ambiguous: MATCH.ambiguous, margin: MATCH.margin, contentMargin: MATCH.contentMargin },
           warning: 'Multiple controls match this target; no action was taken.'
         };
       }
@@ -2989,6 +3095,8 @@
         return Promise.resolve(execute(entry, p, o)).then(function (res) {
           S.dirty = true;
           return waitSettled(o, counter, requestsBefore).then(function () {
+            return waitForExpectation(expect, before, o, t0);
+          }).then(function () {
             if (counter.observer) { try { counter.observer.disconnect(); } catch (e) {} }
             unpatchNetwork();
             ensureScan(true);
@@ -3164,7 +3272,7 @@
         childList: true,
         characterData: true,
         attributes: true,
-        attributeFilter: ['class', 'style', 'hidden', 'aria-hidden', 'open', 'disabled', 'value', 'checked', 'readonly']
+        attributeFilter: ['class', 'style', 'hidden', 'aria-hidden', 'inert', 'open', 'disabled', 'value', 'checked', 'readonly']
       });
     } catch (e) {
       S.observer = null;

@@ -1,0 +1,16 @@
+{
+  "id": "text-only-page-valid-snapshot",
+  "html": "fixtures/text-only.html",
+  "url": "https://corpus.test/text-only-page-valid-snapshot",
+  "notes": "a page with text and no controls is a valid snapshot with no actions",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [],
+      "expectText": [
+        "Just text",
+        "Nothing to click here."
+      ]
+    }
+  ]
+}

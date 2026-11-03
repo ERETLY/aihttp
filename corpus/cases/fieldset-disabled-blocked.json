@@ -1,0 +1,48 @@
+{
+  "id": "fieldset-disabled-blocked",
+  "html": "fixtures/fieldset-disabled.html",
+  "url": "https://corpus.test/fieldset",
+  "notes": "controls inside <fieldset disabled> are disabled, except those in its first <legend>",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2",
+        "a3"
+      ],
+      "expectText": [
+        "\"Inner button\" disabled"
+      ],
+      "expectNotText": [
+        "\"Legend button\" disabled",
+        "\"Outside button\" disabled"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a2",
+      "targetHint": "Inner button inside the disabled fieldset",
+      "expectStatus": "blocked",
+      "expectEffect": {
+        "error": "disabled",
+        "noMutation": true,
+        "pageText": {
+          "selector": "#out",
+          "equals": "idle"
+        }
+      }
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "Legend button, exempt from the disabled fieldset",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "legend"
+        }
+      }
+    }
+  ]
+}

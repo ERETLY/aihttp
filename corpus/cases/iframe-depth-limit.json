@@ -1,0 +1,25 @@
+{
+  "id": "iframe-depth-limit",
+  "html": "fixtures/iframe-nesting.html",
+  "url": "https://corpus.test/iframe-depth-limit",
+  "notes": "pinned limit: same-origin iframes at depth 1 and 2 are in the snapshot, depth 3 and 4 are not",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2",
+        "a3"
+      ],
+      "expectText": [
+        "Top",
+        "L1",
+        "L2"
+      ],
+      "expectNotText": [
+        "\"L3\"",
+        "\"L4\""
+      ]
+    }
+  ]
+}

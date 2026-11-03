@@ -1,0 +1,12 @@
+{
+  "id": "empty-page-valid-snapshot",
+  "html": "fixtures/empty-page.html",
+  "url": "https://corpus.test/empty-page-valid-snapshot",
+  "notes": "an empty page is a valid snapshot with no actions",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": []
+    }
+  ]
+}

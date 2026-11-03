@@ -20,9 +20,39 @@
   `requires_confirmation`, `blocked`, `locked`, `error`, `no_effect`).
   Existing fields and error codes are unchanged; this is additive.
 
+### Fixes
+
+- Scrolled pages: the off-screen text filter compared viewport-relative
+  `getBoundingClientRect()` values with zero, so content scrolled above the
+  viewport vanished from the snapshot and showed up as removed in the next
+  diff. It now uses document coordinates (`fixed` elements keep viewport
+  coordinates).
+- Opacity: only the literal `0` hid a control. `0.0`, `.0` and `0%` (inline or
+  from a stylesheet) now hide it too, so the static backend no longer shows
+  controls a browser would not paint.
+- `inert` on an element or an ancestor removes it from the snapshot, like
+  `aria-hidden`. Form controls inside `<fieldset disabled>` (outside its first
+  `<legend>`) are reported as `disabled` and `act` returns `blocked`.
+
+- Matching: position, DOM order and the fingerprint add up to 14 points, more
+  than `margin` (12), so two controls with the same label could be separated by
+  position alone and the nearer one was clicked. The winner must now also lead
+  every other candidate by `contentMargin` (5) on content signals alone;
+  otherwise the reply is `ambiguous`. `thresholds.contentMargin` is added to the
+  ambiguous reply.
+
+- `expect`: the check ran once right after the quiet window (about 40 ms), so a
+  correct click whose effect arrived 100-400 ms later came back as `no_effect`
+  with "the match may be wrong". `act` now re-checks every 30 ms until the rule
+  holds or `timeout` runs out. A met rule returns as fast as before; an unmet
+  one returns `no_effect` after the full timeout (1200 ms by default).
+
 ### Tests and docs
 
-- Local jsdom corpus with 27 scenarios, `bench/results.json` metrics and no
+- Local jsdom corpus with 46 scenarios (the original 27, the five gap fixes, and
+  cases that pin current limits and behavior: iframe depth, cross-origin
+  iframes, closed shadow roots, empty pages, aria-label and href drift, other
+  hiding mechanisms, a disabled twin, `pointer-events: none`, label lookup), `bench/results.json` metrics and no
   network access.
 - `docs/MATCHING.md`, `docs/ARCHITECTURE.md`, a 30-second quick start, an MCP
   config block and a runnable `examples/agent-loop.js`.

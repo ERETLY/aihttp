@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Foreign frame</title></head>
+<body>
+<main>
+<button>Top</button>
+<iframe id="foreign"></iframe>
+<p id="out">idle</p>
+<script>
+window.__mark = function (value) { var out = document.getElementById("out"); if (out) out.textContent = value; };
+</script>
+<script>
+(function () {
+  var f = document.getElementById("foreign");
+  Object.defineProperty(f, "contentDocument", { get: function () { return null; } });
+  Object.defineProperty(f, "contentWindow", { get: function () { return null; } });
+})();
+</script>
+</main>
+</body>
+</html>
