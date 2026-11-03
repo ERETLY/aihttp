@@ -2,13 +2,13 @@
   "engine": "0.1.0",
   "engine_file": "ahttp.js",
   "totals": {
-    "cases": 56,
-    "passed": 56,
+    "cases": 57,
+    "passed": 57,
     "failed": 0,
     "pending": 0,
-    "match_ok": 56,
-    "diff_ok": 56,
-    "tokens": 2112
+    "match_ok": 57,
+    "diff_ok": 57,
+    "tokens": 2142
   },
   "cases": [
     {
@@ -1184,6 +1184,42 @@
               "name": "text",
               "pass": true,
               "detail": "Visible"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hidden-checkbox-aria-label-only-stays-hidden",
+      "html": "fixtures/hidden-checkbox-aria-label-only.html",
+      "notes": "layout-less scan: an opacity:0 checkbox named only by aria-label has no layout proof and must stay hidden, exactly as on main",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 30,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            },
+            {
+              "name": "sanitized=0",
+              "pass": true,
+              "detail": "0"
             },
             {
               "name": "notText",

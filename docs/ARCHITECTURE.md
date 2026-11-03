@@ -36,7 +36,9 @@ docs/                       API, security, decisions, research, roadmap
    - `hiddenReason()` drops `display:none`, `visibility:hidden`, zero-size,
      off-screen, `aria-hidden` and closed `<dialog>` subtrees. A native
      checkbox/radio hidden only by soft heuristics is kept when a visible label
-     names it (`recoverableToggle()`), so custom switches remain operable.
+     names it (`recoverableToggle()`), so custom switches remain operable. An
+     `aria-label`-only control is kept only with real layout, a box of at least
+     12x12 px inside the page, and opacity as the only hide mechanism.
    - `classify()` maps native controls and ARIA roles to `kind`
      (`click`, `fill`, `select`, `toggle`, `file`).
    - `register()` stores the id and internal fields on an entry, including

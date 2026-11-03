@@ -1251,12 +1251,53 @@
     return out;
   }
 
+  // A native checkbox/radio whose only name is aria-label has no label element
+  // to check for visibility. It may stay only when the page really has layout,
+  // the control itself is a real box inside the page, and opacity is the only
+  // thing hiding it. A 1x1 or off-screen input with aria-label is an invisible
+  // prompt-injection channel, not a control; a MUI overlay is the real case.
+  function ariaLabelOnlyToggleVisible(el, ctx) {
+    if (!ctx.layout) return false;
+    var doc = el.ownerDocument || S.doc;
+    if (!doc || !detectLayout(doc)) return false;
+    var st = styleOf(el, ctx);
+    if (pxNum(st.fontSize) === 0) return false;
+    var clip = String(st.clip || '').toLowerCase();
+    if (clip && clip !== 'auto' && clip !== 'none') return false;
+    var clipPath = String(st.clipPath || '').toLowerCase();
+    if (clipPath && clipPath !== 'none') return false;
+    var indent = pxNum(st.textIndent);
+    if (indent != null && indent <= -999) return false;
+    var left = pxNum(st.left);
+    var top = pxNum(st.top);
+    if ((st.position === 'absolute' || st.position === 'fixed') &&
+        ((left != null && left <= -999) || (top != null && top <= -999))) return false;
+    var rect = null;
+    try { rect = el.getBoundingClientRect ? el.getBoundingClientRect() : null; } catch (e) { rect = null; }
+    if (!rect || !(rect.width >= 12) || !(rect.height >= 12)) return false;
+    var offset = st.position === 'fixed' ? { x: 0, y: 0 } : scrollOffset(ctx.win || doc.defaultView || null);
+    var x1 = rect.left + offset.x;
+    var y1 = rect.top + offset.y;
+    var x2 = rect.right + offset.x;
+    var y2 = rect.bottom + offset.y;
+    if (x2 <= 0 || y2 <= 0) return false;
+    var docEl = doc.documentElement || null;
+    var body = doc.body || null;
+    var win = doc.defaultView || null;
+    var width = Math.max((docEl && docEl.scrollWidth) || 0, (body && body.scrollWidth) || 0, (win && win.innerWidth) || 0);
+    var height = Math.max((docEl && docEl.scrollHeight) || 0, (body && body.scrollHeight) || 0, (win && win.innerHeight) || 0);
+    if (width > 0 && x1 >= width) return false;
+    if (height > 0 && y1 >= height) return false;
+    return true;
+  }
+
   function hasVisibleToggleLabel(el, ctx) {
-    if (normText(attr(el, 'aria-label'))) return true;
     var targets = labelTargets(el);
     for (var i = 0; i < targets.length; i++) {
       if (labelIsVisible(targets[i], ctx)) return true;
     }
+    if (targets.length) return false;
+    if (normText(attr(el, 'aria-label'))) return ariaLabelOnlyToggleVisible(el, ctx);
     return false;
   }
 

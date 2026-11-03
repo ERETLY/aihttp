@@ -36,12 +36,15 @@
 
 - Hidden toggles: a native `input[type=checkbox|radio]` hidden only by soft
   heuristics (opacity <= 0.05, clip, clip-path, font-size 0, off-screen
-  absolute, text-indent, zero/tiny size) stays in the snapshot when it has a
-  visible label (wrapped `<label>`, `label[for]`, `aria-labelledby` or
-  `aria-label`). `display:none`, `visibility:hidden`, `hidden`, `aria-hidden`,
-  `inert`, hidden ancestors and closed `<details>` still hide it. The label is
-  the real hit target in the page; `act(id, { checked: true })` still dispatches
-  a click on the input, which toggles it in Chromium and jsdom.
+  absolute, text-indent, zero/tiny size) stays in the snapshot when a visible
+  label element (wrapped `<label>`, `label[for]`, `aria-labelledby`) names it;
+  when `aria-label` is the only name it needs real layout, its own box of at
+  least 12x12 px inside the page, and opacity as the only hide mechanism, so a
+  1x1 or off-screen input can no longer carry instructions into the snapshot.
+  `display:none`, `visibility:hidden`, `hidden`, `aria-hidden`, `inert`, hidden
+  ancestors and closed `<details>` still hide it. The label is the real hit
+  target in the page; `act(id, { checked: true })` still dispatches a click on
+  the input, which toggles it in Chromium and jsdom.
 
 - Disabled twins: relocation used to filter disabled candidates before scoring,
   so `[disabled "Run"][active "Run"]` clicked the active twin even though the
