@@ -78,7 +78,58 @@ across top/middle/bottom, `next` on the Nonfiction category is `a115`.
 saucedemo: login, two "Add to cart" clicks and the `2` cart badge all passed;
 the cart link and the sort control did not.
 
+## Results (group 3: httpbin, Wikipedia, Hacker News)
+
+| Site | Actions (default) | Full actions | Scan ms | Text tokens | Raw tokens | Aria tokens | Recall | Scenarios |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| httpbin-form | 13 | 13 | 2 | 198 | 432 | 248 | 100% | 1/1 |
+| wikipedia-http | 60 (935 omitted) | 995 | 272 | 1026 | 271558 | 45721 | 95.5% | 0/1 |
+| hacker-news | 60 (169 omitted) | 229 | 27 | 1194 | 11682 | 10065 | 100% | 2/2 |
+
+4 scenarios, 3 passed, 1 failed. httpbin's form round-trip passes: all fills,
+the radio, a topping checkbox and submit land on the response page with the
+entered values. Hacker News: the first story comment link (`760 comments`) and
+`More` (`?p=2`) both navigate. Wikipedia: the search input is missing, and the
+full-scan recall is 95.5% (46 of 1020 visible controls lost), all in the same
+header/ToC subtree. The default 60-action snapshot is a cap, not a scan
+failure: Wikipedia has 995 actions and Hacker News 229; `More` on HN is only
+inside the list when the cap is raised above 200.
+
 ## What is broken
+
+### P1
+
+1. **A visible control is dropped when a stylesheet first hides it and a later
+   rule shows it again.** Wikipedia's search container matches
+   `@media screen { .mw-header .vector-typeahead-search-container { display:none } }`
+   and then
+   `@media screen and (min-width:1120px) { ... { display:block } }`.
+   `buildCssIndex()` stores only the hide rule and ignores the later `display`
+   override, so the whole search subtree is skipped even though
+   `getComputedStyle()` is `display:block` and the input is a 404x32 px visible
+   box. The search field is absent from the snapshot, so the Wikipedia search
+   scenario cannot start; the same false positive removes 46 of 1020 visible
+   controls on the article (search, Donate, Create account, Log in, ToC
+   toggles). Reproduced in jsdom and Chromium.
+   Pending case: `corpus/cases/rw-css-hidden-then-shown.json`
+   (`corpus/fixtures/rw-css-hidden-then-shown.html`).
+
+2. **The todo toggle is missing on TodoMVC.**
+   TodoMVC React renders
+   `<input class="toggle" type="checkbox" data-testid="todo-item-toggle">`
+   with `opacity:0`, a real 40x40 box and a sibling `<label>Task one</label>`
+   (no `label[for]`, no `aria-label`, no `aria-labelledby`). The snapshot has
+   no checkbox, so a task cannot be completed — the primary action of the app.
+   Pending case: `corpus/cases/rw-sibling-label-toggle.json`
+   (`corpus/fixtures/rw-sibling-label-toggle.html`).
+
+3. **The cart cannot be opened on saucedemo.**
+   The cart is `<a class="shopping_cart_link" role="button"
+   aria-label="Cart, empty">` (the label becomes "Cart, 2 items" after adding
+   products). `classify()` returns `null` for every anchor without `href`
+   before it reads the explicit role, so the cart never appears in the snapshot
+   and the primary path to checkout is unreachable.
+   Pending case: `corpus/cases/rw-anchor-role-button.json`.
 
 ### P2
 
@@ -99,16 +150,7 @@ the cart link and the sort control did not.
    Pending case: `corpus/cases/rw-hover-only.json`
    (`corpus/fixtures/rw-hover-only.html`).
 
-3. **A soft-hidden native toggle named only by a sibling `<label>` is
-   dropped.** TodoMVC React renders
-   `<input class="toggle" type="checkbox" data-testid="todo-item-toggle">`
-   with `opacity:0`, a real 40x40 box and a sibling `<label>Task one</label>`
-   (no `label[for]`, no `aria-label`, no `aria-labelledby`). The snapshot has
-   no checkbox, so the first task cannot be completed; the "Clear completed"
-   path is also unreachable until a task can be completed. Pending case:
-   `corpus/cases/rw-sibling-label-toggle.json`.
-
-4. **A native `<select>` hidden with `opacity:0.001` disappears, leaving a
+3. **A native `<select>` hidden with `opacity:0.001` disappears, leaving a
    dead proxy button.** saucedemo renders
    `<span class="select_container"><span class="active_option">Name (A to Z)</span>
    <select aria-label="Sort products" style="opacity:0.001">...</select></span>`.
@@ -118,14 +160,6 @@ the cart link and the sort control did not.
    sort order cannot be changed. Chromium-only repro:
    `benchmark/realworld/repro/select-opacity/` (jsdom cannot prove the real
    box, so this is not a corpus case).
-
-5. **An `<a>` without `href` but with `role="button"` is dropped.**
-   saucedemo's cart is
-   `<a class="shopping_cart_link" role="button" aria-label="Cart, empty">`
-   (the label becomes "Cart, 2 items" after adding products). `classify()`
-   returns `null` for every anchor without `href` before it reads the explicit
-   role, so the cart never appears in the snapshot and cannot be opened.
-   Pending case: `corpus/cases/rw-anchor-role-button.json`.
 
 ### P3
 
@@ -166,17 +200,19 @@ the cart link and the sort control did not.
 
 ## Blocked / not tested yet
 
-Nothing blocked in these groups. Still to run: httpbin, Wikipedia, Hacker News,
-GitHub, MDN, a news site with a cookie banner, and the MCP smoke path.
+Nothing blocked in these groups. Still to run: GitHub, MDN, a news site with a
+cookie banner, and the MCP smoke path.
 
 ## Honest summary (so far)
 
-- Scenarios: 19/23 passed (83%).
-- Recall: 100% on 20 pages; these pages are small-to-medium, and the oracle
-  only counts controls visible in the viewport or well-formed below the fold.
-- Compression: text is 5-36x smaller than raw HTML and 1-23x smaller than
-  Playwright ariaSnapshot (the extreme is `/large`).
+- Scenarios: 22/27 passed (81%).
+- Recall: 100% on 22 pages, 95.5% on the Wikipedia article. The only recall
+  loss found is the CSS override bug above; it is one bug, not 46.
+- Compression: text is 5-265x smaller than raw HTML and 1-45x smaller than
+  Playwright ariaSnapshot. The extremes are `/large` (the-internet) and the
+  Wikipedia article (1 026 text tokens vs 271 558 raw / 45 721 aria).
 - No README claims need changing yet. Recommendation for later: state that
   framesets are not scanned, that hover-only content is reachable only when
-  the hover target is itself an action, and that an anchor without `href` needs
-  an explicit role.
+  the hover target is itself an action, that an anchor without `href` needs an
+  explicit role, and that a CSS hide rule overridden by a later rule can hide a
+  visible control (the Wikipedia bug).

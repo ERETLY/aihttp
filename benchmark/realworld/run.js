@@ -92,13 +92,16 @@ function compactItem(item) {
 }
 
 async function runPageChecks(page, out) {
-  const json = await snapshotJson(page, { maxActions: 400, force: true });
-  const text = await snapshot(page, { format: 'text', maxActions: 400, force: true });
-  out.metrics = await collectMetrics(page, json, text);
+  const full = await snapshotJson(page, { maxActions: 5000, force: true });
+  const text = await snapshot(page, { format: 'text', maxActions: 5000, force: true });
+  const defaultJson = await snapshotJson(page, { force: true });
+  const defaultText = await snapshot(page, { format: 'text', force: true });
+  out.metrics = await collectMetrics(page, defaultJson, defaultText);
+  out.metrics.fullActions = full.actions.length;
 
   let oracleData = { items: [] };
   try { oracleData = await visibilityCheck(page); } catch (e) { out.checks.oracleError = String(e.message || e); }
-  const match = matchActions(json.actions, oracleData.items || []);
+  const match = matchActions(full.actions, oracleData.items || []);
   out.checks.recall = {
     visible: match.visible,
     matched: match.matchedVisible,
@@ -114,7 +117,7 @@ async function runPageChecks(page, out) {
     })
   };
 
-  const base = { text: text, keys: actionKeys(json.actions), count: json.actions.length };
+  const base = { text: text, keys: actionKeys(full.actions), count: full.actions.length };
   const scrolls = [];
   for (const step of [{ at: 'top', y: 0 }, { at: 'middle', y: null }, { at: 'bottom', y: 999999 }]) {
     const y = step.y == null ? await page.evaluate(function () { return Math.floor((document.documentElement.scrollHeight - window.innerHeight) / 2); }) : step.y;
@@ -254,7 +257,7 @@ async function runScenarios(page, site, out) {
       for (const step of scenario.steps) {
         const stepStarted = nowMs();
         if (step.op === 'snapshot') {
-          const json = await snapshotJson(page, { maxActions: 200, force: true });
+          const json = await snapshotJson(page, { maxActions: 500, force: true });
           last = json;
           const failures = await checkExpectations(page, { status: 'ok' }, step.expect || {}, out);
           if (step.expect && step.expect.actionDelta) {
@@ -283,7 +286,7 @@ async function runScenarios(page, site, out) {
         } else if (step.op === 'act') {
           let json = last;
           if (!step.stale || !last) {
-            json = await snapshotJson(page, { maxActions: 200, force: true });
+            json = await snapshotJson(page, { maxActions: 500, force: true });
             last = json;
           }
           const resolved = await resolveTarget(page, json, step.target);

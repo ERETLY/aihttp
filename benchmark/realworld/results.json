@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-03T07:19:43.877Z",
+  "generatedAt": "2026-11-03T07:26:51.422Z",
   "engine": {
     "version": "0.1.0",
-    "sha": "44842ae"
+    "sha": "edbd745"
   },
   "runtime": {
     "node": "v26.13.0",
@@ -2614,6 +2614,690 @@
       ],
       "dialogs": [],
       "totalMs": 7881
+    },
+    {
+      "id": "httpbin-form",
+      "url": "https://httpbin.org/forms/post",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 13,
+        "actionCap": 0,
+        "scanMs": 2,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 707,
+        "textTokens": 198,
+        "rawChars": 1419,
+        "rawTokens": 432,
+        "ariaChars": 912,
+        "ariaTokens": 248,
+        "compressionVsRaw": 0.49823819591261453,
+        "compressionVsAria": 0.7752192982456141,
+        "fullActions": 13
+      },
+      "checks": {
+        "recall": {
+          "visible": 13,
+          "matched": 13,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 13
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 13
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 13
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 13,
+          "secondActions": 13
+        }
+      },
+      "scenarios": [
+        {
+          "name": "fill and submit form",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a1",
+              "action": {
+                "id": "a1",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "Customer name:",
+                "region": "main",
+                "type": "text",
+                "name": "custname"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 164,
+              "navigationLost": null,
+              "latencyMs": 526,
+              "ms": 536
+            },
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "Telephone:",
+                "region": "main",
+                "type": "tel",
+                "name": "custtel"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 156,
+              "navigationLost": null,
+              "latencyMs": 522,
+              "ms": 532
+            },
+            {
+              "op": "act",
+              "id": "a3",
+              "action": {
+                "id": "a3",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "E-mail address:",
+                "region": "main",
+                "type": "email",
+                "name": "custemail"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 156,
+              "navigationLost": null,
+              "latencyMs": 521,
+              "ms": 528
+            },
+            {
+              "op": "act",
+              "id": "a5",
+              "action": {
+                "id": "a5",
+                "tag": "input",
+                "role": "radio",
+                "kind": "toggle",
+                "label": "Medium",
+                "region": "main",
+                "type": "radio",
+                "name": "size",
+                "value": false,
+                "checked": false
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 158,
+              "navigationLost": null,
+              "latencyMs": 521,
+              "ms": 527
+            },
+            {
+              "op": "act",
+              "id": "a7",
+              "action": {
+                "id": "a7",
+                "tag": "input",
+                "role": "checkbox",
+                "kind": "toggle",
+                "label": "Bacon",
+                "region": "main",
+                "type": "checkbox",
+                "name": "topping",
+                "value": false,
+                "checked": false
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 156,
+              "navigationLost": null,
+              "latencyMs": 511,
+              "ms": 515
+            },
+            {
+              "op": "act",
+              "id": "a13",
+              "action": {
+                "id": "a13",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Submit order",
+                "region": "main",
+                "type": "submit"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 161,
+              "navigationLost": null,
+              "latencyMs": 531,
+              "ms": 537
+            }
+          ],
+          "latencyMs": 3175,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 6820
+    },
+    {
+      "id": "wikipedia-http",
+      "url": "https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol",
+      "status": "scenario_failures",
+      "httpStatus": 200,
+      "title": "HTTP - Wikipedia",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 60,
+        "actionCap": 935,
+        "scanMs": 272,
+        "sanitized": 1,
+        "modal": false,
+        "textChars": 3485,
+        "textTokens": 1026,
+        "rawChars": 830758,
+        "rawTokens": 271558,
+        "ariaChars": 176475,
+        "ariaTokens": 45721,
+        "compressionVsRaw": 0.004194964117107509,
+        "compressionVsAria": 0.0197478396373424,
+        "fullActions": 995
+      },
+      "checks": {
+        "recall": {
+          "visible": 1020,
+          "matched": 974,
+          "ratio": 0.9549019607843138,
+          "missed": [
+            {
+              "tag": "input",
+              "role": "textbox",
+              "name": "Search Wikipedia",
+              "href": "",
+              "reasons": [],
+              "html": "<input class=\"cdx-text-input__input mw-searchInput\" autocomplete=\"off\" type=\"search\" name=\"search\" placeholder=\"Search Wikipedia\" aria-label=\"Search Wikipedia\" autocapitalize=\"none\" spellcheck=\"false\""
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Search",
+              "href": "",
+              "reasons": [],
+              "html": "<button class=\"cdx-button cdx-search-input__end-button\">Search</button>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Donate",
+              "href": "https://donate.wikimedia.org/?wmf_source=donate&wmf_medium=sidebar&wmf_campaign=en.wikipedia.org&uselang=en",
+              "reasons": [],
+              "html": "<a data-mw-interface=\"\" href=\"https://donate.wikimedia.org/?wmf_source=donate&amp;wmf_medium=sidebar&amp;wmf_campaign=en.wikipedia.org&amp;uselang=en\" data-mw-donate-attempt=\"top_link\" class=\"\"><span>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Create account",
+              "href": "https://en.wikipedia.org/w/index.php?title=Special:CreateAccount&returnto=HTTP",
+              "reasons": [],
+              "html": "<a data-mw-interface=\"\" href=\"/w/index.php?title=Special:CreateAccount&amp;returnto=HTTP\" title=\"You are encouraged to create an account and log in; however, it is not mandatory\" class=\"\"><span>Create"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Log in",
+              "href": "https://en.wikipedia.org/w/index.php?title=Special:UserLogin&returnto=HTTP",
+              "reasons": [],
+              "html": "<a data-mw-interface=\"\" href=\"/w/index.php?title=Special:UserLogin&amp;returnto=HTTP\" title=\"You're encouraged to log in; however, it's not mandatory. [alt-o]\" accesskey=\"o\" class=\"\"><span>Log in</spa"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Hide Contents",
+              "href": "",
+              "reasons": [],
+              "html": "<button class=\"vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button\" data-event-name=\"pinnable-header.vector-toc.unpin\" aria-label=\"Hide Contents\">hide</button>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "(Top)",
+              "href": "https://en.wikipedia.org/wiki/HTTP#",
+              "reasons": [],
+              "html": "<a href=\"#\" class=\"vector-toc-link\">\n\t\t\t\t<div class=\"vector-toc-text\">(Top)</div>\n\t\t\t</a>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Versions",
+              "href": "https://en.wikipedia.org/wiki/HTTP#Versions",
+              "reasons": [],
+              "html": "<a class=\"vector-toc-link\" href=\"#Versions\">\n\t\t\t<div class=\"vector-toc-text\">\n\t\t\t\t<span class=\"vector-toc-numb\">1</span>\n\t\t\t\t<span>Versions</span>\n\t\t\t</div>\n\t\t</a>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Use",
+              "href": "https://en.wikipedia.org/wiki/HTTP#Use",
+              "reasons": [],
+              "html": "<a class=\"vector-toc-link\" href=\"#Use\">\n\t\t\t<div class=\"vector-toc-text\">\n\t\t\t\t<span class=\"vector-toc-numb\">2</span>\n\t\t\t\t<span>Use</span>\n\t\t\t</div>\n\t\t</a>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Technology",
+              "href": "https://en.wikipedia.org/wiki/HTTP#Technology",
+              "reasons": [],
+              "html": "<a class=\"vector-toc-link\" href=\"#Technology\">\n\t\t\t<div class=\"vector-toc-text\">\n\t\t\t\t<span class=\"vector-toc-numb\">3</span>\n\t\t\t\t<span>Technology</span>\n\t\t\t</div>\n\t\t</a>"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Toggle Technology subsection",
+              "href": "",
+              "reasons": [],
+              "html": "<button aria-controls=\"toc-Technology-sublist\" class=\"cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-toc-toggle\" aria-expanded=\"false\">\n\t\t\t\t<span class=\"vector-icon mw-ui-icon-wikime"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Message format",
+              "href": "https://en.wikipedia.org/wiki/HTTP#Message_format",
+              "reasons": [],
+              "html": "<a class=\"vector-toc-link\" href=\"#Message_format\">\n\t\t\t<div class=\"vector-toc-text\">\n\t\t\t\t<span class=\"vector-toc-numb\">4</span>\n\t\t\t\t<span>Message format</span>\n\t\t\t</div>\n\t\t</a>"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Toggle Message format subsection",
+              "href": "",
+              "reasons": [],
+              "html": "<button aria-controls=\"toc-Message_format-sublist\" class=\"cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-toc-toggle\" aria-expanded=\"false\">\n\t\t\t\t<span class=\"vector-icon mw-ui-icon-wi"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Similar protocols",
+              "href": "https://en.wikipedia.org/wiki/HTTP#Similar_protocols",
+              "reasons": [],
+              "html": "<a class=\"vector-toc-link\" href=\"#Similar_protocols\">\n\t\t\t<div class=\"vector-toc-text\">\n\t\t\t\t<span class=\"vector-toc-numb\">5</span>\n\t\t\t\t<span>Similar protocols</span>\n\t\t\t</div>\n\t\t</a>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "History",
+              "href": "https://en.wikipedia.org/wiki/HTTP#History",
+              "reasons": [],
+              "html": "<a class=\"vector-toc-link\" href=\"#History\">\n\t\t\t<div class=\"vector-toc-text\">\n\t\t\t\t<span class=\"vector-toc-numb\">6</span>\n\t\t\t\t<span>History</span>\n\t\t\t</div>\n\t\t</a>"
+            }
+          ],
+          "missedTotal": 46,
+          "phantom": [
+            {
+              "id": "a277",
+              "tag": "a",
+              "role": "link",
+              "label": "mwAWM",
+              "href": "https://en.wikipedia.org/wiki/File:Http_request_telnet_ubuntu.png"
+            },
+            {
+              "id": "a349",
+              "tag": "th",
+              "role": "button",
+              "label": "Method"
+            },
+            {
+              "id": "a350",
+              "tag": "th",
+              "role": "button",
+              "label": "RFC"
+            },
+            {
+              "id": "a351",
+              "tag": "br",
+              "role": "button",
+              "label": "Request has payload body"
+            },
+            {
+              "id": "a352",
+              "tag": "br",
+              "role": "button",
+              "label": "Response has payload body"
+            },
+            {
+              "id": "a353",
+              "tag": "th",
+              "role": "button",
+              "label": "Safe"
+            },
+            {
+              "id": "a354",
+              "tag": "th",
+              "role": "button",
+              "label": "Idempotent"
+            },
+            {
+              "id": "a355",
+              "tag": "th",
+              "role": "button",
+              "label": "Cacheable"
+            },
+            {
+              "id": "a416",
+              "tag": "a",
+              "role": "link",
+              "label": "mwA4A",
+              "href": "https://en.wikipedia.org/wiki/File:Tim_Berners-Lee_CP_2.jpg"
+            },
+            {
+              "id": "a515",
+              "tag": "a",
+              "role": "link",
+              "label": "Jump up to: 1",
+              "href": "#cite_ref-:0_1-0"
+            },
+            {
+              "id": "a536",
+              "tag": "a",
+              "role": "link",
+              "label": "Jump up to: 1",
+              "href": "#cite_ref-rfc1945_3-0"
+            },
+            {
+              "id": "a548",
+              "tag": "a",
+              "role": "link",
+              "label": "Jump up to: 1",
+              "href": "#cite_ref-rfc9112_4-0"
+            },
+            {
+              "id": "a567",
+              "tag": "a",
+              "role": "link",
+              "label": "Jump up to: 1",
+              "href": "#cite_ref-rfc9113_7-0"
+            },
+            {
+              "id": "a610",
+              "tag": "a",
+              "role": "link",
+              "label": "Jump up to: 1",
+              "href": "#cite_ref-rfc9110_19-0"
+            },
+            {
+              "id": "a639",
+              "tag": "a",
+              "role": "link",
+              "label": "Jump up to: 1",
+              "href": "#cite_ref-Connections_20-0"
+            }
+          ],
+          "phantomTotal": 21,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 400
+            },
+            {
+              "at": "middle",
+              "y": 10944,
+              "actions": 400
+            },
+            {
+              "at": "bottom",
+              "y": 21888,
+              "actions": 400
+            }
+          ],
+          "missingAtMiddle": [
+            "a64|a|link|403 Forbidden|https://en.wikipedia.org/wiki/HTTP_403",
+            "a65|a|link|404 Not Found|https://en.wikipedia.org/wiki/HTTP_404",
+            "a66|a|link|451 Unavailable for Legal Reasons|https://en.wikipedia.org/wiki/HTTP_451",
+            "a67|a|link|Basic access authentication|https://en.wikipedia.org/wiki/Basic_access_authentication",
+            "a68|a|link|Digest access authentication|https://en.wikipedia.org/wiki/Digest_access_authentication",
+            "a156|a|link|server|https://en.wikipedia.org/wiki/Server_(computing)",
+            "a157|a|link|user agent|https://en.wikipedia.org/wiki/User_agent",
+            "a158|a|link|web crawlers|https://en.wikipedia.org/wiki/Web_crawler",
+            "a159|a|link|voice browsers|https://en.wikipedia.org/wiki/Voice_browser",
+            "a160|a|link|mobile apps|https://en.wikipedia.org/wiki/Mobile_app",
+            "a161|a|link|software|https://en.wikipedia.org/wiki/Software",
+            "a162|a|link|web cache|https://en.wikipedia.org/wiki/Web_cache",
+            "a396|a|link|www.example.com|https://en.wikipedia.org/wiki/Example.com",
+            "a397|a|link|carriage return|https://en.wikipedia.org/wiki/Carriage_return",
+            "a398|a|link|line feed|https://en.wikipedia.org/wiki/Line_feed",
+            "a399|a|link|DNS|https://en.wikipedia.org/wiki/Domain_Name_System",
+            "a400|a|link|IP address|https://en.wikipedia.org/wiki/IP_address",
+            "a401|a|link|virtual hosting|https://en.wikipedia.org/wiki/Virtual_hosting",
+            "a402|a|link|ETag|https://en.wikipedia.org/wiki/HTTP_ETag",
+            "a403|a|link|Internet media type|https://en.wikipedia.org/wiki/Internet_media_type"
+          ],
+          "missingAtBottom": [
+            "a64|a|link|403 Forbidden|https://en.wikipedia.org/wiki/HTTP_403",
+            "a65|a|link|404 Not Found|https://en.wikipedia.org/wiki/HTTP_404",
+            "a66|a|link|451 Unavailable for Legal Reasons|https://en.wikipedia.org/wiki/HTTP_451",
+            "a67|a|link|Basic access authentication|https://en.wikipedia.org/wiki/Basic_access_authentication",
+            "a68|a|link|Digest access authentication|https://en.wikipedia.org/wiki/Digest_access_authentication",
+            "a156|a|link|server|https://en.wikipedia.org/wiki/Server_(computing)",
+            "a157|a|link|user agent|https://en.wikipedia.org/wiki/User_agent",
+            "a158|a|link|web crawlers|https://en.wikipedia.org/wiki/Web_crawler",
+            "a159|a|link|voice browsers|https://en.wikipedia.org/wiki/Voice_browser",
+            "a160|a|link|mobile apps|https://en.wikipedia.org/wiki/Mobile_app",
+            "a161|a|link|software|https://en.wikipedia.org/wiki/Software",
+            "a162|a|link|web cache|https://en.wikipedia.org/wiki/Web_cache",
+            "a396|a|link|www.example.com|https://en.wikipedia.org/wiki/Example.com",
+            "a397|a|link|carriage return|https://en.wikipedia.org/wiki/Carriage_return",
+            "a398|a|link|line feed|https://en.wikipedia.org/wiki/Line_feed",
+            "a399|a|link|DNS|https://en.wikipedia.org/wiki/Domain_Name_System",
+            "a400|a|link|IP address|https://en.wikipedia.org/wiki/IP_address",
+            "a401|a|link|virtual hosting|https://en.wikipedia.org/wiki/Virtual_hosting",
+            "a402|a|link|ETag|https://en.wikipedia.org/wiki/HTTP_ETag",
+            "a403|a|link|Internet media type|https://en.wikipedia.org/wiki/Internet_media_type"
+          ],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 400,
+          "secondActions": 400
+        }
+      },
+      "scenarios": [
+        {
+          "name": "search field and article",
+          "ok": false,
+          "steps": [
+            {
+              "op": "act",
+              "ok": false,
+              "failures": [
+                "target not in last snapshot: {\"tag\":\"input\",\"nameContains\":\"Search Wikipedia\"}"
+              ],
+              "candidates": [],
+              "ms": 334
+            }
+          ],
+          "latencyMs": 334,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 8497
+    },
+    {
+      "id": "hacker-news",
+      "url": "https://news.ycombinator.com/",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "Hacker News",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 60,
+        "actionCap": 169,
+        "scanMs": 27,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 3661,
+        "textTokens": 1194,
+        "rawChars": 34575,
+        "rawTokens": 11682,
+        "ariaChars": 40702,
+        "ariaTokens": 10065,
+        "compressionVsRaw": 0.10588575560375994,
+        "compressionVsAria": 0.08994643997837944,
+        "fullActions": 229
+      },
+      "checks": {
+        "recall": {
+          "visible": 229,
+          "matched": 229,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 229
+            },
+            {
+              "at": "middle",
+              "y": 224,
+              "actions": 229
+            },
+            {
+              "at": "bottom",
+              "y": 449,
+              "actions": 229
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 229,
+          "secondActions": 229
+        }
+      },
+      "scenarios": [
+        {
+          "name": "first comments link",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a17",
+              "action": {
+                "id": "a17",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "760 comments",
+                "region": "main",
+                "href": "item?id=50341174"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 202,
+              "navigationLost": null,
+              "latencyMs": 1560,
+              "ms": 1594
+            }
+          ],
+          "latencyMs": 1594,
+          "status": "ok"
+        },
+        {
+          "name": "More pagination",
+          "ok": true,
+          "steps": [
+            {
+              "op": "goto",
+              "ok": true,
+              "url": "https://news.ycombinator.com/"
+            },
+            {
+              "op": "act",
+              "id": "a219",
+              "action": {
+                "id": "a219",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "More",
+                "region": "main",
+                "href": "?p=2"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 204,
+              "navigationLost": null,
+              "latencyMs": 561,
+              "ms": 636
+            }
+          ],
+          "latencyMs": 2214,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 8420
     }
   ]
 }
