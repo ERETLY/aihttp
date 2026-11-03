@@ -34,6 +34,15 @@
   `aria-hidden`. Form controls inside `<fieldset disabled>` (outside its first
   `<legend>`) are reported as `disabled` and `act` returns `blocked`.
 
+- Hidden toggles: a native `input[type=checkbox|radio]` hidden only by soft
+  heuristics (opacity <= 0.05, clip, clip-path, font-size 0, off-screen
+  absolute, text-indent, zero/tiny size) stays in the snapshot when it has a
+  visible label (wrapped `<label>`, `label[for]`, `aria-labelledby` or
+  `aria-label`). `display:none`, `visibility:hidden`, `hidden`, `aria-hidden`,
+  `inert`, hidden ancestors and closed `<details>` still hide it. The label is
+  the real hit target in the page; `act(id, { checked: true })` still dispatches
+  a click on the input, which toggles it in Chromium and jsdom.
+
 - Matching: position, DOM order and the fingerprint add up to 14 points, more
   than `margin` (12), so two controls with the same label could be separated by
   position alone and the nearer one was clicked. The winner must now also lead

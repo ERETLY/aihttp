@@ -415,6 +415,7 @@ For the draft WebMCP API, `ahttp.installWebMCP()` registers `ahttp_snapshot` and
 ### Other
 
 - The hidden-text filter misses text drawn on canvas, set as a background image, or hidden by a stylesheet the page doesn't expose.
+- A native checkbox/radio hidden only by soft CSS (opacity, clip, clip-path, font-size 0, off-screen absolute, text-indent, tiny size) stays in the snapshot when a visible label names it. Hard-hidden controls, or soft-hidden ones without a visible label, stay out; the label itself is not a separate action.
 - `mini-dom` (static backend) is a hand-written parser, not an HTML5 tree builder: no foster parenting, no full table algorithm. Use `--browser` when exact parsing matters.
 - The static backend follows `@import` three levels deep (16 sheets) and evaluates `screen`, `print`, `min-width`, `max-width`, `min-height` and `max-height`. Unknown media features count as matching.
 - Legacy MCP clients get implicit page state. Modern clients carry `pageId`.

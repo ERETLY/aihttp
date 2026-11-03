@@ -2,13 +2,13 @@
   "engine": "0.1.0",
   "engine_file": "ahttp.js",
   "totals": {
-    "cases": 46,
-    "passed": 46,
+    "cases": 52,
+    "passed": 52,
     "failed": 0,
     "pending": 0,
-    "match_ok": 46,
-    "diff_ok": 46,
-    "tokens": 1639
+    "match_ok": 52,
+    "diff_ok": 52,
+    "tokens": 1973
   },
   "cases": [
     {
@@ -206,6 +206,180 @@
               "name": "pageText #out",
               "pass": true,
               "detail": "hello"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "custom-checkbox-opacity",
+      "html": "fixtures/custom-checkbox-opacity.html",
+      "notes": "opacity:0 checkbox inside a visible label; the label is the real hit target",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 94,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\"]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "I agree to the terms"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "checked"
+            }
+          ]
+        },
+        {
+          "step": "3:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "checked"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "custom-radio-group",
+      "html": "fixtures/custom-radio-group.html",
+      "notes": "two opacity:0 radios inside visible labels; act selects the second",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 100,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\"]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Basic plan | Pro plan"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "pro"
+            }
+          ]
+        },
+        {
+          "step": "3:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Pro plan"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "custom-switch-clip",
+      "html": "fixtures/custom-switch-clip.html",
+      "notes": "1x1 clip/clip-path checkbox with a separate label[for]",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 41,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\"]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Email notifications"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "checked"
             }
           ]
         }
@@ -738,6 +912,37 @@
       ]
     },
     {
+      "id": "hard-hidden-checkbox-visible-label",
+      "html": "fixtures/hard-hidden-checkbox.html",
+      "notes": "display:none checkbox must stay hidden even when its label is visible",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 33,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "I accept the terms"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "hidden-aria-hidden",
       "html": "fixtures/hidden-aria.html",
       "notes": "aria-hidden subtree is absent from the snapshot",
@@ -763,6 +968,73 @@
               "name": "text",
               "pass": true,
               "detail": "Visible"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hidden-checkbox-hidden-label-stays-hidden",
+      "html": "fixtures/hidden-checkbox-hidden-label.html",
+      "notes": "soft-hidden checkbox whose label is also hidden must stay hidden",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 37,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            },
+            {
+              "name": "sanitized=1",
+              "pass": true,
+              "detail": "1"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hidden-checkbox-no-label-stays-hidden",
+      "html": "fixtures/hidden-checkbox-no-label.html",
+      "notes": "soft-hidden checkbox with no label must stay hidden",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 29,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
             },
             {
               "name": "notText",

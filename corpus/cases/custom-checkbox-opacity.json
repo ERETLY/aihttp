@@ -1,0 +1,38 @@
+{
+  "id": "custom-checkbox-opacity",
+  "html": "fixtures/custom-checkbox-opacity.html",
+  "url": "https://corpus.test/custom-checkbox",
+  "notes": "opacity:0 checkbox inside a visible label; the label is the real hit target",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ],
+      "expectText": [
+        "I agree to the terms"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "payload": {
+        "checked": true
+      },
+      "targetHint": "I agree to the terms checkbox",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "checked"
+        }
+      }
+    },
+    {
+      "action": "snapshot",
+      "expectText": [
+        "checked"
+      ]
+    }
+  ]
+}

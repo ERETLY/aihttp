@@ -67,7 +67,7 @@
     left: '', top: '', color: '', background: '', clip: '', clipPath: '',
     textIndent: '', cursor: '', overflow: '', inline: null, empty: true
   };
-  var EMPTY_CSS = { hidden: false, pointer: false };
+  var EMPTY_CSS = { hidden: false, pointer: false, hard: false };
   var SHA256_K = [
     0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
     0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
@@ -870,10 +870,10 @@
     var sheets = [];
     try { sheets = doc.styleSheets || []; } catch (e) { sheets = []; }
     var order = 0;
-    function addRule(sel, hide, pointer) {
+    function addRule(sel, hide, pointer, hard) {
       order++;
       idx.rules++;
-      var rule = { sel: sel, order: order, hide: hide, pointer: pointer };
+      var rule = { sel: sel, order: order, hide: hide, pointer: pointer, hard: !!hard };
       var key = selectorKey(sel);
       var arr = idx.buckets.get(key);
       if (!arr) { arr = []; idx.buckets.set(key, arr); }
@@ -890,9 +890,10 @@
         var visibility = cssProp(st, 'visibility').toLowerCase().trim();
         var opacity = cssProp(st, 'opacity').trim();
         var cursor = cssProp(st, 'cursor').toLowerCase().trim();
-        var hide = display === 'none' || visibility === 'hidden' || visibility === 'collapse' || isZeroOpacity(opacity);
+        var hard = display === 'none' || visibility === 'hidden' || visibility === 'collapse';
+        var hide = hard || isZeroOpacity(opacity);
         var pointer = cursor === 'pointer';
-        if (hide || pointer) addRule(rule.selectorText, hide, pointer);
+        if (hide || pointer) addRule(rule.selectorText, hide, pointer, hard);
       }
       var nested = cssRulesOf(rule);
       if (nested) {
@@ -911,7 +912,7 @@
     if (!ctx.css || !ctx.css.buckets.size) return EMPTY_CSS;
     var cached = ctx.cssCache.get(el);
     if (cached) return cached;
-    var result = { hidden: false, pointer: false };
+    var result = { hidden: false, pointer: false, hard: false };
     var css = ctx.css;
     if (css && css.buckets.size) {
       var tokens = tokensOf(el);
@@ -919,6 +920,7 @@
       seen.clear();
       var bestHide = 0;
       var bestPointer = 0;
+      var hardHide = false;
       for (var i = 0; i < tokens.length; i++) {
         var arr = css.buckets.get(tokens[i]);
         if (!arr) continue;
@@ -928,11 +930,13 @@
           seen.add(rule);
           if (!matches(el, rule.sel)) continue;
           if (rule.hide && rule.order > bestHide) bestHide = rule.order;
+          if (rule.hide && rule.hard) hardHide = true;
           if (rule.pointer && rule.order > bestPointer) bestPointer = rule.order;
         }
       }
       result.hidden = bestHide > 0;
       result.pointer = bestPointer > 0;
+      result.hard = hardHide;
     }
     ctx.cssCache.set(el, result);
     return result;
@@ -1194,6 +1198,100 @@
       node = parentOf(node);
     }
     return false;
+  }
+
+  // Native checkboxes and radios are commonly hidden with clip/opacity/size
+  // tricks and operated through a visible label (Bootstrap, Material, Ant,
+  // Tailwind sr-only). Such a control is real if only soft heuristics hide it
+  // and a visible label names it. Hard hiding and a hidden/missing label keep
+  // it out of the snapshot.
+  function toggleType(el) {
+    if (tagOf(el) !== 'input') return '';
+    var type = String(el.type || attr(el, 'type') || '').toLowerCase();
+    return type === 'checkbox' || type === 'radio' ? type : '';
+  }
+
+  function labelIsVisible(node, ctx) {
+    if (!node || node.nodeType !== 1) return false;
+    if (!normText(textOf(node))) return false;
+    return !deepHiddenReason(node, ctx);
+  }
+
+  function labelTargets(el) {
+    var out = [];
+    var node = parentOf(el);
+    var guard = 0;
+    while (node && guard++ < 8) {
+      if (tagOf(node) === 'label') { out.push(node); break; }
+      node = parentOf(node);
+    }
+    var id = attr(el, 'id');
+    if (id) {
+      var root = null;
+      try { root = el.getRootNode ? el.getRootNode() : null; } catch (e) { root = null; }
+      var doc = el.ownerDocument || root;
+      var selector = 'label[for="' + escapeSel(id) + '"]';
+      var list = [];
+      if (root && root.querySelectorAll) {
+        try { list = root.querySelectorAll(selector); } catch (e) { list = []; }
+      }
+      if (!list.length && doc && doc.querySelectorAll) {
+        try { list = doc.querySelectorAll(selector); } catch (e) { list = []; }
+      }
+      for (var i = 0; i < list.length; i++) if (out.indexOf(list[i]) < 0) out.push(list[i]);
+    }
+    var labelledBy = attr(el, 'aria-labelledby');
+    if (labelledBy) {
+      var ids = labelledBy.split(/\s+/);
+      for (var j = 0; j < ids.length; j++) {
+        var target = byId(el, ids[j]);
+        if (target && out.indexOf(target) < 0) out.push(target);
+      }
+    }
+    return out;
+  }
+
+  function hasVisibleToggleLabel(el, ctx) {
+    if (normText(attr(el, 'aria-label'))) return true;
+    var targets = labelTargets(el);
+    for (var i = 0; i < targets.length; i++) {
+      if (labelIsVisible(targets[i], ctx)) return true;
+    }
+    return false;
+  }
+
+  // Hard hiding wins over the soft-toggle escape. This covers the element, every
+  // ancestor, and stylesheet rules, but not the clip/opacity/size heuristics.
+  function hardHidden(el, ctx) {
+    var node = el;
+    var child = null;
+    var guard = 0;
+    while (node && node.nodeType === 1 && guard++ < 60) {
+      var tag = tagOf(node);
+      if (node.hidden) return true;
+      if (tag === 'dialog' && !hasAttr(node, 'open')) return true;
+      if (attr(node, 'aria-hidden') === 'true') return true;
+      if (hasAttr(node, 'inert')) return true;
+      if (tag === 'details' && !node.open && child && tagOf(child) !== 'summary') return true;
+      var st = styleOf(node, ctx);
+      if (st.display === 'none' || st.visibility === 'hidden' || st.visibility === 'collapse') return true;
+      var inline = st.inline || {};
+      var inlineOverrides = (inline.display && String(inline.display).toLowerCase() !== 'none') ||
+        (inline.visibility && ['hidden', 'collapse'].indexOf(String(inline.visibility).toLowerCase()) < 0);
+      if (!inlineOverrides && ctx.css) {
+        var css = cssState(node, ctx);
+        if (css.hidden && css.hard) return true;
+      }
+      child = node;
+      node = parentOf(node);
+    }
+    return false;
+  }
+
+  function recoverableToggle(el, ctx, reason) {
+    if (!reason || !toggleType(el)) return false;
+    if (hardHidden(el, ctx)) return false;
+    return hasVisibleToggleLabel(el, ctx);
   }
 
   function regionOf(el, current) {
@@ -1633,11 +1731,13 @@
     if (hasAttr(el, 'data-ahttp-ignore')) { ctx.ignored++; return 0; }
     var reason = hiddenReason(el, ctx);
     if (reason) {
-      if (reason.suspicious) {
-        var hiddenTexts = countTextNodes(el, 50);
-        if (hiddenTexts > 0) ctx.sanitized += hiddenTexts;
+      if (!recoverableToggle(el, ctx, reason)) {
+        if (reason.suspicious) {
+          var hiddenTexts = countTextNodes(el, 50);
+          if (hiddenTexts > 0) ctx.sanitized += hiddenTexts;
+        }
+        return 0;
       }
-      return 0;
     }
     var ownConfirm = confirmWarn;
     if (hasAttr(el, 'data-ahttp-confirm')) {

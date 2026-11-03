@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Custom radios</title></head>
+<body>
+<main>
+<label><input type="radio" name="plan" value="basic" style="position:absolute;opacity:0"> Basic plan</label>
+<label><input type="radio" name="plan" value="pro" style="position:absolute;opacity:0"> Pro plan</label>
+<p id="out">idle</p>
+<script>
+window.__mark = function (value) {
+  var out = document.getElementById('out');
+  if (out) out.textContent = value;
+};
+var radios = document.querySelectorAll('input[type="radio"]');
+for (var i = 0; i < radios.length; i++) {
+  radios[i].addEventListener('change', function () {
+    window.__mark(this.value);
+  });
+}
+</script>
+</main>
+</body>
+</html>
