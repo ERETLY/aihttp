@@ -1,0 +1,22 @@
+{
+  "id": "rw-label-as-button",
+  "html": "fixtures/rw-label-as-button.html",
+  "url": "https://corpus.test/rw-label-as-button",
+  "pending": "real-world: the-internet /login exposes <label style=cursor:pointer> as a second button action with the same name as its input, so act('Username') is ambiguous",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ],
+      "expectText": [
+        "input \"Username\"",
+        "button \"Save\""
+      ],
+      "expectNotText": [
+        "label role=button"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1877 @@
+{
+  "generatedAt": "2026-11-03T07:10:49.210Z",
+  "engine": {
+    "version": "0.1.0",
+    "sha": "ec1f988"
+  },
+  "runtime": {
+    "node": "v26.13.0",
+    "playwright": "1.64.1",
+    "chromium": "156.0.8078.4"
+  },
+  "defaults": {
+    "pauseMs": 1200,
+    "timeoutMs": 20000,
+    "userAgent": "ahttp-realworld-test (+https://github.com/ERETLY/ahttp)"
+  },
+  "sites": [
+    {
+      "id": "example",
+      "url": "https://example.com/",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "Example Domain",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 1,
+        "actionCap": 0,
+        "scanMs": 5,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 844,
+        "textTokens": 170,
+        "rawChars": 1989,
+        "rawTokens": 641,
+        "ariaChars": 1047,
+        "ariaTokens": 245,
+        "compressionVsRaw": 0.42433383609854197,
+        "compressionVsAria": 0.8061127029608405
+      },
+      "checks": {
+        "recall": {
+          "visible": 1,
+          "matched": 1,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 1
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 1
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 1
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 1,
+          "secondActions": 1
+        }
+      },
+      "scenarios": [
+        {
+          "name": "baseline snapshot",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 1,
+              "ms": 8
+            }
+          ],
+          "latencyMs": 8,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 3448
+    },
+    {
+      "id": "the-internet-checkboxes",
+      "url": "https://the-internet.herokuapp.com/checkboxes",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 5,
+        "actionCap": 0,
+        "scanMs": 31,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 411,
+        "textTokens": 125,
+        "rawChars": 2122,
+        "rawTokens": 594,
+        "ariaChars": 377,
+        "ariaTokens": 121,
+        "compressionVsRaw": 0.19368520263901978,
+        "compressionVsAria": 1.090185676392573
+      },
+      "checks": {
+        "recall": {
+          "visible": 4,
+          "matched": 4,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 5
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 5
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 5
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 5,
+          "secondActions": 5
+        }
+      },
+      "scenarios": [
+        {
+          "name": "toggle first checkbox",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "input",
+                "role": "checkbox",
+                "kind": "toggle",
+                "label": "checkbox 1 checkbox 2",
+                "region": "main",
+                "type": "checkbox",
+                "value": false,
+                "checked": false
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 7638,
+              "navigationLost": null,
+              "latencyMs": 7997,
+              "ms": 8012
+            }
+          ],
+          "latencyMs": 8012,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 12940
+    },
+    {
+      "id": "the-internet-dropdown",
+      "url": "https://the-internet.herokuapp.com/dropdown",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 4,
+        "actionCap": 0,
+        "scanMs": 34,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 362,
+        "textTokens": 108,
+        "rawChars": 2303,
+        "rawTokens": 632,
+        "ariaChars": 433,
+        "ariaTokens": 138,
+        "compressionVsRaw": 0.15718627876682587,
+        "compressionVsAria": 0.836027713625866
+      },
+      "checks": {
+        "recall": {
+          "visible": 3,
+          "matched": 3,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 4
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 4
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 4
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 4,
+          "secondActions": 4
+        }
+      },
+      "scenarios": [
+        {
+          "name": "select Option 2",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "select",
+                "role": "combobox",
+                "kind": "select",
+                "label": "Dropdown List",
+                "region": "main",
+                "type": "select-one",
+                "options": [
+                  "Please select an option",
+                  "Option 1",
+                  "Option 2"
+                ],
+                "optionCount": 3
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 175,
+              "navigationLost": null,
+              "latencyMs": 538,
+              "ms": 551
+            }
+          ],
+          "latencyMs": 551,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 5258
+    },
+    {
+      "id": "the-internet-add-remove",
+      "url": "https://the-internet.herokuapp.com/add_remove_elements/",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 4,
+        "actionCap": 0,
+        "scanMs": 24,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 328,
+        "textTokens": 94,
+        "rawChars": 2142,
+        "rawTokens": 596,
+        "ariaChars": 359,
+        "ariaTokens": 114,
+        "compressionVsRaw": 0.1531279178338002,
+        "compressionVsAria": 0.9136490250696379
+      },
+      "checks": {
+        "recall": {
+          "visible": 3,
+          "matched": 3,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 4
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 4
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 4
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 4,
+          "secondActions": 4
+        }
+      },
+      "scenarios": [
+        {
+          "name": "add two, ambiguous label, delete one",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Add Element",
+                "region": "main",
+                "type": "submit"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 7782,
+              "navigationLost": null,
+              "latencyMs": 8145,
+              "ms": 8157
+            },
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Add Element",
+                "region": "main",
+                "type": "submit"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 171,
+              "navigationLost": null,
+              "latencyMs": 534,
+              "ms": 546
+            },
+            {
+              "op": "act",
+              "id": "Delete",
+              "action": null,
+              "status": "ambiguous",
+              "ok": true,
+              "failures": [],
+              "actMs": 12,
+              "navigationLost": null,
+              "latencyMs": 380,
+              "ms": 393
+            },
+            {
+              "op": "act",
+              "id": "a5",
+              "action": {
+                "id": "a5",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Delete",
+                "region": "main",
+                "type": "submit"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 172,
+              "navigationLost": null,
+              "latencyMs": 536,
+              "ms": 547
+            }
+          ],
+          "latencyMs": 9643,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 14387
+    },
+    {
+      "id": "the-internet-dynamic-loading",
+      "url": "https://the-internet.herokuapp.com/dynamic_loading/1",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 4,
+        "actionCap": 0,
+        "scanMs": 31,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 374,
+        "textTokens": 108,
+        "rawChars": 2221,
+        "rawTokens": 624,
+        "ariaChars": 420,
+        "ariaTokens": 132,
+        "compressionVsRaw": 0.1683926159387663,
+        "compressionVsAria": 0.8904761904761904
+      },
+      "checks": {
+        "recall": {
+          "visible": 3,
+          "matched": 3,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 4
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 4
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 4
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 4,
+          "secondActions": 4
+        }
+      },
+      "scenarios": [
+        {
+          "name": "Start then wait for Hello World",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Start",
+                "region": "main",
+                "type": "submit"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 7798,
+              "navigationLost": null,
+              "latencyMs": 8156,
+              "ms": 8168
+            }
+          ],
+          "latencyMs": 8168,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 12914
+    },
+    {
+      "id": "the-internet-dynamic-controls",
+      "url": "https://the-internet.herokuapp.com/dynamic_controls",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 7,
+        "actionCap": 0,
+        "scanMs": 26,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 544,
+        "textTokens": 147,
+        "rawChars": 4703,
+        "rawTokens": 1214,
+        "ariaChars": 586,
+        "ariaTokens": 170,
+        "compressionVsRaw": 0.11567084839464171,
+        "compressionVsAria": 0.9283276450511946
+      },
+      "checks": {
+        "recall": {
+          "visible": 6,
+          "matched": 6,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 7
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 7
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 7
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 7,
+          "secondActions": 7
+        }
+      },
+      "scenarios": [
+        {
+          "name": "remove then enable and fill",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a3",
+              "action": {
+                "id": "a3",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Remove",
+                "region": "main",
+                "type": "button"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 11075,
+              "navigationLost": null,
+              "latencyMs": 11432,
+              "ms": 11448
+            },
+            {
+              "op": "act",
+              "id": "a5",
+              "action": {
+                "id": "a5",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Enable",
+                "region": "main",
+                "type": "button"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 172,
+              "navigationLost": null,
+              "latencyMs": 534,
+              "ms": 545
+            },
+            {
+              "op": "wait",
+              "ok": true,
+              "ms": 4000
+            },
+            {
+              "op": "act",
+              "id": "a4",
+              "action": {
+                "id": "a4",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "input",
+                "region": "main",
+                "type": "text"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 171,
+              "navigationLost": null,
+              "latencyMs": 536,
+              "ms": 548
+            }
+          ],
+          "latencyMs": 16543,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 21548
+    },
+    {
+      "id": "the-internet-login",
+      "url": "https://the-internet.herokuapp.com/login",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 8,
+        "actionCap": 0,
+        "scanMs": 27,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 612,
+        "textTokens": 163,
+        "rawChars": 2483,
+        "rawTokens": 697,
+        "ariaChars": 855,
+        "ariaTokens": 235,
+        "compressionVsRaw": 0.24647603705195328,
+        "compressionVsAria": 0.7157894736842105
+      },
+      "checks": {
+        "recall": {
+          "visible": 5,
+          "matched": 5,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [
+            {
+              "id": "a2",
+              "tag": "label",
+              "role": "button",
+              "label": "Username"
+            },
+            {
+              "id": "a4",
+              "tag": "label",
+              "role": "button",
+              "label": "Password"
+            }
+          ],
+          "phantomTotal": 2,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 8
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 8
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 8
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 8,
+          "secondActions": 8
+        }
+      },
+      "scenarios": [
+        {
+          "name": "public test login",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a3",
+              "action": {
+                "id": "a3",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "Username",
+                "region": "main",
+                "type": "text",
+                "name": "username"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 175,
+              "navigationLost": null,
+              "latencyMs": 538,
+              "ms": 552
+            },
+            {
+              "op": "act",
+              "id": "a5",
+              "action": {
+                "id": "a5",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "Password",
+                "region": "main",
+                "type": "password",
+                "name": "password"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 168,
+              "navigationLost": null,
+              "latencyMs": 531,
+              "ms": 545
+            },
+            {
+              "op": "act",
+              "id": "a6",
+              "action": {
+                "id": "a6",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Login",
+                "region": "main",
+                "type": "submit"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 1921,
+              "navigationLost": "page.evaluate: Execution context was destroyed, most likely because of a navigation.",
+              "latencyMs": 2286,
+              "ms": 2297
+            }
+          ],
+          "latencyMs": 3394,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 8025
+    },
+    {
+      "id": "the-internet-hovers",
+      "url": "https://the-internet.herokuapp.com/hovers",
+      "status": "scenario_failures",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 3,
+        "actionCap": 0,
+        "scanMs": 24,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 325,
+        "textTokens": 92,
+        "rawChars": 2490,
+        "rawTokens": 735,
+        "ariaChars": 432,
+        "ariaTokens": 132,
+        "compressionVsRaw": 0.13052208835341367,
+        "compressionVsAria": 0.7523148148148148
+      },
+      "checks": {
+        "recall": {
+          "visible": 2,
+          "matched": 2,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 3
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 3
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 3
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 3,
+          "secondActions": 3
+        }
+      },
+      "scenarios": [
+        {
+          "name": "hover first avatar",
+          "ok": false,
+          "steps": [
+            {
+              "op": "act",
+              "ok": false,
+              "failures": [
+                "target not in last snapshot: {\"tag\":\"img\",\"index\":0}"
+              ],
+              "candidates": [],
+              "ms": 11
+            }
+          ],
+          "latencyMs": 11,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 4624
+    },
+    {
+      "id": "the-internet-key-presses",
+      "url": "https://the-internet.herokuapp.com/key_presses",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 4,
+        "actionCap": 0,
+        "scanMs": 23,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 438,
+        "textTokens": 125,
+        "rawChars": 4096,
+        "rawTokens": 1274,
+        "ariaChars": 484,
+        "ariaTokens": 146,
+        "compressionVsRaw": 0.10693359375,
+        "compressionVsAria": 0.9049586776859504
+      },
+      "checks": {
+        "recall": {
+          "visible": 3,
+          "matched": 3,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 4
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 4
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 4
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 4,
+          "secondActions": 4
+        }
+      },
+      "scenarios": [
+        {
+          "name": "press Enter",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "target",
+                "region": "main",
+                "type": "text"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 176,
+              "navigationLost": null,
+              "latencyMs": 541,
+              "ms": 553
+            }
+          ],
+          "latencyMs": 553,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 5156
+    },
+    {
+      "id": "the-internet-challenging-dom",
+      "url": "https://the-internet.herokuapp.com/challenging_dom",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 26,
+        "actionCap": 0,
+        "scanMs": 29,
+        "sanitized": 7,
+        "modal": false,
+        "textChars": 1530,
+        "textTokens": 598,
+        "rawChars": 7012,
+        "rawTokens": 1977,
+        "ariaChars": 4823,
+        "ariaTokens": 1552,
+        "compressionVsRaw": 0.21819737592698232,
+        "compressionVsAria": 0.3172299398714493
+      },
+      "checks": {
+        "recall": {
+          "visible": 25,
+          "matched": 25,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 26
+            },
+            {
+              "at": "middle",
+              "y": 110,
+              "actions": 26
+            },
+            {
+              "at": "bottom",
+              "y": 221,
+              "actions": 26
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 26,
+          "secondActions": 26
+        }
+      },
+      "scenarios": [
+        {
+          "name": "snapshot and duplicate edit/delete links",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 26,
+              "ms": 18
+            },
+            {
+              "op": "act",
+              "id": "Edit",
+              "action": null,
+              "status": "ambiguous",
+              "ok": true,
+              "failures": [],
+              "actMs": 16,
+              "navigationLost": null,
+              "latencyMs": 372,
+              "ms": 386
+            },
+            {
+              "op": "act",
+              "id": "a5",
+              "action": {
+                "id": "a5",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "edit",
+                "region": "main",
+                "href": "#edit"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 7643,
+              "navigationLost": null,
+              "latencyMs": 8000,
+              "ms": 8017
+            }
+          ],
+          "latencyMs": 8421,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 13063
+    },
+    {
+      "id": "the-internet-large",
+      "url": "https://the-internet.herokuapp.com/large",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 3,
+        "actionCap": 0,
+        "scanMs": 101,
+        "sanitized": 50,
+        "modal": false,
+        "textChars": 1984,
+        "textTokens": 1354,
+        "rawChars": 182711,
+        "rawTokens": 48699,
+        "ariaChars": 69200,
+        "ariaTokens": 31451,
+        "compressionVsRaw": 0.010858678459424993,
+        "compressionVsAria": 0.028670520231213872
+      },
+      "checks": {
+        "recall": {
+          "visible": 2,
+          "matched": 2,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 3
+            },
+            {
+              "at": "middle",
+              "y": 1801,
+              "actions": 3
+            },
+            {
+              "at": "bottom",
+              "y": 3602,
+              "actions": 3
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 3,
+          "secondActions": 3
+        }
+      },
+      "scenarios": [
+        {
+          "name": "50x50 table snapshot",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 3,
+              "ms": 89
+            }
+          ],
+          "latencyMs": 89,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 5641
+    },
+    {
+      "id": "the-internet-shadowdom",
+      "url": "https://the-internet.herokuapp.com/shadowdom",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 3,
+        "actionCap": 0,
+        "scanMs": 27,
+        "sanitized": 2,
+        "modal": false,
+        "textChars": 415,
+        "textTokens": 116,
+        "rawChars": 2603,
+        "rawTokens": 690,
+        "ariaChars": 463,
+        "ariaTokens": 139,
+        "compressionVsRaw": 0.15943142527852477,
+        "compressionVsAria": 0.896328293736501
+      },
+      "checks": {
+        "recall": {
+          "visible": 2,
+          "matched": 2,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 3
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 3
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 3
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 3,
+          "secondActions": 3
+        }
+      },
+      "scenarios": [
+        {
+          "name": "shadow DOM snapshot",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 3,
+              "ms": 12
+            }
+          ],
+          "latencyMs": 12,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 4636
+    },
+    {
+      "id": "the-internet-iframe",
+      "url": "https://the-internet.herokuapp.com/iframe",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 22,
+        "actionCap": 0,
+        "scanMs": 39,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 914,
+        "textTokens": 273,
+        "rawChars": 15019,
+        "rawTokens": 6634,
+        "ariaChars": 1448,
+        "ariaTokens": 395,
+        "compressionVsRaw": 0.060856248751581334,
+        "compressionVsAria": 0.6312154696132597
+      },
+      "checks": {
+        "recall": {
+          "visible": 20,
+          "matched": 20,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [
+            {
+              "id": "a18",
+              "tag": "body",
+              "role": "textbox",
+              "label": "Rich Text Area. Press ALT-0 for help."
+            }
+          ],
+          "phantomTotal": 1,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 22
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 22
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 22
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 22,
+          "secondActions": 22
+        }
+      },
+      "scenarios": [
+        {
+          "name": "iframe snapshot",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 22,
+              "ms": 22
+            }
+          ],
+          "latencyMs": 22,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 5069
+    },
+    {
+      "id": "the-internet-nested-frames",
+      "url": "https://the-internet.herokuapp.com/nested_frames",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 0,
+        "actionCap": 0,
+        "scanMs": 2,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 82,
+        "textTokens": 22,
+        "rawChars": 261,
+        "rawTokens": 78,
+        "ariaChars": 0,
+        "ariaTokens": 0,
+        "compressionVsRaw": 0.31417624521072796,
+        "compressionVsAria": null
+      },
+      "checks": {
+        "recall": {
+          "visible": 0,
+          "matched": 0,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 0
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 0
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 0
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 0,
+          "secondActions": 0
+        }
+      },
+      "scenarios": [
+        {
+          "name": "nested frames snapshot",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 0,
+              "ms": 2
+            }
+          ],
+          "latencyMs": 2,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 33418
+    },
+    {
+      "id": "the-internet-alerts",
+      "url": "https://the-internet.herokuapp.com/javascript_alerts",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 6,
+        "actionCap": 0,
+        "scanMs": 19,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 557,
+        "textTokens": 146,
+        "rawChars": 2595,
+        "rawTokens": 730,
+        "ariaChars": 626,
+        "ariaTokens": 181,
+        "compressionVsRaw": 0.21464354527938342,
+        "compressionVsAria": 0.889776357827476
+      },
+      "checks": {
+        "recall": {
+          "visible": 5,
+          "matched": 5,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 6
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 6
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 6
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 6,
+          "secondActions": 6
+        }
+      },
+      "scenarios": [
+        {
+          "name": "JS alert does not hang act",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Click for JS Alert",
+                "region": "main",
+                "type": "submit"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 7963,
+              "navigationLost": null,
+              "latencyMs": 8319,
+              "ms": 8330
+            }
+          ],
+          "latencyMs": 8330,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [
+        {
+          "type": "alert",
+          "message": "I am a JS Alert"
+        }
+      ],
+      "totalMs": 13051
+    },
+    {
+      "id": "the-internet-upload",
+      "url": "https://the-internet.herokuapp.com/upload",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 5,
+        "actionCap": 0,
+        "scanMs": 18,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 430,
+        "textTokens": 124,
+        "rawChars": 2859,
+        "rawTokens": 808,
+        "ariaChars": 470,
+        "ariaTokens": 141,
+        "compressionVsRaw": 0.15040223854494578,
+        "compressionVsAria": 0.9148936170212766
+      },
+      "checks": {
+        "recall": {
+          "visible": 4,
+          "matched": 4,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 5
+            },
+            {
+              "at": "middle",
+              "y": 30,
+              "actions": 5
+            },
+            {
+              "at": "bottom",
+              "y": 61,
+              "actions": 5
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 5,
+          "secondActions": 5
+        }
+      },
+      "scenarios": [
+        {
+          "name": "file input is visible",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 5,
+              "ms": 12
+            }
+          ],
+          "latencyMs": 12,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 4613
+    },
+    {
+      "id": "the-internet-infinite-scroll",
+      "url": "https://the-internet.herokuapp.com/infinite_scroll",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 3,
+        "actionCap": 0,
+        "scanMs": 26,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 697,
+        "textTokens": 167,
+        "rawChars": 6121,
+        "rawTokens": 1374,
+        "ariaChars": 4333,
+        "ariaTokens": 882,
+        "compressionVsRaw": 0.11387028263355661,
+        "compressionVsAria": 0.16085852757904454
+      },
+      "checks": {
+        "recall": {
+          "visible": 2,
+          "matched": 2,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 3
+            },
+            {
+              "at": "middle",
+              "y": 145,
+              "actions": 3
+            },
+            {
+              "at": "bottom",
+              "y": 291,
+              "actions": 3
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 3,
+          "secondActions": 3
+        }
+      },
+      "scenarios": [
+        {
+          "name": "scroll bottom loads more paragraphs",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 3,
+              "ms": 9
+            },
+            {
+              "op": "scroll",
+              "ok": true,
+              "y": 691
+            },
+            {
+              "op": "wait",
+              "ok": true,
+              "ms": 1500
+            },
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 3,
+              "ms": 13
+            }
+          ],
+          "latencyMs": 2140,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "totalMs": 6728
+    }
+  ]
+}

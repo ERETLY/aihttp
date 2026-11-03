@@ -1,0 +1,365 @@
+{
+  "defaults": {
+    "pauseMs": 1200,
+    "timeoutMs": 20000,
+    "userAgent": "ahttp-realworld-test (+https://github.com/ERETLY/ahttp)"
+  },
+  "sites": [
+    {
+      "id": "example",
+      "url": "https://example.com/",
+      "scenarios": [
+        { "name": "baseline snapshot", "steps": [ { "op": "snapshot", "expect": { "text": ["This domain is for use in documentation"] } } ] }
+      ]
+    },
+    {
+      "id": "the-internet-checkboxes",
+      "url": "https://the-internet.herokuapp.com/checkboxes",
+      "scenarios": [
+        {
+          "name": "toggle first checkbox",
+          "steps": [
+            { "op": "act", "target": { "tag": "input", "type": "checkbox", "index": 0 }, "payload": { "checked": true },
+              "expect": { "status": "ok", "dom": [ { "selector": "#checkboxes input", "index": 0, "prop": "checked", "equals": true } ] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "the-internet-dropdown",
+      "url": "https://the-internet.herokuapp.com/dropdown",
+      "scenarios": [
+        {
+          "name": "select Option 2",
+          "steps": [
+            { "op": "act", "target": { "tag": "select", "index": 0 }, "payload": { "value": "2" },
+              "expect": { "status": "ok", "dom": [ { "selector": "#dropdown", "prop": "value", "equals": "2" } ] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "the-internet-add-remove",
+      "url": "https://the-internet.herokuapp.com/add_remove_elements/",
+      "scenarios": [
+        {
+          "name": "add two, ambiguous label, delete one",
+          "steps": [
+            { "op": "act", "target": { "role": "button", "name": "Add Element" }, "expect": { "status": "ok", "count": [ { "selector": "button", "contains": "Delete", "equals": 1 } ] } },
+            { "op": "act", "target": { "role": "button", "name": "Add Element" }, "expect": { "status": "ok", "count": [ { "selector": "button", "contains": "Delete", "equals": 2 } ] } },
+            { "op": "act", "target": { "raw": "Delete" }, "expect": { "status": "ambiguous", "candidatesAtLeast": 2, "count": [ { "selector": "button", "contains": "Delete", "equals": 2 } ] } },
+            { "op": "act", "target": { "role": "button", "name": "Delete", "index": 0 }, "expect": { "status": "ok", "count": [ { "selector": "button", "contains": "Delete", "equals": 1 } ] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "the-internet-dynamic-loading",
+      "url": "https://the-internet.herokuapp.com/dynamic_loading/1",
+      "scenarios": [
+        {
+          "name": "Start then wait for Hello World",
+          "steps": [
+            { "op": "act", "target": { "tag": "button", "name": "Start" }, "payload": { "expect": { "textAdded": ["Hello World!"] }, "timeout": 10000 },
+              "expect": { "status": "ok", "text": ["Hello World!"] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "the-internet-dynamic-controls",
+      "url": "https://the-internet.herokuapp.com/dynamic_controls",
+      "scenarios": [
+        {
+          "name": "remove then enable and fill",
+          "steps": [
+            { "op": "act", "target": { "role": "button", "name": "Remove" }, "expect": { "status": "ok", "text": ["It's gone!"] } },
+            { "op": "act", "target": { "role": "button", "name": "Enable" }, "expect": { "status": "ok" } },
+            { "op": "wait", "ms": 4000 },
+            { "op": "act", "target": { "tag": "input", "type": "text", "index": 0 }, "payload": { "value": "hello" },
+              "expect": { "status": "ok", "dom": [ { "selector": "#input-example input", "prop": "value", "equals": "hello" } ] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "the-internet-login",
+      "url": "https://the-internet.herokuapp.com/login",
+      "scenarios": [
+        {
+          "name": "public test login",
+          "steps": [
+            { "op": "act", "target": { "selector": "#username" }, "payload": { "value": "tomsmith" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "selector": "#password" }, "payload": { "value": "SuperSecretPassword!" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "role": "button", "name": "Login" }, "expect": { "status": "ok", "urlContains": "/secure", "text": ["You logged into a secure area!"] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "the-internet-hovers",
+      "url": "https://the-internet.herokuapp.com/hovers",
+      "scenarios": [
+        {
+          "name": "hover first avatar",
+          "steps": [
+            { "op": "act", "target": { "tag": "img", "index": 0 }, "payload": { "hover": true }, "expect": { "status": "ok", "text": ["name: user1"] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "the-internet-key-presses",
+      "url": "https://the-internet.herokuapp.com/key_presses",
+      "scenarios": [
+        {
+          "name": "press Enter",
+          "steps": [
+            { "op": "act", "target": { "tag": "input", "index": 0 }, "payload": { "key": "Enter" }, "expect": { "status": "ok", "text": ["You entered: ENTER"] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "the-internet-challenging-dom",
+      "url": "https://the-internet.herokuapp.com/challenging_dom",
+      "scenarios": [
+        {
+          "name": "snapshot and duplicate edit/delete links",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["Challenging DOM"] } },
+            { "op": "act", "target": { "raw": "Edit" }, "expect": { "status": "ambiguous", "candidatesAtLeast": 2 } },
+            { "op": "act", "target": { "role": "link", "name": "Edit", "index": 0 }, "expect": { "status": "ok" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "the-internet-large",
+      "url": "https://the-internet.herokuapp.com/large",
+      "scenarios": [
+        { "name": "50x50 table snapshot", "steps": [ { "op": "snapshot", "expect": { "text": ["Large & Deep DOM"] } } ] }
+      ]
+    },
+    {
+      "id": "the-internet-shadowdom",
+      "url": "https://the-internet.herokuapp.com/shadowdom",
+      "scenarios": [
+        { "name": "shadow DOM snapshot", "steps": [ { "op": "snapshot" } ] }
+      ]
+    },
+    {
+      "id": "the-internet-iframe",
+      "url": "https://the-internet.herokuapp.com/iframe",
+      "scenarios": [
+        { "name": "iframe snapshot", "steps": [ { "op": "snapshot" } ] }
+      ]
+    },
+    {
+      "id": "the-internet-nested-frames",
+      "url": "https://the-internet.herokuapp.com/nested_frames",
+      "scenarios": [
+        { "name": "nested frames snapshot", "steps": [ { "op": "snapshot" } ] }
+      ]
+    },
+    {
+      "id": "the-internet-alerts",
+      "url": "https://the-internet.herokuapp.com/javascript_alerts",
+      "scenarios": [
+        {
+          "name": "JS alert does not hang act",
+          "steps": [
+            { "op": "act", "target": { "role": "button", "name": "Click for JS Alert" }, "expect": { "status": "ok", "text": ["You successfully clicked an alert"], "dialog": "alert" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "the-internet-upload",
+      "url": "https://the-internet.herokuapp.com/upload",
+      "scenarios": [
+        {
+          "name": "file input is visible",
+          "steps": [
+            { "op": "snapshot", "expect": { "dom": [ { "selector": "input[type=file]", "prop": "exists", "equals": true } ] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "the-internet-infinite-scroll",
+      "url": "https://the-internet.herokuapp.com/infinite_scroll",
+      "scenarios": [
+        {
+          "name": "scroll bottom loads more paragraphs",
+          "steps": [
+            { "op": "snapshot", "label": "before" },
+            { "op": "scroll", "to": "bottom" },
+            { "op": "wait", "ms": 1500 },
+            { "op": "snapshot", "label": "after", "expect": { "dom": [ { "selector": ".jscroll-added", "prop": "exists", "equals": true } ] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "todomvc-react",
+      "url": "https://todomvc.com/examples/react/dist/",
+      "scenarios": [
+        {
+          "name": "add three, toggle, filters, clear",
+          "steps": [
+            { "op": "act", "target": { "tag": "input", "type": "text", "index": 0 }, "payload": { "value": "Task one" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "tag": "input", "type": "text", "index": 0 }, "payload": { "key": "Enter" }, "expect": { "status": "ok", "text": ["Task one"] } },
+            { "op": "act", "target": { "tag": "input", "type": "text", "index": 0 }, "payload": { "value": "Task two" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "tag": "input", "type": "text", "index": 0 }, "payload": { "key": "Enter" }, "expect": { "status": "ok", "text": ["Task two"] } },
+            { "op": "act", "target": { "tag": "input", "type": "text", "index": 0 }, "payload": { "value": "Task three" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "tag": "input", "type": "text", "index": 0 }, "payload": { "key": "Enter" }, "expect": { "status": "ok", "text": ["Task three"] } },
+            { "op": "act", "target": { "tag": "input", "type": "checkbox", "index": 0 }, "payload": { "checked": true }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "tag": "a", "name": "Active" }, "expect": { "status": "ok", "text": ["Task one", "Task two"] } },
+            { "op": "act", "target": { "tag": "a", "name": "Completed" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "role": "button", "name": "Clear completed" }, "expect": { "status": "ok" } }
+          ]
+        },
+        {
+          "name": "stale ids across a filter rerender",
+          "steps": [
+            { "op": "act", "target": { "tag": "input", "type": "text", "index": 0 }, "payload": { "value": "Stale one" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "tag": "input", "type": "text", "index": 0 }, "payload": { "key": "Enter" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "tag": "a", "name": "Active" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "tag": "a", "name": "All" }, "stale": true, "expect": { "status": "ok" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "saucedemo",
+      "url": "https://www.saucedemo.com/",
+      "scenarios": [
+        {
+          "name": "public test login, add two, sort, cart",
+          "steps": [
+            { "op": "act", "target": { "selector": "#user-name" }, "payload": { "value": "standard_user" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "selector": "#password" }, "payload": { "value": "secret_sauce" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "selector": "#login-button" }, "expect": { "status": "ok", "urlContains": "/inventory.html" } },
+            { "op": "act", "target": { "role": "button", "name": "Add to cart", "index": 0 }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "role": "button", "name": "Add to cart", "index": 0 }, "expect": { "status": "ok" } },
+            { "op": "snapshot", "expect": { "dom": [ { "selector": ".shopping_cart_badge", "prop": "text", "equals": "2" } ] } },
+            { "op": "act", "target": { "tag": "select", "index": 0 }, "payload": { "value": "lohi" },
+              "expect": { "status": "ok", "dom": [ { "selector": ".inventory_item_name", "index": 0, "prop": "text", "equals": "Sauce Labs Onesie" } ] } },
+            { "op": "act", "target": { "tag": "a", "hrefContains": "cart.html" }, "expect": { "status": "ok", "urlContains": "/cart.html", "text": ["Your Cart"] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "books-toscrape",
+      "url": "https://books.toscrape.com/",
+      "scenarios": [
+        {
+          "name": "open first book",
+          "steps": [
+            { "op": "act", "target": { "tag": "a", "name": "A Light in the Attic" }, "expect": { "status": "ok", "urlContains": "a-light-in-the-attic", "text": ["In stock"] } }
+          ]
+        },
+        {
+          "name": "category and next page",
+          "steps": [
+            { "op": "goto", "url": "https://books.toscrape.com/" },
+            { "op": "act", "target": { "tag": "a", "name": "Travel" }, "expect": { "status": "ok", "urlContains": "/category/books/travel" } },
+            { "op": "act", "target": { "tag": "a", "name": "next" }, "expect": { "status": "ok", "urlContains": "page-2" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "httpbin-form",
+      "url": "https://httpbin.org/forms/post",
+      "scenarios": [
+        {
+          "name": "fill and submit form",
+          "steps": [
+            { "op": "act", "target": { "tag": "input", "name": "Customer name" }, "payload": { "value": "ahttp" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "tag": "input", "name": "Telephone" }, "payload": { "value": "12345" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "tag": "input", "name": "E-mail address" }, "payload": { "value": "ahttp@example.com" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "tag": "input", "type": "radio", "index": 1 }, "payload": { "checked": true }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "tag": "input", "type": "checkbox", "index": 0 }, "payload": { "checked": true }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "role": "button", "name": "Submit order" }, "payload": { "timeout": 15000 }, "expect": { "status": "ok", "text": ["ahttp@example.com"] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wikipedia-http",
+      "url": "https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol",
+      "scenarios": [
+        {
+          "name": "search field and article",
+          "steps": [
+            { "op": "act", "target": { "tag": "input", "name": "Search" }, "payload": { "value": "Hypertext Transfer Protocol" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "tag": "input", "name": "Search" }, "payload": { "key": "Enter" }, "expect": { "status": "ok", "urlContains": "Hypertext_Transfer_Protocol" } },
+            { "op": "scroll", "to": "bottom" },
+            { "op": "snapshot", "expect": { "text": ["Hypertext Transfer Protocol"] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hacker-news",
+      "url": "https://news.ycombinator.com/",
+      "scenarios": [
+        {
+          "name": "first comments link",
+          "steps": [
+            { "op": "act", "target": { "tag": "a", "name": "comments", "index": 0 }, "expect": { "status": "ok", "urlContains": "item?id=" } }
+          ]
+        },
+        {
+          "name": "More pagination",
+          "steps": [
+            { "op": "goto", "url": "https://news.ycombinator.com/" },
+            { "op": "act", "target": { "tag": "a", "name": "More" }, "expect": { "status": "ok", "urlContains": "p=2" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "github-ahttp",
+      "url": "https://github.com/ERETLY/ahttp",
+      "scenarios": [
+        {
+          "name": "snapshot repo and Issues tab",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["ahttp"] } },
+            { "op": "act", "target": { "role": "link", "name": "Issues" }, "expect": { "status": "ok", "urlContains": "/issues" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mdn-http",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
+      "scenarios": [
+        {
+          "name": "snapshot and search control",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["HTTP"] } },
+            { "op": "act", "target": { "nameContains": "Search" }, "expect": { "status": "ok" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bbc-news",
+      "url": "https://www.bbc.com/",
+      "scenarios": [
+        {
+          "name": "cookie banner and snapshot",
+          "steps": [
+            { "op": "snapshot", "label": "banner" },
+            { "op": "act", "target": { "nameContains": "Reject" }, "expect": { "status": "ok" } }
+          ]
+        }
+      ]
+    }
+  ]
+}
