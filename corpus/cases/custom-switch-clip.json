@@ -1,0 +1,32 @@
+{
+  "id": "custom-switch-clip",
+  "html": "fixtures/custom-switch-clip.html",
+  "url": "https://corpus.test/custom-switch",
+  "notes": "1x1 clip/clip-path checkbox with a separate label[for]",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ],
+      "expectText": [
+        "Email notifications"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "payload": {
+        "checked": true
+      },
+      "targetHint": "Email notifications switch",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "checked"
+        }
+      }
+    }
+  ]
+}

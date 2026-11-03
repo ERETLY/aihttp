@@ -67,7 +67,7 @@
     left: '', top: '', color: '', background: '', clip: '', clipPath: '',
     textIndent: '', cursor: '', overflow: '', inline: null, empty: true
   };
-  var EMPTY_CSS = { hidden: false, pointer: false };
+  var EMPTY_CSS = { hidden: false, pointer: false, hard: false };
   var SHA256_K = [
     0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
     0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
@@ -870,10 +870,10 @@
     var sheets = [];
     try { sheets = doc.styleSheets || []; } catch (e) { sheets = []; }
     var order = 0;
-    function addRule(sel, hide, pointer) {
+    function addRule(sel, hide, pointer, hard) {
       order++;
       idx.rules++;
-      var rule = { sel: sel, order: order, hide: hide, pointer: pointer };
+      var rule = { sel: sel, order: order, hide: hide, pointer: pointer, hard: !!hard };
       var key = selectorKey(sel);
       var arr = idx.buckets.get(key);
       if (!arr) { arr = []; idx.buckets.set(key, arr); }
@@ -890,9 +890,10 @@
         var visibility = cssProp(st, 'visibility').toLowerCase().trim();
         var opacity = cssProp(st, 'opacity').trim();
         var cursor = cssProp(st, 'cursor').toLowerCase().trim();
-        var hide = display === 'none' || visibility === 'hidden' || visibility === 'collapse' || isZeroOpacity(opacity);
+        var hard = display === 'none' || visibility === 'hidden' || visibility === 'collapse';
+        var hide = hard || isZeroOpacity(opacity);
         var pointer = cursor === 'pointer';
-        if (hide || pointer) addRule(rule.selectorText, hide, pointer);
+        if (hide || pointer) addRule(rule.selectorText, hide, pointer, hard);
       }
       var nested = cssRulesOf(rule);
       if (nested) {
@@ -911,7 +912,7 @@
     if (!ctx.css || !ctx.css.buckets.size) return EMPTY_CSS;
     var cached = ctx.cssCache.get(el);
     if (cached) return cached;
-    var result = { hidden: false, pointer: false };
+    var result = { hidden: false, pointer: false, hard: false };
     var css = ctx.css;
     if (css && css.buckets.size) {
       var tokens = tokensOf(el);
@@ -919,6 +920,7 @@
       seen.clear();
       var bestHide = 0;
       var bestPointer = 0;
+      var hardHide = false;
       for (var i = 0; i < tokens.length; i++) {
         var arr = css.buckets.get(tokens[i]);
         if (!arr) continue;
@@ -928,11 +930,13 @@
           seen.add(rule);
           if (!matches(el, rule.sel)) continue;
           if (rule.hide && rule.order > bestHide) bestHide = rule.order;
+          if (rule.hide && rule.hard) hardHide = true;
           if (rule.pointer && rule.order > bestPointer) bestPointer = rule.order;
         }
       }
       result.hidden = bestHide > 0;
       result.pointer = bestPointer > 0;
+      result.hard = hardHide;
     }
     ctx.cssCache.set(el, result);
     return result;
@@ -1194,6 +1198,141 @@
       node = parentOf(node);
     }
     return false;
+  }
+
+  // Native checkboxes and radios are commonly hidden with clip/opacity/size
+  // tricks and operated through a visible label (Bootstrap, Material, Ant,
+  // Tailwind sr-only). Such a control is real if only soft heuristics hide it
+  // and a visible label names it. Hard hiding and a hidden/missing label keep
+  // it out of the snapshot.
+  function toggleType(el) {
+    if (tagOf(el) !== 'input') return '';
+    var type = String(el.type || attr(el, 'type') || '').toLowerCase();
+    return type === 'checkbox' || type === 'radio' ? type : '';
+  }
+
+  function labelIsVisible(node, ctx) {
+    if (!node || node.nodeType !== 1) return false;
+    if (!normText(textOf(node))) return false;
+    return !deepHiddenReason(node, ctx);
+  }
+
+  function labelTargets(el) {
+    var out = [];
+    var node = parentOf(el);
+    var guard = 0;
+    while (node && guard++ < 8) {
+      if (tagOf(node) === 'label') { out.push(node); break; }
+      node = parentOf(node);
+    }
+    var id = attr(el, 'id');
+    if (id) {
+      var root = null;
+      try { root = el.getRootNode ? el.getRootNode() : null; } catch (e) { root = null; }
+      var doc = el.ownerDocument || root;
+      var selector = 'label[for="' + escapeSel(id) + '"]';
+      var list = [];
+      if (root && root.querySelectorAll) {
+        try { list = root.querySelectorAll(selector); } catch (e) { list = []; }
+      }
+      if (!list.length && doc && doc.querySelectorAll) {
+        try { list = doc.querySelectorAll(selector); } catch (e) { list = []; }
+      }
+      for (var i = 0; i < list.length; i++) if (out.indexOf(list[i]) < 0) out.push(list[i]);
+    }
+    var labelledBy = attr(el, 'aria-labelledby');
+    if (labelledBy) {
+      var ids = labelledBy.split(/\s+/);
+      for (var j = 0; j < ids.length; j++) {
+        var target = byId(el, ids[j]);
+        if (target && out.indexOf(target) < 0) out.push(target);
+      }
+    }
+    return out;
+  }
+
+  // A native checkbox/radio whose only name is aria-label has no label element
+  // to check for visibility. It may stay only when the page really has layout,
+  // the control itself is a real box inside the page, and opacity is the only
+  // thing hiding it. A 1x1 or off-screen input with aria-label is an invisible
+  // prompt-injection channel, not a control; a MUI overlay is the real case.
+  function ariaLabelOnlyToggleVisible(el, ctx) {
+    if (!ctx.layout) return false;
+    var doc = el.ownerDocument || S.doc;
+    if (!doc || !detectLayout(doc)) return false;
+    var st = styleOf(el, ctx);
+    if (pxNum(st.fontSize) === 0) return false;
+    var clip = String(st.clip || '').toLowerCase();
+    if (clip && clip !== 'auto' && clip !== 'none') return false;
+    var clipPath = String(st.clipPath || '').toLowerCase();
+    if (clipPath && clipPath !== 'none') return false;
+    var indent = pxNum(st.textIndent);
+    if (indent != null && indent <= -999) return false;
+    var left = pxNum(st.left);
+    var top = pxNum(st.top);
+    if ((st.position === 'absolute' || st.position === 'fixed') &&
+        ((left != null && left <= -999) || (top != null && top <= -999))) return false;
+    var rect = null;
+    try { rect = el.getBoundingClientRect ? el.getBoundingClientRect() : null; } catch (e) { rect = null; }
+    if (!rect || !(rect.width >= 12) || !(rect.height >= 12)) return false;
+    var offset = st.position === 'fixed' ? { x: 0, y: 0 } : scrollOffset(ctx.win || doc.defaultView || null);
+    var x1 = rect.left + offset.x;
+    var y1 = rect.top + offset.y;
+    var x2 = rect.right + offset.x;
+    var y2 = rect.bottom + offset.y;
+    if (x2 <= 0 || y2 <= 0) return false;
+    var docEl = doc.documentElement || null;
+    var body = doc.body || null;
+    var win = doc.defaultView || null;
+    var width = Math.max((docEl && docEl.scrollWidth) || 0, (body && body.scrollWidth) || 0, (win && win.innerWidth) || 0);
+    var height = Math.max((docEl && docEl.scrollHeight) || 0, (body && body.scrollHeight) || 0, (win && win.innerHeight) || 0);
+    if (width > 0 && x1 >= width) return false;
+    if (height > 0 && y1 >= height) return false;
+    return true;
+  }
+
+  function hasVisibleToggleLabel(el, ctx) {
+    var targets = labelTargets(el);
+    for (var i = 0; i < targets.length; i++) {
+      if (labelIsVisible(targets[i], ctx)) return true;
+    }
+    if (targets.length) return false;
+    if (normText(attr(el, 'aria-label'))) return ariaLabelOnlyToggleVisible(el, ctx);
+    return false;
+  }
+
+  // Hard hiding wins over the soft-toggle escape. This covers the element, every
+  // ancestor, and stylesheet rules, but not the clip/opacity/size heuristics.
+  function hardHidden(el, ctx) {
+    var node = el;
+    var child = null;
+    var guard = 0;
+    while (node && node.nodeType === 1 && guard++ < 60) {
+      var tag = tagOf(node);
+      if (node.hidden) return true;
+      if (tag === 'dialog' && !hasAttr(node, 'open')) return true;
+      if (attr(node, 'aria-hidden') === 'true') return true;
+      if (hasAttr(node, 'inert')) return true;
+      if (tag === 'details' && !node.open && child && tagOf(child) !== 'summary') return true;
+      var st = styleOf(node, ctx);
+      if (st.display === 'none' || st.visibility === 'hidden' || st.visibility === 'collapse') return true;
+      var inline = st.inline || {};
+      var inlineOverrides = (inline.display && String(inline.display).toLowerCase() !== 'none') ||
+        (inline.visibility && ['hidden', 'collapse'].indexOf(String(inline.visibility).toLowerCase()) < 0);
+      if (!inlineOverrides && ctx.css) {
+        var css = cssState(node, ctx);
+        if (css.hidden && css.hard) return true;
+      }
+      child = node;
+      node = parentOf(node);
+    }
+    return false;
+  }
+
+  function recoverableToggle(el, ctx, reason) {
+    if (!reason || !toggleType(el)) return false;
+    if (hardHidden(el, ctx)) return false;
+    return hasVisibleToggleLabel(el, ctx);
   }
 
   function regionOf(el, current) {
@@ -1633,11 +1772,13 @@
     if (hasAttr(el, 'data-ahttp-ignore')) { ctx.ignored++; return 0; }
     var reason = hiddenReason(el, ctx);
     if (reason) {
-      if (reason.suspicious) {
-        var hiddenTexts = countTextNodes(el, 50);
-        if (hiddenTexts > 0) ctx.sanitized += hiddenTexts;
+      if (!recoverableToggle(el, ctx, reason)) {
+        if (reason.suspicious) {
+          var hiddenTexts = countTextNodes(el, 50);
+          if (hiddenTexts > 0) ctx.sanitized += hiddenTexts;
+        }
+        return 0;
       }
-      return 0;
     }
     var ownConfirm = confirmWarn;
     if (hasAttr(el, 'data-ahttp-confirm')) {
@@ -2240,11 +2381,10 @@
       }
     }
     if (!fp || !cand) return { score: -1, content: 0, signals: [] };
-    // A different action kind is not the same control. A disabled node is not
-    // an active target: refuse rather than dispatch into a control that is
-    // visibly unable to run.
+    // A different action kind is not the same control. Disabled candidates are
+    // scored so they can make a near-tie ambiguous, but relocate() never
+    // chooses one as the winner.
     if (fp.kind && cand.kind !== fp.kind) return { score: -1, content: 0, signals: [] };
-    if (cand.disabled) return { score: -1, content: 0, signals: [] };
 
     if (fp.intent && cand.intent === fp.intent) hit('intent', weights.intent);
     if ((fp.testid && cand.testid === fp.testid) ||
@@ -2330,7 +2470,8 @@
       name: item.entry.label,
       tag: item.entry.tag,
       score: item.score,
-      signals: item.signals
+      signals: item.signals,
+      disabled: !!item.entry.disabled
     };
   }
 
@@ -2349,27 +2490,44 @@
       var match = scoreMatch(fp, cand);
       if (match.score <= 0) return;
       if (!hasContentSignal(match.signals)) return;
-      scored.push({ entry: cand, score: match.score, content: match.content, signals: match.signals });
+      scored.push({
+        entry: cand,
+        score: match.score,
+        content: match.content,
+        signals: match.signals,
+        disabled: !!cand.disabled
+      });
     });
     scored.sort(function (a, b) {
       if (b.score !== a.score) return b.score - a.score;
       return (a.entry.order || 0) - (b.entry.order || 0);
     });
-    var best = scored[0] || null;
-    var second = scored[1] || null;
+    // A disabled candidate participates in the score so a disabled twin makes
+    // the choice ambiguous, but it is never the winner. With no active
+    // candidate there is nothing safe to dispatch into.
+    var best = null;
+    var i;
+    for (i = 0; i < scored.length; i++) {
+      if (!scored[i].disabled) { best = scored[i]; break; }
+    }
+    var strongest = scored[0] || null;
     if (!best || best.score < MATCH.ambiguous) {
-      return { status: 'not_found', candidates: [], bestScore: best ? best.score : 0, secondScore: second ? second.score : 0 };
+      return {
+        status: 'not_found',
+        candidates: [],
+        bestScore: best ? best.score : 0,
+        secondScore: strongest && strongest !== best ? strongest.score : 0
+      };
     }
-    var ahead = !second || (best.score - second.score) >= MATCH.margin;
-    // Position cannot choose between candidates: the winner must also lead every
-    // other candidate on content evidence (names, anchors, text), not only on
-    // the runner-up by total score.
-    var otherContent = 0;
-    for (var i = 1; i < scored.length; i++) {
-      if (scored[i].content > otherContent) otherContent = scored[i].content;
+    // The winner must clearly lead every other candidate, active or disabled,
+    // on both total score and content evidence. Position can only break a tie.
+    var ahead = true;
+    for (i = 0; i < scored.length; i++) {
+      if (scored[i] === best) continue;
+      if ((best.score - scored[i].score) < MATCH.margin) ahead = false;
+      if ((best.content - scored[i].content) < MATCH.contentMargin) ahead = false;
     }
-    var contentAhead = scored.length < 2 || (best.content - otherContent) >= MATCH.contentMargin;
-    if (best.score >= MATCH.accept && ahead && contentAhead) {
+    if (best.score >= MATCH.accept && ahead) {
       var cand = best.entry;
       var node = cand.node;
       S.registry.delete(cand.id);
@@ -2381,8 +2539,37 @@
       status: 'ambiguous',
       candidates: scored.slice(0, MATCH.maxCandidates).map(publicCandidate),
       bestScore: best.score,
-      secondScore: second ? second.score : 0
+      secondScore: strongest && strongest !== best ? strongest.score : 0
     };
+  }
+
+  function lookupCandidate(entry, score, signal) {
+    return {
+      id: entry.id,
+      role: entry.role,
+      name: entry.label,
+      tag: entry.tag,
+      score: score,
+      signals: [signal]
+    };
+  }
+
+  function labelLookup(key) {
+    var lower = key.toLowerCase();
+    var intents = [];
+    var exact = [];
+    var loose = [];
+    S.registry.forEach(function (cand) {
+      if (cand.intent && String(cand.intent).toLowerCase() === lower) intents.push(cand);
+      if (cand.label) {
+        if (cand.label === key) exact.push(cand);
+        if (String(cand.label).toLowerCase() === lower) loose.push(cand);
+      }
+    });
+    if (intents.length) return { matches: intents, score: MATCH.weights.intent, signal: 'intent' };
+    if (exact.length) return { matches: exact, score: MATCH.weights.accessibleName, signal: 'name' };
+    if (loose.length) return { matches: loose, score: MATCH.weights.accessibleName - 5, signal: 'name~' };
+    return null;
   }
 
   function resolveEntry(id) {
@@ -2390,12 +2577,17 @@
     var key = String(id).replace(/^\[|\]$/g, '');
     var entry = S.registry.get(key);
     if (!entry) {
-      var lower = key.toLowerCase();
-      S.registry.forEach(function (cand) {
-        if (entry) return;
-        if (cand.intent && String(cand.intent).toLowerCase() === lower) entry = cand;
-        else if (cand.label && String(cand.label).toLowerCase() === lower) entry = cand;
-      });
+      var lookup = labelLookup(key);
+      if (lookup && lookup.matches.length > 1) {
+        return {
+          status: 'ambiguous',
+          id: String(id),
+          candidates: lookup.matches.slice(0, MATCH.maxCandidates).map(function (cand) {
+            return lookupCandidate(cand, lookup.score, lookup.signal);
+          })
+        };
+      }
+      if (lookup) entry = lookup.matches[0];
     }
     if (!entry) return { status: 'not_found', reason: 'unknown_action' };
     if (entry.node && connected(entry.node) && inCurrentScan(entry)) {
@@ -3014,14 +3206,14 @@
         };
       }
       if (resolved.status === 'ambiguous') {
-        var stale = resolved.entry;
+        var stale = resolved.entry || null;
         return {
           ok: false,
           error: 'ambiguous',
           status: 'ambiguous',
-          id: stale.id,
-          action: actionInfo(stale, stale.kind),
-          targetHint: p.targetHint != null ? String(p.targetHint) : (o.targetHint != null ? String(o.targetHint) : (stale.label || null)),
+          id: resolved.id || (stale ? stale.id : String(id)),
+          action: stale ? actionInfo(stale, stale.kind) : undefined,
+          targetHint: p.targetHint != null ? String(p.targetHint) : (o.targetHint != null ? String(o.targetHint) : (stale && stale.label ? stale.label : null)),
           candidates: resolved.candidates,
           thresholds: { accept: MATCH.accept, ambiguous: MATCH.ambiguous, margin: MATCH.margin, contentMargin: MATCH.contentMargin },
           warning: 'Multiple controls match this target; no action was taken.'

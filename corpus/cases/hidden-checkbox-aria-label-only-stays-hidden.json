@@ -1,0 +1,18 @@
+{
+  "id": "hidden-checkbox-aria-label-only-stays-hidden",
+  "html": "fixtures/hidden-checkbox-aria-label-only.html",
+  "url": "https://corpus.test/aria-label-only",
+  "notes": "layout-less scan: an opacity:0 checkbox named only by aria-label has no layout proof and must stay hidden, exactly as on main",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ],
+      "expectNotText": [
+        "Select row 1"
+      ],
+      "expectSanitized": 0
+    }
+  ]
+}

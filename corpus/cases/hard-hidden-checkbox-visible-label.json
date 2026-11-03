@@ -1,0 +1,17 @@
+{
+  "id": "hard-hidden-checkbox-visible-label",
+  "html": "fixtures/hard-hidden-checkbox.html",
+  "url": "https://corpus.test/hard-hidden",
+  "notes": "display:none checkbox must stay hidden even when its label is visible",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ],
+      "expectText": [
+        "I accept the terms"
+      ]
+    }
+  ]
+}

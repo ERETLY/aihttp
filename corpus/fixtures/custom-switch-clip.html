@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Custom switch</title></head>
+<body>
+<main>
+<input type="checkbox" id="notify"
+  style="position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%)">
+<label for="notify">Email notifications</label>
+<button onclick="window.__mark('saved')">Save</button>
+<p id="out">idle</p>
+<script>
+window.__mark = function (value) {
+  var out = document.getElementById('out');
+  if (out) out.textContent = value;
+};
+document.getElementById('notify').addEventListener('change', function () {
+  window.__mark(this.checked ? 'checked' : 'unchecked');
+});
+</script>
+</main>
+</body>
+</html>

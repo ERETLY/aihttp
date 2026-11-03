@@ -2,25 +2,80 @@
   "engine": "0.1.0",
   "engine_file": "ahttp.js",
   "totals": {
-    "cases": 46,
-    "passed": 46,
+    "cases": 57,
+    "passed": 57,
     "failed": 0,
     "pending": 0,
-    "match_ok": 46,
-    "diff_ok": 46,
-    "tokens": 1639
+    "match_ok": 57,
+    "diff_ok": 57,
+    "tokens": 2142
   },
   "cases": [
     {
-      "id": "act-by-label-two-identical-buttons",
-      "html": "fixtures/identical-ok.html",
-      "notes": "PINNED CURRENT BEHAVIOUR: act(\"OK\") with two OK buttons and no rerender resolves by label to the first one and clicks it silently",
+      "id": "act-by-duplicate-intent-ambiguous",
+      "html": "fixtures/duplicate-intent.html",
+      "notes": "two actions share data-ahttp-intent=remove; act(\"remove\") must refuse",
       "pending": false,
       "pending_reason": null,
       "status": "PASS",
       "match_ok": true,
       "diff_ok": true,
       "tokens": 37,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\"]"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ambiguous",
+          "result_status": "ambiguous",
+          "checks": [
+            {
+              "name": "status=ambiguous",
+              "pass": true,
+              "detail": "ambiguous"
+            },
+            {
+              "name": "candidates>=2",
+              "pass": true,
+              "detail": "2"
+            },
+            {
+              "name": "noMutation",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "idle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "act-by-label-exact-case-wins",
+      "html": "fixtures/label-case.html",
+      "notes": "act(\"OK\") prefers the exact-case label over a case-insensitive sibling",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 39,
       "failures": [],
       "steps": [
         {
@@ -50,7 +105,107 @@
             {
               "name": "pageText #out",
               "pass": true,
-              "detail": "one"
+              "detail": "exact"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "act-by-label-two-identical-buttons",
+      "html": "fixtures/identical-ok.html",
+      "notes": "act(\"OK\") with two OK buttons and no rerender must refuse instead of clicking the first one",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 37,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\"]"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ambiguous",
+          "result_status": "ambiguous",
+          "checks": [
+            {
+              "name": "status=ambiguous",
+              "pass": true,
+              "detail": "ambiguous"
+            },
+            {
+              "name": "candidates>=2",
+              "pass": true,
+              "detail": "2"
+            },
+            {
+              "name": "noMutation",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "idle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "act-by-label-unique-ok",
+      "html": "fixtures/single-ok.html",
+      "notes": "a label that matches exactly one action still resolves and runs",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 30,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "orig"
             }
           ]
         }
@@ -212,6 +367,180 @@
       ]
     },
     {
+      "id": "custom-checkbox-opacity",
+      "html": "fixtures/custom-checkbox-opacity.html",
+      "notes": "opacity:0 checkbox inside a visible label; the label is the real hit target",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 94,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\"]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "I agree to the terms"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "checked"
+            }
+          ]
+        },
+        {
+          "step": "3:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "checked"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "custom-radio-group",
+      "html": "fixtures/custom-radio-group.html",
+      "notes": "two opacity:0 radios inside visible labels; act selects the second",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 100,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\"]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Basic plan | Pro plan"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "pro"
+            }
+          ]
+        },
+        {
+          "step": "3:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Pro plan"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "custom-switch-clip",
+      "html": "fixtures/custom-switch-clip.html",
+      "notes": "1x1 clip/clip-path checkbox with a separate label[for]",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 41,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\"]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Email notifications"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "checked"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "disabled-blocked",
       "html": "fixtures/disabled.html",
       "notes": "disabled control is visible in the snapshot but cannot run",
@@ -330,13 +659,74 @@
     {
       "id": "disabled-twin-and-active-twin",
       "html": "fixtures/run-original.html",
-      "notes": "PINNED CURRENT BEHAVIOUR, not an endorsement: the original Run is replaced by [disabled Run][active Run]. Disabled candidates are filtered before scoring, so the active twin is clicked. Single disabled replacement is covered by disabled-not-matched-after-rerender",
+      "notes": "the original Run is replaced by [disabled Run][active Run]; with no anchor separating them the reply must be ambiguous",
       "pending": false,
       "pending_reason": null,
       "status": "PASS",
       "match_ok": true,
       "diff_ok": true,
       "tokens": 31,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            }
+          ]
+        },
+        {
+          "step": "2:rerender",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": []
+        },
+        {
+          "step": "3:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ambiguous",
+          "result_status": "ambiguous",
+          "checks": [
+            {
+              "name": "status=ambiguous",
+              "pass": true,
+              "detail": "ambiguous"
+            },
+            {
+              "name": "candidates>=2",
+              "pass": true,
+              "detail": "2"
+            },
+            {
+              "name": "noMutation",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "idle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "disabled-twin-different-anchor",
+      "html": "fixtures/run-testid.html",
+      "notes": "the active twin keeps the original data-testid, so it clearly outranks the disabled twin and runs",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 33,
       "failures": [],
       "steps": [
         {
@@ -738,6 +1128,37 @@
       ]
     },
     {
+      "id": "hard-hidden-checkbox-visible-label",
+      "html": "fixtures/hard-hidden-checkbox.html",
+      "notes": "display:none checkbox must stay hidden even when its label is visible",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 33,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "I accept the terms"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "hidden-aria-hidden",
       "html": "fixtures/hidden-aria.html",
       "notes": "aria-hidden subtree is absent from the snapshot",
@@ -763,6 +1184,109 @@
               "name": "text",
               "pass": true,
               "detail": "Visible"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hidden-checkbox-aria-label-only-stays-hidden",
+      "html": "fixtures/hidden-checkbox-aria-label-only.html",
+      "notes": "layout-less scan: an opacity:0 checkbox named only by aria-label has no layout proof and must stay hidden, exactly as on main",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 30,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            },
+            {
+              "name": "sanitized=0",
+              "pass": true,
+              "detail": "0"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hidden-checkbox-hidden-label-stays-hidden",
+      "html": "fixtures/hidden-checkbox-hidden-label.html",
+      "notes": "soft-hidden checkbox whose label is also hidden must stay hidden",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 37,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            },
+            {
+              "name": "sanitized=1",
+              "pass": true,
+              "detail": "1"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hidden-checkbox-no-label-stays-hidden",
+      "html": "fixtures/hidden-checkbox-no-label.html",
+      "notes": "soft-hidden checkbox with no label must stay hidden",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 29,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
             },
             {
               "name": "notText",

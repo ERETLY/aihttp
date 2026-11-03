@@ -11,12 +11,18 @@ A candidate is rejected before scoring when:
 
 - it is the same entry as the target;
 - its node is disconnected;
-- its `kind` differs (`click` vs `fill`, `select`, `toggle`, ...);
-- it is disabled (`disabled` or `aria-disabled="true"`).
+- its `kind` differs (`click` vs `fill`, `select`, `toggle`, ...).
 
-A disabled control is visible in a snapshot with the `disabled` suffix, but it
-is never used as an active relocation target. A positional-only candidate is
-also rejected: at least one content anchor must agree.
+A positional-only candidate is also rejected: at least one content anchor must
+agree.
+
+Disabled candidates are scored and appear in `candidates` with
+`disabled: true`, because a disabled twin makes the choice uncertain. They can
+never win: relocation picks the best active candidate, and it must lead every
+other candidate (active or disabled) by both `margin` and `contentMargin`. If no
+active candidate exists, or the best active is below `ambiguous`, the reply is
+`not_found`. If the best active is close to a disabled competitor, the reply is
+`ambiguous` and nothing is dispatched.
 
 ## Signals and weights
 
@@ -90,8 +96,8 @@ click on the wrong row.
   "action": { "id": "a3", "method": "click", "kind": "click", "label": "OK" },
   "targetHint": "first OK button",
   "candidates": [
-    { "id": "a7", "role": "button", "name": "OK", "tag": "button", "score": 89, "signals": ["name", "role", "tag", "path", "order", "fingerprint"] },
-    { "id": "a8", "role": "button", "name": "OK", "tag": "button", "score": 89, "signals": ["name", "role", "tag", "path", "order", "fingerprint"] }
+    { "id": "a7", "role": "button", "name": "OK", "tag": "button", "score": 89, "signals": ["name", "role", "tag", "path", "order", "fingerprint"], "disabled": false },
+    { "id": "a8", "role": "button", "name": "OK", "tag": "button", "score": 89, "signals": ["name", "role", "tag", "path", "order", "fingerprint"], "disabled": false }
   ],
   "thresholds": { "accept": 50, "ambiguous": 24, "margin": 12, "contentMargin": 5 },
   "warning": "Multiple controls match this target; no action was taken."
@@ -105,6 +111,26 @@ a selector. `candidates` is capped at five and sorted by score, then DOM order.
 `confirm: true` does not override `ambiguous`: confirmation is for a known
 action, not for choosing between two actions. The engine dispatches no event and
 does not mutate the registry.
+
+## Label and intent lookup
+
+When the id is not in the registry, `act(id)` also accepts a
+`data-ahttp-intent` value (case-insensitive) or a visible label. Matching is
+ordered:
+
+1. `data-ahttp-intent` (case-insensitive);
+2. label with the exact case;
+3. label case-insensitive.
+
+The first step that has a match decides. One match is used; two or more matches
+return `status: 'ambiguous'` with up to five candidates and dispatch nothing,
+including a duplicate `data-ahttp-intent`. `confirm: true` does not override it.
+A unique label still resolves, and an exact-case label wins over a
+case-insensitive sibling.
+
+Label-lookup candidates have the same shape as relocation candidates. Their
+`score` is the lookup weight (`intent` 100, exact label 55, case-insensitive
+label 50) and `signals` records `intent`, `name` or `name~`.
 
 ## Status values
 

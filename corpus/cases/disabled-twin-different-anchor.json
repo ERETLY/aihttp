@@ -1,0 +1,30 @@
+{
+  "id": "disabled-twin-different-anchor",
+  "html": "fixtures/run-testid.html",
+  "url": "https://corpus.test/disabled-twin-different-anchor",
+  "notes": "the active twin keeps the original data-testid, so it clearly outranks the disabled twin and runs",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ]
+    },
+    {
+      "action": "rerender",
+      "selector": "#app",
+      "html": "<button disabled onclick=\"window.__mark('disabled')\">Run</button><button data-testid=\"run\" onclick=\"window.__mark('active')\">Run</button>"
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "Run button with data-testid",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "active"
+        }
+      }
+    }
+  ]
+}

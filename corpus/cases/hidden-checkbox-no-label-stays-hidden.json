@@ -1,0 +1,17 @@
+{
+  "id": "hidden-checkbox-no-label-stays-hidden",
+  "html": "fixtures/hidden-checkbox-no-label.html",
+  "url": "https://corpus.test/no-label",
+  "notes": "soft-hidden checkbox with no label must stay hidden",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ],
+      "expectNotText": [
+        "checkbox"
+      ]
+    }
+  ]
+}

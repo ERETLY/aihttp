@@ -180,6 +180,10 @@ function snapshotChecks(step, text, json) {
     }
     diff.push(check('textOrder', ok, step.expectTextOrder.join(' -> ')));
   }
+  if (step.expectSanitized != null) {
+    const actual = json.meta ? json.meta.sanitized : null;
+    match.push(check('sanitized=' + step.expectSanitized, actual === step.expectSanitized, actual));
+  }
   if (step.expectDiff && step.expectDiff.contains) {
     diff.push(check('snapshotContains', containsEvery(text, step.expectDiff.contains), step.expectDiff.contains.join(' | ')));
   }

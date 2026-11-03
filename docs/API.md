@@ -90,7 +90,10 @@ Result shape:
 
 When a framework replaced the node, `act` relocates it by stable anchors. If the
 old id now matches two controls within the ambiguity margin, no event is
-dispatched and the reply is structured:
+dispatched and the reply is structured. When the id itself is not in the
+registry, `act` also accepts an intent or a visible label; a lookup that matches
+more than one action returns the same `ambiguous` shape instead of clicking the
+first one:
 
 ```js
 {
@@ -101,8 +104,8 @@ dispatched and the reply is structured:
   action: { id: 'a3', method: 'click', kind: 'click', label: 'OK' },
   targetHint: 'first OK button',
   candidates: [
-    { id: 'a7', role: 'button', name: 'OK', tag: 'button', score: 89, signals: ['name', 'role', 'tag'] },
-    { id: 'a8', role: 'button', name: 'OK', tag: 'button', score: 89, signals: ['name', 'role', 'tag'] }
+    { id: 'a7', role: 'button', name: 'OK', tag: 'button', score: 89, signals: ['name', 'role', 'tag'], disabled: false },
+    { id: 'a8', role: 'button', name: 'OK', tag: 'button', score: 89, signals: ['name', 'role', 'tag'], disabled: false }
   ],
   thresholds: { accept: 50, ambiguous: 24, margin: 12 },
   warning: 'Multiple controls match this target; no action was taken.'

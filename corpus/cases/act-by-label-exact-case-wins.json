@@ -1,0 +1,26 @@
+{
+  "id": "act-by-label-exact-case-wins",
+  "html": "fixtures/label-case.html",
+  "url": "https://corpus.test/act-by-label-exact-case-wins",
+  "notes": "act(\"OK\") prefers the exact-case label over a case-insensitive sibling",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "OK",
+      "targetHint": "exact-case label lookup",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "exact"
+        }
+      }
+    }
+  ]
+}

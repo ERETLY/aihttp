@@ -2,7 +2,7 @@
   "id": "act-by-label-two-identical-buttons",
   "html": "fixtures/identical-ok.html",
   "url": "https://corpus.test/act-by-label-two-identical-buttons",
-  "notes": "PINNED CURRENT BEHAVIOUR: act(\"OK\") with two OK buttons and no rerender resolves by label to the first one and clicks it silently",
+  "notes": "act(\"OK\") with two OK buttons and no rerender must refuse instead of clicking the first one",
   "steps": [
     {
       "action": "snapshot",
@@ -15,10 +15,13 @@
       "action": "click",
       "expectedId": "OK",
       "targetHint": "label lookup, not an id",
+      "expectStatus": "ambiguous",
       "expectEffect": {
+        "candidates": 2,
+        "noMutation": true,
         "pageText": {
           "selector": "#out",
-          "equals": "one"
+          "equals": "idle"
         }
       }
     }

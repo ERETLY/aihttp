@@ -1,0 +1,39 @@
+{
+  "id": "custom-radio-group",
+  "html": "fixtures/custom-radio-group.html",
+  "url": "https://corpus.test/custom-radio",
+  "notes": "two opacity:0 radios inside visible labels; act selects the second",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ],
+      "expectText": [
+        "Basic plan",
+        "Pro plan"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a2",
+      "payload": {
+        "checked": true
+      },
+      "targetHint": "Pro plan radio",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "pro"
+        }
+      }
+    },
+    {
+      "action": "snapshot",
+      "expectText": [
+        "Pro plan"
+      ]
+    }
+  ]
+}

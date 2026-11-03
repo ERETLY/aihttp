@@ -34,6 +34,34 @@
   `aria-hidden`. Form controls inside `<fieldset disabled>` (outside its first
   `<legend>`) are reported as `disabled` and `act` returns `blocked`.
 
+- Hidden toggles: a native `input[type=checkbox|radio]` hidden only by soft
+  heuristics (opacity <= 0.05, clip, clip-path, font-size 0, off-screen
+  absolute, text-indent, zero/tiny size) stays in the snapshot when a visible
+  label element (wrapped `<label>`, `label[for]`, `aria-labelledby`) names it;
+  when `aria-label` is the only name it needs real layout, its own box of at
+  least 12x12 px inside the page, and opacity as the only hide mechanism, so a
+  1x1 or off-screen input can no longer carry instructions into the snapshot.
+  `display:none`, `visibility:hidden`, `hidden`, `aria-hidden`, `inert`, hidden
+  ancestors and closed `<details>` still hide it. The label is the real hit
+  target in the page; `act(id, { checked: true })` still dispatches a click on
+  the input, which toggles it in Chromium and jsdom.
+
+- Disabled twins: relocation used to filter disabled candidates before scoring,
+  so `[disabled "Run"][active "Run"]` clicked the active twin even though the
+  original could be either. Disabled candidates are now scored and returned in
+  `candidates` with `disabled: true`, but they can never win. With no active
+  candidate the reply is `not_found`; an active candidate must lead every other
+  candidate by `margin` and `contentMargin` or the reply is `ambiguous`. A
+  clearly better active candidate (for example, the one that kept the original
+  `data-testid`) still runs.
+
+- Label lookup: when the id is not in the registry, `act("Delete")` used to
+  take the first action with that label. It now tries `data-ahttp-intent`
+  (case-insensitive), then the label with exact case, then the label
+  case-insensitive. A step with more than one match returns `status: 'ambiguous'`
+  with candidates and dispatches nothing; a duplicate `data-ahttp-intent` does
+  the same. Unique labels still run, and `confirm: true` does not bypass it.
+
 - Matching: position, DOM order and the fingerprint add up to 14 points, more
   than `margin` (12), so two controls with the same label could be separated by
   position alone and the nearer one was clicked. The winner must now also lead
