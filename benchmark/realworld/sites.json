@@ -360,6 +360,8 @@
     {
       "id": "bbc-news",
       "url": "https://www.bbc.com/",
+      "blockedSelector": "[id^=\"sp_message_container\"][aria-modal=\"true\"]",
+      "blockedReason": "consent wall: Sourcepoint iframe covers the viewport; not bypassed",
       "scenarios": [
         {
           "name": "cookie banner and snapshot",

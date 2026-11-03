@@ -1,0 +1,19 @@
+{
+  "id": "rw-media-query-range",
+  "html": "fixtures/rw-media-query-range.html",
+  "url": "https://corpus.test/rw-media-query-range",
+  "pending": "real-world: github.com uses @media (width <= 768px) and developer.mozilla.org uses (width < calc(67rem)); mediaMatches does not parse range/or/calc syntax and treats the unknown feature as true, so narrow-screen hide rules are applied at desktop width",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ],
+      "expectText": [
+        "button \"Nav\"",
+        "button \"Side\""
+      ]
+    }
+  ]
+}

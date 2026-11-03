@@ -367,6 +367,35 @@ function isBlocked(status, title, bodyStart) {
   return null;
 }
 
+// A full-viewport consent overlay is not something the harness may dismiss.
+// The selector is declared per site so this cannot silently swallow a page
+// that merely has a small cookie bar (which stays testable).
+async function consentWall(page, site) {
+  if (!site.blockedSelector) return null;
+  // Sourcepoint injects the container before the iframe and the iframe before
+  // it has a box. Poll for a full-viewport overlay instead of assuming the
+  // first DOM match is ready.
+  const deadline = Date.now() + 8000;
+  while (Date.now() < deadline) {
+    const wall = await page.evaluate(function (selector) {
+      const el = document.querySelector(selector);
+      if (!el) return null;
+      const cs = getComputedStyle(el);
+      if (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) === 0) return null;
+      const rect = el.getBoundingClientRect();
+      return {
+        area: rect.width * rect.height,
+        viewport: window.innerWidth * window.innerHeight,
+        width: Math.round(rect.width),
+        height: Math.round(rect.height)
+      };
+    }, site.blockedSelector).catch(function () { return null; });
+    if (wall && wall.viewport && wall.area >= wall.viewport * 0.5) return site.blockedReason || 'consent wall';
+    await new Promise(function (resolve) { setTimeout(resolve, 250); });
+  }
+  return null;
+}
+
 async function runSite(browser, site) {
   const defaults = CONFIG.defaults || {};
   const result = {
@@ -407,7 +436,7 @@ async function runSite(browser, site) {
     await page.waitForTimeout(defaults.pauseMs || 1200);
     result.title = await page.title().catch(function () { return ''; });
     const bodyStart = await page.evaluate(function () { return (document.body ? document.body.innerText : '').slice(0, 800); }).catch(function () { return ''; });
-    const blocked = isBlocked(result.httpStatus, result.title || '', bodyStart);
+    const blocked = isBlocked(result.httpStatus, result.title || '', bodyStart) || await consentWall(page, site);
     if (blocked) {
       result.status = 'blocked';
       result.blocked = blocked;

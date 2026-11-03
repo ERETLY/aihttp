@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Media range syntax</title>
+<style>
+.nav{display:flex}
+.side{display:flex}
+@media (width <= 768px){.nav{display:none}}
+@media (width <= 769px) or (width < calc(50rem)){.side{display:none}}
+</style>
+</head>
+<body>
+<main>
+<div class="nav"><button>Nav</button></div>
+<div class="side"><button>Side</button></div>
+</main>
+</body>
+</html>

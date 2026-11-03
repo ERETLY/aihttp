@@ -78,6 +78,25 @@ across top/middle/bottom, `next` on the Nonfiction category is `a115`.
 saucedemo: login, two "Add to cart" clicks and the `2` cart badge all passed;
 the cart link and the sort control did not.
 
+## Results (group 4: GitHub, MDN, BBC)
+
+| Site | Actions (default) | Full actions | Scan ms | Text tokens | Raw tokens | Aria tokens | Recall | Scenarios |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| github-ahttp | 60 (18 omitted) | 78 | 121 | 13282 | 192300 | 19336 | 41.1% | 1/1 |
+| mdn-http | 17 | 17 | 5 | 437 | 39031 | 8248 | 3.3% | 0/1 |
+| bbc-news | blocked | - | - | - | - | - | - | - |
+
+2 executed scenarios, 1 passed, 1 failed; BBC was blocked before its scenario.
+GitHub: the snapshot has the repo tabs and the Issues link (`a6`) worked in
+2.5 s; 106 of 180 visible controls are missing, mostly the marketing header
+(Products/Developers/Businesses/Resources/Pricing/Sign in/Sign up), the repo
+sub-navigation (Branches, Go to file, commits) and the sidebar tags. MDN is the
+worst page in the run: 17 actions versus 510 visible controls (3.3%). The whole
+`<main id="content">` is missing because MDN styles it with `display:contents`.
+BBC serves a full-viewport Sourcepoint consent iframe (`#sp_message_container_*`,
+`aria-modal="true"`, 1280x800, cross-origin). The harness waits for the wall and
+records `blocked`; it does not dismiss it.
+
 ## Results (group 3: httpbin, Wikipedia, Hacker News)
 
 | Site | Actions (default) | Full actions | Scan ms | Text tokens | Raw tokens | Aria tokens | Recall | Scenarios |
@@ -99,7 +118,32 @@ inside the list when the cap is raised above 200.
 
 ### P1
 
-1. **A visible control is dropped when a stylesheet first hides it and a later
+1. **Modern media-query range syntax is treated as true.**
+   `mediaMatches()` only understands `(min-width: …)` / `(max-width: …)`.
+   Every other feature term is skipped and the query counts as matching.
+   GitHub uses `@media (width <= 768px)`, `(width <= 544px)` and
+   `(width <= 1011.98px)`; MDN uses `(width <= 1044px)`,
+   `(width < calc(67rem))` and `or`. At the test viewport (1280 px) those
+   queries are false in Chromium, but the engine applies their `display:none`
+   / `visibility:hidden` rules. On GitHub this removes the marketing header
+   (Products, Developers, Businesses, Resources, Pricing, Sign in, Sign up),
+   the file table (29 file names and their commit links), `Branches`,
+   `Go to file` and the sidebar tags: 106 of 180 visible controls are missing
+   (recall 41.1%). On MDN the same bug removes the navigation popup and the
+   left sidebar. Pending case: `corpus/cases/rw-media-query-range.json`
+   (`corpus/fixtures/rw-media-query-range.html`).
+
+2. **A `display:contents` wrapper is dropped as a zero-size hidden target.**
+   MDN renders the article inside `<main id="content" class="layout__content">`
+   with `display:contents`. The element has text but its own box is 0x0, so
+   `hiddenAncestorChain()` returns `{hidden:true}` from the zero-size text
+   check and the whole subtree is skipped. 493 of 510 visible controls are
+   lost; recall is 3.3%. jsdom has no layout and cannot reproduce this check,
+   so the repro is Chromium-only:
+   `benchmark/realworld/repro/display-contents/` (`repro.js` prints
+   `Save action: MISSING`; after a fix the button must be an action).
+
+3. **A visible control is dropped when a stylesheet first hides it and a later
    rule shows it again.** Wikipedia's search container matches
    `@media screen { .mw-header .vector-typeahead-search-container { display:none } }`
    and then
@@ -110,11 +154,15 @@ inside the list when the cap is raised above 200.
    box. The search field is absent from the snapshot, so the Wikipedia search
    scenario cannot start; the same false positive removes 46 of 1020 visible
    controls on the article (search, Donate, Create account, Log in, ToC
-   toggles). Reproduced in jsdom and Chromium.
-   Pending case: `corpus/cases/rw-css-hidden-then-shown.json`
-   (`corpus/fixtures/rw-css-hidden-then-shown.html`).
+   toggles). GitHub has the same bug in utility-class form:
+   `<a class="d-none d-lg-flex">` matches `.d-none { display:none }` and the
+   later `.d-lg-flex { display:flex }` under `(width >= 1012px)`; the engine
+   indexes only the hide rule, so the control is dropped. Reproduced in jsdom
+   and Chromium. Pending cases:
+   `corpus/cases/rw-css-hidden-then-shown.json` (Wikipedia) and
+   `corpus/cases/rw-utility-class-show.json` (GitHub).
 
-2. **The todo toggle is missing on TodoMVC.**
+4. **The todo toggle is missing on TodoMVC.**
    TodoMVC React renders
    `<input class="toggle" type="checkbox" data-testid="todo-item-toggle">`
    with `opacity:0`, a real 40x40 box and a sibling `<label>Task one</label>`
@@ -123,7 +171,7 @@ inside the list when the cap is raised above 200.
    Pending case: `corpus/cases/rw-sibling-label-toggle.json`
    (`corpus/fixtures/rw-sibling-label-toggle.html`).
 
-3. **The cart cannot be opened on saucedemo.**
+5. **The cart cannot be opened on saucedemo.**
    The cart is `<a class="shopping_cart_link" role="button"
    aria-label="Cart, empty">` (the label becomes "Cart, 2 items" after adding
    products). `classify()` returns `null` for every anchor without `href`
@@ -186,8 +234,9 @@ inside the list when the cap is raised above 200.
   scanning, not frameset scanning (`LIMITATION`; README note recommended).
 - `/shadowdom`: shadow text is visible in the snapshot
   (`Let's have some different text!`, `My default text`, `In a list!`); the
-  fixture has no interactive element, so shadow actions are exercised on GitHub
-  later.
+  fixture has no interactive element. GitHub exercises real shadow actions:
+  `clipboard-copy` controls appear as `clipboard-copy button "Copy code to
+  clipboard"`, and shadow roots do not break the walk.
 - saucedemo lists two `View details for <product>` links per product (image and
   title). They are real anchors, but identical names make label lookup
   ambiguous; ids still work. Not a bug.
@@ -200,8 +249,15 @@ inside the list when the cap is raised above 200.
 
 ## Blocked / not tested yet
 
-Nothing blocked in these groups. Still to run: GitHub, MDN, a news site with a
-cookie banner, and the MCP smoke path.
+- **bbc.com** serves a full-viewport Sourcepoint consent wall
+  (`#sp_message_container_*`, `aria-modal="true"`, 1280x800, cross-origin
+  iframe). The harness records `blocked` and does not dismiss it. With the wall
+  open the engine scans only the modal container and returns 0 actions; that is
+  the site block, not a separate engine bug.
+- **MCP smoke** result is in `benchmark/realworld/mcp-results.json` and is
+  summarized after the run.
+- Not tested: real accounts, checkout/payment, posting/voting, captcha or bot
+  walls, framesets, cross-origin iframe contents.
 
 ## Honest summary (so far)
 

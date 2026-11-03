@@ -81,7 +81,7 @@ async function main() {
     record('the-internet/checkboxes', 'snapshot text has the checkbox', /input\[checkbox\]/.test(snapText));
     const checkboxId = firstId(snapText, /^(a\d+) input\[checkbox\]/m);
     const acted = checkboxId ? await client.call('tools/call', {
-      name: 'ahttp_act', arguments: { pageId: pageId, id: checkboxId, checked: true }, _meta: META
+      name: 'ahttp_act', arguments: { pageId: pageId, id: checkboxId, value: 'true' }, _meta: META
     }) : { isError: true };
     record('the-internet/checkboxes', 'ahttp_act toggles the checkbox', !acted.isError, acted.structuredContent && acted.structuredContent.status);
     const after = await client.call('tools/call', { name: 'ahttp_snapshot', arguments: { pageId: pageId }, _meta: META });
@@ -108,7 +108,7 @@ async function main() {
     record('todomvc', 'ahttp_act Enter adds the todo', !typed.isError && /MCP task/.test(textOf(typed)));
 
     const books = await client.call('tools/call', {
-      name: 'ahttp_open', arguments: { url: 'https://books.toscrape.com/' }, _meta: META
+      name: 'ahttp_open', arguments: { url: 'https://books.toscrape.com/', maxActions: 500 }, _meta: META
     });
     const booksText = textOf(books);
     const booksPage = books.structuredContent && books.structuredContent.pageId;
@@ -117,7 +117,11 @@ async function main() {
     const nexted = nextId ? await client.call('tools/call', {
       name: 'ahttp_act', arguments: { pageId: booksPage, id: nextId }, _meta: META
     }) : { isError: true };
-    record('books.toscrape', 'ahttp_act navigates to page 2', !nexted.isError && /Page 2 of/.test(textOf(nexted)));
+    const booksAfter = nextId ? await client.call('tools/call', {
+      name: 'ahttp_snapshot', arguments: { pageId: booksPage }, _meta: META
+    }) : { isError: true };
+    record('books.toscrape', 'ahttp_act navigates to page 2',
+      !nexted.isError && /Page 2 of/.test(textOf(booksAfter) + JSON.stringify(nexted.structuredContent || {})));
 
     const addRemove = await client.call('tools/call', {
       name: 'ahttp_open', arguments: { url: 'https://the-internet.herokuapp.com/add_remove_elements/' }, _meta: META
@@ -132,7 +136,11 @@ async function main() {
       });
       arText = textOf(added);
     }
-    record('the-internet/add_remove_elements', 'two Delete buttons exist', (arText.match(/button "Delete"/g) || []).length === 2);
+    const arSnap = await client.call('tools/call', {
+      name: 'ahttp_snapshot', arguments: { pageId: arPage }, _meta: META
+    });
+    const arSnapText = textOf(arSnap);
+    record('the-internet/add_remove_elements', 'two Delete buttons exist', (arSnapText.match(/button "Delete"/g) || []).length === 2);
     const ambiguous = await client.call('tools/call', {
       name: 'ahttp_act', arguments: { pageId: arPage, id: 'Delete' }, _meta: META
     });

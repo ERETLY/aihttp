@@ -1,0 +1,73 @@
+{
+  "generatedAt": "2026-11-03T07:39:39.887Z",
+  "checks": [
+    {
+      "site": "the-internet/checkboxes",
+      "check": "ahttp_open returns a page handle",
+      "ok": true,
+      "detail": "page_86G3FDTHSVei7MaP"
+    },
+    {
+      "site": "the-internet/checkboxes",
+      "check": "snapshot text has the checkbox",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "site": "the-internet/checkboxes",
+      "check": "ahttp_act toggles the checkbox",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "site": "the-internet/checkboxes",
+      "check": "ahttp_snapshot reads the same page",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "site": "todomvc",
+      "check": "ahttp_open works",
+      "ok": true,
+      "detail": "page_R8DDmX3Wum-h2f9D"
+    },
+    {
+      "site": "todomvc",
+      "check": "ahttp_act fill",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "site": "todomvc",
+      "check": "ahttp_act Enter adds the todo",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "site": "books.toscrape",
+      "check": "ahttp_open works",
+      "ok": true,
+      "detail": "page_JZvuLKg5yhjkWMeY"
+    },
+    {
+      "site": "books.toscrape",
+      "check": "ahttp_act navigates to page 2",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "site": "the-internet/add_remove_elements",
+      "check": "two Delete buttons exist",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "site": "the-internet/add_remove_elements",
+      "check": "ambiguous Delete label is refused with candidates",
+      "ok": true,
+      "detail": "ambiguous"
+    }
+  ],
+  "passed": 11,
+  "total": 11
+}
