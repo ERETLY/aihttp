@@ -2,13 +2,13 @@
   "engine": "0.1.0",
   "engine_file": "ahttp.js",
   "totals": {
-    "cases": 55,
-    "passed": 55,
+    "cases": 56,
+    "passed": 56,
     "failed": 0,
     "pending": 0,
-    "match_ok": 55,
-    "diff_ok": 55,
-    "tokens": 2079
+    "match_ok": 56,
+    "diff_ok": 56,
+    "tokens": 2112
   },
   "cases": [
     {
@@ -659,13 +659,74 @@
     {
       "id": "disabled-twin-and-active-twin",
       "html": "fixtures/run-original.html",
-      "notes": "PINNED CURRENT BEHAVIOUR, not an endorsement: the original Run is replaced by [disabled Run][active Run]. Disabled candidates are filtered before scoring, so the active twin is clicked. Single disabled replacement is covered by disabled-not-matched-after-rerender",
+      "notes": "the original Run is replaced by [disabled Run][active Run]; with no anchor separating them the reply must be ambiguous",
       "pending": false,
       "pending_reason": null,
       "status": "PASS",
       "match_ok": true,
       "diff_ok": true,
       "tokens": 31,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            }
+          ]
+        },
+        {
+          "step": "2:rerender",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": []
+        },
+        {
+          "step": "3:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ambiguous",
+          "result_status": "ambiguous",
+          "checks": [
+            {
+              "name": "status=ambiguous",
+              "pass": true,
+              "detail": "ambiguous"
+            },
+            {
+              "name": "candidates>=2",
+              "pass": true,
+              "detail": "2"
+            },
+            {
+              "name": "noMutation",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "idle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "disabled-twin-different-anchor",
+      "html": "fixtures/run-testid.html",
+      "notes": "the active twin keeps the original data-testid, so it clearly outranks the disabled twin and runs",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 33,
       "failures": [],
       "steps": [
         {

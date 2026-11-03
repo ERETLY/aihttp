@@ -2,7 +2,7 @@
   "id": "disabled-twin-and-active-twin",
   "html": "fixtures/run-original.html",
   "url": "https://corpus.test/disabled-twin-and-active-twin",
-  "notes": "PINNED CURRENT BEHAVIOUR, not an endorsement: the original Run is replaced by [disabled Run][active Run]. Disabled candidates are filtered before scoring, so the active twin is clicked. Single disabled replacement is covered by disabled-not-matched-after-rerender",
+  "notes": "the original Run is replaced by [disabled Run][active Run]; with no anchor separating them the reply must be ambiguous",
   "steps": [
     {
       "action": "snapshot",
@@ -19,10 +19,13 @@
       "action": "click",
       "expectedId": "a1",
       "targetHint": "Run button",
+      "expectStatus": "ambiguous",
       "expectEffect": {
+        "candidates": 2,
+        "noMutation": true,
         "pageText": {
           "selector": "#out",
-          "equals": "active"
+          "equals": "idle"
         }
       }
     }

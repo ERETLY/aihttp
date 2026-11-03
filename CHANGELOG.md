@@ -43,6 +43,15 @@
   the real hit target in the page; `act(id, { checked: true })` still dispatches
   a click on the input, which toggles it in Chromium and jsdom.
 
+- Disabled twins: relocation used to filter disabled candidates before scoring,
+  so `[disabled "Run"][active "Run"]` clicked the active twin even though the
+  original could be either. Disabled candidates are now scored and returned in
+  `candidates` with `disabled: true`, but they can never win. With no active
+  candidate the reply is `not_found`; an active candidate must lead every other
+  candidate by `margin` and `contentMargin` or the reply is `ambiguous`. A
+  clearly better active candidate (for example, the one that kept the original
+  `data-testid`) still runs.
+
 - Label lookup: when the id is not in the registry, `act("Delete")` used to
   take the first action with that label. It now tries `data-ahttp-intent`
   (case-insensitive), then the label with exact case, then the label

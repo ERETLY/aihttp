@@ -11,12 +11,18 @@ A candidate is rejected before scoring when:
 
 - it is the same entry as the target;
 - its node is disconnected;
-- its `kind` differs (`click` vs `fill`, `select`, `toggle`, ...);
-- it is disabled (`disabled` or `aria-disabled="true"`).
+- its `kind` differs (`click` vs `fill`, `select`, `toggle`, ...).
 
-A disabled control is visible in a snapshot with the `disabled` suffix, but it
-is never used as an active relocation target. A positional-only candidate is
-also rejected: at least one content anchor must agree.
+A positional-only candidate is also rejected: at least one content anchor must
+agree.
+
+Disabled candidates are scored and appear in `candidates` with
+`disabled: true`, because a disabled twin makes the choice uncertain. They can
+never win: relocation picks the best active candidate, and it must lead every
+other candidate (active or disabled) by both `margin` and `contentMargin`. If no
+active candidate exists, or the best active is below `ambiguous`, the reply is
+`not_found`. If the best active is close to a disabled competitor, the reply is
+`ambiguous` and nothing is dispatched.
 
 ## Signals and weights
 
@@ -90,8 +96,8 @@ click on the wrong row.
   "action": { "id": "a3", "method": "click", "kind": "click", "label": "OK" },
   "targetHint": "first OK button",
   "candidates": [
-    { "id": "a7", "role": "button", "name": "OK", "tag": "button", "score": 89, "signals": ["name", "role", "tag", "path", "order", "fingerprint"] },
-    { "id": "a8", "role": "button", "name": "OK", "tag": "button", "score": 89, "signals": ["name", "role", "tag", "path", "order", "fingerprint"] }
+    { "id": "a7", "role": "button", "name": "OK", "tag": "button", "score": 89, "signals": ["name", "role", "tag", "path", "order", "fingerprint"], "disabled": false },
+    { "id": "a8", "role": "button", "name": "OK", "tag": "button", "score": 89, "signals": ["name", "role", "tag", "path", "order", "fingerprint"], "disabled": false }
   ],
   "thresholds": { "accept": 50, "ambiguous": 24, "margin": 12, "contentMargin": 5 },
   "warning": "Multiple controls match this target; no action was taken."

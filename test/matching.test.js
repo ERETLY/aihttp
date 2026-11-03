@@ -137,6 +137,22 @@ test('a connected but now-hidden target is not actionable', async () => {
   assert.equal(document.getElementById('out').textContent, 'idle');
 });
 
+test('a disabled twin is scored and reported but cannot win', async () => {
+  const window = load('<!doctype html><body><main id="app">' +
+    '<button>Run</button><p id="out">idle</p></main></body>');
+  const document = window.document;
+  window.ahttp.snapshot({ format: 'json' });
+  document.getElementById('app').innerHTML =
+    '<button disabled onclick="document.getElementById(\'out\').textContent=\'disabled\'">Run</button>' +
+    '<button onclick="document.getElementById(\'out\').textContent=\'active\'">Run</button>' +
+    '<p id="out">idle</p>';
+  const result = await window.ahttp.act('a1', null, actOptions());
+  assert.equal(result.status, 'ambiguous');
+  assert.equal(result.candidates.length, 2);
+  assert.ok(result.candidates.some(function (c) { return c.disabled === true; }));
+  assert.equal(document.getElementById('out').textContent, 'idle');
+});
+
 test('unknown ids and successful actions carry a status', async () => {
   const window = load('<!doctype html><body><main><button>Go</button></main></body>');
   const document = window.document;

@@ -104,8 +104,8 @@ first one:
   action: { id: 'a3', method: 'click', kind: 'click', label: 'OK' },
   targetHint: 'first OK button',
   candidates: [
-    { id: 'a7', role: 'button', name: 'OK', tag: 'button', score: 89, signals: ['name', 'role', 'tag'] },
-    { id: 'a8', role: 'button', name: 'OK', tag: 'button', score: 89, signals: ['name', 'role', 'tag'] }
+    { id: 'a7', role: 'button', name: 'OK', tag: 'button', score: 89, signals: ['name', 'role', 'tag'], disabled: false },
+    { id: 'a8', role: 'button', name: 'OK', tag: 'button', score: 89, signals: ['name', 'role', 'tag'], disabled: false }
   ],
   thresholds: { accept: 50, ambiguous: 24, margin: 12 },
   warning: 'Multiple controls match this target; no action was taken.'

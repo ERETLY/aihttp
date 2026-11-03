@@ -2340,11 +2340,10 @@
       }
     }
     if (!fp || !cand) return { score: -1, content: 0, signals: [] };
-    // A different action kind is not the same control. A disabled node is not
-    // an active target: refuse rather than dispatch into a control that is
-    // visibly unable to run.
+    // A different action kind is not the same control. Disabled candidates are
+    // scored so they can make a near-tie ambiguous, but relocate() never
+    // chooses one as the winner.
     if (fp.kind && cand.kind !== fp.kind) return { score: -1, content: 0, signals: [] };
-    if (cand.disabled) return { score: -1, content: 0, signals: [] };
 
     if (fp.intent && cand.intent === fp.intent) hit('intent', weights.intent);
     if ((fp.testid && cand.testid === fp.testid) ||
@@ -2430,7 +2429,8 @@
       name: item.entry.label,
       tag: item.entry.tag,
       score: item.score,
-      signals: item.signals
+      signals: item.signals,
+      disabled: !!item.entry.disabled
     };
   }
 
@@ -2449,27 +2449,44 @@
       var match = scoreMatch(fp, cand);
       if (match.score <= 0) return;
       if (!hasContentSignal(match.signals)) return;
-      scored.push({ entry: cand, score: match.score, content: match.content, signals: match.signals });
+      scored.push({
+        entry: cand,
+        score: match.score,
+        content: match.content,
+        signals: match.signals,
+        disabled: !!cand.disabled
+      });
     });
     scored.sort(function (a, b) {
       if (b.score !== a.score) return b.score - a.score;
       return (a.entry.order || 0) - (b.entry.order || 0);
     });
-    var best = scored[0] || null;
-    var second = scored[1] || null;
+    // A disabled candidate participates in the score so a disabled twin makes
+    // the choice ambiguous, but it is never the winner. With no active
+    // candidate there is nothing safe to dispatch into.
+    var best = null;
+    var i;
+    for (i = 0; i < scored.length; i++) {
+      if (!scored[i].disabled) { best = scored[i]; break; }
+    }
+    var strongest = scored[0] || null;
     if (!best || best.score < MATCH.ambiguous) {
-      return { status: 'not_found', candidates: [], bestScore: best ? best.score : 0, secondScore: second ? second.score : 0 };
+      return {
+        status: 'not_found',
+        candidates: [],
+        bestScore: best ? best.score : 0,
+        secondScore: strongest && strongest !== best ? strongest.score : 0
+      };
     }
-    var ahead = !second || (best.score - second.score) >= MATCH.margin;
-    // Position cannot choose between candidates: the winner must also lead every
-    // other candidate on content evidence (names, anchors, text), not only on
-    // the runner-up by total score.
-    var otherContent = 0;
-    for (var i = 1; i < scored.length; i++) {
-      if (scored[i].content > otherContent) otherContent = scored[i].content;
+    // The winner must clearly lead every other candidate, active or disabled,
+    // on both total score and content evidence. Position can only break a tie.
+    var ahead = true;
+    for (i = 0; i < scored.length; i++) {
+      if (scored[i] === best) continue;
+      if ((best.score - scored[i].score) < MATCH.margin) ahead = false;
+      if ((best.content - scored[i].content) < MATCH.contentMargin) ahead = false;
     }
-    var contentAhead = scored.length < 2 || (best.content - otherContent) >= MATCH.contentMargin;
-    if (best.score >= MATCH.accept && ahead && contentAhead) {
+    if (best.score >= MATCH.accept && ahead) {
       var cand = best.entry;
       var node = cand.node;
       S.registry.delete(cand.id);
@@ -2481,7 +2498,7 @@
       status: 'ambiguous',
       candidates: scored.slice(0, MATCH.maxCandidates).map(publicCandidate),
       bestScore: best.score,
-      secondScore: second ? second.score : 0
+      secondScore: strongest && strongest !== best ? strongest.score : 0
     };
   }
 

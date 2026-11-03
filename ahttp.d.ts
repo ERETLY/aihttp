@@ -138,6 +138,7 @@ declare namespace Ahttp {
     tag: string;
     score: number;
     signals: string[];
+    disabled?: boolean;
   }
 
   interface MatchThresholds {
