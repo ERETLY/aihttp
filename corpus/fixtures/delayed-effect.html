@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Delayed</title></head>
+<body>
+<main>
+<button onclick="setTimeout(function () { window.__mark('Saved'); }, 100)">Save after 100ms</button>
+<button onclick="setTimeout(function () { window.__mark('Synced'); }, 300)">Save after 300ms</button>
+<button onclick="void 0">Never changes</button>
+<p id="out">idle</p>
+<script>
+window.__mark = function (value) { var out = document.getElementById("out"); if (out) out.textContent = value; };
+</script>
+</main>
+</body>
+</html>

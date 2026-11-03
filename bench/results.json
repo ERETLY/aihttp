@@ -2,15 +2,60 @@
   "engine": "0.1.0",
   "engine_file": "ahttp.js",
   "totals": {
-    "cases": 27,
-    "passed": 27,
+    "cases": 46,
+    "passed": 46,
     "failed": 0,
     "pending": 0,
-    "match_ok": 27,
-    "diff_ok": 27,
-    "tokens": 961
+    "match_ok": 46,
+    "diff_ok": 46,
+    "tokens": 1639
   },
   "cases": [
+    {
+      "id": "act-by-label-two-identical-buttons",
+      "html": "fixtures/identical-ok.html",
+      "notes": "PINNED CURRENT BEHAVIOUR: act(\"OK\") with two OK buttons and no rerender resolves by label to the first one and clicks it silently",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 37,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\"]"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "one"
+            }
+          ]
+        }
+      ]
+    },
     {
       "id": "checkbox-toggle",
       "html": "fixtures/checkbox.html",
@@ -283,6 +328,337 @@
       ]
     },
     {
+      "id": "disabled-twin-and-active-twin",
+      "html": "fixtures/run-original.html",
+      "notes": "PINNED CURRENT BEHAVIOUR, not an endorsement: the original Run is replaced by [disabled Run][active Run]. Disabled candidates are filtered before scoring, so the active twin is clicked. Single disabled replacement is covered by disabled-not-matched-after-rerender",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 31,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            }
+          ]
+        },
+        {
+          "step": "2:rerender",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": []
+        },
+        {
+          "step": "3:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "active"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "empty-page-valid-snapshot",
+      "html": "fixtures/empty-page.html",
+      "notes": "an empty page is a valid snapshot with no actions",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 20,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "exact-name-beats-case-variant",
+      "html": "fixtures/single-ok.html",
+      "notes": "after a rerender there is an exact OK and a lowercase ok; real content evidence still decides, so this is not ambiguous",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 26,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            }
+          ]
+        },
+        {
+          "step": "2:rerender",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": []
+        },
+        {
+          "step": "3:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "exact"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "expect-never-met-is-no-effect",
+      "html": "fixtures/delayed-effect.html",
+      "notes": "the expected change never arrives; act waits up to timeout and then reports no_effect",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 50,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\",\"a3\"]"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "no_effect",
+          "result_status": "no_effect",
+          "checks": [
+            {
+              "name": "status=no_effect",
+              "pass": true,
+              "detail": "no_effect"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "idle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "expect-waits-for-delayed-change",
+      "html": "fixtures/delayed-effect.html",
+      "notes": "the page changes 100 ms and 300 ms after the click; with a real settle window and an expect rule this is ok, not no_effect. The runner's zero-wait defaults would hide the bug, so options set the production defaults",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 48,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\",\"a3\"]"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "textAdded",
+              "pass": true,
+              "detail": "Saved"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "Saved"
+            }
+          ]
+        },
+        {
+          "step": "3:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "textAdded",
+              "pass": true,
+              "detail": "Synced"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "Synced"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fieldset-disabled-blocked",
+      "html": "fixtures/fieldset-disabled.html",
+      "notes": "controls inside <fieldset disabled> are disabled, except those in its first <legend>",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 46,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\",\"a3\"]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "\"Inner button\" disabled"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "blocked",
+          "result_status": "blocked",
+          "checks": [
+            {
+              "name": "status=blocked",
+              "pass": true,
+              "detail": "blocked"
+            },
+            {
+              "name": "error=disabled",
+              "pass": true,
+              "detail": "disabled"
+            },
+            {
+              "name": "noMutation",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "idle"
+            }
+          ]
+        },
+        {
+          "step": "3:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "legend"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "guarded-action-confirm",
       "html": "fixtures/confirm.html",
       "notes": "data-ahttp-confirm blocks the first call; confirm runs it",
@@ -434,6 +810,42 @@
       ]
     },
     {
+      "id": "hidden-visibility-attribute-details",
+      "html": "fixtures/hidden-mechanisms.html",
+      "notes": "visibility:hidden, the hidden attribute, input type=hidden and the content of a closed <details> are not targets; the summary stays",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 37,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\"]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Closed details | Visible"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "identical-delete-buttons-ambiguous",
       "html": "fixtures/identical-delete.html",
       "notes": "two identical Delete buttons in rows; no stable anchor after rerender",
@@ -550,6 +962,128 @@
               "name": "pageText #out",
               "pass": true,
               "detail": "idle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "iframe-cross-origin-skipped",
+      "html": "fixtures/iframe-cross-origin.html",
+      "notes": "pinned limit: a frame the parent cannot read (cross-origin) is skipped and the snapshot does not fail",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 30,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Top"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "iframe-depth-limit",
+      "html": "fixtures/iframe-nesting.html",
+      "notes": "pinned limit: same-origin iframes at depth 1 and 2 are in the snapshot, depth 3 and 4 are not",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 41,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\",\"a3\"]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Top | L1 | L2"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "inert-excluded",
+      "html": "fixtures/inert.html",
+      "notes": "inert on an element or an ancestor removes it from the snapshot; a browser ignores clicks there",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 26,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Normal"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "normal"
             }
           ]
         }
@@ -685,6 +1219,42 @@
       ]
     },
     {
+      "id": "opacity-zero-variants-hidden",
+      "html": "fixtures/opacity-variants.html",
+      "notes": "opacity 0, 0.0, 0% and .0 hide a control, inline or from a stylesheet; 0.5 does not",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 33,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\"]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Half visible | Plain"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "placeholder-stable-after-label-change",
       "html": "fixtures/placeholder.html",
       "notes": "placeholder survives a label change when id and name are gone",
@@ -730,6 +1300,37 @@
               "name": "pageText #out",
               "pass": true,
               "detail": "q:shoes"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pointer-events-none-still-listed",
+      "html": "fixtures/pointer-none.html",
+      "notes": "PINNED CURRENT BEHAVIOUR: pointer-events:none does not hide a control; it is still listed",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 38,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\"]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Unclickable | Clickable"
             }
           ]
         }
@@ -889,6 +1490,76 @@
       ]
     },
     {
+      "id": "rerender-aria-label-and-href-drift",
+      "html": "fixtures/drift.html",
+      "notes": "after a rerender the aria-label of an icon button and the href of a link both changed; the stable visible text still finds them",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 45,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\"]"
+            }
+          ]
+        },
+        {
+          "step": "2:rerender",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": []
+        },
+        {
+          "step": "3:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "closed"
+            }
+          ]
+        },
+        {
+          "step": "4:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "docs"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "row-appears-and-disappears",
       "html": "fixtures/add-remove.html",
       "notes": "a click adds an action; a second click removes it",
@@ -959,6 +1630,166 @@
               "name": "pageText #out",
               "pass": true,
               "detail": "dismissed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "scrolled-page-keeps-top-content",
+      "html": "fixtures/scrolled-page.html",
+      "notes": "page is scrolled 500px; a link above the viewport must stay in the snapshot",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 46,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\"]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Help | Continue"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "clicked"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "second-act-on-removed-button",
+      "html": "fixtures/self-removing.html",
+      "notes": "a button removes itself on click; a second act on the same id is not_found and dispatches nothing",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 32,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "gone"
+            }
+          ]
+        },
+        {
+          "step": "3:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "not_found",
+          "result_status": "not_found",
+          "checks": [
+            {
+              "name": "status=not_found",
+              "pass": true,
+              "detail": "not_found"
+            },
+            {
+              "name": "error=detached_action",
+              "pass": true,
+              "detail": "detached_action"
+            },
+            {
+              "name": "noMutation",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "gone"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shadow-closed-not-reachable",
+      "html": "fixtures/shadow-closed.html",
+      "notes": "pinned limit: a closed shadow root cannot be read, so its controls are not in the snapshot",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 32,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Light button"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
             }
           ]
         }
@@ -1245,6 +2076,37 @@
       ]
     },
     {
+      "id": "text-only-page-valid-snapshot",
+      "html": "fixtures/text-only.html",
+      "notes": "a page with text and no controls is a valid snapshot with no actions",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 33,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[]"
+            },
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Just text | Nothing to click here."
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "toolbar-aria-label",
       "html": "fixtures/toolbar-aria.html",
       "notes": "icon-only toolbar; accessible names come from aria-label",
@@ -1339,6 +2201,73 @@
               "name": "pageText #out",
               "pass": true,
               "detail": "copied"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "twins-position-only-ambiguous",
+      "html": "fixtures/twins-far.html",
+      "notes": "two OK buttons, same label and no anchor; six other buttons push the second one out of order range. Position must not pick the winner",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 27,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            }
+          ]
+        },
+        {
+          "step": "2:rerender",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": []
+        },
+        {
+          "step": "3:rerender",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": []
+        },
+        {
+          "step": "4:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ambiguous",
+          "result_status": "ambiguous",
+          "checks": [
+            {
+              "name": "status=ambiguous",
+              "pass": true,
+              "detail": "ambiguous"
+            },
+            {
+              "name": "candidates>=2",
+              "pass": true,
+              "detail": "2"
+            },
+            {
+              "name": "noMutation",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "idle"
             }
           ]
         }

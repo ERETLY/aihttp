@@ -1,0 +1,20 @@
+{
+  "id": "shadow-closed-not-reachable",
+  "html": "fixtures/shadow-closed.html",
+  "url": "https://corpus.test/shadow-closed-not-reachable",
+  "notes": "pinned limit: a closed shadow root cannot be read, so its controls are not in the snapshot",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ],
+      "expectText": [
+        "Light button"
+      ],
+      "expectNotText": [
+        "Closed shadow button"
+      ]
+    }
+  ]
+}

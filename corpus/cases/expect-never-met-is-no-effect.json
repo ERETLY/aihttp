@@ -1,0 +1,27 @@
+{
+  "id": "expect-never-met-is-no-effect",
+  "html": "fixtures/delayed-effect.html",
+  "url": "https://corpus.test/delayed-never",
+  "notes": "the expected change never arrives; act waits up to timeout and then reports no_effect",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2",
+        "a3"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a3",
+      "targetHint": "button that does nothing",
+      "options": { "quiet": 40, "minWait": 40, "timeout": 600 },
+      "actExpect": { "textAdded": [ "Saved" ] },
+      "expectStatus": "no_effect",
+      "expectEffect": {
+        "pageText": { "selector": "#out", "equals": "idle" }
+      }
+    }
+  ]
+}

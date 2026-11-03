@@ -1,0 +1,25 @@
+{
+  "id": "hidden-visibility-attribute-details",
+  "html": "fixtures/hidden-mechanisms.html",
+  "url": "https://corpus.test/hidden-visibility-attribute-details",
+  "notes": "visibility:hidden, the hidden attribute, input type=hidden and the content of a closed <details> are not targets; the summary stays",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ],
+      "expectText": [
+        "Closed details",
+        "Visible"
+      ],
+      "expectNotText": [
+        "Hidden visibility",
+        "Hidden attribute",
+        "Inside closed details",
+        "token"
+      ]
+    }
+  ]
+}

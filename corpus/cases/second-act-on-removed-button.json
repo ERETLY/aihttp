@@ -1,0 +1,39 @@
+{
+  "id": "second-act-on-removed-button",
+  "html": "fixtures/self-removing.html",
+  "url": "https://corpus.test/second-act-on-removed-button",
+  "notes": "a button removes itself on click; a second act on the same id is not_found and dispatches nothing",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "Remove me button",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "gone"
+        }
+      }
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "the button that no longer exists",
+      "expectStatus": "not_found",
+      "expectEffect": {
+        "error": "detached_action",
+        "noMutation": true,
+        "pageText": {
+          "selector": "#out",
+          "equals": "gone"
+        }
+      }
+    }
+  ]
+}

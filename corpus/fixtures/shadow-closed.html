@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Closed shadow</title></head>
+<body>
+<main>
+<button>Light button</button>
+<div id="host"></div>
+<p id="out">idle</p>
+<script>
+window.__mark = function (value) { var out = document.getElementById("out"); if (out) out.textContent = value; };
+</script>
+<script>
+(function () {
+  var host = document.getElementById("host");
+  var root = host.attachShadow({ mode: "closed" });
+  root.innerHTML = '<button>Closed shadow button</button>';
+})();
+</script>
+</main>
+</body>
+</html>

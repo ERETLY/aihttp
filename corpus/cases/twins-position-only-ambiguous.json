@@ -1,0 +1,38 @@
+{
+  "id": "twins-position-only-ambiguous",
+  "html": "fixtures/twins-far.html",
+  "url": "https://corpus.test/twins-far",
+  "notes": "two OK buttons, same label and no anchor; six other buttons push the second one out of order range. Position must not pick the winner",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ]
+    },
+    {
+      "action": "rerender",
+      "selector": "#app",
+      "html": "<div><button onclick=\"window.__mark('main')\">OK</button></div><button>F1</button><button>F2</button><button>F3</button><button>F4</button><button>F5</button><button>F6</button>"
+    },
+    {
+      "action": "rerender",
+      "selector": "#foot",
+      "html": "<button onclick=\"window.__mark('footer')\">OK</button>"
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "the OK button in main",
+      "expectStatus": "ambiguous",
+      "expectEffect": {
+        "candidates": 2,
+        "noMutation": true,
+        "pageText": {
+          "selector": "#out",
+          "equals": "idle"
+        }
+      }
+    }
+  ]
+}

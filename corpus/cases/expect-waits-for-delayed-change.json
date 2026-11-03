@@ -1,0 +1,38 @@
+{
+  "id": "expect-waits-for-delayed-change",
+  "html": "fixtures/delayed-effect.html",
+  "url": "https://corpus.test/delayed",
+  "notes": "the page changes 100 ms and 300 ms after the click; with a real settle window and an expect rule this is ok, not no_effect. The runner's zero-wait defaults would hide the bug, so options set the production defaults",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2",
+        "a3"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "Save after 100ms button",
+      "options": { "quiet": 40, "minWait": 40, "timeout": 1200 },
+      "actExpect": { "textAdded": [ "Saved" ] },
+      "expectEffect": {
+        "textAdded": [ "Saved" ],
+        "pageText": { "selector": "#out", "equals": "Saved" }
+      }
+    },
+    {
+      "action": "click",
+      "expectedId": "a2",
+      "targetHint": "Save after 300ms button",
+      "options": { "quiet": 40, "minWait": 40, "timeout": 1200 },
+      "actExpect": { "textAdded": [ "Synced" ] },
+      "expectEffect": {
+        "textAdded": [ "Synced" ],
+        "pageText": { "selector": "#out", "equals": "Synced" }
+      }
+    }
+  ]
+}

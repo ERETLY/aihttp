@@ -1,0 +1,17 @@
+{
+  "id": "iframe-cross-origin-skipped",
+  "html": "fixtures/iframe-cross-origin.html",
+  "url": "https://corpus.test/iframe-cross-origin-skipped",
+  "notes": "pinned limit: a frame the parent cannot read (cross-origin) is skipped and the snapshot does not fail",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ],
+      "expectText": [
+        "Top"
+      ]
+    }
+  ]
+}

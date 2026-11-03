@@ -1,0 +1,30 @@
+{
+  "id": "scrolled-page-keeps-top-content",
+  "html": "fixtures/scrolled-page.html",
+  "url": "https://corpus.test/scrolled",
+  "notes": "page is scrolled 500px; a link above the viewport must stay in the snapshot",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ],
+      "expectText": [
+        "Help",
+        "Continue"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a2",
+      "targetHint": "Continue button",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "clicked"
+        }
+      }
+    }
+  ]
+}

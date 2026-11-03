@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Scrolled page</title></head>
+<body>
+<main>
+<nav><a id="help" href="#help">Help</a></nav>
+<div id="content">
+<p>Content block</p>
+<button onclick="window.__mark('clicked')">Continue</button>
+</div>
+<p id="out">idle</p>
+<script>
+window.__mark = function (value) {
+  var out = document.getElementById('out');
+  if (out) out.textContent = value;
+};
+// jsdom has no layout. Give the containers a real rect and put the top link
+// above the viewport after a 500px scroll.
+(function () {
+  var sx = 0;
+  var sy = 500;
+  try {
+    Object.defineProperty(window, 'scrollX', { get: function () { return sx; }, configurable: true });
+    Object.defineProperty(window, 'scrollY', { get: function () { return sy; }, configurable: true });
+    Object.defineProperty(window, 'pageXOffset', { get: function () { return sx; }, configurable: true });
+    Object.defineProperty(window, 'pageYOffset', { get: function () { return sy; }, configurable: true });
+  } catch (e) {}
+  var rect = function (width, height, left, top) {
+    return {
+      width: width, height: height, left: left, top: top,
+      right: left + width, bottom: top + height, x: left, y: top
+    };
+  };
+  Element.prototype.getBoundingClientRect = function () {
+    if (this === document.body) return rect(800, 1600, 0, 0);
+    if (this.id === 'help') return rect(60, 20, 10, -60);
+    if (this.id === 'out') return rect(120, 20, 10, 600);
+    return rect(200, 32, 10, 300);
+  };
+})();
+</script>
+</main>
+</body>
+</html>

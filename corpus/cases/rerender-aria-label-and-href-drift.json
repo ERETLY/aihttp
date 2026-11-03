@@ -1,0 +1,42 @@
+{
+  "id": "rerender-aria-label-and-href-drift",
+  "html": "fixtures/drift.html",
+  "url": "https://corpus.test/rerender-aria-label-and-href-drift",
+  "notes": "after a rerender the aria-label of an icon button and the href of a link both changed; the stable visible text still finds them",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ]
+    },
+    {
+      "action": "rerender",
+      "selector": "#app",
+      "html": "<button aria-label=\"Close dialog (Esc)\" onclick=\"window.__mark('closed')\">&times;</button><a href=\"/b\" onclick=\"event.preventDefault(); window.__mark('docs')\">Docs</a>"
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "close button, aria-label changed",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "closed"
+        }
+      }
+    },
+    {
+      "action": "click",
+      "expectedId": "a2",
+      "targetHint": "Docs link, href changed",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "docs"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "inert-excluded",
+  "html": "fixtures/inert.html",
+  "url": "https://corpus.test/inert",
+  "notes": "inert on an element or an ancestor removes it from the snapshot; a browser ignores clicks there",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ],
+      "expectText": [
+        "Normal"
+      ],
+      "expectNotText": [
+        "Inert child",
+        "Inert self"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "Normal button",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "normal"
+        }
+      }
+    }
+  ]
+}
