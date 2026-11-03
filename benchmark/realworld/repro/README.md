@@ -14,3 +14,15 @@ Run: `node benchmark/realworld/repro/select-opacity/repro.js`
 
 Expected after a fix: the select is an action named `Sort products` and can be
 used to change the order; the span is not a dead button.
+
+## display-contents
+
+`developer.mozilla.org` wraps the article in `<main id="content">` with
+`display: contents`. The element has text but its own box is 0x0, so
+`hiddenAncestorChain()` treats it as a zero-size hidden target and drops the
+whole subtree (493 of 510 visible controls on the MDN HTTP article).
+
+Run: `node benchmark/realworld/repro/display-contents/repro.js`
+
+Expected after a fix: `display: contents` is transparent for visibility, the
+`Save` button is an action, and the article text is included.

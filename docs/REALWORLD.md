@@ -1,15 +1,16 @@
 # Real-world engine report
 
-Status: **in progress** (checkpoint after the first two groups). The final
-version of this file is written after every planned site has run.
+Status: **final** (all planned sites have run; the engine is unchanged).
 
 - Date: 2026-11-03
 - Branch: `test/realworld` from `main` (`ec1f988`, after PR #3)
 - Engine under test: `ahttp.js` at `ec1f988`, unmodified
 - Runtime: Node v26.13.0, Playwright 1.64.1, Chromium 156.0.8078.4
 - Harness: `benchmark/realworld/` (`sites.json`, `oracle.js`, `run.js`, `mcp.js`)
-- Command: `npm run test:realworld -- --site=...`; raw data in
-  `benchmark/realworld/results.json`
+- Command: `npm run test:realworld`; raw data in
+  `benchmark/realworld/results.json`, MCP smoke in
+  `benchmark/realworld/mcp-results.json`
+- This harness is opt-in. It is not part of `npm test` and not part of CI.
 
 ## Method
 
@@ -17,8 +18,9 @@ Each page is opened in a fresh Chromium context with User-Agent
 `ahttp-realworld-test (+https://github.com/ERETLY/ahttp)`, one site at a time,
 with a 1.2 s pause between sites. The engine is injected with
 `page.addInitScript`, so it survives navigation. The harness does not log in to
-real accounts, submit payments or posts, and stops at any 403/429/captcha/bot
-wall.
+real accounts, submit payments or posts, or vote. It stops at any
+403/429/captcha/bot wall and at a full-viewport consent wall, and records the
+site as blocked instead of dismissing the wall.
 
 Per page the harness records:
 
@@ -32,87 +34,66 @@ Per page the harness records:
 3. scroll stability at top/middle/bottom;
 4. determinism of two consecutive forced snapshots.
 
+Recall is computed against a full 5000-action scan, because the default
+60-action snapshot is a product cap and the point of the metric is what the
+engine can see, not what it chooses to print. Scroll checks also use the full
+list so a re-ranked capped list cannot look like lost content.
+
 `phantom` in the tables means "an action without a visible oracle counterpart".
 It is a lead, not proof: the oracle can miss a control whose accessible name it
 computes differently. Every phantom that became a finding was reproduced
 separately.
 
-## Results (group 1: example.com and the-internet)
+## Results
 
-| Site | Actions | Scan ms | Text tokens | Raw tokens | Aria tokens | Recall | Scenarios |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| example | 1 | 5 | 170 | 641 | 245 | 100% | 1/1 |
-| the-internet-checkboxes | 5 | 31 | 125 | 594 | 121 | 100% | 1/1 |
-| the-internet-dropdown | 4 | 34 | 108 | 632 | 138 | 100% | 1/1 |
-| the-internet-add-remove | 4 | 24 | 94 | 596 | 114 | 100% | 1/1 |
-| the-internet-dynamic-loading | 4 | 31 | 108 | 624 | 132 | 100% | 1/1 |
-| the-internet-dynamic-controls | 7 | 26 | 147 | 1214 | 170 | 100% | 1/1 |
-| the-internet-login | 8 | 27 | 163 | 697 | 235 | 100% | 1/1 |
-| the-internet-hovers | 3 | 24 | 92 | 735 | 132 | 100% | 0/1 |
-| the-internet-key-presses | 4 | 23 | 125 | 1274 | 146 | 100% | 1/1 |
-| the-internet-challenging-dom | 26 | 29 | 598 | 1977 | 1552 | 100% | 1/1 |
-| the-internet-large | 3 | 101 | 1354 | 48699 | 31451 | 100% | 1/1 |
-| the-internet-shadowdom | 3 | 27 | 116 | 690 | 139 | 100% | 1/1 |
-| the-internet-iframe | 22 | 39 | 273 | 6634 | 395 | 100% | 1/1 |
-| the-internet-nested-frames | 0 | 2 | 22 | 78 | 0 | 100% | 1/1 |
-| the-internet-alerts | 6 | 19 | 146 | 730 | 181 | 100% | 1/1 |
-| the-internet-upload | 5 | 18 | 124 | 808 | 141 | 100% | 1/1 |
-| the-internet-infinite-scroll | 3 | 26 | 167 | 1374 | 882 | 100% | 1/1 |
-
-17 scenarios, 16 passed, 1 failed. Determinism was identical on every page
-(text and ids). Scroll stability showed no lost header/nav action in this
-group.
-
-## Results (group 2: TodoMVC, saucedemo, books.toscrape)
-
-| Site | Actions | Scan ms | Text tokens | Raw tokens | Aria tokens | Recall | Scenarios |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| todomvc-react | 12 | 7 | 363 | 942 | 535 | 100% | 1/2 |
-| saucedemo (login page) | 3 | 9 | 86 | 719 | 88 | 100% | 0/2 |
-| books.toscrape | 114 | 48 | 2728 | 9832 | 4657 | 100% | 2/2 |
-
-6 scenarios, 3 passed, 3 failed. Recall 100% on all three. TodoMVC's
-stale-id scenario passed: after a filter rerender, the id from the previous
-snapshot was relocated and clicked. books.toscrape: 114 actions, stable ids
-across top/middle/bottom, `next` on the Nonfiction category is `a115`.
-saucedemo: login, two "Add to cart" clicks and the `2` cart badge all passed;
-the cart link and the sort control did not.
-
-## Results (group 4: GitHub, MDN, BBC)
-
-| Site | Actions (default) | Full actions | Scan ms | Text tokens | Raw tokens | Aria tokens | Recall | Scenarios |
+| Site | Actions | Full | Scan ms | Text tokens | Raw tokens | Aria tokens | Recall | Scenarios |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| github-ahttp | 60 (18 omitted) | 78 | 121 | 13282 | 192300 | 19336 | 41.1% | 1/1 |
-| mdn-http | 17 | 17 | 5 | 437 | 39031 | 8248 | 3.3% | 0/1 |
-| bbc-news | blocked | - | - | - | - | - | - | - |
+| example | 1 | 1 | 0 | 170 | 641 | 245 | 100% | 1/1 |
+| the-internet-checkboxes | 5 | 5 | 8 | 125 | 594 | 121 | 100% | 1/1 |
+| the-internet-dropdown | 4 | 4 | 9 | 108 | 632 | 138 | 100% | 1/1 |
+| the-internet-add-remove | 4 | 4 | 8 | 94 | 596 | 114 | 100% | 1/1 |
+| the-internet-dynamic-loading | 4 | 4 | 11 | 108 | 624 | 132 | 100% | 1/1 |
+| the-internet-dynamic-controls | 7 | 7 | 8 | 147 | 1214 | 170 | 100% | 1/1 |
+| the-internet-login | 8 | 8 | 9 | 163 | 697 | 235 | 100% | 1/1 |
+| the-internet-hovers | 3 | 3 | 10 | 92 | 735 | 132 | 100% | 0/1 |
+| the-internet-key-presses | 4 | 4 | 8 | 125 | 1274 | 146 | 100% | 1/1 |
+| the-internet-challenging-dom | 26 | 26 | 12 | 598 | 1980 | 1552 | 100% | 1/1 |
+| the-internet-large | 3 | 3 | 92 | 1354 | 48699 | 31451 | 100% | 1/1 |
+| the-internet-shadowdom | 3 | 3 | 7 | 116 | 690 | 139 | 100% | 1/1 |
+| the-internet-iframe | 22 | 22 | 14 | 273 | 6634 | 395 | 100% | 1/1 |
+| the-internet-nested-frames | 0 | 0 | 0 | 22 | 78 | 0 | 100% | 1/1 |
+| the-internet-alerts | 6 | 6 | 8 | 146 | 730 | 181 | 100% | 1/1 |
+| the-internet-upload | 5 | 5 | 8 | 124 | 808 | 141 | 100% | 1/1 |
+| the-internet-infinite-scroll | 3 | 3 | 8 | 171 | 1387 | 895 | 100% | 1/1 |
+| todomvc-react | 12 | 12 | 3 | 363 | 942 | 535 | 100% | 1/2 |
+| saucedemo | 3 | 3 | 4 | 86 | 719 | 88 | 100% | 0/2 |
+| books.toscrape | 60 (54 omitted) | 114 | 24 | 1283 | 9832 | 4657 | 100% | 2/2 |
+| httpbin-form | 13 | 13 | 1 | 198 | 432 | 248 | 100% | 1/1 |
+| wikipedia-http | 60 (935 omitted) | 995 | 224 | 1026 | 271558 | 45721 | 95.5% | 0/1 |
+| hacker-news | 60 (166 omitted) | 226 | 30 | 1225 | 11556 | 9963 | 100% | 2/2 |
+| github-ahttp | 60 (18 omitted) | 78 | 151 | 13282 | 192313 | 19336 | 41.1% | 1/1 |
+| mdn-http | 17 | 17 | 5 | 437 | 39029 | 8247 | 3.3% | 0/1 |
+| bbc-news | blocked | - | - | - | - | - | - | 0/0 |
 
-2 executed scenarios, 1 passed, 1 failed; BBC was blocked before its scenario.
-GitHub: the snapshot has the repo tabs and the Issues link (`a6`) worked in
-2.5 s; 106 of 180 visible controls are missing, mostly the marketing header
-(Products/Developers/Businesses/Resources/Pricing/Sign in/Sign up), the repo
-sub-navigation (Branches, Go to file, commits) and the sidebar tags. MDN is the
-worst page in the run: 17 actions versus 510 visible controls (3.3%). The whole
-`<main id="content">` is missing because MDN styles it with `display:contents`.
-BBC serves a full-viewport Sourcepoint consent iframe (`#sp_message_container_*`,
-`aria-modal="true"`, 1280x800, cross-origin). The harness waits for the wall and
-records `blocked`; it does not dismiss it.
+26 sites: 25 were scanned and 1 (BBC) was blocked by a consent wall.
+29 scenarios were defined; 23 passed and 6 failed. Determinism was identical
+on every scanned page (text and ids). Scroll stability lost no action after the
+full-list fix, including Wikipedia (995 actions at top, middle and bottom).
 
-## Results (group 3: httpbin, Wikipedia, Hacker News)
+The six failed scenarios:
 
-| Site | Actions (default) | Full actions | Scan ms | Text tokens | Raw tokens | Aria tokens | Recall | Scenarios |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| httpbin-form | 13 | 13 | 2 | 198 | 432 | 248 | 100% | 1/1 |
-| wikipedia-http | 60 (935 omitted) | 995 | 272 | 1026 | 271558 | 45721 | 95.5% | 0/1 |
-| hacker-news | 60 (169 omitted) | 229 | 27 | 1194 | 11682 | 10065 | 100% | 2/2 |
-
-4 scenarios, 3 passed, 1 failed. httpbin's form round-trip passes: all fills,
-the radio, a topping checkbox and submit land on the response page with the
-entered values. Hacker News: the first story comment link (`760 comments`) and
-`More` (`?p=2`) both navigate. Wikipedia: the search input is missing, and the
-full-scan recall is 95.5% (46 of 1020 visible controls lost), all in the same
-header/ToC subtree. The default 60-action snapshot is a cap, not a scan
-failure: Wikipedia has 995 actions and Hacker News 229; `More` on HN is only
-inside the list when the cap is raised above 200.
+- `the-internet-hovers`: the hover target is an `<img>`/`<figure>` and is not
+  an action, so there is nothing to hover.
+- `todomvc-react`: the task checkbox is missing from the snapshot, so the task
+  cannot be completed (`toggle`).
+- `saucedemo` (cart): `.shopping_cart_link` is an anchor without `href`, so
+  the cart is not an action.
+- `saucedemo` (sort): the `opacity:0.001` native select is dropped, and the
+  visible proxy span is a dead button.
+- `wikipedia-http`: the header search input is dropped by the CSS override
+  false positive.
+- `mdn-http`: the whole `<main>` article is dropped by `display:contents`
+  handling, so the search target is not in the snapshot.
 
 ## What is broken
 
@@ -212,12 +193,13 @@ inside the list when the cap is raised above 200.
 ### P3
 
 1. **First action on a page with pending subresources can take 7-11 s.**
-   Measured `act()` evaluate time: 7.9 s (`/checkboxes`), 11.1 s
-   (`/dynamic_controls`), 8.1 s (`/dynamic_loading`), 7.7 s (`/alerts`),
-   7.1 s (`/challenging_dom`). The same actions later on the same page take
-   0.17-0.5 s. The pages load third-party images/scripts; this looks like the
-   settle loop waiting for requests that started before the action. It is a
-   latency risk, not a wrong result; no standalone minimal repro yet.
+   Measured `act()` evaluate time in the first group: 7.9 s (`/checkboxes`),
+   11.1 s (`/dynamic_controls`), 8.1 s (`/dynamic_loading`), 7.7 s
+   (`/alerts`), 7.1 s (`/challenging_dom`). The same actions later on the same
+   page take 0.17-0.5 s. The pages load third-party images/scripts; this looks
+   like the settle loop waiting for requests that started before the action.
+   It is a latency risk, not a wrong result; no standalone minimal repro yet.
+
 2. **Unlabelled native checkboxes get the whole form text as their name.**
    On `/checkboxes` both inputs are `checkbox "checkbox 1 checkbox 2"` instead
    of `checkbox 1` and `checkbox 2`; ids still work, but label lookup is
@@ -228,8 +210,8 @@ inside the list when the cap is raised above 200.
 
 - `/login` submit: the engine fills and submits, and the browser lands on
   `/secure`. Direct `page.evaluate` loses the act reply because the navigation
-  destroys the JS context; the MCP path is checked separately in this report.
-  The action itself works.
+  destroys the JS context; the MCP path passes the equivalent fill/submit
+  checks. The action itself works.
 - `/nested_frames` is a `<frameset>` page: 0 actions. README promises iframe
   scanning, not frameset scanning (`LIMITATION`; README note recommended).
 - `/shadowdom`: shadow text is visible in the snapshot
@@ -246,29 +228,66 @@ inside the list when the cap is raised above 200.
 - `/upload`: the file input is listed; no file was uploaded (out of scope).
 - Infinite scroll loads new paragraphs after `scroll` + re-snapshot; the new
   content carries no actions, so the action list stays at 3.
+- GitHub's snapshot has `Star 0 (0)`/`1 tag` while the oracle's text is
+  `Star0 (0)`/`1tag`; those two unmatched items are name-normalisation noise,
+  not missing controls.
 
 ## Blocked / not tested yet
 
 - **bbc.com** serves a full-viewport Sourcepoint consent wall
-  (`#sp_message_container_*`, `aria-modal="true"`, 1280x800, cross-origin
+  (`[id^="sp_message_container"][aria-modal="true"]`, 1280x800, cross-origin
   iframe). The harness records `blocked` and does not dismiss it. With the wall
   open the engine scans only the modal container and returns 0 actions; that is
   the site block, not a separate engine bug.
-- **MCP smoke** result is in `benchmark/realworld/mcp-results.json` and is
-  summarized after the run.
 - Not tested: real accounts, checkout/payment, posting/voting, captcha or bot
   walls, framesets, cross-origin iframe contents.
 
-## Honest summary (so far)
+## MCP smoke
 
-- Scenarios: 22/27 passed (81%).
-- Recall: 100% on 22 pages, 95.5% on the Wikipedia article. The only recall
-  loss found is the CSS override bug above; it is one bug, not 46.
-- Compression: text is 5-265x smaller than raw HTML and 1-45x smaller than
-  Playwright ariaSnapshot. The extremes are `/large` (the-internet) and the
-  Wikipedia article (1 026 text tokens vs 271 558 raw / 45 721 aria).
-- No README claims need changing yet. Recommendation for later: state that
-  framesets are not scanned, that hover-only content is reachable only when
-  the hover target is itself an action, that an anchor without `href` needs an
-  explicit role, and that a CSS hide rule overridden by a later rule can hide a
-  visible control (the Wikipedia bug).
+`node benchmark/realworld/mcp.js` runs the real `bin/ahttp-mcp.js --browser`
+over stdio and passes 11/11 checks:
+
+- `ahttp_open` returns a `pageId`; `ahttp_snapshot` reads the same page;
+- `ahttp_act` toggles a checkbox with `value: "true"` and the follow-up
+  snapshot shows the checked state;
+- TodoMVC fill + `Enter` adds a todo;
+- books.toscrape `next` navigates to page 2;
+- after two "Add Element" clicks there are two Delete buttons, and asking for
+  `Delete` by name returns `status: "ambiguous"` with both candidates.
+
+## Honest summary
+
+- **Scenarios:** 23 of 29 passed (79.3%). 6 failed; BBC was blocked before its
+  scenario. The failures are 4 P1 blocks (TodoMVC toggle, saucedemo cart,
+  Wikipedia search, MDN search) and 2 P2 failures (saucedemo sort,
+  the-internet hover).
+- **Recall:** average 93.6%, median 100%. 22 of 25 scanned pages are at 100%;
+  Wikipedia is 95.5%, GitHub 41.1%, MDN 3.3%. The low three are explained by
+  the three P1 bugs that affect scanning, not by 645 separate defects: one CSS
+  override, one media-query parser gap and one `display:contents` check account
+  for almost all of the loss.
+- **Compression:** at the median, text is 6.5x smaller than raw HTML (15.4% of
+  raw tokens; range 2.2x-265x) and 1.4x smaller than Playwright ariaSnapshot
+  (69.7% of aria tokens; range 0.97x-44x, excluding the frameset page with 0
+  aria tokens). The engine is not always smaller than ariaSnapshot, and the
+  report does not claim it is.
+- **Stability:** determinism identical on all 25 scanned pages; scroll lost no
+  action when compared against the full list.
+- **No engine changes** were made. Every finding is a pending corpus case or a
+  Chromium-only repro; the pending cases fail on the current engine by design.
+
+## README recommendations (not applied)
+
+1. State that a `display:contents` wrapper is transparent for visibility; its
+   children are the targets, not the wrapper.
+2. State which media-query syntax the CSS index understands, or fix range,
+   `or` and `calc()` parsing. Today an unknown feature is treated as true,
+   which is the unsafe default.
+3. Explain that an anchor without `href` is only an action when it has an
+   explicit role (today it is dropped before the role is read).
+4. Keep the iframe claim precise: same-origin iframes are scanned; `<frameset>`
+   pages are not.
+5. State that hover-only content is reachable only when the hover target is
+   itself an action.
+6. Do not claim that a hidden-then-shown control is found until the CSS index
+   tracks show rules and source order (the Wikipedia and GitHub cases).

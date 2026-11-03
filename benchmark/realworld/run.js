@@ -123,7 +123,7 @@ async function runPageChecks(page, out) {
     const y = step.y == null ? await page.evaluate(function () { return Math.floor((document.documentElement.scrollHeight - window.innerHeight) / 2); }) : step.y;
     await page.evaluate(function (value) { window.scrollTo(0, value); }, y);
     await page.waitForTimeout(450);
-    const snap = await snapshotJson(page, { maxActions: 400, force: true });
+    const snap = await snapshotJson(page, { maxActions: 5000, force: true });
     scrolls.push({ at: step.at, y: await page.evaluate(function () { return window.scrollY; }), keys: actionKeys(snap.actions), count: snap.actions.length });
   }
   await page.evaluate(function () { window.scrollTo(0, 0); });
