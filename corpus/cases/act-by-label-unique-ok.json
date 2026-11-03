@@ -1,0 +1,25 @@
+{
+  "id": "act-by-label-unique-ok",
+  "html": "fixtures/single-ok.html",
+  "url": "https://corpus.test/act-by-label-unique-ok",
+  "notes": "a label that matches exactly one action still resolves and runs",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "OK",
+      "targetHint": "unique label lookup",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "orig"
+        }
+      }
+    }
+  ]
+}

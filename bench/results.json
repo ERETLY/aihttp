@@ -2,25 +2,80 @@
   "engine": "0.1.0",
   "engine_file": "ahttp.js",
   "totals": {
-    "cases": 52,
-    "passed": 52,
+    "cases": 55,
+    "passed": 55,
     "failed": 0,
     "pending": 0,
-    "match_ok": 52,
-    "diff_ok": 52,
-    "tokens": 1973
+    "match_ok": 55,
+    "diff_ok": 55,
+    "tokens": 2079
   },
   "cases": [
     {
-      "id": "act-by-label-two-identical-buttons",
-      "html": "fixtures/identical-ok.html",
-      "notes": "PINNED CURRENT BEHAVIOUR: act(\"OK\") with two OK buttons and no rerender resolves by label to the first one and clicks it silently",
+      "id": "act-by-duplicate-intent-ambiguous",
+      "html": "fixtures/duplicate-intent.html",
+      "notes": "two actions share data-ahttp-intent=remove; act(\"remove\") must refuse",
       "pending": false,
       "pending_reason": null,
       "status": "PASS",
       "match_ok": true,
       "diff_ok": true,
       "tokens": 37,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\"]"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ambiguous",
+          "result_status": "ambiguous",
+          "checks": [
+            {
+              "name": "status=ambiguous",
+              "pass": true,
+              "detail": "ambiguous"
+            },
+            {
+              "name": "candidates>=2",
+              "pass": true,
+              "detail": "2"
+            },
+            {
+              "name": "noMutation",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "idle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "act-by-label-exact-case-wins",
+      "html": "fixtures/label-case.html",
+      "notes": "act(\"OK\") prefers the exact-case label over a case-insensitive sibling",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 39,
       "failures": [],
       "steps": [
         {
@@ -50,7 +105,107 @@
             {
               "name": "pageText #out",
               "pass": true,
-              "detail": "one"
+              "detail": "exact"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "act-by-label-two-identical-buttons",
+      "html": "fixtures/identical-ok.html",
+      "notes": "act(\"OK\") with two OK buttons and no rerender must refuse instead of clicking the first one",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 37,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\",\"a2\"]"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ambiguous",
+          "result_status": "ambiguous",
+          "checks": [
+            {
+              "name": "status=ambiguous",
+              "pass": true,
+              "detail": "ambiguous"
+            },
+            {
+              "name": "candidates>=2",
+              "pass": true,
+              "detail": "2"
+            },
+            {
+              "name": "noMutation",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "idle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "act-by-label-unique-ok",
+      "html": "fixtures/single-ok.html",
+      "notes": "a label that matches exactly one action still resolves and runs",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 30,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "ids",
+              "pass": true,
+              "detail": "[\"a1\"]"
+            }
+          ]
+        },
+        {
+          "step": "2:click",
+          "match_ok": true,
+          "diff_ok": true,
+          "status": "ok",
+          "result_status": "ok",
+          "checks": [
+            {
+              "name": "status=ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "name": "pageText #out",
+              "pass": true,
+              "detail": "orig"
             }
           ]
         }

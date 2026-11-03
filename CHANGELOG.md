@@ -43,6 +43,13 @@
   the real hit target in the page; `act(id, { checked: true })` still dispatches
   a click on the input, which toggles it in Chromium and jsdom.
 
+- Label lookup: when the id is not in the registry, `act("Delete")` used to
+  take the first action with that label. It now tries `data-ahttp-intent`
+  (case-insensitive), then the label with exact case, then the label
+  case-insensitive. A step with more than one match returns `status: 'ambiguous'`
+  with candidates and dispatches nothing; a duplicate `data-ahttp-intent` does
+  the same. Unique labels still run, and `confirm: true` does not bypass it.
+
 - Matching: position, DOM order and the fingerprint add up to 14 points, more
   than `margin` (12), so two controls with the same label could be separated by
   position alone and the nearer one was clicked. The winner must now also lead

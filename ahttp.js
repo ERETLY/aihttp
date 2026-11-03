@@ -2485,17 +2485,51 @@
     };
   }
 
+  function lookupCandidate(entry, score, signal) {
+    return {
+      id: entry.id,
+      role: entry.role,
+      name: entry.label,
+      tag: entry.tag,
+      score: score,
+      signals: [signal]
+    };
+  }
+
+  function labelLookup(key) {
+    var lower = key.toLowerCase();
+    var intents = [];
+    var exact = [];
+    var loose = [];
+    S.registry.forEach(function (cand) {
+      if (cand.intent && String(cand.intent).toLowerCase() === lower) intents.push(cand);
+      if (cand.label) {
+        if (cand.label === key) exact.push(cand);
+        if (String(cand.label).toLowerCase() === lower) loose.push(cand);
+      }
+    });
+    if (intents.length) return { matches: intents, score: MATCH.weights.intent, signal: 'intent' };
+    if (exact.length) return { matches: exact, score: MATCH.weights.accessibleName, signal: 'name' };
+    if (loose.length) return { matches: loose, score: MATCH.weights.accessibleName - 5, signal: 'name~' };
+    return null;
+  }
+
   function resolveEntry(id) {
     if (!id) return { status: 'not_found', reason: 'unknown_action' };
     var key = String(id).replace(/^\[|\]$/g, '');
     var entry = S.registry.get(key);
     if (!entry) {
-      var lower = key.toLowerCase();
-      S.registry.forEach(function (cand) {
-        if (entry) return;
-        if (cand.intent && String(cand.intent).toLowerCase() === lower) entry = cand;
-        else if (cand.label && String(cand.label).toLowerCase() === lower) entry = cand;
-      });
+      var lookup = labelLookup(key);
+      if (lookup && lookup.matches.length > 1) {
+        return {
+          status: 'ambiguous',
+          id: String(id),
+          candidates: lookup.matches.slice(0, MATCH.maxCandidates).map(function (cand) {
+            return lookupCandidate(cand, lookup.score, lookup.signal);
+          })
+        };
+      }
+      if (lookup) entry = lookup.matches[0];
     }
     if (!entry) return { status: 'not_found', reason: 'unknown_action' };
     if (entry.node && connected(entry.node) && inCurrentScan(entry)) {
@@ -3114,14 +3148,14 @@
         };
       }
       if (resolved.status === 'ambiguous') {
-        var stale = resolved.entry;
+        var stale = resolved.entry || null;
         return {
           ok: false,
           error: 'ambiguous',
           status: 'ambiguous',
-          id: stale.id,
-          action: actionInfo(stale, stale.kind),
-          targetHint: p.targetHint != null ? String(p.targetHint) : (o.targetHint != null ? String(o.targetHint) : (stale.label || null)),
+          id: resolved.id || (stale ? stale.id : String(id)),
+          action: stale ? actionInfo(stale, stale.kind) : undefined,
+          targetHint: p.targetHint != null ? String(p.targetHint) : (o.targetHint != null ? String(o.targetHint) : (stale && stale.label ? stale.label : null)),
           candidates: resolved.candidates,
           thresholds: { accept: MATCH.accept, ambiguous: MATCH.ambiguous, margin: MATCH.margin, contentMargin: MATCH.contentMargin },
           warning: 'Multiple controls match this target; no action was taken.'

@@ -201,3 +201,36 @@ test('MCP browser mode executes page JavaScript', { skip: gate.skip, timeout: 60
     await close(local.server);
   }
 });
+
+test('MCP reports ambiguous when a label matches several actions', { timeout: 30000 }, async () => {
+  const local = await listen((req, res) => {
+    res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
+    res.end('<!doctype html><html><head><title>MCP label</title></head><body>' +
+      '<main><button>OK</button><button>OK</button><p id="out">idle</p></main></body></html>');
+  });
+  const proc = spawn(process.execPath, [path.join(__dirname, '..', 'bin', 'ahttp-mcp.js'), '--allow-private'], {
+    stdio: ['pipe', 'pipe', 'pipe']
+  });
+  const client = createClient(proc);
+  try {
+    const opened = await client.call('tools/call', {
+      name: 'ahttp_open',
+      arguments: { url: local.url },
+      _meta: MODERN_META
+    });
+    assert.equal(opened.isError, false);
+    const pageId = opened.structuredContent.pageId;
+    const result = await client.call('tools/call', {
+      name: 'ahttp_act',
+      arguments: { pageId, id: 'OK' },
+      _meta: MODERN_META
+    });
+    assert.equal(result.isError, true);
+    assert.equal(result.structuredContent.status, 'ambiguous');
+    assert.equal(result.structuredContent.candidates.length, 2);
+    assert.match(result.content[0].text, /AMBIGUOUS/);
+  } finally {
+    proc.kill();
+    await close(local.server);
+  }
+});

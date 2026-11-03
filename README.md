@@ -392,11 +392,11 @@ For the draft WebMCP API, `ahttp.installWebMCP()` registers `ahttp_snapshot` and
 
 - Matching is heuristic, not a proof of identity. Stable anchors (intent, test id, DOM id, name, accessible name, text, title, placeholder, alt, href) are tried first; the fingerprint is a low-weight fallback.
 - Two near-identical controls can land in the ambiguity band. The engine then returns `status: 'ambiguous'` with candidates and dispatches nothing. It does not guess.
+- When the id is not in the registry, `act()` can resolve by `data-ahttp-intent` or by label. A lookup that matches more than one action returns `status: 'ambiguous'` with candidates instead of clicking the first one.
 - `confirm: true` does not resolve ambiguity. Re-snapshot, disambiguate with `data-ahttp-intent` or `data-testid`, or use `query`/`scope`.
 - A disabled replacement is not an active target. An action whose expected effect is missing returns `status: 'no_effect'` when an `expect` rule is supplied; re-snapshot instead of retrying.
 - Position and DOM order are tie-breakers only. A virtualized list that unmounts a row produces `not_found`, not a click on a recycled row.
 - If the original control is replaced by a disabled twin and an active twin with the same label, the active twin is clicked: disabled candidates are filtered before scoring. A lone disabled replacement gives `not_found`.
-- Looking an action up by label instead of by id (`act('OK')`) takes the first control with that label, even when several share it. Use ids or `data-ahttp-intent`.
 - `pointer-events: none` does not hide a control; it is still listed.
 - With an `expect` rule, a change that never comes returns `no_effect` only after `timeout` (1200 ms by default); pass a smaller `timeout` to fail faster.
 

@@ -90,7 +90,10 @@ Result shape:
 
 When a framework replaced the node, `act` relocates it by stable anchors. If the
 old id now matches two controls within the ambiguity margin, no event is
-dispatched and the reply is structured:
+dispatched and the reply is structured. When the id itself is not in the
+registry, `act` also accepts an intent or a visible label; a lookup that matches
+more than one action returns the same `ambiguous` shape instead of clicking the
+first one:
 
 ```js
 {

@@ -1,0 +1,29 @@
+{
+  "id": "act-by-duplicate-intent-ambiguous",
+  "html": "fixtures/duplicate-intent.html",
+  "url": "https://corpus.test/act-by-duplicate-intent",
+  "notes": "two actions share data-ahttp-intent=remove; act(\"remove\") must refuse",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "remove",
+      "targetHint": "duplicate data-ahttp-intent",
+      "expectStatus": "ambiguous",
+      "expectEffect": {
+        "candidates": 2,
+        "noMutation": true,
+        "pageText": {
+          "selector": "#out",
+          "equals": "idle"
+        }
+      }
+    }
+  ]
+}

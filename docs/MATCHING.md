@@ -106,6 +106,26 @@ a selector. `candidates` is capped at five and sorted by score, then DOM order.
 action, not for choosing between two actions. The engine dispatches no event and
 does not mutate the registry.
 
+## Label and intent lookup
+
+When the id is not in the registry, `act(id)` also accepts a
+`data-ahttp-intent` value (case-insensitive) or a visible label. Matching is
+ordered:
+
+1. `data-ahttp-intent` (case-insensitive);
+2. label with the exact case;
+3. label case-insensitive.
+
+The first step that has a match decides. One match is used; two or more matches
+return `status: 'ambiguous'` with up to five candidates and dispatch nothing,
+including a duplicate `data-ahttp-intent`. `confirm: true` does not override it.
+A unique label still resolves, and an exact-case label wins over a
+case-insensitive sibling.
+
+Label-lookup candidates have the same shape as relocation candidates. Their
+`score` is the lookup weight (`intent` 100, exact label 55, case-insensitive
+label 50) and `signals` records `intent`, `name` or `name~`.
+
 ## Status values
 
 Every `act()` result now carries `status`:

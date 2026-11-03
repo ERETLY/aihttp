@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Duplicate intent</title></head>
+<body>
+<main>
+<button data-ahttp-intent="remove" onclick="window.__mark('left')">Delete</button>
+<button data-ahttp-intent="remove" onclick="window.__mark('right')">Remove</button>
+<p id="out">idle</p>
+<script>
+window.__mark = function (value) { var out = document.getElementById('out'); if (out) out.textContent = value; };
+</script>
+</main>
+</body>
+</html>
