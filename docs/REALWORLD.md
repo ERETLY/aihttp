@@ -278,9 +278,9 @@ over stdio and passes 11/11 checks:
 
 ## After the fixes
 
-Rerun on 2026-11-04 of `fix/realworld-gaps` at `04bbc3d` (engine changes in
-`630f153..fcdd48f`, scenario corrections in `60beed2` and `1326d80`), same
-sites, the same oracle; raw data in
+Rerun on 2026-11-04 of `fix/realworld-gaps` at `e08c574` (engine changes in
+`630f153..fcdd48f`; harness and scenario changes in `04bbc3d`, `60beed2`,
+`1326d80` and `e08c574`), same sites and the same oracle; raw data in
 `benchmark/realworld/results-after-fixes.json`.
 
 | Site | Recall before | Recall after | Scanned actions |
@@ -288,9 +288,10 @@ sites, the same oracle; raw data in
 | wikipedia-http | 95.5% | 97.6% | 60 |
 | github-ahttp | 41.1% | 98.9% | 60 |
 | mdn-http | 3.3% | 30.8% | 60 |
-| all scanned pages (mean) | 93.6% | 97.1% | |
+| bbc-news | blocked | 83.1% | 60 |
+| all scanned pages (mean) | 93.6% (25) | 96.6% (26) | |
 
-- **Scenarios:** 23/29 before, 28/29 after.
+- **Scenarios:** 23/29 before, 29/30 after (bbc-news gained a scenario).
 - **Corrected scenario expectations, no engine change:** `wikipedia-http` and
   `todomvc-react` now pass. Wikipedia's `/wiki/Hypertext_Transfer_Protocol`
   redirects to `/wiki/HTTP`, and after typing, the snapshot exposes the
@@ -301,8 +302,10 @@ sites, the same oracle; raw data in
   that no list item contains `Task one`.
 - **Still failing, by design:** `the-internet-hovers` is the hover-only case.
   It stays a pending corpus case and is documented in README.
-- **Still blocked:** `bbc-news` serves the same full-viewport consent wall; the
-  harness records `blocked` and does not dismiss it.
+- **Unblocked:** `bbc-news` now passes. The wall lives in a `privacy-mgmt.com`
+  cross-origin frame; when a site declares the frame and the button, the harness
+  presses "I do not agree" and keeps `blocked` only if the full-viewport overlay
+  remains. The page now scans at 83.1% recall.
 - **MDN gap is the oracle, not the engine.** 30.8% is 157/510 matched. The
   engine reports 159 actions over 570 nodes; the oracle counts 510 visible
   targets because it does not treat content inside a closed `<details>` as

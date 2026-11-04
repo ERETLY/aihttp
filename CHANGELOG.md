@@ -113,12 +113,13 @@
 - `test/realworld-layout.test.js`: five Chromium tests behind
   `AHTTP_REQUIRE_BROWSER=1` (layout mode, anchors without `href`, label proxy,
   partial opacity, `display: contents` and the security fixture).
-- `docs/REALWORLD.md` keeps the before/after run: 23/29 to 28/29 scenarios and
-  mean recall 93.6% to 97.1%.
+- `docs/REALWORLD.md` keeps the before/after run: 23/29 to 29/30 scenarios and
+  mean recall 93.6% to 96.6% over the scanned pages (bbc-news is new).
 - Two real-world steps were corrected against live evidence: Wikipedia clicks a
   search suggestion, TodoMVC expects the Active filter to hide the completed
   todo. The harness retries a text/dom read while a form-submit navigation
-  commits.
+  commits, and can reject a declared cross-origin consent wall, so bbc-news is
+  scanned instead of blocked.
 - `docs/MATCHING.md`, `docs/ARCHITECTURE.md`, a 30-second quick start, an MCP
   config block and a runnable `examples/agent-loop.js`.
 
