@@ -2,7 +2,6 @@
   "id": "rw-css-hidden-then-shown",
   "html": "fixtures/rw-css-hidden-then-shown.html",
   "url": "https://corpus.test/rw-css-hidden-then-shown",
-  "pending": "real-world: en.wikipedia.org hides .vector-typeahead-search-container with display:none under @media screen and shows it again under min-width:1120px; the CSS index keeps only the hide rule and drops the visible search input",
   "steps": [
     {
       "action": "snapshot",
@@ -11,7 +10,7 @@
         "a2"
       ],
       "expectText": [
-        "input \"Search Wikipedia\"",
+        "input[search] \"Search Wikipedia\"",
         "button \"Save\""
       ]
     }

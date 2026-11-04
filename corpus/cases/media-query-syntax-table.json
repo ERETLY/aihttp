@@ -1,0 +1,50 @@
+{
+  "id": "media-query-syntax-table",
+  "html": "fixtures/media-query-syntax-table.html",
+  "url": "https://corpus.test/media-query-syntax-table",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectText": [
+        "button \"Q02\"",
+        "button \"Q03\"",
+        "button \"Q05\"",
+        "button \"Q12\"",
+        "button \"Q14\"",
+        "button \"Q16\"",
+        "button \"Q18\"",
+        "button \"Q20\"",
+        "button \"Q23\"",
+        "button \"Q24\"",
+        "button \"Q27\"",
+        "button \"Q30\"",
+        "button \"Q31\"",
+        "button \"Q35\"",
+        "button \"Q36\""
+      ],
+      "expectNotText": [
+        "button \"Q01\"",
+        "button \"Q04\"",
+        "button \"Q06\"",
+        "button \"Q07\"",
+        "button \"Q08\"",
+        "button \"Q09\"",
+        "button \"Q10\"",
+        "button \"Q11\"",
+        "button \"Q13\"",
+        "button \"Q15\"",
+        "button \"Q17\"",
+        "button \"Q19\"",
+        "button \"Q21\"",
+        "button \"Q22\"",
+        "button \"Q25\"",
+        "button \"Q26\"",
+        "button \"Q28\"",
+        "button \"Q29\"",
+        "button \"Q32\"",
+        "button \"Q33\"",
+        "button \"Q34\""
+      ]
+    }
+  ]
+}
