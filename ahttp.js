@@ -1146,7 +1146,7 @@
     var inlineOverrides = (inline.display && String(inline.display).toLowerCase() !== 'none') ||
       (inline.visibility && ['hidden', 'collapse'].indexOf(String(inline.visibility).toLowerCase()) < 0) ||
       (inline.opacity != null && !isZeroOpacity(inline.opacity));
-    if (!inlineOverrides && ctx.css) {
+    if (!inlineOverrides && ctx.css && !ctx.layout) {
       var css = cssState(el, ctx);
       if (css.hidden) return { hidden: true, suspicious: false };
     }
@@ -1319,7 +1319,7 @@
       var inline = st.inline || {};
       var inlineOverrides = (inline.display && String(inline.display).toLowerCase() !== 'none') ||
         (inline.visibility && ['hidden', 'collapse'].indexOf(String(inline.visibility).toLowerCase()) < 0);
-      if (!inlineOverrides && ctx.css) {
+      if (!inlineOverrides && ctx.css && !ctx.layout) {
         var css = cssState(node, ctx);
         if (css.hidden && css.hard) return true;
       }
@@ -1394,7 +1394,7 @@
     }
     if (isEditable(el)) return { kind: 'fill', role: 'textbox', native: true, editable: true };
     if (role && ROLE_KINDS[role]) return { kind: ROLE_KINDS[role], role: role, native: false, custom: true };
-    var pointer = st.cursor === 'pointer' || cssState(el, ctx).pointer;
+    var pointer = st.cursor === 'pointer' || (!ctx.layout && cssState(el, ctx).pointer);
     var handler = hasAttr(el, 'onclick') || hasAttr(el, 'onmousedown') || hasAttr(el, 'onkeydown') || hasAttr(el, 'onkeyup');
     if (pointer || handler) return { kind: 'click', role: 'button', native: false, custom: true };
     var ti = attr(el, 'tabindex');
@@ -1726,11 +1726,12 @@
       var subDoc = null;
       try { subDoc = el.contentDocument || null; } catch (e) { subDoc = null; }
       if (subDoc && (subDoc.body || subDoc.documentElement)) {
+        var subLayout = detectLayout(subDoc);
         var sub = {
           doc: subDoc,
           win: subDoc.defaultView || ctx.win,
-          layout: detectLayout(subDoc),
-          css: buildCssIndex(subDoc),
+          layout: subLayout,
+          css: subLayout ? { buckets: new Map(), rules: 0 } : buildCssIndex(subDoc),
           styleCache: new Map(),
           actions: ctx.actions,
           text: ctx.text,
@@ -1832,7 +1833,7 @@
       doc: doc,
       win: env,
       layout: S.layout,
-      css: buildCssIndex(doc),
+      css: S.layout ? { buckets: new Map(), rules: 0 } : buildCssIndex(doc),
       styleCache: new Map(),
       actions: [],
       text: [],
