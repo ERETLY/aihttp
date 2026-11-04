@@ -2,7 +2,6 @@
   "id": "rw-anchor-role-button",
   "html": "fixtures/rw-anchor-role-button.html",
   "url": "https://corpus.test/rw-anchor-role-button",
-  "pending": "real-world: saucedemo cart is <a role=button aria-label='Cart, empty'> without href; classify() drops every anchor without href before it looks at the explicit role, so the cart is missing from the snapshot",
   "steps": [
     {
       "action": "snapshot",

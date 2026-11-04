@@ -61,6 +61,37 @@ test('layout mode follows computed style instead of the CSS index', { skip: gate
   }
 });
 
+test('anchors without href stay actions when role, handler or tabindex says so', { skip: gate.skip, timeout: 90000 }, async () => {
+  if (gate.fail) assert.fail(gate.reason);
+  const browser = await playwright.chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+    const snap = await snapshotOf(page, '<!doctype html><html><head><title>Anchors</title></head><body><main>' +
+      '<a role="button" aria-label="Cart, empty">cart</a>' +
+      '<a onclick="document.getElementById(\'out\').textContent=\'ran\'">Run task</a>' +
+      '<a tabindex="0">Focus target</a>' +
+      '<a>Plain text only</a>' +
+      '<p id="out">idle</p></main></body></html>');
+    assert.match(snap.text, /a role=button "Cart, empty"/);
+    assert.match(snap.text, /button "Run task"/);
+    assert.match(snap.text, /button "Focus target"/);
+    assert.doesNotMatch(snap.text, /button "Plain text only"/);
+
+    const cart = await page.evaluate(function () {
+      return window.ahttp.act('Cart, empty', null, { quiet: 0, minWait: 0, timeout: 250, snapshot: false });
+    });
+    assert.equal(cart.status, 'ok');
+
+    const run = await page.evaluate(function () {
+      return window.ahttp.act('Run task', null, { quiet: 0, minWait: 0, timeout: 250, snapshot: false });
+    });
+    assert.equal(run.status, 'ok');
+    assert.equal(await page.evaluate(function () { return document.getElementById('out').textContent; }), 'ran');
+  } finally {
+    await browser.close();
+  }
+});
+
 test('display: contents and zero-size wrappers stay visible', { skip: gate.skip, timeout: 90000 }, async () => {
   if (gate.fail) assert.fail(gate.reason);
   const browser = await playwright.chromium.launch({ headless: true });

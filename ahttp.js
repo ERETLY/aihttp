@@ -2103,10 +2103,7 @@
     if (tag === 'select') return { kind: 'select', role: 'combobox', native: true };
     if (tag === 'button') return { kind: 'click', role: 'button', native: true };
     if (tag === 'summary') return { kind: 'click', role: 'button', native: true };
-    if (tag === 'a') {
-      if (hasAttr(el, 'href')) return { kind: 'click', role: 'link', native: true };
-      return null;
-    }
+    if (tag === 'a' && hasAttr(el, 'href')) return { kind: 'click', role: 'link', native: true };
     if (isEditable(el)) return { kind: 'fill', role: 'textbox', native: true, editable: true };
     if (role && ROLE_KINDS[role]) return { kind: ROLE_KINDS[role], role: role, native: false, custom: true };
     var pointer = st.cursor === 'pointer' || (!ctx.layout && cssState(el, ctx).pointer);

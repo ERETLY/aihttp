@@ -1,0 +1,26 @@
+{
+  "id": "anchor-onclick-no-href",
+  "html": "fixtures/anchor-onclick-no-href.html",
+  "url": "https://corpus.test/anchor-onclick-no-href",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ],
+      "expectText": [
+        "button \"Run task\""
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "clicked"
+        }
+      }
+    }
+  ]
+}
