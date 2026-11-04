@@ -1,0 +1,27 @@
+{
+  "id": "rw-hover-only",
+  "html": "fixtures/rw-hover-only.html",
+  "url": "https://corpus.test/rw-hover-only",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "payload": {
+        "hover": true
+      },
+      "targetHint": "avatar figure"
+    },
+    {
+      "action": "snapshot",
+      "expectText": [
+        "name: user1"
+      ]
+    }
+  ]
+}

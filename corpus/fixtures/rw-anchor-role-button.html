@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Anchor role button</title></head>
+<body>
+<main>
+<a role="button" aria-label="Cart, empty" onclick="window.__mark('cart')">Bag</a>
+<button onclick="window.__mark('save')">Save</button>
+<p id="out">idle</p>
+<script>
+window.__mark = function (value) {
+  var out = document.getElementById('out');
+  if (out) out.textContent = value;
+};
+</script>
+</main>
+</body>
+</html>

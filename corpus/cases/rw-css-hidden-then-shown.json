@@ -1,0 +1,18 @@
+{
+  "id": "rw-css-hidden-then-shown",
+  "html": "fixtures/rw-css-hidden-then-shown.html",
+  "url": "https://corpus.test/rw-css-hidden-then-shown",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ],
+      "expectText": [
+        "input[search] \"Search Wikipedia\"",
+        "button \"Save\""
+      ]
+    }
+  ]
+}

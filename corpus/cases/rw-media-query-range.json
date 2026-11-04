@@ -1,0 +1,18 @@
+{
+  "id": "rw-media-query-range",
+  "html": "fixtures/rw-media-query-range.html",
+  "url": "https://corpus.test/rw-media-query-range",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ],
+      "expectText": [
+        "button \"Nav\"",
+        "button \"Side\""
+      ]
+    }
+  ]
+}

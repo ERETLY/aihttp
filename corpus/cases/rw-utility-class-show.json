@@ -1,0 +1,16 @@
+{
+  "id": "rw-utility-class-show",
+  "html": "fixtures/rw-utility-class-show.html",
+  "url": "https://corpus.test/rw-utility-class-show",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ],
+      "expectText": [
+        "button \"Open\""
+      ]
+    }
+  ]
+}

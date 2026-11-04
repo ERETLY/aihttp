@@ -1,0 +1,30 @@
+{
+  "id": "rw-sibling-label-toggle",
+  "html": "fixtures/rw-sibling-label-toggle.html",
+  "url": "https://corpus.test/rw-sibling-label-toggle",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ],
+      "expectText": [
+        "input[checkbox] \"Task one\" unchecked"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "payload": {
+        "checked": true
+      },
+      "targetHint": "task one toggle",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "checked"
+        }
+      }
+    }
+  ]
+}

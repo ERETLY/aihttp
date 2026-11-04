@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Bootstrap btn-check</title>
+<style>
+.btn-check{display:none}
+.btn{cursor:pointer;display:inline-block;padding:4px 8px;border:1px solid #333}
+</style>
+</head>
+<body>
+<main>
+<input class="btn-check" type="checkbox" id="dark">
+<label class="btn" for="dark">Dark mode</label>
+<button>Save</button>
+<p id="out">idle</p>
+</main>
+<script>
+document.getElementById('dark').addEventListener('change', function () {
+  document.getElementById('out').textContent = this.checked ? 'on' : 'off';
+});
+</script>
+</body>
+</html>

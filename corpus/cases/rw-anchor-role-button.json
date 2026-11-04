@@ -1,0 +1,29 @@
+{
+  "id": "rw-anchor-role-button",
+  "html": "fixtures/rw-anchor-role-button.html",
+  "url": "https://corpus.test/rw-anchor-role-button",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ],
+      "expectText": [
+        "a role=button \"Cart, empty\"",
+        "button \"Save\""
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "targetHint": "cart anchor",
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "cart"
+        }
+      }
+    }
+  ]
+}

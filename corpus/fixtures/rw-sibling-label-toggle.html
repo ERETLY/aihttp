@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Sibling toggle</title>
+<style>
+.view{position:relative;padding:4px}
+.toggle{position:absolute;top:0;left:0;width:40px;height:40px;margin:0;opacity:0}
+</style>
+</head>
+<body>
+<main>
+<ul class="todo-list">
+  <li><div class="view">
+    <input class="toggle" type="checkbox" data-testid="todo-item-toggle">
+    <label>Task one</label>
+  </div></li>
+</ul>
+<p id="out">idle</p>
+</main>
+<script>
+document.querySelector('.toggle').addEventListener('change', function () {
+  document.getElementById('out').textContent = this.checked ? 'checked' : 'unchecked';
+});
+</script>
+</body>
+</html>

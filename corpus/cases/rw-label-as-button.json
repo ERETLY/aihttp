@@ -1,0 +1,21 @@
+{
+  "id": "rw-label-as-button",
+  "html": "fixtures/rw-label-as-button.html",
+  "url": "https://corpus.test/rw-label-as-button",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ],
+      "expectText": [
+        "input \"Username\"",
+        "button \"Save\""
+      ],
+      "expectNotText": [
+        "label role=button"
+      ]
+    }
+  ]
+}
