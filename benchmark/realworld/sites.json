@@ -215,7 +215,7 @@
             { "op": "act", "target": { "tag": "input", "type": "text", "index": 0 }, "payload": { "value": "Task three" }, "expect": { "status": "ok" } },
             { "op": "act", "target": { "tag": "input", "type": "text", "index": 0 }, "payload": { "key": "Enter" }, "expect": { "status": "ok", "text": ["Task three"] } },
             { "op": "act", "target": { "tag": "input", "type": "checkbox", "index": 0 }, "payload": { "checked": true }, "expect": { "status": "ok" } },
-            { "op": "act", "target": { "tag": "a", "name": "Active" }, "expect": { "status": "ok", "text": ["Task one", "Task two"] } },
+            { "op": "act", "target": { "tag": "a", "name": "Active" }, "expect": { "status": "ok", "text": ["Task two", "Task three"], "count": [{ "selector": ".todo-list li", "equals": 2 }, { "selector": ".todo-list li", "contains": "Task one", "equals": 0 }] } },
             { "op": "act", "target": { "tag": "a", "name": "Completed" }, "expect": { "status": "ok" } },
             { "op": "act", "target": { "role": "button", "name": "Clear completed" }, "expect": { "status": "ok" } }
           ]
