@@ -1,4 +1,4 @@
-/*! ahttp.js v0.1.0 | MIT | DOM-to-action bridge for LLM agents */
+/*! ahttp.js v0.2.0 | MIT | DOM-to-action bridge for LLM agents */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) {
     module.exports = factory(root);
@@ -10,7 +10,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : this), function (GLOBAL) {
   'use strict';
 
-  var VERSION = '0.1.0';
+  var VERSION = '0.2.0';
   if (GLOBAL.ahttp && GLOBAL.ahttp.__ahttp === true) return GLOBAL.ahttp;
 
   var SKIP_TAGS = { script: 1, style: 1, noscript: 1, template: 1, meta: 1, link: 1, head: 1, base: 1, title: 1 };

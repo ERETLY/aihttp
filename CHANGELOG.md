@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.2.0, 2026-11-04
+
 ### Matching
 
 - Relocation scores independent anchors: intent, test id, DOM id, name,

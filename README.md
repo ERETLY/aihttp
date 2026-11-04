@@ -1,7 +1,8 @@
 # ahttp
 
 [![status: experimental](https://img.shields.io/badge/status-experimental-orange)](#)
-[![version: pre-1.0](https://img.shields.io/badge/version-pre--1.0-lightgrey)](#)
+[![version](https://img.shields.io/github/package-json/v/ERETLY/ahttp)](https://github.com/ERETLY/ahttp/blob/main/package.json)
+[![CI](https://github.com/ERETLY/ahttp/actions/workflows/ci.yml/badge.svg)](https://github.com/ERETLY/ahttp/actions/workflows/ci.yml)
 
 Page snapshots for LLM agents. ahttp scans the DOM, gives every control a short id, and after each action returns a diff instead of the whole page.
 
