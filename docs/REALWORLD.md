@@ -276,7 +276,46 @@ over stdio and passes 11/11 checks:
 - **No engine changes** were made. Every finding is a pending corpus case or a
   Chromium-only repro; the pending cases fail on the current engine by design.
 
-## README recommendations (not applied)
+## After the fixes
+
+Rerun on 2026-11-04 of `fix/realworld-gaps` at `3489b3c` (engine changes in
+`630f153..fcdd48f`), same sites, same scenarios and the same oracle; raw data in
+`benchmark/realworld/results-after-fixes.json`.
+
+| Site | Recall before | Recall after | Scanned actions |
+|---|---:|---:|---:|
+| wikipedia-http | 95.5% | 97.6% | 60 |
+| github-ahttp | 41.1% | 98.9% | 60 |
+| mdn-http | 3.3% | 30.8% | 60 |
+| all scanned pages (mean) | 93.6% | 97.1% | |
+
+- **Scenarios:** 23/29 before, 26/29 after.
+- **Still failing, by design:** `the-internet-hovers` is the hover-only case.
+  It stays a pending corpus case and is documented in README.
+- **Still failing, page flow:** `wikipedia-http` now fills the search field and
+  sends `Enter` with `status: ok`, but Wikipedia opens a suggestion list instead
+  of navigating; the scenario expects the URL to change without clicking a
+  suggestion. Before the fixes it stopped earlier with
+  `target not in last snapshot`.
+- **Still failing, assertion:** `todomvc-react` is 1/2. The checkbox toggle is
+  now reachable (sibling label fix), so the scenario gets further and fails on
+  the filter step: after clicking "Active" the snapshot does not contain
+  `Task one`. Before it stopped at the toggle with `target not in last
+  snapshot`. The recall is 100% in both runs.
+- **Still blocked:** `bbc-news` serves the same full-viewport consent wall; the
+  harness records `blocked` and does not dismiss it.
+- **MDN gap is the oracle, not the engine.** 30.8% is 157/510 matched. The
+  engine reports 159 actions over 570 nodes; the oracle counts 510 visible
+  targets because it does not treat content inside a closed `<details>` as
+  hidden. All five pruned `<ol>` subtrees (353 missed targets) sit inside closed
+  `<details>` in the left sidebar. The oracle is deliberately independent and is
+  not tuned to the engine, so the number stays as measured.
+
+Items 1, 2, 3 and 5 of the recommendations below are now applied; item 6 no
+longer reproduces because browser layout mode reads computed style; item 4 was
+already accurate.
+
+## README recommendations (original run, applied where noted)
 
 1. State that a `display:contents` wrapper is transparent for visibility; its
    children are the targets, not the wrapper.

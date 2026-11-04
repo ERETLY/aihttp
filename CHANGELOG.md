@@ -75,13 +75,46 @@
   holds or `timeout` runs out. A met rule returns as fast as before; an unmet
   one returns `no_effect` after the full timeout (1200 ms by default).
 
+### Real-world fixes
+
+- Layout mode reads visibility and cursor from `getComputedStyle` only. The
+  browser already resolved media queries, specificity and inheritance, so the
+  CSS index is not consulted and cannot override the page. GitHub recall went
+  from 41.1% to 98.9%.
+- The static backend evaluates a Media Queries 4 subset (width, height,
+  aspect-ratio, resolution, ranges, `and`/`or`/`not`, `calc`, `em`/`rem`/`vw`/`vh`
+  and common preferences) and cascades `display`, `visibility`, `opacity` and
+  `cursor` by `!important`, specificity and source order. An unknown feature or
+  an unparsable query is false, never true.
+- `display: contents` no longer hides a subtree, and a zero-size clipped wrapper
+  does not hide content a browser still paints.
+- Anchors without `href` stay actions when a role, a handler, a pointer cursor or
+  `tabindex` makes them interactive.
+- A sibling `<label>` without `for`, and the direct text next to an unlabelled
+  checkbox, now name the control; two checkboxes in one paragraph get distinct
+  names.
+- A `<label>` is not a separate action when its control is in the snapshot.
+  Bootstrap `btn-check` labels stay clickable when the radio is hard-hidden or
+  missing.
+- A native `select`, `textarea` or text input hidden only by partial opacity
+  (`0 < opacity <= 0.05`) is recovered when it has a real box and a name;
+  `opacity: 0` is not. A `cursor: pointer` element covered by a native control
+  is dropped instead of becoming a dead button.
+
 ### Tests and docs
 
-- Local jsdom corpus with 46 scenarios (the original 27, the five gap fixes, and
-  cases that pin current limits and behavior: iframe depth, cross-origin
+- Local jsdom corpus with 71 scenarios (the original 27, the gap fixes and the
+  real-world regressions: media queries and cascade, CSS-hidden-then-shown,
+  anchors without `href`, sibling labels and adjacent text, label proxies,
+  Bootstrap `btn-check`, partial-opacity fields, iframe depth, cross-origin
   iframes, closed shadow roots, empty pages, aria-label and href drift, other
   hiding mechanisms, a disabled twin, `pointer-events: none`, label lookup), `bench/results.json` metrics and no
   network access.
+- `test/realworld-layout.test.js`: five Chromium tests behind
+  `AHTTP_REQUIRE_BROWSER=1` (layout mode, anchors without `href`, label proxy,
+  partial opacity, `display: contents` and the security fixture).
+- `docs/REALWORLD.md` keeps the before/after run: 23/29 to 26/29 scenarios and
+  mean recall 93.6% to 97.1%.
 - `docs/MATCHING.md`, `docs/ARCHITECTURE.md`, a 30-second quick start, an MCP
   config block and a runnable `examples/agent-loop.js`.
 
