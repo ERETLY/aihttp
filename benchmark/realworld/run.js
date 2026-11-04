@@ -213,6 +213,24 @@ async function resolveTarget(page, json, target) {
   return { id: matches[index].id, action: matches[index] };
 }
 
+// A click that submits a form tears down the JS context. The act step waits for
+// load, but a navigation that commits late still races the text/dom check.
+// Retry the read on that error instead of reporting it as a failed expectation.
+async function evaluateStable(page, fn, arg) {
+  let last = null;
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      return await page.evaluate(fn, arg);
+    } catch (e) {
+      last = e;
+      if (!/Execution context was destroyed|Cannot find context|navigat/i.test(String((e && e.message) || e))) throw e;
+      await page.waitForLoadState('domcontentloaded', { timeout: 8000 }).catch(function () {});
+      await page.waitForTimeout(250);
+    }
+  }
+  throw last;
+}
+
 async function checkExpectations(page, result, expect, context) {
   const failures = [];
   const status = result && result.status ? result.status : (result && result.ok ? 'ok' : 'error');
@@ -231,7 +249,7 @@ async function checkExpectations(page, result, expect, context) {
     if (!hit) failures.push('dialog ' + expect.dialog + ' not observed');
   }
   if (expect.text || expect.dom || expect.count) {
-    const verdict = await page.evaluate(function (rules) {
+    const verdict = await evaluateStable(page, function (rules) {
       var out = [];
       var body = document.body ? document.body.innerText : '';
       if (rules.text) {
