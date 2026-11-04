@@ -361,13 +361,13 @@
       "id": "bbc-news",
       "url": "https://www.bbc.com/",
       "blockedSelector": "[id^=\"sp_message_container\"][aria-modal=\"true\"]",
-      "blockedReason": "consent wall: Sourcepoint iframe covers the viewport; not bypassed",
+      "blockedReason": "consent wall: Sourcepoint iframe covers the viewport; dismissal failed",
+      "consent": { "frameUrlContains": "privacy-mgmt.com", "buttonText": "I do not agree", "timeoutMs": 5000 },
       "scenarios": [
         {
-          "name": "cookie banner and snapshot",
+          "name": "cookie wall rejected, page scanned",
           "steps": [
-            { "op": "snapshot", "label": "banner" },
-            { "op": "act", "target": { "nameContains": "Reject" }, "expect": { "status": "ok" } }
+            { "op": "snapshot", "label": "after reject", "expect": { "text": ["BBC"] } }
           ]
         }
       ]

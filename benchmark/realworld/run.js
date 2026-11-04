@@ -413,30 +413,64 @@ function isBlocked(status, title, bodyStart) {
   return null;
 }
 
-// A full-viewport consent overlay is not something the harness may dismiss.
-// The selector is declared per site so this cannot silently swallow a page
-// that merely has a small cookie bar (which stays testable).
+// A full-viewport consent overlay is not something the engine can click when it
+// lives in a cross-origin iframe. A site may declare the frame and the button
+// for the harness to press before scanning; without that declaration the wall
+// stays a block. The selector and the button are per site so a small cookie bar
+// is never swallowed silently.
+async function overlayBox(page, selector) {
+  return page.evaluate(function (sel) {
+    const el = document.querySelector(sel);
+    if (!el) return null;
+    const cs = getComputedStyle(el);
+    if (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) === 0) return null;
+    const rect = el.getBoundingClientRect();
+    return {
+      area: rect.width * rect.height,
+      viewport: window.innerWidth * window.innerHeight,
+      width: Math.round(rect.width),
+      height: Math.round(rect.height)
+    };
+  }, selector).catch(function () { return null; });
+}
+
+async function dismissConsent(page, consent) {
+  if (!consent || !consent.buttonText) return false;
+  const frames = page.frames().filter(function (frame) {
+    return !consent.frameUrlContains || frame.url().indexOf(consent.frameUrlContains) >= 0;
+  });
+  for (const frame of frames) {
+    try {
+      const button = frame.getByRole('button', { name: consent.buttonText, exact: false }).first();
+      if (!(await button.count())) continue;
+      await button.click({ timeout: consent.timeoutMs || 5000 });
+      await page.waitForTimeout(400);
+      return true;
+    } catch (e) {}
+  }
+  return false;
+}
+
 async function consentWall(page, site) {
   if (!site.blockedSelector) return null;
+  const consent = site.consent || null;
+  let tried = false;
   // Sourcepoint injects the container before the iframe and the iframe before
   // it has a box. Poll for a full-viewport overlay instead of assuming the
   // first DOM match is ready.
   const deadline = Date.now() + 8000;
   while (Date.now() < deadline) {
-    const wall = await page.evaluate(function (selector) {
-      const el = document.querySelector(selector);
-      if (!el) return null;
-      const cs = getComputedStyle(el);
-      if (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) === 0) return null;
-      const rect = el.getBoundingClientRect();
-      return {
-        area: rect.width * rect.height,
-        viewport: window.innerWidth * window.innerHeight,
-        width: Math.round(rect.width),
-        height: Math.round(rect.height)
-      };
-    }, site.blockedSelector).catch(function () { return null; });
-    if (wall && wall.viewport && wall.area >= wall.viewport * 0.5) return site.blockedReason || 'consent wall';
+    const wall = await overlayBox(page, site.blockedSelector);
+    if (wall && wall.viewport && wall.area >= wall.viewport * 0.5) {
+      if (consent && !tried) {
+        tried = true;
+        await dismissConsent(page, consent);
+        await new Promise(function (resolve) { setTimeout(resolve, 500); });
+        if (!(await overlayBox(page, site.blockedSelector))) return null;
+        continue;
+      }
+      return site.blockedReason || 'consent wall';
+    }
     await new Promise(function (resolve) { setTimeout(resolve, 250); });
   }
   return null;
