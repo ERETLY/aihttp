@@ -198,3 +198,36 @@ test('display: contents and zero-size wrappers stay visible', { skip: gate.skip,
     await browser.close();
   }
 });
+
+test('a CSS hover card is a hover action and its hidden text stays out until hovered', { skip: gate.skip, timeout: 90000 }, async () => {
+  if (gate.fail) assert.fail(gate.reason);
+  const browser = await playwright.chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+    const gif = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+    const before = await snapshotOf(page, '<!doctype html><html><head><title>Hover card</title><style>' +
+      '.card{width:120px;height:80px}.card:hover .cap{display:block}.cap{display:none}' +
+      '</style></head><body><main><div class="card"><img alt="User avatar" src="' + gif + '">' +
+      '<div class="cap">name: user1</div></div></main></body></html>');
+
+    const hover = before.json.actions.filter(function (action) { return action.kind === 'hover'; });
+    assert.equal(hover.length, 1);
+    assert.equal(hover[0].role, 'hover');
+    assert.equal(hover[0].label, 'User avatar');
+    assert.doesNotMatch(before.text, /name: user1/);
+    assert.doesNotMatch(JSON.stringify(before.json), /name: user1/);
+
+    const acted = await page.evaluate(function (id) {
+      return window.ahttp.act(id, { hover: true }, { quiet: 0, minWait: 0, timeout: 250, snapshot: false });
+    }, hover[0].id);
+    assert.equal(acted.status, 'ok');
+    assert.equal(acted.action.kind, 'hover');
+
+    const after = await page.evaluate(function () {
+      return window.ahttp.snapshot({ format: 'text', force: true });
+    });
+    assert.match(after, /name: user1/);
+  } finally {
+    await browser.close();
+  }
+});

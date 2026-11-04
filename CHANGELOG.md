@@ -19,6 +19,12 @@
 - Every result now carries `status` (`ok`, `ambiguous`, `not_found`,
   `requires_confirmation`, `blocked`, `locked`, `error`, `no_effect`).
   Existing fields and error codes are unchanged; this is additive.
+- Hover-only targets are actions (`kind: 'hover'`, `role: 'hover'`) when the
+  element owns an inline `onmouseover`/`onmouseenter` handler or matches a CSS
+  `:hover` rule that reveals a hidden descendant. `act` applies the rule's
+  `display`/`visibility`/`opacity` declarations and fires pointer/mouse events,
+  because synthetic events do not activate CSS `:hover`. Names come from
+  visible text, `aria-label`, `title` or an image alt only.
 
 ### Fixes
 
@@ -120,7 +126,7 @@
   (its first summary stays visible). MDN recall moved from 10.4% to 96.3%; both
   sides were re-measured with the same oracle.
 - `docs/REALWORLD.md` keeps the before/after run with the corrected oracle:
-  29/30 scenarios, mean recall 93.1% to 99.2% over 26 scanned pages.
+  30/30 scenarios, mean recall 93.1% to 99.1% over 26 scanned pages.
 - Two real-world steps were corrected against live evidence: Wikipedia clicks a
   search suggestion, TodoMVC expects the Active filter to hide the completed
   todo. The harness retries a text/dom read while a form-submit navigation

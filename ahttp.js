@@ -2213,6 +2213,135 @@
     return false;
   }
 
+  // A CSS rule that reveals a hidden descendant on hover is the common hover
+  // card (`.figure:hover .figcaption { display:block }`). Only rules that set a
+  // visible display/visibility/opacity and reference a descendant after
+  // `:hover` are kept, so `a:hover { color: ... }` never becomes an action.
+  function hoverRulesFor(ctx) {
+    if (ctx.hoverRules) return ctx.hoverRules;
+    var rules = [];
+    ctx.hoverRules = rules;
+    if (!ctx.layout || !ctx.doc || !ctx.doc.styleSheets) return rules;
+    var win = ctx.win || ctx.doc.defaultView || null;
+    function styleValue(style, name) {
+      if (!style) return '';
+      if (style.getPropertyValue) {
+        var value = style.getPropertyValue(name);
+        if (value) return String(value);
+      }
+      return String(style[name] || '');
+    }
+    function reveals(style) {
+      var display = styleValue(style, 'display');
+      if (display && display !== 'none') return true;
+      if (styleValue(style, 'visibility') === 'visible') return true;
+      var opacity = parseFloat(styleValue(style, 'opacity'));
+      return !isNaN(opacity) && opacity > 0.05;
+    }
+    function addRule(rule, mediaOk) {
+      if (!mediaOk) return;
+      var selector = rule.selectorText || '';
+      if (selector.indexOf(':hover') < 0 || !reveals(rule.style)) return;
+      var props = [];
+      var names = ['display', 'visibility', 'opacity'];
+      for (var n = 0; n < names.length; n++) {
+        var value = styleValue(rule.style, names[n]);
+        if (!value) continue;
+        props.push({
+          name: names[n],
+          value: value,
+          priority: rule.style && rule.style.getPropertyPriority ? rule.style.getPropertyPriority(names[n]) : ''
+        });
+      }
+      if (!props.length) return;
+      var parts = selector.split(',');
+      for (var i = 0; i < parts.length; i++) {
+        var part = normText(parts[i]);
+        var at = part.indexOf(':hover');
+        if (at < 0) continue;
+        var before = part.slice(0, at).replace(/[\s>+~]+$/, '');
+        var compound = before.split(/[\s>+~]+/).pop();
+        var after = part.slice(at + 6);
+        if (!compound || !after || !/^[\s>+~]/.test(after)) continue;
+        rules.push({ base: compound, full: part.replace(':hover', ''), props: props });
+      }
+    }
+    function walk(list, mediaOk) {
+      for (var i = 0; i < list.length; i++) {
+        var rule = list[i];
+        if (rule.selectorText) {
+          addRule(rule, mediaOk);
+          continue;
+        }
+        if (!rule.cssRules) continue;
+        var ok = mediaOk;
+        if (rule.media && win && typeof win.matchMedia === 'function') {
+          try { ok = ok && win.matchMedia(rule.media.mediaText).matches; } catch (e) {}
+        }
+        walk(rule.cssRules, ok);
+      }
+    }
+    for (var s = 0; s < ctx.doc.styleSheets.length; s++) {
+      var list = null;
+      try { list = ctx.doc.styleSheets[s].cssRules; } catch (e) { list = null; }
+      if (list) walk(list, true);
+    }
+    return rules;
+  }
+
+  function hoverReveal(el, ctx) {
+    if (hasAttr(el, 'onmouseover') || hasAttr(el, 'onmouseenter')) return true;
+    if (!ctx.layout) return false;
+    var rules = hoverRulesFor(ctx);
+    for (var i = 0; i < rules.length; i++) {
+      var rule = rules[i];
+      var match = false;
+      try { match = typeof el.matches === 'function' && el.matches(rule.base); } catch (e) { match = false; }
+      if (!match) continue;
+      var target = null;
+      try { target = el.querySelector(rule.full); } catch (e) { target = null; }
+      if (!target) continue;
+      var st = styleOf(target, ctx);
+      if (st.display === 'none' || st.visibility === 'hidden' || parseFloat(st.opacity) <= 0.05) return true;
+    }
+    return false;
+  }
+
+  // Synthetic mouse events cannot activate a CSS :hover rule, so a hover
+  // action applies the declarations of the matching reveal rule to the hidden
+  // target. Inline handlers still receive the events.
+  function hoverEffectsFor(el, ctx) {
+    var out = [];
+    if (!ctx.layout) return out;
+    var rules = hoverRulesFor(ctx);
+    for (var i = 0; i < rules.length; i++) {
+      var rule = rules[i];
+      var match = false;
+      try { match = typeof el.matches === 'function' && el.matches(rule.base); } catch (e) { match = false; }
+      if (!match) continue;
+      var target = null;
+      try { target = el.querySelector(rule.full); } catch (e) { target = null; }
+      if (!target) continue;
+      var st = styleOf(target, ctx);
+      if (!(st.display === 'none' || st.visibility === 'hidden' || parseFloat(st.opacity) <= 0.05)) continue;
+      out.push({ node: target, props: rule.props });
+    }
+    return out;
+  }
+
+  function applyHoverEffects(entry) {
+    var list = entry.hoverEffects || [];
+    for (var i = 0; i < list.length; i++) {
+      var item = list[i];
+      var style = item.node && item.node.style;
+      if (!style || typeof style.setProperty !== 'function') continue;
+      for (var j = 0; j < item.props.length; j++) {
+        var prop = item.props[j];
+        try { style.setProperty(prop.name, prop.value, prop.priority || ''); } catch (e) {}
+      }
+    }
+  }
+
   function classify(el, st, ctx) {
     var tag = tagOf(el);
     var role = roleOf(el);
@@ -2236,6 +2365,9 @@
     if (tag === 'label' && !handler && labelProxyControl(el, ctx)) return null;
     if (pointer || handler) {
       return { kind: 'click', role: 'button', native: false, custom: true, pointerOnly: !!pointer && !handler };
+    }
+    if (hoverReveal(el, ctx)) {
+      return { kind: 'hover', role: 'hover', native: false, custom: true };
     }
     var ti = attr(el, 'tabindex');
     if (ti != null && parseInt(ti, 10) >= 0) return { kind: 'click', role: 'button', native: false, custom: true };
@@ -2387,6 +2519,51 @@
     return tag;
   }
 
+  // Hover-only actions must not take their name from hidden text: a hover card
+  // usually contains the very content it reveals. Use only the visible name
+  // sources and the alt of a visible image.
+  function visibleInnerText(el) {
+    var inner = '';
+    try { inner = el.innerText; } catch (e) { inner = ''; }
+    return typeof inner === 'string' ? normText(inner) : '';
+  }
+
+  function hoverName(el) {
+    var intent = normText(attr(el, 'data-ahttp-intent'));
+    if (intent) return intent;
+    var aria = normText(attr(el, 'aria-label'));
+    if (aria) return aria;
+    var by = attr(el, 'aria-labelledby');
+    if (by) {
+      var ids = by.split(/\s+/);
+      var parts = [];
+      for (var i = 0; i < ids.length; i++) {
+        var target = byId(el, ids[i]);
+        if (target) {
+          var partText = visibleInnerText(target);
+          if (partText) parts.push(partText);
+        }
+      }
+      if (parts.length) return parts.join(' ');
+    }
+    var title = normText(attr(el, 'title'));
+    if (title) return title;
+    var alt = normText(attr(el, 'alt'));
+    if (alt) return alt;
+    var img = el.querySelector ? el.querySelector('img[alt]') : null;
+    if (img) {
+      var imgAlt = normText(attr(img, 'alt'));
+      if (imgAlt) return imgAlt;
+    }
+    var visible = visibleInnerText(el);
+    if (visible) return visible;
+    var testid = normText(attr(el, 'data-testid'));
+    if (testid) return testid;
+    var id = attr(el, 'id');
+    if (id) return id;
+    return tagOf(el);
+  }
+
   function optionInfo(el) {
     var opts = el.options || null;
     var count = 0;
@@ -2475,7 +2652,7 @@
 
   function register(el, info, region, ctx, form, confirmWarn, readonlyGuard) {
     var entry = entryFor(el);
-    var label = labelFrom(el, info);
+    var label = info.kind === 'hover' ? hoverName(el) : labelFrom(el, info);
     var type = String(el.type || '').toLowerCase();
     var href = null;
     if (tagOf(el) === 'a') {
@@ -2486,6 +2663,7 @@
     entry.tag = tagOf(el);
     entry.role = info.role || entry.tag;
     entry.kind = info.kind;
+    entry.hoverEffects = info.kind === 'hover' ? hoverEffectsFor(el, ctx) : null;
     entry.native = !!info.native;
     entry.editable = !!info.editable;
     entry.label = label;
@@ -2501,7 +2679,7 @@
     entry.title = normText(attr(el, 'title'));
     entry.alt = normText(attr(el, 'alt'));
     entry.ariaLabel = normText(attr(el, 'aria-label'));
-    entry.visibleText = normText(textOf(el));
+    entry.visibleText = info.kind === 'hover' ? visibleInnerText(el) : normText(textOf(el));
     entry.value = readValue(el, info);
     entry.checked = info.kind === 'toggle' ? el.checked === true : undefined;
     entry.required = el.required === true || hasAttr(el, 'required');
@@ -3918,6 +4096,7 @@
       return { ok: true, action: actionInfo(entry, 'key'), method: 'key' };
     }
     if (p.hover) {
+      applyHoverEffects(entry);
       fire(el, 'pointerover', { bubbles: true }, doc);
       fire(el, 'mouseover', { bubbles: true }, doc);
       fire(el, 'mousemove', { bubbles: true }, doc);
@@ -4001,6 +4180,13 @@
       var want = p.checked != null ? !!p.checked : (p.value != null ? String(p.value) === 'true' : !el.checked);
       if (!!el.checked !== want) clickSequence(el, opts);
       return { ok: true, action: actionInfo(entry, 'toggle'), method: 'toggle' };
+    }
+    if (kind === 'hover') {
+      applyHoverEffects(entry);
+      fire(el, 'pointerover', { bubbles: true }, doc);
+      fire(el, 'mouseover', { bubbles: true }, doc);
+      fire(el, 'mousemove', { bubbles: true }, doc);
+      return { ok: true, action: actionInfo(entry, 'hover'), method: 'hover' };
     }
     clickSequence(el, opts);
     var href = entry.href || null;

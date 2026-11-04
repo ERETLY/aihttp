@@ -58,7 +58,14 @@ docs/                       API, security, decisions, research, roadmap
      when its control will be in the snapshot; it stays clickable only when the
      control is hard-hidden or missing (Bootstrap `btn-check`). A
      `cursor:pointer` element with no handler and no role is dropped when
-     `elementFromPoint` finds a native control painted over its centre.
+     `elementFromPoint` finds a native control painted over its centre. An
+     element that owns an inline `onmouseover`/`onmouseenter` handler, or
+     matches a CSS `:hover` rule with a descendant combinator that reveals a
+     hidden descendant, becomes `kind: hover`. `act` applies the rule's
+     `display`/`visibility`/`opacity` declarations and fires the pointer events,
+     because synthetic events cannot activate CSS `:hover`. Its label is built
+     from visible text, `aria-label`, `title` or an image alt only, so the
+     content it reveals never leaks into the name.
    - `register()` stores the id and internal fields on an entry, including
      `label` (accessible-name subset), `name`, `domId`, `intent`, `testid`,
      `href`, `placeholder`, `role`, `path` and `fingerprint`.

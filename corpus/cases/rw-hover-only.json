@@ -2,7 +2,6 @@
   "id": "rw-hover-only",
   "html": "fixtures/rw-hover-only.html",
   "url": "https://corpus.test/rw-hover-only",
-  "pending": "LIMITATION by design: hover targets are not actions; the-internet /hovers reveals 'name: user1' only on mouseover, and guessing hover targets produced dead actions. See README Known limitations.",
   "steps": [
     {
       "action": "snapshot",

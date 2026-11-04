@@ -103,7 +103,7 @@
         {
           "name": "hover first avatar",
           "steps": [
-            { "op": "act", "target": { "tag": "img", "index": 0 }, "payload": { "hover": true }, "expect": { "status": "ok", "text": ["name: user1"] } }
+            { "op": "act", "target": { "tag": "div", "nameContains": "User Avatar" }, "payload": { "hover": true }, "expect": { "status": "ok", "text": ["name: user1"] } }
           ]
         }
       ]
