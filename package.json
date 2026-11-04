@@ -1,6 +1,6 @@
 {
   "name": "ahttp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Small, executable page snapshots for LLM agents. Zero-dependency browser file, CLI and MCP server.",
   "main": "ahttp.js",
   "browser": "ahttp.js",
