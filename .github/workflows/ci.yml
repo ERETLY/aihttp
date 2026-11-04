@@ -30,7 +30,7 @@ jobs:
         run: |
           set -euo pipefail
           git fetch --no-tags origin "$BASE_REF"
-          base_version=$(git show "origin/$BASE_REF:package.json" | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>process.stdout.write(JSON.parse(s).version))")
+          base_version=$(git show "origin/$BASE_REF:package.json" | node -e "process.stdout.write(JSON.parse(require('fs').readFileSync(0,'utf8').replace(/^\uFEFF/,'')).version)")
           version=$(node -p "require('./package.json').version")
           changed=$(git diff --name-only "origin/$BASE_REF...HEAD")
           if echo "$changed" | grep -Eq '^(ahttp\.js|ahttp\.d\.ts|bin/|lib/)' && [ "$version" = "$base_version" ]; then
