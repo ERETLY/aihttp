@@ -278,7 +278,7 @@ async function runScenarios(page, site, out) {
       for (const step of scenario.steps) {
         const stepStarted = nowMs();
         if (step.op === 'snapshot') {
-          const timed = await snapshotTimed(page, { maxActions: 500, force: true });
+          const timed = await snapshotTimed(page, { format: 'json', maxActions: 500, force: true });
           const json = timed.result;
           last = json;
           const failures = await checkExpectations(page, { status: 'ok' }, step.expect || {}, out);
@@ -376,7 +376,7 @@ async function runScenarios(page, site, out) {
         }
       }
     } catch (e) {
-      entry.error = String(e.message || e);
+      entry.error = String(e && e.stack ? e.stack : (e && e.message ? e.message : e));
     }
     entry.latencyMs = nowMs() - started;
     entry.ok = !entry.error && entry.steps.length > 0 && entry.steps.every(function (step) { return step.ok; });
