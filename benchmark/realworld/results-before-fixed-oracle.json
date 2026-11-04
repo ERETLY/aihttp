@@ -1,0 +1,4327 @@
+{
+  "generatedAt": "2026-11-04T07:33:36.104Z",
+  "engine": {
+    "version": "0.1.0",
+    "sha": "167aacb"
+  },
+  "runtime": {
+    "node": "v26.13.0",
+    "playwright": "1.64.1",
+    "chromium": "156.0.8078.4"
+  },
+  "defaults": {
+    "pauseMs": 1200,
+    "timeoutMs": 20000,
+    "userAgent": "ahttp-realworld-test (+https://github.com/ERETLY/ahttp)"
+  },
+  "sites": [
+    {
+      "id": "example",
+      "url": "https://example.com/",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "Example Domain",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 1,
+        "actionCap": 0,
+        "scanMs": 1,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 844,
+        "textTokens": 170,
+        "rawChars": 1989,
+        "rawTokens": 641,
+        "ariaChars": 1047,
+        "ariaTokens": 245,
+        "compressionVsRaw": 0.42433383609854197,
+        "compressionVsAria": 0.8061127029608405,
+        "timing": {
+          "jsonWallMs": 3,
+          "jsonInPageMs": 0.7000000001862645,
+          "textWallMs": 2,
+          "textInPageMs": 0.5
+        },
+        "fullActions": 1
+      },
+      "checks": {
+        "recall": {
+          "visible": 1,
+          "matched": 1,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 1
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 1
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 1
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 1,
+          "secondActions": 1
+        }
+      },
+      "scenarios": [
+        {
+          "name": "baseline snapshot",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 1,
+              "wallMs": 2,
+              "inPageMs": 0.2999999998137355,
+              "metaMs": 1,
+              "ms": 4
+            }
+          ],
+          "latencyMs": 4,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 1729,
+      "totalMs": 3275
+    },
+    {
+      "id": "the-internet-checkboxes",
+      "url": "https://the-internet.herokuapp.com/checkboxes",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 5,
+        "actionCap": 0,
+        "scanMs": 9,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 411,
+        "textTokens": 125,
+        "rawChars": 2122,
+        "rawTokens": 594,
+        "ariaChars": 377,
+        "ariaTokens": 121,
+        "compressionVsRaw": 0.19368520263901978,
+        "compressionVsAria": 1.090185676392573,
+        "timing": {
+          "jsonWallMs": 12,
+          "jsonInPageMs": 9.300000000745058,
+          "textWallMs": 11,
+          "textInPageMs": 8.900000000372529
+        },
+        "fullActions": 5
+      },
+      "checks": {
+        "recall": {
+          "visible": 4,
+          "matched": 4,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 5
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 5
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 5
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 5,
+          "secondActions": 5
+        }
+      },
+      "scenarios": [
+        {
+          "name": "toggle first checkbox",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "input",
+                "role": "checkbox",
+                "kind": "toggle",
+                "label": "checkbox 1 checkbox 2",
+                "region": "main",
+                "type": "checkbox",
+                "value": false,
+                "checked": false
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 7904,
+              "engineMs": 7892,
+              "navigationLost": null,
+              "latencyMs": 8271,
+              "ms": 8281
+            }
+          ],
+          "latencyMs": 8281,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 3051,
+      "totalMs": 12969
+    },
+    {
+      "id": "the-internet-dropdown",
+      "url": "https://the-internet.herokuapp.com/dropdown",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 4,
+        "actionCap": 0,
+        "scanMs": 9,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 362,
+        "textTokens": 108,
+        "rawChars": 2303,
+        "rawTokens": 632,
+        "ariaChars": 433,
+        "ariaTokens": 138,
+        "compressionVsRaw": 0.15718627876682587,
+        "compressionVsAria": 0.836027713625866,
+        "timing": {
+          "jsonWallMs": 11,
+          "jsonInPageMs": 8.699999999254942,
+          "textWallMs": 10,
+          "textInPageMs": 8.100000000558794
+        },
+        "fullActions": 4
+      },
+      "checks": {
+        "recall": {
+          "visible": 3,
+          "matched": 3,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 4
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 4
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 4
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 4,
+          "secondActions": 4
+        }
+      },
+      "scenarios": [
+        {
+          "name": "select Option 2",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "select",
+                "role": "combobox",
+                "kind": "select",
+                "label": "Dropdown List",
+                "region": "main",
+                "type": "select-one",
+                "options": [
+                  "Please select an option",
+                  "Option 1",
+                  "Option 2"
+                ],
+                "optionCount": 3
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 171,
+              "engineMs": 161,
+              "navigationLost": null,
+              "latencyMs": 526,
+              "ms": 535
+            }
+          ],
+          "latencyMs": 535,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 3090,
+      "totalMs": 5216
+    },
+    {
+      "id": "the-internet-add-remove",
+      "url": "https://the-internet.herokuapp.com/add_remove_elements/",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 4,
+        "actionCap": 0,
+        "scanMs": 7,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 328,
+        "textTokens": 94,
+        "rawChars": 2142,
+        "rawTokens": 596,
+        "ariaChars": 359,
+        "ariaTokens": 114,
+        "compressionVsRaw": 0.1531279178338002,
+        "compressionVsAria": 0.9136490250696379,
+        "timing": {
+          "jsonWallMs": 10,
+          "jsonInPageMs": 7.800000000745058,
+          "textWallMs": 9,
+          "textInPageMs": 7.5
+        },
+        "fullActions": 4
+      },
+      "checks": {
+        "recall": {
+          "visible": 3,
+          "matched": 3,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 4
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 4
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 4
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 4,
+          "secondActions": 4
+        }
+      },
+      "scenarios": [
+        {
+          "name": "add two, ambiguous label, delete one",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Add Element",
+                "region": "main",
+                "type": "submit"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 7921,
+              "engineMs": 7909,
+              "navigationLost": null,
+              "latencyMs": 8287,
+              "ms": 8297
+            },
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Add Element",
+                "region": "main",
+                "type": "submit"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 171,
+              "engineMs": 161,
+              "navigationLost": null,
+              "latencyMs": 536,
+              "ms": 548
+            },
+            {
+              "op": "act",
+              "id": "Delete",
+              "action": null,
+              "status": "ambiguous",
+              "ok": true,
+              "failures": [],
+              "actMs": 10,
+              "engineMs": null,
+              "navigationLost": null,
+              "latencyMs": 369,
+              "ms": 379
+            },
+            {
+              "op": "act",
+              "id": "a5",
+              "action": {
+                "id": "a5",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Delete",
+                "region": "main",
+                "type": "submit"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 170,
+              "engineMs": 159,
+              "navigationLost": null,
+              "latencyMs": 525,
+              "ms": 534
+            }
+          ],
+          "latencyMs": 9758,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 3015,
+      "totalMs": 14364
+    },
+    {
+      "id": "the-internet-dynamic-loading",
+      "url": "https://the-internet.herokuapp.com/dynamic_loading/1",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 4,
+        "actionCap": 0,
+        "scanMs": 8,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 374,
+        "textTokens": 108,
+        "rawChars": 2221,
+        "rawTokens": 624,
+        "ariaChars": 420,
+        "ariaTokens": 132,
+        "compressionVsRaw": 0.1683926159387663,
+        "compressionVsAria": 0.8904761904761904,
+        "timing": {
+          "jsonWallMs": 10,
+          "jsonInPageMs": 8,
+          "textWallMs": 10,
+          "textInPageMs": 7.7999999998137355
+        },
+        "fullActions": 4
+      },
+      "checks": {
+        "recall": {
+          "visible": 3,
+          "matched": 3,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 4
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 4
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 4
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 4,
+          "secondActions": 4
+        }
+      },
+      "scenarios": [
+        {
+          "name": "Start then wait for Hello World",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Start",
+                "region": "main",
+                "type": "submit"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 10050,
+              "engineMs": 10039,
+              "navigationLost": null,
+              "latencyMs": 10402,
+              "ms": 10413
+            }
+          ],
+          "latencyMs": 10413,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 3011,
+      "totalMs": 15012
+    },
+    {
+      "id": "the-internet-dynamic-controls",
+      "url": "https://the-internet.herokuapp.com/dynamic_controls",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 7,
+        "actionCap": 0,
+        "scanMs": 8,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 544,
+        "textTokens": 147,
+        "rawChars": 4703,
+        "rawTokens": 1214,
+        "ariaChars": 586,
+        "ariaTokens": 170,
+        "compressionVsRaw": 0.11567084839464171,
+        "compressionVsAria": 0.9283276450511946,
+        "timing": {
+          "jsonWallMs": 11,
+          "jsonInPageMs": 8.5,
+          "textWallMs": 10,
+          "textInPageMs": 8.599999999627471
+        },
+        "fullActions": 7
+      },
+      "checks": {
+        "recall": {
+          "visible": 6,
+          "matched": 6,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 7
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 7
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 7
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 7,
+          "secondActions": 7
+        }
+      },
+      "scenarios": [
+        {
+          "name": "remove then enable and fill",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a3",
+              "action": {
+                "id": "a3",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Remove",
+                "region": "main",
+                "type": "button"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 11071,
+              "engineMs": 11060,
+              "navigationLost": null,
+              "latencyMs": 11430,
+              "ms": 11441
+            },
+            {
+              "op": "act",
+              "id": "a5",
+              "action": {
+                "id": "a5",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Enable",
+                "region": "main",
+                "type": "button"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 171,
+              "engineMs": 160,
+              "navigationLost": null,
+              "latencyMs": 535,
+              "ms": 547
+            },
+            {
+              "op": "wait",
+              "ok": true,
+              "ms": 4000
+            },
+            {
+              "op": "act",
+              "id": "a4",
+              "action": {
+                "id": "a4",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "input",
+                "region": "main",
+                "type": "text"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 171,
+              "engineMs": 161,
+              "navigationLost": null,
+              "latencyMs": 524,
+              "ms": 534
+            }
+          ],
+          "latencyMs": 16525,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 3218,
+      "totalMs": 21336
+    },
+    {
+      "id": "the-internet-login",
+      "url": "https://the-internet.herokuapp.com/login",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 8,
+        "actionCap": 0,
+        "scanMs": 9,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 612,
+        "textTokens": 163,
+        "rawChars": 2483,
+        "rawTokens": 697,
+        "ariaChars": 855,
+        "ariaTokens": 235,
+        "compressionVsRaw": 0.24647603705195328,
+        "compressionVsAria": 0.7157894736842105,
+        "timing": {
+          "jsonWallMs": 11,
+          "jsonInPageMs": 8.799999999813735,
+          "textWallMs": 10,
+          "textInPageMs": 8.300000000745058
+        },
+        "fullActions": 8
+      },
+      "checks": {
+        "recall": {
+          "visible": 5,
+          "matched": 5,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [
+            {
+              "id": "a2",
+              "tag": "label",
+              "role": "button",
+              "label": "Username"
+            },
+            {
+              "id": "a4",
+              "tag": "label",
+              "role": "button",
+              "label": "Password"
+            }
+          ],
+          "phantomTotal": 2,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 8
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 8
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 8
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 8,
+          "secondActions": 8
+        }
+      },
+      "scenarios": [
+        {
+          "name": "public test login",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a3",
+              "action": {
+                "id": "a3",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "Username",
+                "region": "main",
+                "type": "text",
+                "name": "username"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 172,
+              "engineMs": 161,
+              "navigationLost": null,
+              "latencyMs": 531,
+              "ms": 543
+            },
+            {
+              "op": "act",
+              "id": "a5",
+              "action": {
+                "id": "a5",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "Password",
+                "region": "main",
+                "type": "password",
+                "name": "password"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 170,
+              "engineMs": 159,
+              "navigationLost": null,
+              "latencyMs": 531,
+              "ms": 544
+            },
+            {
+              "op": "act",
+              "id": "a6",
+              "action": {
+                "id": "a6",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Login",
+                "region": "main",
+                "type": "submit"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 1916,
+              "engineMs": null,
+              "navigationLost": "page.evaluate: Execution context was destroyed, most likely because of a navigation.",
+              "latencyMs": 2282,
+              "ms": 2291
+            }
+          ],
+          "latencyMs": 3378,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 3034,
+      "totalMs": 8020
+    },
+    {
+      "id": "the-internet-hovers",
+      "url": "https://the-internet.herokuapp.com/hovers",
+      "status": "scenario_failures",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 3,
+        "actionCap": 0,
+        "scanMs": 9,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 325,
+        "textTokens": 92,
+        "rawChars": 2490,
+        "rawTokens": 735,
+        "ariaChars": 432,
+        "ariaTokens": 132,
+        "compressionVsRaw": 0.13052208835341367,
+        "compressionVsAria": 0.7523148148148148,
+        "timing": {
+          "jsonWallMs": 12,
+          "jsonInPageMs": 9.100000000558794,
+          "textWallMs": 11,
+          "textInPageMs": 9.400000000372529
+        },
+        "fullActions": 3
+      },
+      "checks": {
+        "recall": {
+          "visible": 2,
+          "matched": 2,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 3
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 3
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 3
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 3,
+          "secondActions": 3
+        }
+      },
+      "scenarios": [
+        {
+          "name": "hover first avatar",
+          "ok": false,
+          "steps": [
+            {
+              "op": "act",
+              "ok": false,
+              "failures": [
+                "target not in last snapshot: {\"tag\":\"img\",\"index\":0}"
+              ],
+              "candidates": [],
+              "ms": 10
+            }
+          ],
+          "latencyMs": 10,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 3013,
+      "totalMs": 4610
+    },
+    {
+      "id": "the-internet-key-presses",
+      "url": "https://the-internet.herokuapp.com/key_presses",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 4,
+        "actionCap": 0,
+        "scanMs": 9,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 438,
+        "textTokens": 125,
+        "rawChars": 4096,
+        "rawTokens": 1274,
+        "ariaChars": 484,
+        "ariaTokens": 146,
+        "compressionVsRaw": 0.10693359375,
+        "compressionVsAria": 0.9049586776859504,
+        "timing": {
+          "jsonWallMs": 11,
+          "jsonInPageMs": 9.700000000186265,
+          "textWallMs": 10,
+          "textInPageMs": 8.200000000186265
+        },
+        "fullActions": 4
+      },
+      "checks": {
+        "recall": {
+          "visible": 3,
+          "matched": 3,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 4
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 4
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 4
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 4,
+          "secondActions": 4
+        }
+      },
+      "scenarios": [
+        {
+          "name": "press Enter",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "target",
+                "region": "main",
+                "type": "text"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 172,
+              "engineMs": 161,
+              "navigationLost": null,
+              "latencyMs": 526,
+              "ms": 536
+            }
+          ],
+          "latencyMs": 536,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 2970,
+      "totalMs": 5100
+    },
+    {
+      "id": "the-internet-challenging-dom",
+      "url": "https://the-internet.herokuapp.com/challenging_dom",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 26,
+        "actionCap": 0,
+        "scanMs": 12,
+        "sanitized": 7,
+        "modal": false,
+        "textChars": 1530,
+        "textTokens": 598,
+        "rawChars": 7012,
+        "rawTokens": 1978,
+        "ariaChars": 4823,
+        "ariaTokens": 1552,
+        "compressionVsRaw": 0.21819737592698232,
+        "compressionVsAria": 0.3172299398714493,
+        "timing": {
+          "jsonWallMs": 15,
+          "jsonInPageMs": 11.599999999627471,
+          "textWallMs": 13,
+          "textInPageMs": 11.600000000558794
+        },
+        "fullActions": 26
+      },
+      "checks": {
+        "recall": {
+          "visible": 25,
+          "matched": 25,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 26
+            },
+            {
+              "at": "middle",
+              "y": 110,
+              "actions": 26
+            },
+            {
+              "at": "bottom",
+              "y": 221,
+              "actions": 26
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 26,
+          "secondActions": 26
+        }
+      },
+      "scenarios": [
+        {
+          "name": "snapshot and duplicate edit/delete links",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 26,
+              "wallMs": 15,
+              "inPageMs": 11.599999999627471,
+              "metaMs": 11,
+              "ms": 17
+            },
+            {
+              "op": "act",
+              "id": "Edit",
+              "action": null,
+              "status": "ambiguous",
+              "ok": true,
+              "failures": [],
+              "actMs": 12,
+              "engineMs": null,
+              "navigationLost": null,
+              "latencyMs": 377,
+              "ms": 392
+            },
+            {
+              "op": "act",
+              "id": "a5",
+              "action": {
+                "id": "a5",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "edit",
+                "region": "main",
+                "href": "#edit"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 7607,
+              "engineMs": 7591,
+              "navigationLost": null,
+              "latencyMs": 7961,
+              "ms": 7977
+            }
+          ],
+          "latencyMs": 8386,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 2982,
+      "totalMs": 13038
+    },
+    {
+      "id": "the-internet-large",
+      "url": "https://the-internet.herokuapp.com/large",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 3,
+        "actionCap": 0,
+        "scanMs": 81,
+        "sanitized": 50,
+        "modal": false,
+        "textChars": 1984,
+        "textTokens": 1354,
+        "rawChars": 182711,
+        "rawTokens": 48699,
+        "ariaChars": 69200,
+        "ariaTokens": 31451,
+        "compressionVsRaw": 0.010858678459424993,
+        "compressionVsAria": 0.028670520231213872,
+        "timing": {
+          "jsonWallMs": 93,
+          "jsonInPageMs": 81.09999999962747,
+          "textWallMs": 83,
+          "textInPageMs": 80.70000000018626
+        },
+        "fullActions": 3
+      },
+      "checks": {
+        "recall": {
+          "visible": 2,
+          "matched": 2,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 3
+            },
+            {
+              "at": "middle",
+              "y": 1801,
+              "actions": 3
+            },
+            {
+              "at": "bottom",
+              "y": 3602,
+              "actions": 3
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 3,
+          "secondActions": 3
+        }
+      },
+      "scenarios": [
+        {
+          "name": "50x50 table snapshot",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 3,
+              "wallMs": 89,
+              "inPageMs": 85.3999999994412,
+              "metaMs": 86,
+              "ms": 91
+            }
+          ],
+          "latencyMs": 91,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 3022,
+      "totalMs": 5829
+    },
+    {
+      "id": "the-internet-shadowdom",
+      "url": "https://the-internet.herokuapp.com/shadowdom",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 3,
+        "actionCap": 0,
+        "scanMs": 8,
+        "sanitized": 2,
+        "modal": false,
+        "textChars": 415,
+        "textTokens": 116,
+        "rawChars": 2603,
+        "rawTokens": 690,
+        "ariaChars": 463,
+        "ariaTokens": 139,
+        "compressionVsRaw": 0.15943142527852477,
+        "compressionVsAria": 0.896328293736501,
+        "timing": {
+          "jsonWallMs": 10,
+          "jsonInPageMs": 8,
+          "textWallMs": 12,
+          "textInPageMs": 9.200000000186265
+        },
+        "fullActions": 3
+      },
+      "checks": {
+        "recall": {
+          "visible": 2,
+          "matched": 2,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 3
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 3
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 3
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 3,
+          "secondActions": 3
+        }
+      },
+      "scenarios": [
+        {
+          "name": "shadow DOM snapshot",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 3,
+              "wallMs": 13,
+              "inPageMs": 10.5,
+              "metaMs": 11,
+              "ms": 13
+            }
+          ],
+          "latencyMs": 13,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 3158,
+      "totalMs": 4788
+    },
+    {
+      "id": "the-internet-iframe",
+      "url": "https://the-internet.herokuapp.com/iframe",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 22,
+        "actionCap": 0,
+        "scanMs": 18,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 914,
+        "textTokens": 273,
+        "rawChars": 15019,
+        "rawTokens": 6634,
+        "ariaChars": 1448,
+        "ariaTokens": 395,
+        "compressionVsRaw": 0.060856248751581334,
+        "compressionVsAria": 0.6312154696132597,
+        "timing": {
+          "jsonWallMs": 23,
+          "jsonInPageMs": 19,
+          "textWallMs": 16,
+          "textInPageMs": 14.399999999441206
+        },
+        "fullActions": 22
+      },
+      "checks": {
+        "recall": {
+          "visible": 20,
+          "matched": 20,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [
+            {
+              "id": "a18",
+              "tag": "body",
+              "role": "textbox",
+              "label": "Rich Text Area. Press ALT-0 for help."
+            }
+          ],
+          "phantomTotal": 1,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 22
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 22
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 22
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 22,
+          "secondActions": 22
+        }
+      },
+      "scenarios": [
+        {
+          "name": "iframe snapshot",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 22,
+              "wallMs": 19,
+              "inPageMs": 15.900000000372529,
+              "metaMs": 15,
+              "ms": 19
+            }
+          ],
+          "latencyMs": 19,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 3364,
+      "totalMs": 5151
+    },
+    {
+      "id": "the-internet-nested-frames",
+      "url": "https://the-internet.herokuapp.com/nested_frames",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 0,
+        "actionCap": 0,
+        "scanMs": 1,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 82,
+        "textTokens": 22,
+        "rawChars": 261,
+        "rawTokens": 78,
+        "ariaChars": 0,
+        "ariaTokens": 0,
+        "compressionVsRaw": 0.31417624521072796,
+        "compressionVsAria": null,
+        "timing": {
+          "jsonWallMs": 3,
+          "jsonInPageMs": 0.599999999627471,
+          "textWallMs": 2,
+          "textInPageMs": 0.30000000074505806
+        },
+        "fullActions": 0
+      },
+      "checks": {
+        "recall": {
+          "visible": 0,
+          "matched": 0,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 0
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 0
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 0
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 0,
+          "secondActions": 0
+        }
+      },
+      "scenarios": [
+        {
+          "name": "nested frames snapshot",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 0,
+              "wallMs": 3,
+              "inPageMs": 0.6999999992549419,
+              "metaMs": 0,
+              "ms": 3
+            }
+          ],
+          "latencyMs": 3,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 1972,
+      "totalMs": 33491
+    },
+    {
+      "id": "the-internet-alerts",
+      "url": "https://the-internet.herokuapp.com/javascript_alerts",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 6,
+        "actionCap": 0,
+        "scanMs": 8,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 557,
+        "textTokens": 146,
+        "rawChars": 2595,
+        "rawTokens": 730,
+        "ariaChars": 626,
+        "ariaTokens": 181,
+        "compressionVsRaw": 0.21464354527938342,
+        "compressionVsAria": 0.889776357827476,
+        "timing": {
+          "jsonWallMs": 10,
+          "jsonInPageMs": 8.199999999254942,
+          "textWallMs": 10,
+          "textInPageMs": 8.400000000372529
+        },
+        "fullActions": 6
+      },
+      "checks": {
+        "recall": {
+          "visible": 5,
+          "matched": 5,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 6
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 6
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 6
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 6,
+          "secondActions": 6
+        }
+      },
+      "scenarios": [
+        {
+          "name": "JS alert does not hang act",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Click for JS Alert",
+                "region": "main",
+                "type": "submit"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 8116,
+              "engineMs": 8104,
+              "navigationLost": null,
+              "latencyMs": 8470,
+              "ms": 8482
+            }
+          ],
+          "latencyMs": 8482,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [
+        {
+          "type": "alert",
+          "message": "I am a JS Alert"
+        }
+      ],
+      "loadMs": 3146,
+      "totalMs": 13224
+    },
+    {
+      "id": "the-internet-upload",
+      "url": "https://the-internet.herokuapp.com/upload",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 5,
+        "actionCap": 0,
+        "scanMs": 10,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 430,
+        "textTokens": 124,
+        "rawChars": 2859,
+        "rawTokens": 808,
+        "ariaChars": 470,
+        "ariaTokens": 141,
+        "compressionVsRaw": 0.15040223854494578,
+        "compressionVsAria": 0.9148936170212766,
+        "timing": {
+          "jsonWallMs": 12,
+          "jsonInPageMs": 9.400000000372529,
+          "textWallMs": 10,
+          "textInPageMs": 7.900000000372529
+        },
+        "fullActions": 5
+      },
+      "checks": {
+        "recall": {
+          "visible": 4,
+          "matched": 4,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 5
+            },
+            {
+              "at": "middle",
+              "y": 30,
+              "actions": 5
+            },
+            {
+              "at": "bottom",
+              "y": 61,
+              "actions": 5
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 5,
+          "secondActions": 5
+        }
+      },
+      "scenarios": [
+        {
+          "name": "file input is visible",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 5,
+              "wallMs": 11,
+              "inPageMs": 8.5,
+              "metaMs": 8,
+              "ms": 13
+            }
+          ],
+          "latencyMs": 13,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 3124,
+      "totalMs": 4731
+    },
+    {
+      "id": "the-internet-infinite-scroll",
+      "url": "https://the-internet.herokuapp.com/infinite_scroll",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "The Internet",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 3,
+        "actionCap": 0,
+        "scanMs": 9,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 697,
+        "textTokens": 172,
+        "rawChars": 6144,
+        "rawTokens": 1386,
+        "ariaChars": 4356,
+        "ariaTokens": 893,
+        "compressionVsRaw": 0.11344401041666667,
+        "compressionVsAria": 0.16000918273645545,
+        "timing": {
+          "jsonWallMs": 11,
+          "jsonInPageMs": 9.300000000745058,
+          "textWallMs": 11,
+          "textInPageMs": 9
+        },
+        "fullActions": 3
+      },
+      "checks": {
+        "recall": {
+          "visible": 2,
+          "matched": 2,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Fork me on GitHub",
+              "reasons": [
+                "zero-size"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 3
+            },
+            {
+              "at": "middle",
+              "y": 145,
+              "actions": 3
+            },
+            {
+              "at": "bottom",
+              "y": 291,
+              "actions": 3
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 3,
+          "secondActions": 3
+        }
+      },
+      "scenarios": [
+        {
+          "name": "scroll bottom loads more paragraphs",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 3,
+              "wallMs": 10,
+              "inPageMs": 7.900000000372529,
+              "metaMs": 8,
+              "ms": 10
+            },
+            {
+              "op": "scroll",
+              "ok": true,
+              "y": 707
+            },
+            {
+              "op": "wait",
+              "ok": true,
+              "ms": 1500
+            },
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 3,
+              "wallMs": 12,
+              "inPageMs": 9.699999999254942,
+              "metaMs": 10,
+              "ms": 13
+            }
+          ],
+          "latencyMs": 2143,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 3185,
+      "totalMs": 6918
+    },
+    {
+      "id": "todomvc-react",
+      "url": "https://todomvc.com/examples/react/dist/",
+      "status": "scenario_failures",
+      "httpStatus": 200,
+      "title": "TodoMVC: React",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 12,
+        "actionCap": 0,
+        "scanMs": 3,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 1353,
+        "textTokens": 363,
+        "rawChars": 3289,
+        "rawTokens": 942,
+        "ariaChars": 1968,
+        "ariaTokens": 535,
+        "compressionVsRaw": 0.411371237458194,
+        "compressionVsAria": 0.6875,
+        "timing": {
+          "jsonWallMs": 11,
+          "jsonInPageMs": 4.400000000372529,
+          "textWallMs": 5,
+          "textInPageMs": 3.400000000372529
+        },
+        "fullActions": 12
+      },
+      "checks": {
+        "recall": {
+          "visible": 12,
+          "matched": 12,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 12
+            },
+            {
+              "at": "middle",
+              "y": 1,
+              "actions": 12
+            },
+            {
+              "at": "bottom",
+              "y": 3,
+              "actions": 12
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 12,
+          "secondActions": 12
+        }
+      },
+      "scenarios": [
+        {
+          "name": "add three, toggle, filters, clear",
+          "ok": false,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a11",
+              "action": {
+                "id": "a11",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "New Todo Input",
+                "region": "chrome",
+                "type": "text",
+                "placeholder": "What needs to be done?"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 161,
+              "engineMs": 153,
+              "navigationLost": null,
+              "latencyMs": 514,
+              "ms": 521
+            },
+            {
+              "op": "act",
+              "id": "a11",
+              "action": {
+                "id": "a11",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "New Todo Input",
+                "region": "chrome",
+                "type": "text",
+                "placeholder": "What needs to be done?",
+                "value": "Task one"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 175,
+              "engineMs": 170,
+              "navigationLost": null,
+              "latencyMs": 527,
+              "ms": 533
+            },
+            {
+              "op": "act",
+              "id": "a11",
+              "action": {
+                "id": "a11",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "New Todo Input",
+                "region": "chrome",
+                "type": "text",
+                "placeholder": "What needs to be done?"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 161,
+              "engineMs": 156,
+              "navigationLost": null,
+              "latencyMs": 526,
+              "ms": 530
+            },
+            {
+              "op": "act",
+              "id": "a11",
+              "action": {
+                "id": "a11",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "New Todo Input",
+                "region": "chrome",
+                "type": "text",
+                "placeholder": "What needs to be done?",
+                "value": "Task two"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 178,
+              "engineMs": 170,
+              "navigationLost": null,
+              "latencyMs": 543,
+              "ms": 549
+            },
+            {
+              "op": "act",
+              "id": "a11",
+              "action": {
+                "id": "a11",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "New Todo Input",
+                "region": "chrome",
+                "type": "text",
+                "placeholder": "What needs to be done?"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 159,
+              "engineMs": 154,
+              "navigationLost": null,
+              "latencyMs": 511,
+              "ms": 517
+            },
+            {
+              "op": "act",
+              "id": "a11",
+              "action": {
+                "id": "a11",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "New Todo Input",
+                "region": "chrome",
+                "type": "text",
+                "placeholder": "What needs to be done?",
+                "value": "Task three"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 179,
+              "engineMs": 173,
+              "navigationLost": null,
+              "latencyMs": 545,
+              "ms": 550
+            },
+            {
+              "op": "act",
+              "ok": false,
+              "failures": [
+                "target not in last snapshot: {\"tag\":\"input\",\"type\":\"checkbox\",\"index\":0}"
+              ],
+              "candidates": [],
+              "ms": 6
+            }
+          ],
+          "latencyMs": 3206,
+          "status": "ok"
+        },
+        {
+          "name": "stale ids across a filter rerender",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a11",
+              "action": {
+                "id": "a11",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "New Todo Input",
+                "region": "chrome",
+                "type": "text",
+                "placeholder": "What needs to be done?"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 161,
+              "engineMs": 154,
+              "navigationLost": null,
+              "latencyMs": 520,
+              "ms": 526
+            },
+            {
+              "op": "act",
+              "id": "a11",
+              "action": {
+                "id": "a11",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "New Todo Input",
+                "region": "chrome",
+                "type": "text",
+                "placeholder": "What needs to be done?",
+                "value": "Stale one"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 178,
+              "engineMs": 173,
+              "navigationLost": null,
+              "latencyMs": 543,
+              "ms": 549
+            },
+            {
+              "op": "act",
+              "id": "a14",
+              "action": {
+                "id": "a14",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "Active",
+                "region": "chrome",
+                "href": "#/active"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 178,
+              "engineMs": 172,
+              "navigationLost": null,
+              "latencyMs": 541,
+              "ms": 547
+            },
+            {
+              "op": "act",
+              "id": "a13",
+              "action": {
+                "id": "a13",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "All",
+                "region": "chrome",
+                "href": "#/"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 177,
+              "engineMs": 172,
+              "navigationLost": null,
+              "latencyMs": 534,
+              "ms": 534
+            }
+          ],
+          "latencyMs": 2156,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 2174,
+      "totalMs": 9093
+    },
+    {
+      "id": "saucedemo",
+      "url": "https://www.saucedemo.com/",
+      "status": "scenario_failures",
+      "httpStatus": 200,
+      "title": "Swag Labs",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 3,
+        "actionCap": 0,
+        "scanMs": 4,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 318,
+        "textTokens": 86,
+        "rawChars": 2745,
+        "rawTokens": 719,
+        "ariaChars": 333,
+        "ariaTokens": 88,
+        "compressionVsRaw": 0.11584699453551912,
+        "compressionVsAria": 0.954954954954955,
+        "timing": {
+          "jsonWallMs": 6,
+          "jsonInPageMs": 4.099999999627471,
+          "textWallMs": 4,
+          "textInPageMs": 2.7999999998137355
+        },
+        "fullActions": 3
+      },
+      "checks": {
+        "recall": {
+          "visible": 3,
+          "matched": 3,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 3
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 3
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 3
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 3,
+          "secondActions": 3
+        }
+      },
+      "scenarios": [
+        {
+          "name": "public test login, add two, cart",
+          "ok": false,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a1",
+              "action": {
+                "id": "a1",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "Username",
+                "region": "main",
+                "type": "text",
+                "name": "user-name",
+                "placeholder": "Username"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 163,
+              "engineMs": 157,
+              "navigationLost": null,
+              "latencyMs": 517,
+              "ms": 524
+            },
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "Password",
+                "region": "main",
+                "type": "password",
+                "name": "password",
+                "placeholder": "Password"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 158,
+              "engineMs": 154,
+              "navigationLost": null,
+              "latencyMs": 510,
+              "ms": 517
+            },
+            {
+              "op": "act",
+              "id": "a3",
+              "action": {
+                "id": "a3",
+                "tag": "input",
+                "role": "button",
+                "kind": "click",
+                "label": "Login",
+                "region": "main",
+                "type": "submit",
+                "name": "login-button",
+                "value": "Login"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 209,
+              "engineMs": 203,
+              "navigationLost": null,
+              "latencyMs": 572,
+              "ms": 579
+            },
+            {
+              "op": "act",
+              "id": "a7",
+              "action": {
+                "id": "a7",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Add to cart",
+                "region": "main",
+                "type": "submit",
+                "name": "add-to-cart-sauce-labs-backpack"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 182,
+              "engineMs": 174,
+              "navigationLost": null,
+              "latencyMs": 538,
+              "ms": 548
+            },
+            {
+              "op": "act",
+              "id": "a10",
+              "action": {
+                "id": "a10",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Add to cart",
+                "region": "main",
+                "type": "submit",
+                "name": "add-to-cart-sauce-labs-bike-light"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 180,
+              "engineMs": 175,
+              "navigationLost": null,
+              "latencyMs": 543,
+              "ms": 552
+            },
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 19,
+              "wallMs": 8,
+              "inPageMs": 4.599999999627471,
+              "metaMs": 5,
+              "ms": 10
+            },
+            {
+              "op": "act",
+              "ok": false,
+              "failures": [
+                "target not in last snapshot: {\"selector\":\".shopping_cart_link\"}"
+              ],
+              "candidates": [],
+              "ms": 9
+            }
+          ],
+          "latencyMs": 2739,
+          "status": "ok"
+        },
+        {
+          "name": "change sort order",
+          "ok": false,
+          "steps": [
+            {
+              "op": "goto",
+              "ok": true,
+              "url": "https://www.saucedemo.com/"
+            },
+            {
+              "op": "act",
+              "id": "a1",
+              "action": {
+                "id": "a1",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "Username",
+                "region": "main",
+                "type": "text",
+                "name": "user-name",
+                "placeholder": "Username"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 161,
+              "engineMs": 156,
+              "navigationLost": null,
+              "latencyMs": 512,
+              "ms": 521
+            },
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "Password",
+                "region": "main",
+                "type": "password",
+                "name": "password",
+                "placeholder": "Password"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 157,
+              "engineMs": 152,
+              "navigationLost": null,
+              "latencyMs": 512,
+              "ms": 519
+            },
+            {
+              "op": "act",
+              "id": "a3",
+              "action": {
+                "id": "a3",
+                "tag": "input",
+                "role": "button",
+                "kind": "click",
+                "label": "Login",
+                "region": "main",
+                "type": "submit",
+                "name": "login-button",
+                "value": "Login"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 182,
+              "engineMs": 175,
+              "navigationLost": null,
+              "latencyMs": 539,
+              "ms": 546
+            },
+            {
+              "op": "act",
+              "ok": false,
+              "failures": [
+                "target not in last snapshot: {\"tag\":\"select\",\"index\":0}"
+              ],
+              "candidates": [],
+              "ms": 9
+            }
+          ],
+          "latencyMs": 2818,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 2251,
+      "totalMs": 9343
+    },
+    {
+      "id": "books-toscrape",
+      "url": "https://books.toscrape.com/",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "All products | Books to Scrape - Sandbox",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 60,
+        "actionCap": 54,
+        "scanMs": 23,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 4391,
+        "textTokens": 1283,
+        "rawChars": 51004,
+        "rawTokens": 9832,
+        "ariaChars": 16662,
+        "ariaTokens": 4657,
+        "compressionVsRaw": 0.08609128695788566,
+        "compressionVsAria": 0.2635337894610491,
+        "timing": {
+          "jsonWallMs": 30,
+          "jsonInPageMs": 23.5,
+          "textWallMs": 25,
+          "textInPageMs": 23.399999999441206
+        },
+        "fullActions": 114
+      },
+      "checks": {
+        "recall": {
+          "visible": 114,
+          "matched": 114,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 114
+            },
+            {
+              "at": "middle",
+              "y": 874,
+              "actions": 114
+            },
+            {
+              "at": "bottom",
+              "y": 1749,
+              "actions": 114
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 114,
+          "secondActions": 114
+        }
+      },
+      "scenarios": [
+        {
+          "name": "open first book",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a54",
+              "action": {
+                "id": "a54",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "A Light in the Attic",
+                "region": "main",
+                "href": "catalogue/a-light-in-the-attic_1000/index.html"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 204,
+              "engineMs": 176,
+              "navigationLost": null,
+              "latencyMs": 563,
+              "ms": 595
+            }
+          ],
+          "latencyMs": 595,
+          "status": "ok"
+        },
+        {
+          "name": "category and next page",
+          "ok": true,
+          "steps": [
+            {
+              "op": "goto",
+              "ok": true,
+              "url": "https://books.toscrape.com/"
+            },
+            {
+              "op": "act",
+              "id": "a15",
+              "action": {
+                "id": "a15",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "Nonfiction",
+                "region": "chrome",
+                "href": "catalogue/category/books/nonfiction_13/index.html"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 210,
+              "engineMs": 177,
+              "navigationLost": null,
+              "latencyMs": 562,
+              "ms": 609
+            },
+            {
+              "op": "act",
+              "id": "a115",
+              "action": {
+                "id": "a115",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "next",
+                "region": "main",
+                "href": "page-2.html"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 209,
+              "engineMs": 176,
+              "navigationLost": null,
+              "latencyMs": 561,
+              "ms": 607
+            }
+          ],
+          "latencyMs": 2451,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 2872,
+      "totalMs": 7805
+    },
+    {
+      "id": "httpbin-form",
+      "url": "https://httpbin.org/forms/post",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 13,
+        "actionCap": 0,
+        "scanMs": 2,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 707,
+        "textTokens": 198,
+        "rawChars": 1419,
+        "rawTokens": 432,
+        "ariaChars": 912,
+        "ariaTokens": 248,
+        "compressionVsRaw": 0.49823819591261453,
+        "compressionVsAria": 0.7752192982456141,
+        "timing": {
+          "jsonWallMs": 4,
+          "jsonInPageMs": 1.699999999254942,
+          "textWallMs": 3,
+          "textInPageMs": 1.7000000001862645
+        },
+        "fullActions": 13
+      },
+      "checks": {
+        "recall": {
+          "visible": 13,
+          "matched": 13,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 13
+            },
+            {
+              "at": "middle",
+              "y": 0,
+              "actions": 13
+            },
+            {
+              "at": "bottom",
+              "y": 0,
+              "actions": 13
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 13,
+          "secondActions": 13
+        }
+      },
+      "scenarios": [
+        {
+          "name": "fill and submit form",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a1",
+              "action": {
+                "id": "a1",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "Customer name:",
+                "region": "main",
+                "type": "text",
+                "name": "custname"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 160,
+              "engineMs": 156,
+              "navigationLost": null,
+              "latencyMs": 521,
+              "ms": 526
+            },
+            {
+              "op": "act",
+              "id": "a2",
+              "action": {
+                "id": "a2",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "Telephone:",
+                "region": "main",
+                "type": "tel",
+                "name": "custtel"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 158,
+              "engineMs": 154,
+              "navigationLost": null,
+              "latencyMs": 513,
+              "ms": 518
+            },
+            {
+              "op": "act",
+              "id": "a3",
+              "action": {
+                "id": "a3",
+                "tag": "input",
+                "role": "textbox",
+                "kind": "fill",
+                "label": "E-mail address:",
+                "region": "main",
+                "type": "email",
+                "name": "custemail"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 156,
+              "engineMs": 152,
+              "navigationLost": null,
+              "latencyMs": 514,
+              "ms": 518
+            },
+            {
+              "op": "act",
+              "id": "a5",
+              "action": {
+                "id": "a5",
+                "tag": "input",
+                "role": "radio",
+                "kind": "toggle",
+                "label": "Medium",
+                "region": "main",
+                "type": "radio",
+                "name": "size",
+                "value": false,
+                "checked": false
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 158,
+              "engineMs": 154,
+              "navigationLost": null,
+              "latencyMs": 513,
+              "ms": 519
+            },
+            {
+              "op": "act",
+              "id": "a7",
+              "action": {
+                "id": "a7",
+                "tag": "input",
+                "role": "checkbox",
+                "kind": "toggle",
+                "label": "Bacon",
+                "region": "main",
+                "type": "checkbox",
+                "name": "topping",
+                "value": false,
+                "checked": false
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 157,
+              "engineMs": 154,
+              "navigationLost": null,
+              "latencyMs": 515,
+              "ms": 519
+            },
+            {
+              "op": "act",
+              "id": "a13",
+              "action": {
+                "id": "a13",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Submit order",
+                "region": "main",
+                "type": "submit"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 157,
+              "engineMs": 154,
+              "navigationLost": null,
+              "latencyMs": 517,
+              "ms": 521
+            }
+          ],
+          "latencyMs": 3121,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 1952,
+      "totalMs": 6609
+    },
+    {
+      "id": "wikipedia-http",
+      "url": "https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol",
+      "status": "scenario_failures",
+      "httpStatus": 200,
+      "title": "HTTP - Wikipedia",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 60,
+        "actionCap": 935,
+        "scanMs": 182,
+        "sanitized": 1,
+        "modal": false,
+        "textChars": 3485,
+        "textTokens": 1026,
+        "rawChars": 832668,
+        "rawTokens": 272133,
+        "ariaChars": 176538,
+        "ariaTokens": 45739,
+        "compressionVsRaw": 0.004185341576714849,
+        "compressionVsAria": 0.019740792350655383,
+        "timing": {
+          "jsonWallMs": 189,
+          "jsonInPageMs": 183.70000000018626,
+          "textWallMs": 195,
+          "textInPageMs": 194.09999999962747
+        },
+        "fullActions": 995
+      },
+      "checks": {
+        "recall": {
+          "visible": 1021,
+          "matched": 974,
+          "ratio": 0.9539666993143977,
+          "missed": [
+            {
+              "tag": "input",
+              "role": "textbox",
+              "name": "Search Wikipedia",
+              "href": "",
+              "reasons": [],
+              "html": "<input class=\"cdx-text-input__input mw-searchInput\" autocomplete=\"off\" type=\"search\" name=\"search\" placeholder=\"Search Wikipedia\" aria-label=\"Search Wikipedia\" autocapitalize=\"none\" spellcheck=\"false\""
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Search",
+              "href": "",
+              "reasons": [],
+              "html": "<button class=\"cdx-button cdx-search-input__end-button\">Search</button>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Donate",
+              "href": "https://donate.wikimedia.org/?wmf_source=donate&wmf_medium=sidebar&wmf_campaign=en.wikipedia.org&uselang=en",
+              "reasons": [],
+              "html": "<a data-mw-interface=\"\" href=\"https://donate.wikimedia.org/?wmf_source=donate&amp;wmf_medium=sidebar&amp;wmf_campaign=en.wikipedia.org&amp;uselang=en\" data-mw-donate-attempt=\"top_link\" class=\"\"><span>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Create account",
+              "href": "https://en.wikipedia.org/w/index.php?title=Special:CreateAccount&returnto=HTTP",
+              "reasons": [],
+              "html": "<a data-mw-interface=\"\" href=\"/w/index.php?title=Special:CreateAccount&amp;returnto=HTTP\" title=\"You are encouraged to create an account and log in; however, it is not mandatory\" class=\"\"><span>Create"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Log in",
+              "href": "https://en.wikipedia.org/w/index.php?title=Special:UserLogin&returnto=HTTP",
+              "reasons": [],
+              "html": "<a data-mw-interface=\"\" href=\"/w/index.php?title=Special:UserLogin&amp;returnto=HTTP\" title=\"You're encouraged to log in; however, it's not mandatory. [alt-o]\" accesskey=\"o\" class=\"\"><span>Log in</spa"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Hide Contents",
+              "href": "",
+              "reasons": [],
+              "html": "<button class=\"vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button\" data-event-name=\"pinnable-header.vector-toc.unpin\" aria-label=\"Hide Contents\">hide</button>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "(Top)",
+              "href": "https://en.wikipedia.org/wiki/HTTP#",
+              "reasons": [],
+              "html": "<a href=\"#\" class=\"vector-toc-link\">\n\t\t\t\t<div class=\"vector-toc-text\">(Top)</div>\n\t\t\t</a>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Versions",
+              "href": "https://en.wikipedia.org/wiki/HTTP#Versions",
+              "reasons": [],
+              "html": "<a class=\"vector-toc-link\" href=\"#Versions\">\n\t\t\t<div class=\"vector-toc-text\">\n\t\t\t\t<span class=\"vector-toc-numb\">1</span>\n\t\t\t\t<span>Versions</span>\n\t\t\t</div>\n\t\t</a>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Use",
+              "href": "https://en.wikipedia.org/wiki/HTTP#Use",
+              "reasons": [],
+              "html": "<a class=\"vector-toc-link\" href=\"#Use\">\n\t\t\t<div class=\"vector-toc-text\">\n\t\t\t\t<span class=\"vector-toc-numb\">2</span>\n\t\t\t\t<span>Use</span>\n\t\t\t</div>\n\t\t</a>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Technology",
+              "href": "https://en.wikipedia.org/wiki/HTTP#Technology",
+              "reasons": [],
+              "html": "<a class=\"vector-toc-link\" href=\"#Technology\">\n\t\t\t<div class=\"vector-toc-text\">\n\t\t\t\t<span class=\"vector-toc-numb\">3</span>\n\t\t\t\t<span>Technology</span>\n\t\t\t</div>\n\t\t</a>"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Toggle Technology subsection",
+              "href": "",
+              "reasons": [],
+              "html": "<button aria-controls=\"toc-Technology-sublist\" class=\"cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-toc-toggle\" aria-expanded=\"false\">\n\t\t\t\t<span class=\"vector-icon mw-ui-icon-wikime"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Message format",
+              "href": "https://en.wikipedia.org/wiki/HTTP#Message_format",
+              "reasons": [],
+              "html": "<a class=\"vector-toc-link\" href=\"#Message_format\">\n\t\t\t<div class=\"vector-toc-text\">\n\t\t\t\t<span class=\"vector-toc-numb\">4</span>\n\t\t\t\t<span>Message format</span>\n\t\t\t</div>\n\t\t</a>"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Toggle Message format subsection",
+              "href": "",
+              "reasons": [],
+              "html": "<button aria-controls=\"toc-Message_format-sublist\" class=\"cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-toc-toggle\" aria-expanded=\"false\">\n\t\t\t\t<span class=\"vector-icon mw-ui-icon-wi"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Similar protocols",
+              "href": "https://en.wikipedia.org/wiki/HTTP#Similar_protocols",
+              "reasons": [],
+              "html": "<a class=\"vector-toc-link\" href=\"#Similar_protocols\">\n\t\t\t<div class=\"vector-toc-text\">\n\t\t\t\t<span class=\"vector-toc-numb\">5</span>\n\t\t\t\t<span>Similar protocols</span>\n\t\t\t</div>\n\t\t</a>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "History",
+              "href": "https://en.wikipedia.org/wiki/HTTP#History",
+              "reasons": [],
+              "html": "<a class=\"vector-toc-link\" href=\"#History\">\n\t\t\t<div class=\"vector-toc-text\">\n\t\t\t\t<span class=\"vector-toc-numb\">6</span>\n\t\t\t\t<span>History</span>\n\t\t\t</div>\n\t\t</a>"
+            }
+          ],
+          "missedTotal": 47,
+          "phantom": [
+            {
+              "id": "a277",
+              "tag": "a",
+              "role": "link",
+              "label": "mwAWM",
+              "href": "https://en.wikipedia.org/wiki/File:Http_request_telnet_ubuntu.png"
+            },
+            {
+              "id": "a349",
+              "tag": "th",
+              "role": "button",
+              "label": "Method"
+            },
+            {
+              "id": "a350",
+              "tag": "th",
+              "role": "button",
+              "label": "RFC"
+            },
+            {
+              "id": "a351",
+              "tag": "br",
+              "role": "button",
+              "label": "Request has payload body"
+            },
+            {
+              "id": "a352",
+              "tag": "br",
+              "role": "button",
+              "label": "Response has payload body"
+            },
+            {
+              "id": "a353",
+              "tag": "th",
+              "role": "button",
+              "label": "Safe"
+            },
+            {
+              "id": "a354",
+              "tag": "th",
+              "role": "button",
+              "label": "Idempotent"
+            },
+            {
+              "id": "a355",
+              "tag": "th",
+              "role": "button",
+              "label": "Cacheable"
+            },
+            {
+              "id": "a416",
+              "tag": "a",
+              "role": "link",
+              "label": "mwA4A",
+              "href": "https://en.wikipedia.org/wiki/File:Tim_Berners-Lee_CP_2.jpg"
+            },
+            {
+              "id": "a515",
+              "tag": "a",
+              "role": "link",
+              "label": "Jump up to: 1",
+              "href": "#cite_ref-:0_1-0"
+            },
+            {
+              "id": "a536",
+              "tag": "a",
+              "role": "link",
+              "label": "Jump up to: 1",
+              "href": "#cite_ref-rfc1945_3-0"
+            },
+            {
+              "id": "a548",
+              "tag": "a",
+              "role": "link",
+              "label": "Jump up to: 1",
+              "href": "#cite_ref-rfc9112_4-0"
+            },
+            {
+              "id": "a567",
+              "tag": "a",
+              "role": "link",
+              "label": "Jump up to: 1",
+              "href": "#cite_ref-rfc9113_7-0"
+            },
+            {
+              "id": "a610",
+              "tag": "a",
+              "role": "link",
+              "label": "Jump up to: 1",
+              "href": "#cite_ref-rfc9110_19-0"
+            },
+            {
+              "id": "a639",
+              "tag": "a",
+              "role": "link",
+              "label": "Jump up to: 1",
+              "href": "#cite_ref-Connections_20-0"
+            }
+          ],
+          "phantomTotal": 21,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 995
+            },
+            {
+              "at": "middle",
+              "y": 10944,
+              "actions": 995
+            },
+            {
+              "at": "bottom",
+              "y": 21888,
+              "actions": 995
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 400,
+          "secondActions": 400
+        }
+      },
+      "scenarios": [
+        {
+          "name": "search field and article",
+          "ok": false,
+          "steps": [
+            {
+              "op": "act",
+              "ok": false,
+              "failures": [
+                "target not in last snapshot: {\"tag\":\"input\",\"nameContains\":\"Search Wikipedia\"}"
+              ],
+              "candidates": [],
+              "ms": 204
+            }
+          ],
+          "latencyMs": 204,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 2051,
+      "totalMs": 6852
+    },
+    {
+      "id": "hacker-news",
+      "url": "https://news.ycombinator.com/",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "Hacker News",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 60,
+        "actionCap": 170,
+        "scanMs": 23,
+        "sanitized": 0,
+        "modal": false,
+        "textChars": 3798,
+        "textTokens": 1261,
+        "rawChars": 34685,
+        "rawTokens": 11758,
+        "ariaChars": 40589,
+        "ariaTokens": 10113,
+        "compressionVsRaw": 0.10949978376819951,
+        "compressionVsAria": 0.09357215008992584,
+        "timing": {
+          "jsonWallMs": 30,
+          "jsonInPageMs": 24.300000000745058,
+          "textWallMs": 27,
+          "textInPageMs": 24.700000000186265
+        },
+        "fullActions": 230
+      },
+      "checks": {
+        "recall": {
+          "visible": 230,
+          "matched": 230,
+          "ratio": 1,
+          "missed": [],
+          "missedTotal": 0,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 230
+            },
+            {
+              "at": "middle",
+              "y": 208,
+              "actions": 230
+            },
+            {
+              "at": "bottom",
+              "y": 417,
+              "actions": 230
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 230,
+          "secondActions": 230
+        }
+      },
+      "scenarios": [
+        {
+          "name": "first comments link",
+          "ok": true,
+          "steps": [
+            {
+              "op": "act",
+              "id": "a17",
+              "action": {
+                "id": "a17",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "34 comments",
+                "region": "main",
+                "href": "item?id=50361268"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 201,
+              "engineMs": 176,
+              "navigationLost": null,
+              "latencyMs": 560,
+              "ms": 595
+            }
+          ],
+          "latencyMs": 595,
+          "status": "ok"
+        },
+        {
+          "name": "More pagination",
+          "ok": true,
+          "steps": [
+            {
+              "op": "goto",
+              "ok": true,
+              "url": "https://news.ycombinator.com/"
+            },
+            {
+              "op": "act",
+              "id": "a221",
+              "action": {
+                "id": "a221",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "More",
+                "region": "main",
+                "href": "?p=2"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 197,
+              "engineMs": 173,
+              "navigationLost": null,
+              "latencyMs": 560,
+              "ms": 607
+            }
+          ],
+          "latencyMs": 2082,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 2397,
+      "totalMs": 6994
+    },
+    {
+      "id": "github-ahttp",
+      "url": "https://github.com/ERETLY/ahttp",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "GitHub - ERETLY/ahttp: Executable page snapshots for LLM agents and people. One browser file, one userscript, CLI and MCP server. No dependencies, no server. · GitHub",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 60,
+        "actionCap": 18,
+        "scanMs": 111,
+        "sanitized": 12,
+        "modal": false,
+        "textChars": 53444,
+        "textTokens": 13282,
+        "rawChars": 495279,
+        "rawTokens": 192344,
+        "ariaChars": 69138,
+        "ariaTokens": 19339,
+        "compressionVsRaw": 0.10790685653944544,
+        "compressionVsAria": 0.7730047152072667,
+        "timing": {
+          "jsonWallMs": 121,
+          "jsonInPageMs": 111.79999999981374,
+          "textWallMs": 114,
+          "textInPageMs": 109.5
+        },
+        "fullActions": 78
+      },
+      "checks": {
+        "recall": {
+          "visible": 180,
+          "matched": 74,
+          "ratio": 0.4111111111111111,
+          "missed": [
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Products",
+              "href": "",
+              "reasons": [],
+              "html": "<button type=\"button\" class=\"Button__wfsCbG\" aria-expanded=\"false\" aria-controls=\"_R_nd_\">Products<svg data-component=\"Octicon\" aria-hidden=\"true\" focusable=\"false\" class=\"octicon octicon-triangle-rig"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Developers",
+              "href": "",
+              "reasons": [],
+              "html": "<button type=\"button\" class=\"Button__wfsCbG\" aria-expanded=\"false\" aria-controls=\"_R_17d_\">Developers<svg data-component=\"Octicon\" aria-hidden=\"true\" focusable=\"false\" class=\"octicon octicon-triangle-"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Businesses",
+              "href": "",
+              "reasons": [],
+              "html": "<button type=\"button\" class=\"Button__wfsCbG\" aria-expanded=\"false\" aria-controls=\"_R_1nd_\">Businesses<svg data-component=\"Octicon\" aria-hidden=\"true\" focusable=\"false\" class=\"octicon octicon-triangle-"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Resources",
+              "href": "",
+              "reasons": [],
+              "html": "<button type=\"button\" class=\"Button__wfsCbG\" aria-expanded=\"false\" aria-controls=\"_R_27d_\">Resources<svg data-component=\"Octicon\" aria-hidden=\"true\" focusable=\"false\" class=\"octicon octicon-triangle-r"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Pricing",
+              "href": "https://github.com/pricing",
+              "reasons": [],
+              "html": "<a href=\"https://github.com/pricing\" data-analytics-event=\"{&quot;action&quot;:&quot;pricing&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;pricing&quot;,&quot;location&quot;:&quot;n"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Search or jump to, type / to search",
+              "href": "",
+              "reasons": [],
+              "html": "<button class=\"Primer_Brand__Button-module__Button___scH9Z Primer_Brand__Button-module__Button--subtle___F7pEE Primer_Brand__Button-module__Button--size-small___zQrEw trigger__A07fH5\" type=\"button\" ar"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Sign in",
+              "href": "https://github.com/login?return_to=https%3A%2F%2Fgithub.com%2FERETLY%2Fahttp",
+              "reasons": [],
+              "html": "<a class=\"Primer_Brand__Button-module__Button___scH9Z Primer_Brand__Button-module__Button--subtle___F7pEE Primer_Brand__Button-module__Button--size-small___zQrEw cta__xkenoh desktopActionGap__qkQEsb h"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Sign up",
+              "href": "https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=ERETLY%2Fahttp",
+              "reasons": [],
+              "html": "<a class=\"Primer_Brand__Button-module__Button___scH9Z Primer_Brand__Button-module__Button--primary___MSbnU Primer_Brand__Button-module__Button--size-small___zQrEw cta__xkenoh\" href=\"/signup?ref_cta=Si"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Appearance settings",
+              "href": "",
+              "reasons": [],
+              "html": "<button class=\"Primer_Brand__Button-module__Button___scH9Z Primer_Brand__Button-module__Button--subtle___F7pEE Primer_Brand__Button-module__Button--size-small___zQrEw trigger__VWDtQ2\" type=\"button\" ar"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Star0 (0)",
+              "href": "https://github.com/login?return_to=%2FERETLY%2Fahttp",
+              "reasons": [],
+              "html": "<a data-component=\"Button\" type=\"button\" href=\"/login?return_to=%2FERETLY%2Fahttp\" data-testid=\"star-button\" class=\"prc-Button-ButtonBase-9n-Xk IconOnlyWhenNarrow__FbBSx0\" data-loading=\"false\" data-si"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "5 Branches",
+              "href": "https://github.com/ERETLY/ahttp/branches",
+              "reasons": [],
+              "html": "<a data-component=\"Button\" type=\"button\" href=\"/ERETLY/ahttp/branches\" class=\"prc-Button-ButtonBase-9n-Xk Button__AyoG5z\" data-loading=\"false\" data-size=\"medium\" data-variant=\"invisible\"><span data-co"
+            },
+            {
+              "tag": "input",
+              "role": "combobox",
+              "name": "Go to file",
+              "href": "",
+              "reasons": [],
+              "html": "<input type=\"text\" aria-label=\"Go to file\" role=\"combobox\" aria-controls=\"file-results-list\" aria-expanded=\"false\" aria-haspopup=\"dialog\" autocorrect=\"off\" spellcheck=\"false\" placeholder=\"Go to file\" "
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Merge pull request",
+              "href": "https://github.com/ERETLY/ahttp/commit/ec1f9887f558dd6dcf3d19f15d3f7fa664d9aa43",
+              "reasons": [],
+              "html": "<a data-pjax=\"true\" data-hovercard-url=\"/ERETLY/ahttp/commit/ec1f9887f558dd6dcf3d19f15d3f7fa664d9aa43/hovercard\" data-hovercard-type=\"commit\" class=\"Link--secondary\" href=\"/ERETLY/ahttp/commit/ec1f988"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "#3",
+              "href": "https://github.com/ERETLY/ahttp/pull/3",
+              "reasons": [],
+              "html": "<a class=\"issue-link js-issue-link\" data-error-text=\"Failed to load title\" data-id=\"6177563276\" data-permission-text=\"Title is private\" data-url=\"https://github.com/ERETLY/ahttp/issues/3\" data-hoverca"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "from ERETLY/fix/real-world-gaps",
+              "href": "https://github.com/ERETLY/ahttp/commit/ec1f9887f558dd6dcf3d19f15d3f7fa664d9aa43",
+              "reasons": [],
+              "html": "<a data-pjax=\"true\" data-hovercard-url=\"/ERETLY/ahttp/commit/ec1f9887f558dd6dcf3d19f15d3f7fa664d9aa43/hovercard\" data-hovercard-type=\"commit\" class=\"Link--secondary\" href=\"/ERETLY/ahttp/commit/ec1f988"
+            }
+          ],
+          "missedTotal": 106,
+          "phantom": [
+            {
+              "id": "a15",
+              "tag": "a",
+              "role": "link",
+              "label": "Star 0 (0)",
+              "href": "/login?return_to=%2FERETLY%2Fahttp"
+            },
+            {
+              "id": "a43",
+              "tag": "table",
+              "role": "button",
+              "label": "Method What you get Can act Checkout (5 steps) Hacker News Wikipedia Lobsters GitHub MDN Total 20 tasks Raw HTML serialized DOM no 3,983 11,771 191,129 17,909 105,767 59,787 390,346 25,896 Markdown Readability + Turndown no 68 5,136 26,579 6,542 1,387 3,008 42,720 n/a Jina Reader hosted Markdown no n/a 5,536 27,977 6,293 1,342 3,180 44,328 n/a Firecrawl hosted Markdown no n/a 5,291 39,364 7,433 42,589 3,850 98,527 n/a Accessibility tree roles and names no 346 10,099 73,404 5,918 5,404 7,381 102,552 5,360 ahttp actions, text, ids yes 289 1,162 1,136 1,105 4,198 1,149 9,039 5,104 ahttp self actions, text, ids yes 289 1,170 1,148 1,116 4,208 1,242 9,173 5,104"
+            },
+            {
+              "id": "a68",
+              "tag": "div",
+              "role": "button",
+              "label": "ahttp Public Notifications You must be signed in to change notification settings Fork 0 (0) Star 0 (0) You must be signed in to star a repository About Executable page snapshots for LLM agents and people. One browser file, one userscript, CLI and MCP server. No dependencies, no server. Topics accessibility ai-agents ai-agents-automation browser-automation dom javascript llm-tools mcp mcp-server no-server nodejs playwright prompt-injection self-hosted tampermonkey tool-calling userscript violentmonkey web-scraping webmcp Resources Readme License Code of conduct Code of conduct Contributing Contributing Security policy Security policy Activity Stars 0 stars Watchers 0 watching Forks 0 forks Report repository main 5 Branches 1 Tag Go to file Code Open more actions menu Latest commit ERETLY Merge pull request #3 from ERETLY/fix/real-world-gaps Open commit details success Nov 3, 2026 ec1f988 · Nov 3, 2026 History 20 Commits Open commit details 20 Commits Folders and files Name Name Last commit message Last commit date.github.github Initial commit Nov 1, 2026 bench bench fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 benchmark benchmark bench: time script, timing tables generated from time-results.json Nov 1, 2026 bin bin feat: report no_effect when an expected change is missing Nov 2, 2026 corpus corpus fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 docs docs fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 examples examples docs: add a 30-second quick start, MCP config and limitations Nov 2, 2026 lib lib Initial commit Nov 1, 2026 scripts scripts bench: time script, timing tables generated from time-results.json Nov 1, 2026 self self fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 test test fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 tools tools Initial commit Nov 1, 2026 types types Initial commit Nov 1, 2026.gitattributes.gitattributes Initial commit Nov 1, 2026.gitignore.gitignore Initial commit Nov 1, 2026 CHANGELOG.md CHANGELOG.md fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 CODE_OF_CONDUCT.md CODE_OF_CONDUCT.md Initial commit Nov 1, 2026 CONTRIBUTING.md CONTRIBUTING.md Initial commit Nov 1, 2026 LICENSE LICENSE Initial commit Nov 1, 2026 README.md README.md fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 SECURITY.md SECURITY.md Initial commit Nov 1, 2026 ahttp.d.ts ahttp.d.ts fix: score disabled twins without letting them win Nov 3, 2026 ahttp.js ahttp.js fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 ahttp.min.js ahttp.min.js fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 eslint.config.js eslint.config.js Initial commit Nov 1, 2026 llms.txt llms.txt docs: add a 30-second quick start, MCP config and limitations Nov 2, 2026 package-lock.json package-lock.json Initial commit Nov 1, 2026 package.json package.json test: add matching regression corpus and runner Nov 2, 2026 tsconfig.json tsconfig.json Initial commit Nov 1, 2026 View all files Repository files navigation README Code of conduct Contributing License Security More items ahttp Page snapshots for LLM agents. ahttp scans the DOM, gives every control a short id, and after each action returns a diff instead of the whole page. It is one browser file with no dependencies, plus a CLI and an MCP server. The server runs on Node with either a small built-in DOM or real Chromium. Experimental, pre-1.0. One maintainer. The API can still change; additive fields and new options are documented before any breaking change. Quick start Userscript: first snapshot in about 30 seconds Install Tampermonkey or Violentmonkey. Open the raw self/ahttp.user.js and confirm the install. If the client does not offer the install, create a new script and paste the file. Open any http(s) page and press Alt+Shift+A (or click the ahttp button). The panel shows the snapshot; type an id and press Act. This path needs no clone and no server. The script uses @grant none and uploads nothing. MCP: one config block Clone and install once: git clone https://github.com/ERETLY/ahttp.git cd ahttp npm ci npx playwright install chromium Then paste this into Claude Desktop or Cursor and replace /absolute/path/to/ahttp: { \"mcpServers\": { \"ahttp\": { \"command\": \" node \", \"args\": [\" /absolute/path/to/ahttp/bin/ahttp-mcp.js \", \" --browser \"] } } } Restart the client and call ahttp_open with a URL. The tools are ahttp_open, ahttp_snapshot and ahttp_act. --browser runs page JavaScript; drop it only for static HTML. Owner auth and legacy options are in MCP server. Agent loop on a local page node examples/agent-loop.js It prints a snapshot, picks a control by label, clicks it with an expect rule, and prints the diff. No network: a local fixture is loaded in Chromium. Example A snapshot is a few lines of text: ahttp | Widget shop | https://shop.test/cart a1 input \"Email\" ph=\"you@example.com\" a2 button \"Add to cart\" a3 a \"Shipping help\" -> /help [text: untrusted] Cart (1 item) $49.00 The agent passes an id to act: const step = await ahttp. act ('a2'); // step.ok === true // step.diff.text === '+ text \"Added to cart\"' Files You want to Use Run it on any page, no server self/ahttp.user.js Ship the engine on a site ahttp.min.js Read or debug the engine ahttp.js Inspect a page from a terminal bin/ahttp-cli.js Give an MCP client browser tools bin/ahttp-mcp.js Drive Chromium from Node lib/browser.js + Playwright ahttp.min.js is built from ahttp.js and has the same API. Not on npm yet. Install from git: git clone https://github.com/ERETLY/ahttp.git cd ahttp npm install Node 18+. Playwright is an optional peer dependency, needed only for the browser backend. Userscript self/ahttp.user.js is the engine plus a small panel. No server, no npm. Install Tampermonkey, Violentmonkey or similar. Create a new script and paste in self/ahttp.user.js. Open any http(s) page and press Alt+Shift+A, or click the ahttp button in the bottom-right corner. The panel scans the page, shows the snapshot and runs an action by id. Guarded actions need a second Confirm click. It uses @grant none and skips iframes. Rebuild it with npm run build:self. In a page < script src =\" /assets/ahttp.min.js \" > </ script > < script > document. addEventListener ('DOMContentLoaded', function () { console. log (ahttp. snapshot ({ maxActions: 20, maxText: 500 })); }); // in an async function: const step = await ahttp.act('a2'); </ script > Loading the file does nothing: no observer, no DOM walk, no patched globals. snapshot() is synchronous, act() returns a promise. Snapshot The first line is tool name, title and URL. Long URLs are cut to the origin plus the last two path segments; format: 'json' and verbose keep the full one. An action line is an id, a tag, a quoted label and optional suffixes: Suffix Meaning val=\"...\" Current value ph=\"...\" Placeholder opts=2(Small|Large) Select options (shown when there are six or fewer) checked / unchecked Checkbox or switch state disabled, readonly, required Control state -> /path Link target confirm=\"...\" Needs confirmation Plain text inputs print as input; other types keep their type (input[email]). Region headers ([modal], [main], [nav]) appear only when more than one region has actions. A [meta] line appears when actions were capped, nodes were sanitized, or the page is owned or read-only. verbose: true adds forms, control counts, layout mode, scan time and engine version. Page text is marked [text: untrusted]. Treat it as data, not instructions. Common options: Option Default Effect maxActions 60 Cap on action lines maxText 1400 Cap on page text, in characters includeText true false drops page text query none Keep actions matching a string scope all main, chrome, modal, all or a CSS selector force false Ignore the scan cache format text json for structured output Everything else is in docs/API.md. Actions act(id, payload) resolves the id, checks policy and confirmation, dispatches the event, waits for network and DOM activity to settle, rescans and returns: { ok: true, action: { id: 'a2', method: 'click', kind: 'click', label: 'Add to cart' }, diff: { text: '+ text \"Added to cart\"' }, snapshot: '...', snapshotMeta: { chars: 214, tokens: 54 } } Errors are returned, not thrown: { ok: false, error: 'unknown_action' }. A blocked action (policy_denied) never touches the page. A string payload fills the target. An object payload can carry: Key Meaning value Fill text or select an option checked Set a checkbox or switch read Read the value, change nothing key Enter, Escape, Tab, arrows, space hover / scroll Hover or scroll into view confirm Accept a guarded action settle, timeout, quiet, minWait, networkQuiet Settle behavior; see docs/API.md diff / snapshot false leaves that part out of the reply If a framework replaces the node, the engine rescans and relocates it by stable anchors: intent, test id, DOM id, name, accessible name, visible text, title, placeholder, alt and href. The old fingerprint is only a low-weight structural signal. If two candidates are too close, the action is not dispatched; act returns status: 'ambiguous' with the candidates. confirm: true does not override that. Weights and thresholds are in docs/MATCHING.md. Pass expect when the action must change something. If the change does not happen, the result keeps ok: true but reports status: 'no_effect' with the failed rules; re-snapshot instead of retrying the same click. await ahttp. act ('a2', { expect: { diff: true, textAdded: ['Added to cart'] } }); Actions marked data-ahttp-confirm do not run on the first call. The engine returns requiresConfirmation; call again with { confirm: true }. This stops accidents. It does not prove a human approved anything. Benchmarks Compared with raw HTML, Markdown (Readability + Turndown), Jina Reader, Firecrawl and the Chromium accessibility tree, on five pinned pages (benchmark/pinned/, SHA-256 checked), a five-step checkout and a 20-task scripted run. The block below is generated from benchmark/results.json and benchmark/self-results.json; a test fails if it drifts. Last run: 2026-11-01T05:13:00.818Z. ahttp 0.1.0 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base. Tokens Tokens an agent reads, lower is better. Checkout is five snapshots of one purchase flow, each page column is one snapshot of a pinned page, 20 tasks is every step of the scripted suite. Total adds the non-empty cells in a row. Method What you get Can act Checkout (5 steps) Hacker News Wikipedia Lobsters GitHub MDN Total 20 tasks Raw HTML serialized DOM no 3,983 11,771 191,129 17,909 105,767 59,787 390,346 25,896 Markdown Readability + Turndown no 68 5,136 26,579 6,542 1,387 3,008 42,720 n/a Jina Reader hosted Markdown no n/a 5,536 27,977 6,293 1,342 3,180 44,328 n/a Firecrawl hosted Markdown no n/a 5,291 39,364 7,433 42,589 3,850 98,527 n/a Accessibility tree roles and names no 346 10,099 73,404 5,918 5,404 7,381 102,552 5,360 ahttp actions, text, ids yes 289 1,162 1,136 1,105 4,198 1,149 9,039 5,104 ahttp self actions, text, ids yes 289 1,170 1,148 1,116 4,208 1,242 9,173 5,104 Only the two ahttp rows can click; the baselines score 0/20 on the task suite because they only read. ahttp self is the same engine loaded as self/ahttp.user.js in Chromium. Time Wall-clock numbers from one machine, relative at best. Live and scan come from benchmark/time-results.json (2026-11-01T05:58:12.040Z). Checkout. Average per step over five local snapshots. The hosted readers cannot run it. Method Time per step Accessibility tree 3.9 ms Raw HTML 4.5 ms Markdown 12.9 ms ahttp 86.5 ms ahttp self 84.9 ms Live. URL to content, one request per page, 2026-11-01: Method Hacker News Wikipedia Lobsters GitHub MDN ahttp 1,847 ms 4,379 ms 2,151 ms 2,430 ms 1,430 ms ahttp self 1,456 ms 1,499 ms 1,595 ms 2,413 ms 855 ms Jina Reader 1,179 ms 1,506 ms 748 ms 756 ms 427 ms Firecrawl 1,320 ms 1,576 ms 1,169 ms 1,589 ms 468 ms Single runs, not medians. ahttp fetches the page and its linked stylesheets in Node and scans it. ahttp self loads the page in Chromium with the userscript injected and takes a snapshot. The hosted readers return Markdown only. Scan. One snapshot per pinned page. Raw HTML, the accessibility tree and ahttp self run in Chromium on the page served from localhost; Markdown and ahttp run in Node. Method Hacker News Wikipedia Lobsters GitHub MDN Raw HTML 26 ms 212 ms 20 ms 38 ms 14 ms Markdown 274 ms 869 ms 398 ms 205 ms 252 ms Accessibility tree 87 ms 288 ms 71 ms 92 ms 77 ms ahttp 39 ms 3,165 ms 4 ms 18 ms 13 ms ahttp self 25 ms 194 ms 25 ms 34 ms 19 ms Hosted readers have no separate scan step; their time is in Live time. Caveats No LLM in the loop. The task runner is a script. One win32 x64 machine. Scan time is the least portable number. Accessibility token counts depend on the Chromium build. Jina Reader (r.jina.ai) and Firecrawl (v2 scrape) fetch the live page, not the pinned HTML. Without JINA_API_KEY, Jina can return 403 on GitHub. Reproduce (needs Chromium): npm run bench # tokens, checkout, tasks: benchmark/run.js npm run bench:self # userscript in Chromium: benchmark/self.js npm run bench:time # scan and live timings: benchmark/time.js npm run bench:render # rewrite the block above Keys are read from JINA_API_KEY and FIRECRAWL_API_KEY and never written to disk. bench calls Jina without a key (AHTTP_JINA=0 skips it) and skips Firecrawl without one (AHTTP_FIRECRAWL=0 skips it explicitly). bench:time times a hosted reader only when its key is set. MCP server { \"mcpServers\": { \"ahttp\": { \"command\": \" node \", \"args\": [\" /absolute/path/to/ahttp/bin/ahttp-mcp.js \"] } } } Add \"--browser\" to the args for Chromium and pages that need JavaScript. Add \"--allow-private\" only if you want loopback or private addresses reachable. Tool Arguments Notes ahttp_open { url, maxActions? } Returns a pageId and a snapshot ahttp_snapshot { pageId?, scope?, query?, maxActions?, maxText?, includeText?, verbose?, format? } Read-only ahttp_act { pageId?, id, value?, key?, confirmationToken? } Runs one action Keep the pageId. 2026-07-28 clients must send it; legacy clients may omit it while one page is open. The first ahttp_act on a guarded control fires no event and returns a one-time, expiring confirmationToken bound to that page and action. Repeat the call with the token to execute it. Owner credentials come from the environment: { \"mcpServers\": { \"ahttp\": { \"command\": \" node \", \"args\": [\" /absolute/path/to/ahttp/bin/ahttp-mcp.js \", \" --browser \"], \"env\": { \"AHTTP_AUTH_TOKEN\": \" short-lived-server-token \", \"AHTTP_OWNER_KEY\": \" optional-soft-gate-key \" } } } } JSON-RPC 2.0 over stdio. Supports the legacy initialize handshake through 2025-11-25 and the 2026-07-28 discovery model. CLI node bin/ahttp-cli.js https://example.com node bin/ahttp-cli.js https://example.com --query \" Buy \" --max-actions 20 The CLI fetches the HTML, attaches the engine to the parsed DOM and prints the snapshot. It never clicks. docs/DEMO.md is a terminal transcript against a local page; node scripts/demo.js regenerates it. To see an action change the page and come back as a diff, load ahttp.min.js in a page or run the MCP server with --browser. For site owners You do not have to change anything; the engine reads the DOM as is. These attributes let a page declare intent and limits: Attribute Effect data-ahttp-intent Stable name for policy and agent code data-ahttp-confirm=\"reason\" Requires confirmation before execution data-ahttp-readonly Readable, not writable data-ahttp-ignore Removes the subtree from actions and text data-ahttp-access public, dev, gate or owner data-ahttp-auth-endpoint Server-verified authorization endpoint data-ahttp-allow / data-ahttp-deny Policy filters data-ahttp-max-actions Hard action cap data-ahttp-intent is the one to set. Without it the engine identifies a control by its visible text or accessible name, which changes when the copy does. Access mode Meaning public Any agent that loads the page can read and act dev Open only on localhost, 127.0.0.1,::1 or file: gate A SHA-256 in the page hides the graph from casual agents. Soft gate, not authentication owner Server-verified session with a short-lived policy owner is the production path. The page ships no secret: the agent authenticates against your backend, receives a short-lived token and policy, and the engine relocks when the token expires. gate is fine for pages that are not sensitive: < script src =\" ahttp.min.js \" data-ahttp-access =\" gate \" data-ahttp-key-hash =\" <sha256> \" > </ script > node bin/ahttp-cli.js --hash-key ' owner-secret ' AHTTP_OWNER_KEY= ' owner-secret ' node bin/ahttp-mcp.js Client-side JavaScript cannot enforce authorization. Whatever performs the mutation must re-check agent, tenant, object and intent on the server. See docs/OWNER_MODE.md, docs/SECURITY.md and the reference backend in examples/auth-server/. For the draft WebMCP API, ahttp.installWebMCP() registers ahttp_snapshot and ahttp_act when document.modelContext exists. It is opt-in; see docs/RESEARCH.md. Security Locks, hidden actions and data-ahttp-confirm are not authorization. The server must authorize every sensitive mutation. gate is a hint. The hash is in the page source. Action labels, URLs and values come from the page too, not only the text block. Treat every page-derived string as untrusted. includeText: false or maxText: 0 drops the text block. Hidden-text filtering is heuristic. Don't put secrets in a page you wouldn't show the agent. The static MCP backend does not run JavaScript. Use --browser for script-dependent pages. The browser backend blocks private targets and non-HTTP schemes at the route layer. DNS rebinding is still possible; run it on a network you control. confirmationToken is one-time and expiring. It is not proof of human approval. No third-party audit. Report vulnerabilities privately, see SECURITY.md. Warning CDP mode attaches to a real browser. ahttp creates a fresh context by default; --cdp-use-existing-profile lets the agent act inside your signed-in profile and read its cookies. Use a dedicated profile. Known limitations Matching and rerenders Matching is heuristic, not a proof of identity. Stable anchors (intent, test id, DOM id, name, accessible name, text, title, placeholder, alt, href) are tried first; the fingerprint is a low-weight fallback. Two near-identical controls can land in the ambiguity band. The engine then returns status: 'ambiguous' with candidates and dispatches nothing. It does not guess. When the id is not in the registry, act() can resolve by data-ahttp-intent or by label. A lookup that matches more than one action returns status: 'ambiguous' with candidates instead of clicking the first one. confirm: true does not resolve ambiguity. Re-snapshot, disambiguate with data-ahttp-intent or data-testid, or use query / scope. A disabled replacement is not an active target. An action whose expected effect is missing returns status: 'no_effect' when an expect rule is supplied; re-snapshot instead of retrying. Position and DOM order are tie-breakers only. A virtualized list that unmounts a row produces not_found, not a click on a recycled row. A disabled twin participates in the ranking but can never win: if it is the best candidate alone you get not_found, and if an active twin is not clearly ahead you get ambiguous with both candidates. A clearly better active twin still runs. pointer-events: none does not hide a control; it is still listed. With an expect rule, a change that never comes returns no_effect only after timeout (1200 ms by default); pass a smaller timeout to fail faster. Shadow DOM and iframes Open shadow roots and <slot> content are scanned when the page exposes them. Closed shadow roots are unreachable. Same-origin iframe documents are scanned up to two levels deep. Cross-origin iframes are skipped, and the userscript skips all iframes (@noframes). Accessible names are a subset of the spec: aria-owns, some SVG name rules and references across shadow boundaries are missing. Browser mode includes CSS::before /::after text and SVG titles. The userscript panel shows one page and does not cross iframe boundaries. Virtualized lists Only mounted rows exist in the snapshot. An id from a row that was unmounted cannot be matched; the engine returns not_found. The engine does not scroll a virtualized container to revive a row. Do that with scroll on the container or a page-specific control, then re-snapshot. Other The hidden-text filter misses text drawn on canvas, set as a background image, or hidden by a stylesheet the page doesn't expose. A native checkbox/radio hidden only by soft CSS (opacity, clip, clip-path, font-size 0, off-screen absolute, text-indent, tiny size) stays in the snapshot when a visible label names it. Hard-hidden controls, or soft-hidden ones without a visible label, stay out; the label itself is not a separate action. When aria-label is the only name, the control needs real layout, its own box of at least 12x12 px inside the page, and opacity as the only hide mechanism; otherwise it stays out like any hidden text. mini-dom (static backend) is a hand-written parser, not an HTML5 tree builder: no foster parenting, no full table algorithm. Use --browser when exact parsing matters. The static backend follows @import three levels deep (16 sheets) and evaluates screen, print, min-width, max-width, min-height and max-height. Unknown media features count as matching. Legacy MCP clients get implicit page state. Modern clients carry pageId. The task benchmark is scripted, not an LLM evaluation. Breaking changes None in 0.1.x. The matching work adds status, candidates, targetHint, thresholds, effect and expect; existing fields, error codes and snapshot lines are unchanged. A change that cannot stay additive bumps the version and is listed here before release. Development npm ci npm test # unit, network, MCP and browser tests npm run typecheck npm run lint npm run test:bench # benchmark and regression suites, needs Chromium npm run smoke # runtime and CLI against a local fixture, no dev dependencies npm run build # regenerate ahttp.min.js and self/ahttp.user.js npm test skips the Playwright test when Chromium is missing. AHTTP_REQUIRE_BROWSER=1 turns that skip into a failure; CI sets it. The giant-DOM scan time warns above AHTTP_GIANT_MS (default 150 ms) and never fails the run. Matching corpus npm test runs the local regression corpus. To run or filter it directly: npm run test:corpus node corpus/runner.js --filter=login The runner prints case | match | diff | tokens | status, writes bench/results.json, and exits non-zero on a failure. Cases and fixtures live in corpus/; the format is in corpus/README.md. Everything runs in jsdom against local HTML: no network, no live site, no browser required. ahttp.js browser engine, no runtime dependencies ahttp.min.js generated minified build self/ahttp.user.js generated userscript: engine plus panel self/panel.js panel source bin/ahttp-cli.js CLI inspector bin/ahttp-mcp.js MCP stdio server lib/ page fetch, SSRF guard, mini-dom, Playwright/CDP backend benchmark/ torture, owner, pinned pages, checkout, tasks, MCP scripts/ build, demo, benchmark rendering test/ node:test suites docs/ API, security, decisions, research, roadmap examples/ Playwright, browser, MCP and server-auth examples License MIT, see LICENSE. About Executable page snapshots for LLM agents and people. One browser file, one userscript, CLI and MCP server. No dependencies, no server. Topics accessibility ai-agents ai-agents-automation browser-automation dom javascript llm-tools mcp mcp-server no-server nodejs playwright prompt-injection self-hosted tampermonkey tool-calling userscript violentmonkey web-scraping webmcp Resources Readme License Code of conduct Code of conduct Contributing Contributing Security policy Security policy Activity Stars 0 stars Watchers 0 watching Forks 0 forks Report repository Releases 1 tag Contributors 1 (1) ERETLY Languages HTML 72.9% JavaScript 27.1%"
+            }
+          ],
+          "phantomTotal": 3,
+          "hiddenMatched": [
+            {
+              "action": "a1",
+              "name": "Skip to content",
+              "reasons": [
+                "clip"
+              ]
+            }
+          ]
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 78
+            },
+            {
+              "at": "middle",
+              "y": 5360,
+              "actions": 78
+            },
+            {
+              "at": "bottom",
+              "y": 11627,
+              "actions": 78
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 78,
+          "secondActions": 78
+        }
+      },
+      "scenarios": [
+        {
+          "name": "snapshot repo and Issues tab",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 78,
+              "wallMs": 123,
+              "inPageMs": 114.5,
+              "metaMs": 114,
+              "ms": 127
+            },
+            {
+              "op": "act",
+              "id": "a6",
+              "action": {
+                "id": "a6",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "Issues",
+                "region": "chrome",
+                "href": "/ERETLY/ahttp/issues"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 1131,
+              "engineMs": 1003,
+              "navigationLost": null,
+              "latencyMs": 1482,
+              "ms": 1611
+            }
+          ],
+          "latencyMs": 1738,
+          "status": "ok"
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 3811,
+      "totalMs": 8718
+    },
+    {
+      "id": "mdn-http",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
+      "status": "scenario_failures",
+      "httpStatus": 200,
+      "title": "HTTP: Hypertext Transfer Protocol | MDN",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 17,
+        "actionCap": 0,
+        "scanMs": 6,
+        "sanitized": 86,
+        "modal": false,
+        "textChars": 1426,
+        "textTokens": 437,
+        "rawChars": 139775,
+        "rawTokens": 39039,
+        "ariaChars": 31256,
+        "ariaTokens": 8251,
+        "compressionVsRaw": 0.010202110534788053,
+        "compressionVsAria": 0.045623240337855135,
+        "timing": {
+          "jsonWallMs": 8,
+          "jsonInPageMs": 5.5,
+          "textWallMs": 7,
+          "textInPageMs": 5.400000000372529
+        },
+        "fullActions": 17
+      },
+      "checks": {
+        "recall": {
+          "visible": 163,
+          "matched": 17,
+          "ratio": 0.10429447852760736,
+          "missed": [
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "HTML",
+              "href": "",
+              "reasons": [],
+              "html": "<button class=\"menu__tab-button\" type=\"button\" slot=\"button\" aria-expanded=\"false\" aria-controls=\"uid_oeq55b1n2so\">\n                      <span class=\"menu__tab-label\">HTML</span>\n                    "
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "CSS",
+              "href": "",
+              "reasons": [],
+              "html": "<button class=\"menu__tab-button\" type=\"button\" slot=\"button\" aria-expanded=\"false\" aria-controls=\"uid_93ipn9wz0wa\">\n                      <span class=\"menu__tab-label\">CSS</span>\n                    <"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "JavaScript",
+              "href": "",
+              "reasons": [],
+              "html": "<button class=\"menu__tab-button\" type=\"button\" slot=\"button\" aria-expanded=\"false\" aria-controls=\"uid_4qt5q8orol7\">\n                      <span class=\"menu__tab-label\" data-type=\"long\">JavaScript</spa"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Web APIs",
+              "href": "",
+              "reasons": [],
+              "html": "<button class=\"menu__tab-button\" type=\"button\" slot=\"button\" aria-expanded=\"false\" aria-controls=\"uid_csxeaigoi9e\">\n                      <span class=\"menu__tab-label\">Web APIs</span>\n                "
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "All",
+              "href": "",
+              "reasons": [],
+              "html": "<button class=\"menu__tab-button\" type=\"button\" slot=\"button\" aria-expanded=\"false\" aria-controls=\"uid_gz1dtpfa09e\">\n                      <span class=\"menu__tab-label\">All</span>\n                    <"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Learn",
+              "href": "",
+              "reasons": [],
+              "html": "<button class=\"menu__tab-button\" type=\"button\" slot=\"button\" aria-expanded=\"false\" aria-controls=\"uid_dlyor4t4ibb\">\n                      <span class=\"menu__tab-label\">Learn</span>\n                   "
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Tools",
+              "href": "",
+              "reasons": [],
+              "html": "<button class=\"menu__tab-button\" type=\"button\" slot=\"button\" aria-expanded=\"false\" aria-controls=\"uid_snnh2sh3oiq\">\n                      <span class=\"menu__tab-label\">Tools</span>\n                   "
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "About",
+              "href": "",
+              "reasons": [],
+              "html": "<button class=\"menu__tab-button\" type=\"button\" slot=\"button\" aria-expanded=\"false\" aria-controls=\"uid_ym69p8qoen\">\n                      <span class=\"menu__tab-label\">About</span>\n                    "
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Blog",
+              "href": "https://developer.mozilla.org/en-US/blog/",
+              "reasons": [],
+              "html": "<a class=\"menu__tab-link\" href=\"/en-US/blog/\" data-glean-id=\"menu_click_link: top-level -&gt; /en-US/blog/\">Blog</a>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "application-layer",
+              "href": "https://en.wikipedia.org/wiki/Application_Layer",
+              "reasons": [],
+              "html": "<a href=\"https://en.wikipedia.org/wiki/Application_Layer\" class=\"external\" target=\"_blank\" title=\"External link (opens in new tab)\">application-layer</a>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "client-server model",
+              "href": "https://en.wikipedia.org/wiki/Client%E2%80%93server_model",
+              "reasons": [],
+              "html": "<a href=\"https://en.wikipedia.org/wiki/Client%E2%80%93server_model\" class=\"external\" target=\"_blank\" title=\"External link (opens in new tab)\">client-server model</a>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "stateless protocol",
+              "href": "https://en.wikipedia.org/wiki/Stateless_protocol",
+              "reasons": [],
+              "html": "<a href=\"https://en.wikipedia.org/wiki/Stateless_protocol\" class=\"external\" target=\"_blank\" title=\"External link (opens in new tab)\">stateless protocol</a>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "cookies",
+              "href": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies",
+              "reasons": [],
+              "html": "<a href=\"/en-US/docs/Web/HTTP/Guides/Cookies\">cookies</a>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Guides",
+              "href": "https://developer.mozilla.org/en-US/docs/Web/HTTP#guides",
+              "reasons": [],
+              "html": "<a href=\"#guides\" data-glean-id=\"toc_click: #guides\" aria-current=\"true\">Guides</a>"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Tools & resources",
+              "href": "https://developer.mozilla.org/en-US/docs/Web/HTTP#tools_resources",
+              "reasons": [],
+              "html": "<a href=\"#tools_resources\" data-glean-id=\"toc_click: #tools_resources\">Tools &amp; resources</a>"
+            }
+          ],
+          "missedTotal": 146,
+          "phantom": [],
+          "phantomTotal": 0,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 17
+            },
+            {
+              "at": "middle",
+              "y": 2736,
+              "actions": 17
+            },
+            {
+              "at": "bottom",
+              "y": 5778,
+              "actions": 17
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 17,
+          "secondActions": 17
+        }
+      },
+      "scenarios": [
+        {
+          "name": "snapshot and search control",
+          "ok": false,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 17,
+              "wallMs": 8,
+              "inPageMs": 4.900000000372529,
+              "metaMs": 5,
+              "ms": 10
+            },
+            {
+              "op": "act",
+              "ok": false,
+              "failures": [
+                "target not in last snapshot: {\"nameContains\":\"Search\"}"
+              ],
+              "candidates": [],
+              "ms": 8
+            }
+          ],
+          "latencyMs": 18,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 2059,
+      "totalMs": 3789
+    },
+    {
+      "id": "bbc-news",
+      "url": "https://www.bbc.com/",
+      "status": "ok",
+      "httpStatus": 200,
+      "title": "BBC Home | Breaking News, World News, US News, Sports, Business, Innovation, Climate, Culture, Travel, Video & Audio",
+      "blocked": null,
+      "error": null,
+      "metrics": {
+        "actions": 60,
+        "actionCap": 144,
+        "scanMs": 38,
+        "sanitized": 102,
+        "modal": false,
+        "textChars": 3468,
+        "textTokens": 1028,
+        "rawChars": 702943,
+        "rawTokens": 239558,
+        "ariaChars": 70692,
+        "ariaTokens": 17953,
+        "compressionVsRaw": 0.004933543687041481,
+        "compressionVsAria": 0.0490578849091835,
+        "timing": {
+          "jsonWallMs": 44,
+          "jsonInPageMs": 39.40000000037253,
+          "textWallMs": 44,
+          "textInPageMs": 39.40000000037253
+        },
+        "fullActions": 204
+      },
+      "checks": {
+        "recall": {
+          "visible": 244,
+          "matched": 181,
+          "ratio": 0.7418032786885246,
+          "missed": [
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Register",
+              "href": "",
+              "reasons": [],
+              "html": "<button type=\"button\" aria-label=\"Register\" class=\"Button-styles__ButtonBase-sc-c0f7f974-2 Button-styles__GeneralButton-sc-c0f7f974-3 gCqUYN bFiEsi\"><span data-testid=\"button-text\" aria-hidden=\"false\""
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Sign In",
+              "href": "",
+              "reasons": [],
+              "html": "<button type=\"button\" aria-label=\"Sign In\" class=\"Button-styles__ButtonBase-sc-c0f7f974-2 Button-styles__UnboxedButton-sc-c0f7f974-5 gCqUYN jdLCIq\"><span data-testid=\"button-text\" aria-hidden=\"false\" "
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "LIVE . updates",
+              "href": "https://www.bbc.com/news/live/cj1dw0ydn595t",
+              "reasons": [],
+              "html": "<a href=\"/news/live/cj1dw0ydn595t\" data-testid=\"us-election-banner-action-link\" class=\"ssrcss-p12od3-Link e16hqiom2\"><span data-testid=\"live-link-heading\" class=\"ssrcss-zw91jm-LiveContainer e16hqiom0\""
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "James Talarico becomes first Democrat to win Texas Senate seat since 1988 \"This wasn't just a tsunami, not just a refere",
+              "href": "https://www.bbc.com/news/articles/c6n8dnn09jg7o",
+              "reasons": [],
+              "html": "<a href=\"/news/articles/c6n8dnn09jg7o\" data-testid=\"internal-link\" class=\"Anchor-styles__AnchorStyled-sc-651d33db-0 hygVWX\"><div data-testid=\"dundee-article\" class=\"Dundee-styles__CardStyled-sc-50abbc"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Republican Susan Collins loses seat to Democrat, ending nearly 30 years in the Senate Maine's Senate race was mired in c",
+              "href": "https://www.bbc.com/news/articles/cred3jj69jvqo",
+              "reasons": [],
+              "html": "<a href=\"/news/articles/cred3jj69jvqo\" data-testid=\"internal-link\" class=\"Anchor-styles__AnchorStyled-sc-651d33db-0 hygVWX\"><div data-testid=\"dundee-article\" class=\"Dundee-styles__CardStyled-sc-50abbc"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Florida Republicans fend off Democrats as state elects first black governor Republican Byron Donalds, who was backed by ",
+              "href": "https://www.bbc.com/news/articles/c9146d88pl32o",
+              "reasons": [],
+              "html": "<a href=\"/news/articles/c9146d88pl32o\" data-testid=\"internal-link\" class=\"Anchor-styles__AnchorStyled-sc-651d33db-0 hygVWX\"><div data-testid=\"dundee-article\" class=\"Dundee-styles__CardStyled-sc-50abbc"
+            },
+            {
+              "tag": "a",
+              "role": "link",
+              "name": "Amy Acton wins Ohio governor after bitter race with billionaire Ramaswamy The raced heated up in its final weeks after t",
+              "href": "https://www.bbc.com/news/articles/cmx2dlz8574jo",
+              "reasons": [],
+              "html": "<a href=\"/news/articles/cmx2dlz8574jo\" data-testid=\"internal-link\" class=\"Anchor-styles__AnchorStyled-sc-651d33db-0 hygVWX\"><div data-testid=\"dundee-article\" class=\"Dundee-styles__CardStyled-sc-50abbc"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "James Talarico celebrates stunning senate victory in Texas",
+              "href": "",
+              "reasons": [],
+              "html": "<button role=\"button\" tabindex=\"0\" aria-label=\"James Talarico celebrates stunning senate victory in Texas\" class=\"Nottingham-styles__NottinghamStyled-sc-f04caa5b-0 jqKloT\"><div class=\"Nottingham-style"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "BBC reports from Iowa as Democrat flips Senate seat",
+              "href": "",
+              "reasons": [],
+              "html": "<button role=\"button\" tabindex=\"0\" aria-label=\"BBC reports from Iowa as Democrat flips Senate seat\" class=\"Nottingham-styles__NottinghamStyled-sc-f04caa5b-0 jqKloT\"><div class=\"Nottingham-styles__Nott"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "BBC reports from Texas as Democrats win Senate seat",
+              "href": "",
+              "reasons": [],
+              "html": "<button role=\"button\" tabindex=\"0\" aria-label=\"BBC reports from Texas as Democrats win Senate seat\" class=\"Nottingham-styles__NottinghamStyled-sc-f04caa5b-0 jqKloT\"><div class=\"Nottingham-styles__Nott"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Texas governor-elect Gina Hinojosa celebrates historic win",
+              "href": "",
+              "reasons": [],
+              "html": "<button role=\"button\" tabindex=\"0\" aria-label=\"Texas governor-elect Gina Hinojosa celebrates historic win\" class=\"Nottingham-styles__NottinghamStyled-sc-f04caa5b-0 jqKloT\"><div class=\"Nottingham-style"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Greg Abbott concedes race for Texas governor",
+              "href": "",
+              "reasons": [],
+              "html": "<button role=\"button\" tabindex=\"0\" aria-label=\"Greg Abbott concedes race for Texas governor\" class=\"Nottingham-styles__NottinghamStyled-sc-f04caa5b-0 jqKloT\"><div class=\"Nottingham-styles__NottinghamC"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Darline Graham speaks after losing late brother's Senate seat",
+              "href": "",
+              "reasons": [],
+              "html": "<button role=\"button\" tabindex=\"0\" aria-label=\"Darline Graham speaks after losing late brother's Senate seat\" class=\"Nottingham-styles__NottinghamStyled-sc-f04caa5b-0 jqKloT\"><div class=\"Nottingham-st"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Vivek Ramaswamy concedes after bitter Ohio battle",
+              "href": "",
+              "reasons": [],
+              "html": "<button role=\"button\" tabindex=\"0\" aria-label=\"Vivek Ramaswamy concedes after bitter Ohio battle\" class=\"Nottingham-styles__NottinghamStyled-sc-f04caa5b-0 jqKloT\"><div class=\"Nottingham-styles__Nottin"
+            },
+            {
+              "tag": "button",
+              "role": "button",
+              "name": "Keisha Lance Bottoms reacts to historic Georgia governor win",
+              "href": "",
+              "reasons": [],
+              "html": "<button role=\"button\" tabindex=\"0\" aria-label=\"Keisha Lance Bottoms reacts to historic Georgia governor win\" class=\"Nottingham-styles__NottinghamStyled-sc-f04caa5b-0 jqKloT\"><div class=\"Nottingham-sty"
+            }
+          ],
+          "missedTotal": 63,
+          "phantom": [
+            {
+              "id": "a18",
+              "tag": "a",
+              "role": "link",
+              "label": "Live. updates",
+              "href": "/news/live/cj1dw0ydn595t"
+            },
+            {
+              "id": "a25",
+              "tag": "a",
+              "role": "link",
+              "label": "James Talarico becomes first Democrat to win Texas Senate seat since 1988 \"This wasn't just a tsunami, not just a referendum, but this was a bloodbath,\" one expert told the BBC on Democrats' historic wins in Texas.",
+              "href": "/news/articles/c6n8dnn09jg7o"
+            },
+            {
+              "id": "a26",
+              "tag": "a",
+              "role": "link",
+              "label": "Republican Susan Collins loses seat to Democrat, ending nearly 30 years in the Senate Maine's Senate race was mired in controversy after Democratic nominee Graham Planter withdrew following multiple scandals.",
+              "href": "/news/articles/cred3jj69jvqo"
+            },
+            {
+              "id": "a27",
+              "tag": "a",
+              "role": "link",
+              "label": "Florida Republicans fend off Democrats as state elects first black governor Republican Byron Donalds, who was backed by President Donald Trump, will be the first black governor of Florida.",
+              "href": "/news/articles/c9146d88pl32o"
+            },
+            {
+              "id": "a28",
+              "tag": "a",
+              "role": "link",
+              "label": "Amy Acton wins Ohio governor after bitter race with billionaire Ramaswamy The raced heated up in its final weeks after the Republican contender released an ad featuring Acton's mother.",
+              "href": "/news/articles/cmx2dlz8574jo"
+            },
+            {
+              "id": "a59",
+              "tag": "a",
+              "role": "link",
+              "label": "What Florida jet audio and flight data tells us about its final moments A private jet crashed in Florida on Sunday, killing all nine people on board, according to US authorities. BBC Verify",
+              "href": "/news/videos/c52e9lgxjz82o"
+            },
+            {
+              "id": "a60",
+              "tag": "a",
+              "role": "link",
+              "label": "Sarah Smith on Democrats flipping the House of Representatives The BBC's North America editor Sarah Smith delivers the news: Democrats are projected to flip the House of Representatives from a Republican majority to a Democratic one. US & Canada",
+              "href": "/news/videos/cwly37l351neo"
+            },
+            {
+              "id": "a61",
+              "tag": "a",
+              "role": "link",
+              "label": "'I am ready to fight' - Senator-elect Chris Pappas celebrates New Hampshire win The Democratic candidate has won the state's open seat, making history as the first openly-gay man elected to the Senate. US & Canada",
+              "href": "/news/videos/c6y4xz3ypenko"
+            },
+            {
+              "id": "a62",
+              "tag": "a",
+              "role": "link",
+              "label": "With results coming in, is it still too early to tell? Even with some races already being called, the BBC's Sarah Smith cautions that it may be too early for Democrats to get excited. US & Canada",
+              "href": "/news/videos/ckx2qzeqy5vyo"
+            },
+            {
+              "id": "a63",
+              "tag": "a",
+              "role": "link",
+              "label": "BBC inside Ossoff's watch party in Georgia The BBC's Carl Nasman reports from inside a Democratic watch party in Georgia as supporters celebrate Ossoff's lead over his Republican challenger, Mike Collins. US & Canada",
+              "href": "/news/videos/ck7vp45ydgryo"
+            },
+            {
+              "id": "a64",
+              "tag": "a",
+              "role": "link",
+              "label": "'A brighter future' - why Americans came out to vote Voters in Iowa, Georgia and Ohio spoke to BBC reporters as millions of Americans decide who will control Congress. US & Canada",
+              "href": "/news/videos/cq8rz6xlz6ejo"
+            },
+            {
+              "id": "a66",
+              "tag": "a",
+              "role": "link",
+              "label": "Helicopter collision near Mt Everest captured on camera An Indian tourist was killed and two others were injured, officials say, after two helicopters crashed while landing. Asia",
+              "href": "/news/videos/cr3wv0y50dgyo"
+            },
+            {
+              "id": "a68",
+              "tag": "a",
+              "role": "link",
+              "label": "Giant eagles once ruled the skies. They snatched human children, and shaped our evolution After the dinosaur-killing asteroid hit, giant birds became apex predators for tens of millions of years – and humans were among their prey.",
+              "href": "/future/article/20261028-predatory-birds-the-size-of-a-small-aircraft-once-flocked-the-skies-some-of-them-ate-humans"
+            },
+            {
+              "id": "a70",
+              "tag": "a",
+              "role": "link",
+              "label": "Which dog breed is the smartest? A 1940s experiment tested 500 puppies to find out ​‌ In post-WWII Maine, a group of scientists built the School for Dogs, a massive facility to breed a \"super-dog\". Things didn't go as planned.",
+              "href": "/future/article/20261001-the-forgotten-1940s-experiment-that-tried-and-failed-to-create-a-super-dog"
+            },
+            {
+              "id": "a77",
+              "tag": "a",
+              "role": "link",
+              "label": "Four tankers destroyed by naval mines in Strait of Hormuz, Iran's IRGC says Iran's Islamic Revolutionary Guard Corps says the vessels had hit sea mines while trying to cross a prohibited route.",
+              "href": "/news/articles/c6d934npl9y8o"
+            }
+          ],
+          "phantomTotal": 23,
+          "hiddenMatched": []
+        },
+        "scroll": {
+          "counts": [
+            {
+              "at": "top",
+              "y": 0,
+              "actions": 204
+            },
+            {
+              "at": "middle",
+              "y": 7152,
+              "actions": 204
+            },
+            {
+              "at": "bottom",
+              "y": 14331,
+              "actions": 204
+            }
+          ],
+          "missingAtMiddle": [],
+          "missingAtBottom": [],
+          "addedAtBottom": []
+        },
+        "determinism": {
+          "identicalText": true,
+          "identicalIds": true,
+          "firstActions": 204,
+          "secondActions": 204
+        }
+      },
+      "scenarios": [
+        {
+          "name": "cookie wall rejected, page scanned",
+          "ok": true,
+          "steps": [
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 204,
+              "wallMs": 61,
+              "inPageMs": 40.40000000037253,
+              "metaMs": 40,
+              "ms": 75
+            }
+          ],
+          "latencyMs": 75,
+          "status": null
+        }
+      ],
+      "dialogs": [],
+      "loadMs": 2809,
+      "totalMs": 6852
+    }
+  ]
+}

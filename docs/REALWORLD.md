@@ -278,20 +278,24 @@ over stdio and passes 11/11 checks:
 
 ## After the fixes
 
-Rerun on 2026-11-04 of `fix/realworld-gaps` at `e08c574` (engine changes in
-`630f153..fcdd48f`; harness and scenario changes in `04bbc3d`, `60beed2`,
-`1326d80` and `e08c574`), same sites and the same oracle; raw data in
+The original run above used the old oracle. The oracle now treats content under
+a closed `<details>` as hidden (its first `<summary>` stays visible), so both
+sides were measured again on 2026-11-04 with the corrected oracle and the same
+harness. Before is the pre-fix engine at `6ee22e7`; after is the engine from
+`630f153..fcdd48f`. Raw data in
+`benchmark/realworld/results-before-fixed-oracle.json` and
 `benchmark/realworld/results-after-fixes.json`.
 
 | Site | Recall before | Recall after | Scanned actions |
 |---|---:|---:|---:|
-| wikipedia-http | 95.5% | 97.6% | 60 |
+| wikipedia-http | 95.4% | 97.6% | 60 |
 | github-ahttp | 41.1% | 98.9% | 60 |
-| mdn-http | 3.3% | 30.8% | 60 |
-| bbc-news | blocked | 83.1% | 60 |
-| all scanned pages (mean) | 93.6% (25) | 96.6% (26) | |
+| mdn-http | 10.4% | 96.3% | 60 |
+| bbc-news | 74.2% | 85.7% | 60 |
+| all scanned pages (mean) | 93.1% (26) | 99.2% (26) | |
 
-- **Scenarios:** 23/29 before, 29/30 after (bbc-news gained a scenario).
+- **Scenarios:** the current engine passes 29/30; under the same scenarios the
+  old engine passes 24/30. The only remaining failure is the hover-only case.
 - **Corrected scenario expectations, no engine change:** `wikipedia-http` and
   `todomvc-react` now pass. Wikipedia's `/wiki/Hypertext_Transfer_Protocol`
   redirects to `/wiki/HTTP`, and after typing, the snapshot exposes the
@@ -305,13 +309,12 @@ Rerun on 2026-11-04 of `fix/realworld-gaps` at `e08c574` (engine changes in
 - **Unblocked:** `bbc-news` now passes. The wall lives in a `privacy-mgmt.com`
   cross-origin frame; when a site declares the frame and the button, the harness
   presses "I do not agree" and keeps `blocked` only if the full-viewport overlay
-  remains. The page now scans at 83.1% recall.
-- **MDN gap is the oracle, not the engine.** 30.8% is 157/510 matched. The
-  engine reports 159 actions over 570 nodes; the oracle counts 510 visible
-  targets because it does not treat content inside a closed `<details>` as
-  hidden. All five pruned `<ol>` subtrees (353 missed targets) sit inside closed
-  `<details>` in the left sidebar. The oracle is deliberately independent and is
-  not tuned to the engine, so the number stays as measured.
+  remains. The page scans at 85.7% recall after the fixes.
+- **MDN:** 10.4% → 96.3% (157/163). The old 3.3% counted 353 links inside five
+  closed sidebar `<details>` as visible. Six visible controls are still
+  unmatched (the JavaScript menu tab and five HTTP sidebar links); the engine
+  reports 159 actions over 570 nodes. The oracle change is a visibility rule,
+  not engine tuning.
 
 Items 1, 2, 3 and 5 of the recommendations below are now applied; item 6 no
 longer reproduces because browser layout mode reads computed style; item 4 was
