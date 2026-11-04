@@ -278,8 +278,9 @@ over stdio and passes 11/11 checks:
 
 ## After the fixes
 
-Rerun on 2026-11-04 of `fix/realworld-gaps` at `3489b3c` (engine changes in
-`630f153..fcdd48f`), same sites, same scenarios and the same oracle; raw data in
+Rerun on 2026-11-04 of `fix/realworld-gaps` at `04bbc3d` (engine changes in
+`630f153..fcdd48f`, scenario corrections in `60beed2` and `1326d80`), same
+sites, the same oracle; raw data in
 `benchmark/realworld/results-after-fixes.json`.
 
 | Site | Recall before | Recall after | Scanned actions |
@@ -289,19 +290,17 @@ Rerun on 2026-11-04 of `fix/realworld-gaps` at `3489b3c` (engine changes in
 | mdn-http | 3.3% | 30.8% | 60 |
 | all scanned pages (mean) | 93.6% | 97.1% | |
 
-- **Scenarios:** 23/29 before, 26/29 after.
+- **Scenarios:** 23/29 before, 28/29 after.
+- **Corrected scenario expectations, no engine change:** `wikipedia-http` and
+  `todomvc-react` now pass. Wikipedia's `/wiki/Hypertext_Transfer_Protocol`
+  redirects to `/wiki/HTTP`, and after typing, the snapshot exposes the
+  suggestion overlay, so the scenario clicks the first suggestion and asserts
+  `/wiki/HTTP_cookie`. TodoMVC became reachable at the toggle step, and the old
+  expectation asked for the completed `Task one` after the Active filter; the
+  filter correctly hides it, so the step asserts `Task two`, `Task three` and
+  that no list item contains `Task one`.
 - **Still failing, by design:** `the-internet-hovers` is the hover-only case.
   It stays a pending corpus case and is documented in README.
-- **Still failing, page flow:** `wikipedia-http` now fills the search field and
-  sends `Enter` with `status: ok`, but Wikipedia opens a suggestion list instead
-  of navigating; the scenario expects the URL to change without clicking a
-  suggestion. Before the fixes it stopped earlier with
-  `target not in last snapshot`.
-- **Still failing, assertion:** `todomvc-react` is 1/2. The checkbox toggle is
-  now reachable (sibling label fix), so the scenario gets further and fails on
-  the filter step: after clicking "Active" the snapshot does not contain
-  `Task one`. Before it stopped at the toggle with `target not in last
-  snapshot`. The recall is 100% in both runs.
 - **Still blocked:** `bbc-news` serves the same full-viewport consent wall; the
   harness records `blocked` and does not dismiss it.
 - **MDN gap is the oracle, not the engine.** 30.8% is 157/510 matched. The

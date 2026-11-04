@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-04T06:40:17.827Z",
+  "generatedAt": "2026-11-04T07:11:25.261Z",
   "engine": {
     "version": "0.1.0",
-    "sha": "649800b"
+    "sha": "1326d80"
   },
   "runtime": {
     "node": "v26.13.0",
@@ -38,9 +38,9 @@
         "compressionVsRaw": 0.42433383609854197,
         "compressionVsAria": 0.8061127029608405,
         "timing": {
-          "jsonWallMs": 2,
-          "jsonInPageMs": 0.6000000000931323,
-          "textWallMs": 2,
+          "jsonWallMs": 3,
+          "jsonInPageMs": 0.6000000005587935,
+          "textWallMs": 1,
           "textInPageMs": 0.5
         },
         "fullActions": 1
@@ -96,7 +96,7 @@
               "failures": [],
               "actions": 1,
               "wallMs": 2,
-              "inPageMs": 0.39999999990686774,
+              "inPageMs": 0.5,
               "metaMs": 0,
               "ms": 4
             }
@@ -106,8 +106,8 @@
         }
       ],
       "dialogs": [],
-      "loadMs": 1738,
-      "totalMs": 3276
+      "loadMs": 1740,
+      "totalMs": 3290
     },
     {
       "id": "the-internet-checkboxes",
@@ -120,7 +120,7 @@
       "metrics": {
         "actions": 5,
         "actionCap": 0,
-        "scanMs": 1,
+        "scanMs": 0,
         "sanitized": 0,
         "modal": false,
         "textChars": 389,
@@ -133,9 +133,9 @@
         "compressionVsAria": 1.0318302387267904,
         "timing": {
           "jsonWallMs": 3,
-          "jsonInPageMs": 0.8999999999068677,
+          "jsonInPageMs": 0.8999999994412065,
           "textWallMs": 3,
-          "textInPageMs": 1
+          "textInPageMs": 0.900000000372529
         },
         "fullActions": 5
       },
@@ -209,20 +209,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 8018,
-              "engineMs": 8014,
+              "actMs": 7870,
+              "engineMs": 7867,
               "navigationLost": null,
-              "latencyMs": 8372,
-              "ms": 8375
+              "latencyMs": 8234,
+              "ms": 8237
             }
           ],
-          "latencyMs": 8375,
+          "latencyMs": 8237,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 3153,
-      "totalMs": 13049
+      "loadMs": 3151,
+      "totalMs": 12904
     },
     {
       "id": "the-internet-dropdown",
@@ -235,7 +235,7 @@
       "metrics": {
         "actions": 4,
         "actionCap": 0,
-        "scanMs": 0,
+        "scanMs": 1,
         "sanitized": 0,
         "modal": false,
         "textChars": 362,
@@ -248,9 +248,9 @@
         "compressionVsAria": 0.836027713625866,
         "timing": {
           "jsonWallMs": 3,
-          "jsonInPageMs": 0.8999999999068677,
-          "textWallMs": 2,
-          "textInPageMs": 1
+          "jsonInPageMs": 0.8000000007450581,
+          "textWallMs": 3,
+          "textInPageMs": 1.099999999627471
         },
         "fullActions": 4
       },
@@ -328,20 +328,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 156,
-              "engineMs": 153,
+              "actMs": 157,
+              "engineMs": 152,
               "navigationLost": null,
-              "latencyMs": 518,
-              "ms": 521
+              "latencyMs": 521,
+              "ms": 523
             }
           ],
-          "latencyMs": 521,
+          "latencyMs": 523,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 3049,
-      "totalMs": 5073
+      "loadMs": 3021,
+      "totalMs": 5057
     },
     {
       "id": "the-internet-add-remove",
@@ -367,9 +367,9 @@
         "compressionVsAria": 0.9136490250696379,
         "timing": {
           "jsonWallMs": 3,
-          "jsonInPageMs": 0.8999999999068677,
+          "jsonInPageMs": 1,
           "textWallMs": 2,
-          "textInPageMs": 0.8999999999068677
+          "textInPageMs": 0.6999999992549419
         },
         "fullActions": 4
       },
@@ -441,11 +441,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 8120,
-              "engineMs": 8116,
+              "actMs": 7991,
+              "engineMs": 7988,
               "navigationLost": null,
-              "latencyMs": 8473,
-              "ms": 8476
+              "latencyMs": 8355,
+              "ms": 8358
             },
             {
               "op": "act",
@@ -462,11 +462,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 152,
-              "engineMs": 149,
+              "actMs": 155,
+              "engineMs": 152,
               "navigationLost": null,
-              "latencyMs": 512,
-              "ms": 515
+              "latencyMs": 519,
+              "ms": 522
             },
             {
               "op": "act",
@@ -475,11 +475,11 @@
               "status": "ambiguous",
               "ok": true,
               "failures": [],
-              "actMs": 3,
+              "actMs": 2,
               "engineMs": null,
               "navigationLost": null,
-              "latencyMs": 371,
-              "ms": 373
+              "latencyMs": 357,
+              "ms": 360
             },
             {
               "op": "act",
@@ -496,20 +496,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 157,
+              "actMs": 156,
               "engineMs": 154,
               "navigationLost": null,
-              "latencyMs": 509,
+              "latencyMs": 508,
               "ms": 512
             }
           ],
-          "latencyMs": 9876,
+          "latencyMs": 9752,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 3018,
-      "totalMs": 14416
+      "loadMs": 2987,
+      "totalMs": 14258
     },
     {
       "id": "the-internet-dynamic-loading",
@@ -535,9 +535,9 @@
         "compressionVsAria": 0.8904761904761904,
         "timing": {
           "jsonWallMs": 3,
-          "jsonInPageMs": 1.1000000000931323,
-          "textWallMs": 3,
-          "textInPageMs": 1.1000000000931323
+          "jsonInPageMs": 0.8999999994412065,
+          "textWallMs": 2,
+          "textInPageMs": 1
         },
         "fullActions": 4
       },
@@ -609,20 +609,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 7462,
-              "engineMs": 7458,
+              "actMs": 10028,
+              "engineMs": 10025,
               "navigationLost": null,
-              "latencyMs": 7825,
-              "ms": 7828
+              "latencyMs": 10394,
+              "ms": 10398
             }
           ],
-          "latencyMs": 7828,
+          "latencyMs": 10398,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 4945,
-      "totalMs": 14290
+      "loadMs": 3007,
+      "totalMs": 14912
     },
     {
       "id": "the-internet-dynamic-controls",
@@ -635,7 +635,7 @@
       "metrics": {
         "actions": 7,
         "actionCap": 0,
-        "scanMs": 1,
+        "scanMs": 2,
         "sanitized": 0,
         "modal": false,
         "textChars": 544,
@@ -647,10 +647,10 @@
         "compressionVsRaw": 0.11567084839464171,
         "compressionVsAria": 0.9283276450511946,
         "timing": {
-          "jsonWallMs": 3,
-          "jsonInPageMs": 1.2999999998137355,
-          "textWallMs": 4,
-          "textInPageMs": 2
+          "jsonWallMs": 4,
+          "jsonInPageMs": 1.400000000372529,
+          "textWallMs": 3,
+          "textInPageMs": 1.6000000005587935
         },
         "fullActions": 7
       },
@@ -722,11 +722,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 11062,
-              "engineMs": 11058,
+              "actMs": 11060,
+              "engineMs": 11057,
               "navigationLost": null,
-              "latencyMs": 11427,
-              "ms": 11431
+              "latencyMs": 11419,
+              "ms": 11422
             },
             {
               "op": "act",
@@ -743,11 +743,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 157,
-              "engineMs": 154,
+              "actMs": 158,
+              "engineMs": 155,
               "navigationLost": null,
-              "latencyMs": 512,
-              "ms": 517
+              "latencyMs": 515,
+              "ms": 519
             },
             {
               "op": "wait",
@@ -769,20 +769,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 154,
-              "engineMs": 150,
+              "actMs": 155,
+              "engineMs": 152,
               "navigationLost": null,
-              "latencyMs": 515,
-              "ms": 520
+              "latencyMs": 517,
+              "ms": 521
             }
           ],
-          "latencyMs": 16468,
+          "latencyMs": 16467,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 3263,
-      "totalMs": 21248
+      "loadMs": 3267,
+      "totalMs": 21261
     },
     {
       "id": "the-internet-login",
@@ -795,7 +795,7 @@
       "metrics": {
         "actions": 6,
         "actionCap": 0,
-        "scanMs": 1,
+        "scanMs": 2,
         "sanitized": 0,
         "modal": false,
         "textChars": 548,
@@ -808,9 +808,9 @@
         "compressionVsAria": 0.6409356725146199,
         "timing": {
           "jsonWallMs": 4,
-          "jsonInPageMs": 1.3999999999068677,
-          "textWallMs": 3,
-          "textInPageMs": 1.5
+          "jsonInPageMs": 1.3999999994412065,
+          "textWallMs": 2,
+          "textInPageMs": 1.3999999994412065
         },
         "fullActions": 6
       },
@@ -883,11 +883,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 156,
-              "engineMs": 152,
+              "actMs": 158,
+              "engineMs": 154,
               "navigationLost": null,
-              "latencyMs": 512,
-              "ms": 517
+              "latencyMs": 514,
+              "ms": 519
             },
             {
               "op": "act",
@@ -905,11 +905,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 158,
-              "engineMs": 154,
+              "actMs": 155,
+              "engineMs": 151,
               "navigationLost": null,
               "latencyMs": 512,
-              "ms": 516
+              "ms": 517
             },
             {
               "op": "act",
@@ -926,20 +926,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 1910,
+              "actMs": 1914,
               "engineMs": null,
               "navigationLost": "page.evaluate: Execution context was destroyed, most likely because of a navigation.",
-              "latencyMs": 2276,
-              "ms": 2280
+              "latencyMs": 2283,
+              "ms": 2287
             }
           ],
-          "latencyMs": 3313,
+          "latencyMs": 3323,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 3160,
-      "totalMs": 7988
+      "loadMs": 3162,
+      "totalMs": 7990
     },
     {
       "id": "the-internet-hovers",
@@ -966,8 +966,8 @@
         "timing": {
           "jsonWallMs": 3,
           "jsonInPageMs": 1,
-          "textWallMs": 2,
-          "textInPageMs": 1.1999999997206032
+          "textWallMs": 3,
+          "textInPageMs": 1.5
         },
         "fullActions": 3
       },
@@ -1031,7 +1031,7 @@
                 "target not in last snapshot: {\"tag\":\"img\",\"index\":0}"
               ],
               "candidates": [],
-              "ms": 3
+              "ms": 2
             }
           ],
           "latencyMs": 3,
@@ -1039,8 +1039,8 @@
         }
       ],
       "dialogs": [],
-      "loadMs": 3191,
-      "totalMs": 4686
+      "loadMs": 3065,
+      "totalMs": 4575
     },
     {
       "id": "the-internet-key-presses",
@@ -1066,9 +1066,9 @@
         "compressionVsAria": 0.9049586776859504,
         "timing": {
           "jsonWallMs": 3,
-          "jsonInPageMs": 1,
+          "jsonInPageMs": 0.900000000372529,
           "textWallMs": 2,
-          "textInPageMs": 0.900000000372529
+          "textInPageMs": 0.8999999994412065
         },
         "fullActions": 4
       },
@@ -1140,20 +1140,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 159,
-              "engineMs": 156,
+              "actMs": 158,
+              "engineMs": 154,
               "navigationLost": null,
-              "latencyMs": 516,
-              "ms": 519
+              "latencyMs": 519,
+              "ms": 521
             }
           ],
-          "latencyMs": 519,
+          "latencyMs": 521,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 2965,
-      "totalMs": 5002
+      "loadMs": 3015,
+      "totalMs": 5049
     },
     {
       "id": "the-internet-challenging-dom",
@@ -1166,22 +1166,22 @@
       "metrics": {
         "actions": 26,
         "actionCap": 0,
-        "scanMs": 3,
+        "scanMs": 4,
         "sanitized": 7,
         "modal": false,
         "textChars": 1530,
-        "textTokens": 599,
+        "textTokens": 598,
         "rawChars": 7012,
-        "rawTokens": 1979,
+        "rawTokens": 1982,
         "ariaChars": 4823,
-        "ariaTokens": 1553,
+        "ariaTokens": 1552,
         "compressionVsRaw": 0.21819737592698232,
         "compressionVsAria": 0.3172299398714493,
         "timing": {
           "jsonWallMs": 8,
-          "jsonInPageMs": 3.8999999999068677,
-          "textWallMs": 5,
-          "textInPageMs": 3.8999999999068677
+          "jsonInPageMs": 3.900000000372529,
+          "textWallMs": 6,
+          "textInPageMs": 4.2000000001862645
         },
         "fullActions": 26
       },
@@ -1244,8 +1244,8 @@
               "failures": [],
               "actions": 26,
               "wallMs": 8,
-              "inPageMs": 3.6999999997206032,
-              "metaMs": 4,
+              "inPageMs": 3.2999999998137355,
+              "metaMs": 3,
               "ms": 10
             },
             {
@@ -1255,11 +1255,11 @@
               "status": "ambiguous",
               "ok": true,
               "failures": [],
-              "actMs": 7,
+              "actMs": 5,
               "engineMs": null,
               "navigationLost": null,
-              "latencyMs": 363,
-              "ms": 369
+              "latencyMs": 356,
+              "ms": 363
             },
             {
               "op": "act",
@@ -1276,20 +1276,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 7733,
-              "engineMs": 7727,
+              "actMs": 7431,
+              "engineMs": 7425,
               "navigationLost": null,
-              "latencyMs": 8095,
-              "ms": 8102
+              "latencyMs": 7789,
+              "ms": 7796
             }
           ],
-          "latencyMs": 8481,
+          "latencyMs": 8169,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 2961,
-      "totalMs": 13003
+      "loadMs": 2983,
+      "totalMs": 12730
     },
     {
       "id": "the-internet-large",
@@ -1302,7 +1302,7 @@
       "metrics": {
         "actions": 3,
         "actionCap": 0,
-        "scanMs": 60,
+        "scanMs": 59,
         "sanitized": 50,
         "modal": false,
         "textChars": 1984,
@@ -1315,9 +1315,9 @@
         "compressionVsAria": 0.028670520231213872,
         "timing": {
           "jsonWallMs": 64,
-          "jsonInPageMs": 60.10000000009313,
-          "textWallMs": 61,
-          "textInPageMs": 59.39999999990687
+          "jsonInPageMs": 60,
+          "textWallMs": 62,
+          "textInPageMs": 60.59999999962747
         },
         "fullActions": 3
       },
@@ -1379,19 +1379,19 @@
               "ok": true,
               "failures": [],
               "actions": 3,
-              "wallMs": 61,
-              "inPageMs": 58.299999999813735,
-              "metaMs": 58,
-              "ms": 63
+              "wallMs": 58,
+              "inPageMs": 55.10000000055879,
+              "metaMs": 54,
+              "ms": 60
             }
           ],
-          "latencyMs": 63,
+          "latencyMs": 60,
           "status": null
         }
       ],
       "dialogs": [],
-      "loadMs": 3969,
-      "totalMs": 6393
+      "loadMs": 3018,
+      "totalMs": 5386
     },
     {
       "id": "the-internet-shadowdom",
@@ -1416,10 +1416,10 @@
         "compressionVsRaw": 0.15213215520553208,
         "compressionVsAria": 0.8552915766738661,
         "timing": {
-          "jsonWallMs": 2,
-          "jsonInPageMs": 1.1000000000931323,
+          "jsonWallMs": 3,
+          "jsonInPageMs": 1,
           "textWallMs": 3,
-          "textInPageMs": 1.1000000000931323
+          "textInPageMs": 1
         },
         "fullActions": 3
       },
@@ -1492,8 +1492,8 @@
         }
       ],
       "dialogs": [],
-      "loadMs": 3031,
-      "totalMs": 4539
+      "loadMs": 3013,
+      "totalMs": 4527
     },
     {
       "id": "the-internet-iframe",
@@ -1518,10 +1518,10 @@
         "compressionVsRaw": 0.060856248751581334,
         "compressionVsAria": 0.6312154696132597,
         "timing": {
-          "jsonWallMs": 5,
-          "jsonInPageMs": 2.3999999999068677,
+          "jsonWallMs": 6,
+          "jsonInPageMs": 2.5,
           "textWallMs": 4,
-          "textInPageMs": 2.7000000001862645
+          "textInPageMs": 2.2999999998137355
         },
         "fullActions": 22
       },
@@ -1591,7 +1591,7 @@
               "failures": [],
               "actions": 22,
               "wallMs": 5,
-              "inPageMs": 2,
+              "inPageMs": 1.8999999994412065,
               "metaMs": 2,
               "ms": 5
             }
@@ -1601,8 +1601,8 @@
         }
       ],
       "dialogs": [],
-      "loadMs": 3298,
-      "totalMs": 4840
+      "loadMs": 3112,
+      "totalMs": 4670
     },
     {
       "id": "the-internet-nested-frames",
@@ -1615,7 +1615,7 @@
       "metrics": {
         "actions": 0,
         "actionCap": 0,
-        "scanMs": 0,
+        "scanMs": 1,
         "sanitized": 0,
         "modal": false,
         "textChars": 82,
@@ -1627,10 +1627,10 @@
         "compressionVsRaw": 0.31417624521072796,
         "compressionVsAria": null,
         "timing": {
-          "jsonWallMs": 2,
-          "jsonInPageMs": 0.2999999998137355,
-          "textWallMs": 2,
-          "textInPageMs": 0.3000000002793968
+          "jsonWallMs": 3,
+          "jsonInPageMs": 0.5,
+          "textWallMs": 1,
+          "textInPageMs": 0.20000000018626451
         },
         "fullActions": 0
       },
@@ -1685,8 +1685,8 @@
               "failures": [],
               "actions": 0,
               "wallMs": 2,
-              "inPageMs": 0.19999999972060323,
-              "metaMs": 0,
+              "inPageMs": 0.20000000018626451,
+              "metaMs": 1,
               "ms": 2
             }
           ],
@@ -1695,8 +1695,8 @@
         }
       ],
       "dialogs": [],
-      "loadMs": 1916,
-      "totalMs": 33426
+      "loadMs": 1918,
+      "totalMs": 33398
     },
     {
       "id": "the-internet-alerts",
@@ -1721,10 +1721,10 @@
         "compressionVsRaw": 0.21464354527938342,
         "compressionVsAria": 0.889776357827476,
         "timing": {
-          "jsonWallMs": 3,
+          "jsonWallMs": 4,
           "jsonInPageMs": 1,
           "textWallMs": 2,
-          "textInPageMs": 0.8999999999068677
+          "textInPageMs": 1.099999999627471
         },
         "fullActions": 6
       },
@@ -1796,14 +1796,14 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 8081,
-              "engineMs": 8077,
+              "actMs": 8159,
+              "engineMs": 8156,
               "navigationLost": null,
-              "latencyMs": 8438,
-              "ms": 8441
+              "latencyMs": 8519,
+              "ms": 8522
             }
           ],
-          "latencyMs": 8441,
+          "latencyMs": 8522,
           "status": "ok"
         }
       ],
@@ -1813,8 +1813,8 @@
           "message": "I am a JS Alert"
         }
       ],
-      "loadMs": 3118,
-      "totalMs": 13071
+      "loadMs": 3037,
+      "totalMs": 13077
     },
     {
       "id": "the-internet-upload",
@@ -1839,10 +1839,10 @@
         "compressionVsRaw": 0.15040223854494578,
         "compressionVsAria": 0.9148936170212766,
         "timing": {
-          "jsonWallMs": 3,
-          "jsonInPageMs": 1.1000000000931323,
-          "textWallMs": 3,
-          "textInPageMs": 1.5
+          "jsonWallMs": 4,
+          "jsonInPageMs": 1.400000000372529,
+          "textWallMs": 2,
+          "textInPageMs": 1.099999999627471
         },
         "fullActions": 5
       },
@@ -1904,9 +1904,9 @@
               "ok": true,
               "failures": [],
               "actions": 5,
-              "wallMs": 4,
-              "inPageMs": 1.3999999999068677,
-              "metaMs": 2,
+              "wallMs": 3,
+              "inPageMs": 0.7999999998137355,
+              "metaMs": 1,
               "ms": 5
             }
           ],
@@ -1915,8 +1915,8 @@
         }
       ],
       "dialogs": [],
-      "loadMs": 3892,
-      "totalMs": 5390
+      "loadMs": 3043,
+      "totalMs": 4568
     },
     {
       "id": "the-internet-infinite-scroll",
@@ -1929,22 +1929,22 @@
       "metrics": {
         "actions": 3,
         "actionCap": 0,
-        "scanMs": 1,
+        "scanMs": 2,
         "sanitized": 0,
         "modal": false,
         "textChars": 697,
-        "textTokens": 167,
-        "rawChars": 6215,
-        "rawTokens": 1396,
-        "ariaChars": 4427,
-        "ariaTokens": 905,
-        "compressionVsRaw": 0.11214802896218826,
-        "compressionVsAria": 0.1574429636322566,
+        "textTokens": 170,
+        "rawChars": 6171,
+        "rawTokens": 1385,
+        "ariaChars": 4383,
+        "ariaTokens": 893,
+        "compressionVsRaw": 0.11294765840220386,
+        "compressionVsAria": 0.15902349988592288,
         "timing": {
           "jsonWallMs": 3,
-          "jsonInPageMs": 1.1000000000931323,
-          "textWallMs": 2,
-          "textInPageMs": 1.1000000000931323
+          "jsonInPageMs": 1.2999999998137355,
+          "textWallMs": 3,
+          "textInPageMs": 1.099999999627471
         },
         "fullActions": 3
       },
@@ -1976,12 +1976,12 @@
             },
             {
               "at": "middle",
-              "y": 153,
+              "y": 145,
               "actions": 3
             },
             {
               "at": "bottom",
-              "y": 307,
+              "y": 291,
               "actions": 3
             }
           ],
@@ -2007,14 +2007,14 @@
               "failures": [],
               "actions": 3,
               "wallMs": 3,
-              "inPageMs": 1,
+              "inPageMs": 0.900000000372529,
               "metaMs": 1,
               "ms": 3
             },
             {
               "op": "scroll",
               "ok": true,
-              "y": 707
+              "y": 691
             },
             {
               "op": "wait",
@@ -2027,23 +2027,23 @@
               "failures": [],
               "actions": 3,
               "wallMs": 4,
-              "inPageMs": 1.1999999997206032,
+              "inPageMs": 1.900000000372529,
               "metaMs": 1,
-              "ms": 5
+              "ms": 6
             }
           ],
-          "latencyMs": 2118,
+          "latencyMs": 2125,
           "status": null
         }
       ],
       "dialogs": [],
-      "loadMs": 3294,
-      "totalMs": 6911
+      "loadMs": 3166,
+      "totalMs": 6804
     },
     {
       "id": "todomvc-react",
       "url": "https://todomvc.com/examples/react/dist/",
-      "status": "scenario_failures",
+      "status": "ok",
       "httpStatus": 200,
       "title": "TodoMVC: React",
       "blocked": null,
@@ -2051,7 +2051,7 @@
       "metrics": {
         "actions": 12,
         "actionCap": 0,
-        "scanMs": 2,
+        "scanMs": 1,
         "sanitized": 0,
         "modal": false,
         "textChars": 1353,
@@ -2063,10 +2063,10 @@
         "compressionVsRaw": 0.411371237458194,
         "compressionVsAria": 0.6875,
         "timing": {
-          "jsonWallMs": 5,
-          "jsonInPageMs": 1.6999999997206032,
+          "jsonWallMs": 4,
+          "jsonInPageMs": 1.599999999627471,
           "textWallMs": 3,
-          "textInPageMs": 1.8000000002793968
+          "textInPageMs": 1.400000000372529
         },
         "fullActions": 12
       },
@@ -2113,7 +2113,7 @@
       "scenarios": [
         {
           "name": "add three, toggle, filters, clear",
-          "ok": false,
+          "ok": true,
           "steps": [
             {
               "op": "act",
@@ -2155,10 +2155,10 @@
               "ok": true,
               "failures": [],
               "actMs": 174,
-              "engineMs": 170,
+              "engineMs": 171,
               "navigationLost": null,
-              "latencyMs": 532,
-              "ms": 536
+              "latencyMs": 530,
+              "ms": 534
             },
             {
               "op": "act",
@@ -2176,11 +2176,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 155,
-              "engineMs": 150,
+              "actMs": 158,
+              "engineMs": 153,
               "navigationLost": null,
-              "latencyMs": 512,
-              "ms": 516
+              "latencyMs": 509,
+              "ms": 515
             },
             {
               "op": "act",
@@ -2199,10 +2199,10 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 175,
-              "engineMs": 170,
+              "actMs": 177,
+              "engineMs": 172,
               "navigationLost": null,
-              "latencyMs": 533,
+              "latencyMs": 532,
               "ms": 538
             },
             {
@@ -2221,11 +2221,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 155,
+              "actMs": 156,
               "engineMs": 152,
               "navigationLost": null,
-              "latencyMs": 512,
-              "ms": 517
+              "latencyMs": 513,
+              "ms": 519
             },
             {
               "op": "act",
@@ -2245,10 +2245,10 @@
               "ok": true,
               "failures": [],
               "actMs": 173,
-              "engineMs": 168,
+              "engineMs": 169,
               "navigationLost": null,
-              "latencyMs": 525,
-              "ms": 531
+              "latencyMs": 530,
+              "ms": 537
             },
             {
               "op": "act",
@@ -2267,11 +2267,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 157,
-              "engineMs": 153,
+              "actMs": 161,
+              "engineMs": 156,
               "navigationLost": null,
-              "latencyMs": 513,
-              "ms": 518
+              "latencyMs": 527,
+              "ms": 532
             },
             {
               "op": "act",
@@ -2286,18 +2286,58 @@
                 "href": "#/active"
               },
               "status": "ok",
-              "ok": false,
-              "failures": [
-                "text missing: Task one"
-              ],
+              "ok": true,
+              "failures": [],
               "actMs": 177,
-              "engineMs": 172,
+              "engineMs": 173,
               "navigationLost": null,
-              "latencyMs": 540,
-              "ms": 547
+              "latencyMs": 531,
+              "ms": 537
+            },
+            {
+              "op": "act",
+              "id": "a16",
+              "action": {
+                "id": "a16",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "Completed",
+                "region": "chrome",
+                "href": "#/completed"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 175,
+              "engineMs": 171,
+              "navigationLost": null,
+              "latencyMs": 527,
+              "ms": 532
+            },
+            {
+              "op": "act",
+              "id": "a19",
+              "action": {
+                "id": "a19",
+                "tag": "button",
+                "role": "button",
+                "kind": "click",
+                "label": "Clear completed",
+                "region": "chrome",
+                "type": "submit"
+              },
+              "status": "ok",
+              "ok": true,
+              "failures": [],
+              "actMs": 178,
+              "engineMs": 174,
+              "navigationLost": null,
+              "latencyMs": 534,
+              "ms": 539
             }
           ],
-          "latencyMs": 4230,
+          "latencyMs": 5310,
           "status": "ok"
         },
         {
@@ -2320,11 +2360,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 159,
-              "engineMs": 154,
+              "actMs": 153,
+              "engineMs": 150,
               "navigationLost": null,
-              "latencyMs": 513,
-              "ms": 518
+              "latencyMs": 514,
+              "ms": 519
             },
             {
               "op": "act",
@@ -2343,11 +2383,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 176,
-              "engineMs": 172,
+              "actMs": 175,
+              "engineMs": 171,
               "navigationLost": null,
-              "latencyMs": 527,
-              "ms": 533
+              "latencyMs": 530,
+              "ms": 535
             },
             {
               "op": "act",
@@ -2364,11 +2404,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 157,
-              "engineMs": 153,
+              "actMs": 173,
+              "engineMs": 169,
               "navigationLost": null,
-              "latencyMs": 514,
-              "ms": 520
+              "latencyMs": 527,
+              "ms": 532
             },
             {
               "op": "act",
@@ -2385,20 +2425,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 172,
-              "engineMs": 168,
+              "actMs": 175,
+              "engineMs": 170,
               "navigationLost": null,
               "latencyMs": 535,
               "ms": 535
             }
           ],
-          "latencyMs": 2106,
+          "latencyMs": 2121,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 2171,
-      "totalMs": 10022
+      "loadMs": 2155,
+      "totalMs": 11114
     },
     {
       "id": "saucedemo",
@@ -2423,10 +2463,10 @@
         "compressionVsRaw": 0.11584699453551912,
         "compressionVsAria": 0.954954954954955,
         "timing": {
-          "jsonWallMs": 4,
-          "jsonInPageMs": 1.2000000001862645,
-          "textWallMs": 2,
-          "textInPageMs": 1.2000000001862645
+          "jsonWallMs": 3,
+          "jsonInPageMs": 1.2999999998137355,
+          "textWallMs": 3,
+          "textInPageMs": 1.099999999627471
         },
         "fullActions": 3
       },
@@ -2492,11 +2532,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 163,
-              "engineMs": 158,
+              "actMs": 159,
+              "engineMs": 156,
               "navigationLost": null,
-              "latencyMs": 523,
-              "ms": 530
+              "latencyMs": 511,
+              "ms": 516
             },
             {
               "op": "act",
@@ -2518,8 +2558,8 @@
               "actMs": 156,
               "engineMs": 154,
               "navigationLost": null,
-              "latencyMs": 516,
-              "ms": 520
+              "latencyMs": 510,
+              "ms": 514
             },
             {
               "op": "act",
@@ -2538,11 +2578,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 200,
-              "engineMs": 196,
+              "actMs": 203,
+              "engineMs": 199,
               "navigationLost": null,
-              "latencyMs": 553,
-              "ms": 558
+              "latencyMs": 556,
+              "ms": 560
             },
             {
               "op": "act",
@@ -2560,11 +2600,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 178,
-              "engineMs": 173,
+              "actMs": 177,
+              "engineMs": 172,
               "navigationLost": null,
-              "latencyMs": 543,
-              "ms": 549
+              "latencyMs": 529,
+              "ms": 535
             },
             {
               "op": "act",
@@ -2582,11 +2622,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 175,
-              "engineMs": 172,
+              "actMs": 174,
+              "engineMs": 170,
               "navigationLost": null,
-              "latencyMs": 534,
-              "ms": 540
+              "latencyMs": 538,
+              "ms": 544
             },
             {
               "op": "snapshot",
@@ -2594,9 +2634,9 @@
               "failures": [],
               "actions": 20,
               "wallMs": 6,
-              "inPageMs": 2.400000000372529,
-              "metaMs": 3,
-              "ms": 7
+              "inPageMs": 2.5,
+              "metaMs": 2,
+              "ms": 8
             },
             {
               "op": "act",
@@ -2612,14 +2652,14 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 173,
-              "engineMs": 168,
+              "actMs": 175,
+              "engineMs": 169,
               "navigationLost": null,
-              "latencyMs": 538,
-              "ms": 545
+              "latencyMs": 534,
+              "ms": 541
             }
           ],
-          "latencyMs": 3249,
+          "latencyMs": 3218,
           "status": "ok"
         },
         {
@@ -2648,11 +2688,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 156,
-              "engineMs": 152,
+              "actMs": 155,
+              "engineMs": 153,
               "navigationLost": null,
-              "latencyMs": 510,
-              "ms": 516
+              "latencyMs": 515,
+              "ms": 522
             },
             {
               "op": "act",
@@ -2671,11 +2711,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 155,
-              "engineMs": 152,
+              "actMs": 156,
+              "engineMs": 153,
               "navigationLost": null,
-              "latencyMs": 518,
-              "ms": 522
+              "latencyMs": 515,
+              "ms": 519
             },
             {
               "op": "act",
@@ -2694,11 +2734,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 180,
-              "engineMs": 176,
+              "actMs": 175,
+              "engineMs": 171,
               "navigationLost": null,
-              "latencyMs": 533,
-              "ms": 537
+              "latencyMs": 531,
+              "ms": 535
             },
             {
               "op": "act",
@@ -2723,20 +2763,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 163,
-              "engineMs": 158,
+              "actMs": 160,
+              "engineMs": 156,
               "navigationLost": null,
-              "latencyMs": 516,
-              "ms": 521
+              "latencyMs": 519,
+              "ms": 526
             }
           ],
-          "latencyMs": 3324,
+          "latencyMs": 3330,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 2281,
-      "totalMs": 10358
+      "loadMs": 2307,
+      "totalMs": 10360
     },
     {
       "id": "books-toscrape",
@@ -2749,7 +2789,7 @@
       "metrics": {
         "actions": 60,
         "actionCap": 54,
-        "scanMs": 13,
+        "scanMs": 14,
         "sanitized": 0,
         "modal": false,
         "textChars": 4391,
@@ -2761,9 +2801,9 @@
         "compressionVsRaw": 0.08609128695788566,
         "compressionVsAria": 0.2635337894610491,
         "timing": {
-          "jsonWallMs": 20,
-          "jsonInPageMs": 13.5,
-          "textWallMs": 14,
+          "jsonWallMs": 21,
+          "jsonInPageMs": 13.799999999813735,
+          "textWallMs": 15,
           "textInPageMs": 12.900000000372529
         },
         "fullActions": 114
@@ -2828,14 +2868,14 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 183,
-              "engineMs": 167,
+              "actMs": 181,
+              "engineMs": 165,
               "navigationLost": null,
-              "latencyMs": 549,
-              "ms": 569
+              "latencyMs": 545,
+              "ms": 566
             }
           ],
-          "latencyMs": 569,
+          "latencyMs": 566,
           "status": "ok"
         },
         {
@@ -2863,10 +2903,10 @@
               "ok": true,
               "failures": [],
               "actMs": 184,
-              "engineMs": 164,
+              "engineMs": 165,
               "navigationLost": null,
-              "latencyMs": 536,
-              "ms": 567
+              "latencyMs": 538,
+              "ms": 566
             },
             {
               "op": "act",
@@ -2883,20 +2923,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 180,
-              "engineMs": 164,
+              "actMs": 182,
+              "engineMs": 163,
               "navigationLost": null,
-              "latencyMs": 543,
-              "ms": 573
+              "latencyMs": 547,
+              "ms": 577
             }
           ],
-          "latencyMs": 2374,
+          "latencyMs": 2375,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 2941,
-      "totalMs": 7630
+      "loadMs": 2904,
+      "totalMs": 7604
     },
     {
       "id": "httpbin-form",
@@ -2922,9 +2962,9 @@
         "compressionVsAria": 0.7752192982456141,
         "timing": {
           "jsonWallMs": 5,
-          "jsonInPageMs": 2,
+          "jsonInPageMs": 2.099999999627471,
           "textWallMs": 3,
-          "textInPageMs": 2.1000000000931323
+          "textInPageMs": 1.8999999994412065
         },
         "fullActions": 13
       },
@@ -2992,8 +3032,8 @@
               "actMs": 157,
               "engineMs": 153,
               "navigationLost": null,
-              "latencyMs": 510,
-              "ms": 515
+              "latencyMs": 512,
+              "ms": 517
             },
             {
               "op": "act",
@@ -3011,11 +3051,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 158,
-              "engineMs": 154,
+              "actMs": 159,
+              "engineMs": 155,
               "navigationLost": null,
-              "latencyMs": 514,
-              "ms": 518
+              "latencyMs": 512,
+              "ms": 517
             },
             {
               "op": "act",
@@ -3033,11 +3073,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 155,
+              "actMs": 156,
               "engineMs": 152,
               "navigationLost": null,
-              "latencyMs": 507,
-              "ms": 512
+              "latencyMs": 515,
+              "ms": 519
             },
             {
               "op": "act",
@@ -3057,11 +3097,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 159,
-              "engineMs": 154,
+              "actMs": 157,
+              "engineMs": 153,
               "navigationLost": null,
-              "latencyMs": 512,
-              "ms": 518
+              "latencyMs": 511,
+              "ms": 516
             },
             {
               "op": "act",
@@ -3081,11 +3121,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 155,
-              "engineMs": 151,
+              "actMs": 158,
+              "engineMs": 154,
               "navigationLost": null,
-              "latencyMs": 505,
-              "ms": 510
+              "latencyMs": 514,
+              "ms": 518
             },
             {
               "op": "act",
@@ -3102,25 +3142,25 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 156,
-              "engineMs": 153,
+              "actMs": 159,
+              "engineMs": 155,
               "navigationLost": null,
-              "latencyMs": 513,
-              "ms": 518
+              "latencyMs": 516,
+              "ms": 521
             }
           ],
-          "latencyMs": 3091,
+          "latencyMs": 3108,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 1965,
-      "totalMs": 6585
+      "loadMs": 2022,
+      "totalMs": 6663
     },
     {
       "id": "wikipedia-http",
       "url": "https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol",
-      "status": "scenario_failures",
+      "status": "ok",
       "httpStatus": 200,
       "title": "HTTP - Wikipedia",
       "blocked": null,
@@ -3128,22 +3168,22 @@
       "metrics": {
         "actions": 60,
         "actionCap": 968,
-        "scanMs": 178,
+        "scanMs": 152,
         "sanitized": 1,
         "modal": false,
         "textChars": 3886,
         "textTokens": 1109,
         "rawChars": 832668,
-        "rawTokens": 272133,
+        "rawTokens": 272132,
         "ariaChars": 176538,
         "ariaTokens": 45739,
         "compressionVsRaw": 0.004666926073777304,
         "compressionVsAria": 0.022012257984116733,
         "timing": {
-          "jsonWallMs": 185,
-          "jsonInPageMs": 179,
-          "textWallMs": 165,
-          "textInPageMs": 163.3000000002794
+          "jsonWallMs": 159,
+          "jsonInPageMs": 153,
+          "textWallMs": 154,
+          "textInPageMs": 152.80000000074506
         },
         "fullActions": 1028
       },
@@ -3413,7 +3453,7 @@
       "scenarios": [
         {
           "name": "search field and article",
-          "ok": false,
+          "ok": true,
           "steps": [
             {
               "op": "act",
@@ -3432,46 +3472,56 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 1017,
-              "engineMs": 862,
+              "actMs": 1032,
+              "engineMs": 871,
               "navigationLost": null,
-              "latencyMs": 1376,
-              "ms": 1556
+              "latencyMs": 1397,
+              "ms": 1587
             },
             {
               "op": "act",
-              "id": "a1029",
+              "id": "a1030",
               "action": {
-                "id": "a1029",
-                "tag": "input",
-                "role": "combobox",
-                "kind": "fill",
-                "label": "Search Wikipedia",
+                "id": "a1030",
+                "tag": "a",
+                "role": "link",
+                "kind": "click",
+                "label": "HTTP cookie Data item stored in a browser by a website",
                 "region": "chrome",
-                "type": "search",
-                "name": "search",
-                "placeholder": "Search Wikipedia",
-                "value": "Hypertext Transfer Protocol"
+                "href": "https://en.wikipedia.org/w/index.php?title=Special%3ASearch&search=HTTP+cookie&wprov=acrw1_0"
               },
               "status": "ok",
-              "ok": false,
-              "failures": [
-                "url missing Hypertext_Transfer_Protocol"
-              ],
-              "actMs": 498,
-              "engineMs": 325,
+              "ok": true,
+              "failures": [],
+              "actMs": 493,
+              "engineMs": 332,
               "navigationLost": null,
-              "latencyMs": 861,
-              "ms": 1053
+              "latencyMs": 844,
+              "ms": 1043
+            },
+            {
+              "op": "scroll",
+              "ok": true,
+              "y": 26248
+            },
+            {
+              "op": "snapshot",
+              "ok": true,
+              "failures": [],
+              "actions": 500,
+              "wallMs": 193,
+              "inPageMs": 162.80000000074506,
+              "metaMs": 160,
+              "ms": 198
             }
           ],
-          "latencyMs": 2609,
+          "latencyMs": 3454,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 2026,
-      "totalMs": 8858
+      "loadMs": 2051,
+      "totalMs": 9723
     },
     {
       "id": "hacker-news",
@@ -3487,19 +3537,19 @@
         "scanMs": 20,
         "sanitized": 0,
         "modal": false,
-        "textChars": 3796,
+        "textChars": 3797,
         "textTokens": 1266,
-        "rawChars": 34682,
+        "rawChars": 34684,
         "rawTokens": 11758,
-        "ariaChars": 40580,
+        "ariaChars": 40586,
         "ariaTokens": 10113,
-        "compressionVsRaw": 0.10945158872037368,
-        "compressionVsAria": 0.09354361754558896,
+        "compressionVsRaw": 0.1094741090992965,
+        "compressionVsAria": 0.09355442763514513,
         "timing": {
-          "jsonWallMs": 27,
-          "jsonInPageMs": 21.600000000093132,
-          "textWallMs": 22,
-          "textInPageMs": 20.100000000093132
+          "jsonWallMs": 26,
+          "jsonInPageMs": 21.199999999254942,
+          "textWallMs": 21,
+          "textInPageMs": 19.5
         },
         "fullActions": 230
       },
@@ -3556,21 +3606,21 @@
                 "tag": "a",
                 "role": "link",
                 "kind": "click",
-                "label": "18 comments",
+                "label": "27 comments",
                 "region": "main",
                 "href": "item?id=50361268"
               },
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 189,
-              "engineMs": 168,
+              "actMs": 191,
+              "engineMs": 170,
               "navigationLost": null,
-              "latencyMs": 552,
-              "ms": 583
+              "latencyMs": 551,
+              "ms": 584
             }
           ],
-          "latencyMs": 583,
+          "latencyMs": 584,
           "status": "ok"
         },
         {
@@ -3598,19 +3648,19 @@
               "ok": true,
               "failures": [],
               "actMs": 193,
-              "engineMs": 171,
+              "engineMs": 170,
               "navigationLost": null,
-              "latencyMs": 558,
-              "ms": 599
+              "latencyMs": 557,
+              "ms": 598
             }
           ],
-          "latencyMs": 2086,
+          "latencyMs": 2078,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 2394,
-      "totalMs": 6933
+      "loadMs": 2385,
+      "totalMs": 6924
     },
     {
       "id": "github-ahttp",
@@ -3623,22 +3673,22 @@
       "metrics": {
         "actions": 60,
         "actionCap": 123,
-        "scanMs": 55,
+        "scanMs": 52,
         "sanitized": 12,
         "modal": false,
         "textChars": 30026,
         "textTokens": 7742,
-        "rawChars": 495279,
-        "rawTokens": 192355,
+        "rawChars": 495278,
+        "rawTokens": 192336,
         "ariaChars": 69138,
         "ariaTokens": 19339,
-        "compressionVsRaw": 0.06062441573335433,
+        "compressionVsRaw": 0.06062453813817694,
         "compressionVsAria": 0.4342908386126298,
         "timing": {
-          "jsonWallMs": 62,
-          "jsonInPageMs": 55.5,
+          "jsonWallMs": 59,
+          "jsonInPageMs": 52.90000000037253,
           "textWallMs": 57,
-          "textInPageMs": 55
+          "textInPageMs": 53.60000000055879
         },
         "fullActions": 183
       },
@@ -3744,10 +3794,10 @@
               "ok": true,
               "failures": [],
               "actions": 183,
-              "wallMs": 69,
-              "inPageMs": 54.89999999990687,
-              "metaMs": 54,
-              "ms": 71
+              "wallMs": 68,
+              "inPageMs": 56.200000000186265,
+              "metaMs": 55,
+              "ms": 70
             },
             {
               "op": "act",
@@ -3764,20 +3814,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 910,
-              "engineMs": 835,
+              "actMs": 846,
+              "engineMs": 787,
               "navigationLost": null,
-              "latencyMs": 1274,
-              "ms": 1344
+              "latencyMs": 1198,
+              "ms": 1263
             }
           ],
-          "latencyMs": 1415,
+          "latencyMs": 1333,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 3551,
-      "totalMs": 7450
+      "loadMs": 3472,
+      "totalMs": 7272
     },
     {
       "id": "mdn-http",
@@ -3795,17 +3845,17 @@
         "modal": false,
         "textChars": 4652,
         "textTokens": 1296,
-        "rawChars": 139773,
-        "rawTokens": 39031,
-        "ariaChars": 31256,
-        "ariaTokens": 8249,
-        "compressionVsRaw": 0.033282536684481265,
-        "compressionVsAria": 0.14883542359866905,
+        "rawChars": 139775,
+        "rawTokens": 39035,
+        "ariaChars": 31260,
+        "ariaTokens": 8263,
+        "compressionVsRaw": 0.03328206045430156,
+        "compressionVsAria": 0.1488163787587972,
         "timing": {
-          "jsonWallMs": 22,
-          "jsonInPageMs": 17.299999999813735,
+          "jsonWallMs": 21,
+          "jsonInPageMs": 17,
           "textWallMs": 19,
-          "textInPageMs": 17.299999999813735
+          "textInPageMs": 17.300000000745058
         },
         "fullActions": 159
       },
@@ -3821,7 +3871,7 @@
               "name": "JavaScript",
               "href": "",
               "reasons": [],
-              "html": "<button class=\"menu__tab-button\" type=\"button\" slot=\"button\" aria-expanded=\"false\" aria-controls=\"uid_mkojhbu7nl\">\n                      <span class=\"menu__tab-label\" data-type=\"long\">JavaScript</span"
+              "html": "<button class=\"menu__tab-button\" type=\"button\" slot=\"button\" aria-expanded=\"false\" aria-controls=\"uid_kggh0iomjd9\">\n                      <span class=\"menu__tab-label\" data-type=\"long\">JavaScript</spa"
             },
             {
               "tag": "a",
@@ -3964,12 +4014,12 @@
             },
             {
               "at": "middle",
-              "y": 2818,
+              "y": 2779,
               "actions": 159
             },
             {
               "at": "bottom",
-              "y": 5806,
+              "y": 5793,
               "actions": 159
             }
           ],
@@ -3994,10 +4044,10 @@
               "ok": true,
               "failures": [],
               "actions": 159,
-              "wallMs": 26,
-              "inPageMs": 16.299999999813735,
+              "wallMs": 25,
+              "inPageMs": 15.599999999627471,
               "metaMs": 16,
-              "ms": 28
+              "ms": 27
             },
             {
               "op": "act",
@@ -4014,20 +4064,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 635,
-              "engineMs": 615,
+              "actMs": 203,
+              "engineMs": 184,
               "navigationLost": null,
-              "latencyMs": 993,
-              "ms": 1020
+              "latencyMs": 566,
+              "ms": 591
             }
           ],
-          "latencyMs": 1048,
+          "latencyMs": 618,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 2044,
-      "totalMs": 5006
+      "loadMs": 1952,
+      "totalMs": 4474
     },
     {
       "id": "bbc-news",
@@ -4041,8 +4091,8 @@
       "checks": {},
       "scenarios": [],
       "dialogs": [],
-      "loadMs": 2767,
-      "totalMs": 3352
+      "loadMs": 2707,
+      "totalMs": 3290
     }
   ]
 }
