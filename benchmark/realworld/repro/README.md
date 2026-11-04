@@ -15,6 +15,11 @@ Run: `node benchmark/realworld/repro/select-opacity/repro.js`
 Expected after a fix: the select is an action named `Sort products` and can be
 used to change the order; the span is not a dead button.
 
+Status: closed by test. `test/realworld-layout.test.js` covers this fixture in
+Chromium. A native field whose only hiding is `0 < opacity <= 0.05`, that has a
+real box and a name, is recovered; a `cursor:pointer` element covered by a
+native control is dropped instead of becoming a dead button.
+
 ## display-contents
 
 `developer.mozilla.org` wraps the article in `<main id="content">` with

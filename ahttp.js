@@ -1929,6 +1929,29 @@
     return type === 'checkbox' || type === 'radio' ? type : '';
   }
 
+  // Native fields whose value the agent fills or picks. Used by the soft-hidden
+  // recovery: a real box at partial opacity is a styled control, not a beacon.
+  function nativeTextField(el) {
+    var tag = tagOf(el);
+    if (tag === 'textarea' || tag === 'select') return true;
+    if (tag !== 'input') return false;
+    var type = String(el.type || attr(el, 'type') || 'text').toLowerCase();
+    return type !== 'hidden' && type !== 'checkbox' && type !== 'radio' &&
+      type !== 'file' && type !== 'submit' && type !== 'button' &&
+      type !== 'reset' && type !== 'image' && type !== 'range' && type !== 'color';
+  }
+
+  function hasControlName(el) {
+    if (normText(attr(el, 'aria-label'))) return true;
+    if (normText(attr(el, 'placeholder'))) return true;
+    if (normText(attr(el, 'title'))) return true;
+    var targets = labelTargets(el);
+    for (var i = 0; i < targets.length; i++) {
+      if (normText(textOf(targets[i]))) return true;
+    }
+    return false;
+  }
+
   function labelIsVisible(node, ctx) {
     if (!node || node.nodeType !== 1) return false;
     if (!normText(textOf(node))) return false;
@@ -2010,16 +2033,22 @@
     return out;
   }
 
-  // A native checkbox/radio whose only name is aria-label has no label element
-  // to check for visibility. It may stay only when the page really has layout,
-  // the control itself is a real box inside the page, and opacity is the only
-  // thing hiding it. A 1x1 or off-screen input with aria-label is an invisible
+  // A native control whose only name is aria-label (or a styled field with no
+  // label element) has nothing to prove visibility with. It may stay only when
+  // the page really has layout, the control is a real box inside the page, and
+  // only soft hiding applies. A 1x1 or off-screen input is an invisible
   // prompt-injection channel, not a control; a MUI overlay is the real case.
-  function ariaLabelOnlyToggleVisible(el, ctx) {
+  // `partialOnly` is for non-toggle fields: opacity must be greater than zero,
+  // so a fully transparent field is never recovered.
+  function realBoxSoftHidden(el, ctx, partialOnly) {
     if (!ctx.layout) return false;
     var doc = el.ownerDocument || S.doc;
     if (!doc || !detectLayout(doc)) return false;
     var st = styleOf(el, ctx);
+    if (partialOnly) {
+      var op = opacityNum(st.opacity);
+      if (!(op > 0 && op <= 0.05)) return false;
+    }
     if (pxNum(st.fontSize) === 0) return false;
     var clip = String(st.clip || '').toLowerCase();
     if (clip && clip !== 'auto' && clip !== 'none') return false;
@@ -2056,7 +2085,7 @@
       if (labelIsVisible(targets[i], ctx)) return true;
     }
     if (targets.length) return false;
-    if (normText(attr(el, 'aria-label'))) return ariaLabelOnlyToggleVisible(el, ctx);
+    if (normText(attr(el, 'aria-label'))) return realBoxSoftHidden(el, ctx, false);
     return false;
   }
 
@@ -2089,6 +2118,19 @@
     if (!reason || !toggleType(el)) return false;
     if (hardHidden(el, ctx)) return false;
     return hasVisibleToggleLabel(el, ctx);
+  }
+
+  // A styled native field can be hidden only by partial opacity: saucedemo
+  // paints a span and covers it with a real <select> at opacity:0.001. The box
+  // must exist, carry a name and stay on the page. display:none, opacity:0 and
+  // 1x1 beacons never come back.
+  function recoverableControl(el, ctx, reason) {
+    if (!reason) return false;
+    if (toggleType(el)) return recoverableToggle(el, ctx, reason);
+    if (!nativeTextField(el)) return false;
+    if (hardHidden(el, ctx)) return false;
+    if (!hasControlName(el)) return false;
+    return realBoxSoftHidden(el, ctx, true);
   }
 
   function regionOf(el, current) {
@@ -2148,6 +2190,29 @@
     return null;
   }
 
+  // A cursor:pointer element that only looks clickable is a dead proxy when a
+  // real native control is painted over it (saucedemo paints a span and covers
+  // it with the true <select>). elementFromPoint sees the topmost box, so a hit
+  // on the element itself or on its own subtree is not covered.
+  function coveredByNativeControl(el, ctx) {
+    var doc = el.ownerDocument || S.doc;
+    if (!doc || typeof doc.elementFromPoint !== 'function') return false;
+    var rect = null;
+    try { rect = el.getBoundingClientRect ? el.getBoundingClientRect() : null; } catch (e) { rect = null; }
+    if (!rect || !(rect.width > 0) || !(rect.height > 0)) return false;
+    var hit = null;
+    try { hit = doc.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2); } catch (e) { hit = null; }
+    if (!hit) return false;
+    var node = hit;
+    var guard = 0;
+    while (node && guard++ < 8) {
+      if (node === el) return false;
+      if (nativeTextField(node) || toggleType(node) || tagOf(node) === 'button') return true;
+      node = parentOf(node);
+    }
+    return false;
+  }
+
   function classify(el, st, ctx) {
     var tag = tagOf(el);
     var role = roleOf(el);
@@ -2169,7 +2234,9 @@
     var pointer = st.cursor === 'pointer' || (!ctx.layout && cssState(el, ctx).pointer);
     var handler = hasAttr(el, 'onclick') || hasAttr(el, 'onmousedown') || hasAttr(el, 'onkeydown') || hasAttr(el, 'onkeyup');
     if (tag === 'label' && !handler && labelProxyControl(el, ctx)) return null;
-    if (pointer || handler) return { kind: 'click', role: 'button', native: false, custom: true };
+    if (pointer || handler) {
+      return { kind: 'click', role: 'button', native: false, custom: true, pointerOnly: !!pointer && !handler };
+    }
     var ti = attr(el, 'tabindex');
     if (ti != null && parseInt(ti, 10) >= 0) return { kind: 'click', role: 'button', native: false, custom: true };
     return null;
@@ -2553,7 +2620,7 @@
     if (hasAttr(el, 'data-ahttp-ignore')) { ctx.ignored++; return 0; }
     var reason = hiddenReason(el, ctx);
     if (reason) {
-      if (!recoverableToggle(el, ctx, reason)) {
+      if (!recoverableControl(el, ctx, reason)) {
         if (reason.suspicious) {
           var hiddenTexts = countTextNodes(el, 50);
           if (hiddenTexts > 0) ctx.sanitized += hiddenTexts;
@@ -2570,6 +2637,7 @@
     region = regionOf(el, region);
     var st = styleOf(el, ctx);
     var info = classify(el, st, ctx);
+    if (info && info.pointerOnly && ctx.layout && coveredByNativeControl(el, ctx)) info = null;
     var childTextOff = textOff;
     if (!info && !textOff) {
       var blockLike = TEXT_BLOCKS[tag] || !el.firstElementChild;

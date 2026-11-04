@@ -10,6 +10,7 @@ const { playwright, chromiumAvailable, browserGate } = require('../tools/browser
 const ENGINE = fs.readFileSync(path.join(__dirname, '..', 'ahttp.js'), 'utf8');
 const FIXTURES = path.join(__dirname, '..', 'corpus', 'fixtures');
 const REPRO = path.join(__dirname, '..', 'benchmark', 'realworld', 'repro', 'display-contents', 'fixture.html');
+const REPRO_SELECT = path.join(__dirname, '..', 'benchmark', 'realworld', 'repro', 'select-opacity', 'fixture.html');
 const SECURITY = fs.readFileSync(path.join(__dirname, '..', 'benchmark', 'fixtures', '05-security.html'), 'utf8');
 const gate = browserGate(chromiumAvailable(), process.env.AHTTP_REQUIRE_BROWSER === '1');
 
@@ -116,6 +117,39 @@ test('a label is an action only when its control is not in the snapshot', { skip
     });
     assert.equal(clicked.status, 'ok');
     assert.equal(await page.evaluate(function () { return document.getElementById('dark').checked; }), true);
+  } finally {
+    await browser.close();
+  }
+});
+
+test('a partially transparent native field is real, a fully transparent one is not', { skip: gate.skip, timeout: 90000 }, async () => {
+  if (gate.fail) assert.fail(gate.reason);
+  const browser = await playwright.chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+
+    const repro = await snapshotOf(page, fs.readFileSync(REPRO_SELECT, 'utf8'));
+    const select = repro.json.actions.filter(function (action) { return action.tag === 'select'; });
+    assert.equal(select.length, 1);
+    assert.equal(select[0].label, 'Sort products');
+    assert.equal(select[0].kind, 'select');
+    assert.equal(repro.json.actions.filter(function (action) { return action.tag === 'span'; }).length, 0);
+
+    const picked = await page.evaluate(function () {
+      return window.ahttp.act('Sort products', { value: 'za' }, { quiet: 0, minWait: 0, timeout: 250, snapshot: false });
+    });
+    assert.equal(picked.status, 'ok');
+    assert.equal(await page.evaluate(function () { return document.getElementById('out').textContent; }), 'za');
+
+    const fields = await snapshotOf(page, '<!doctype html><html><head><title>Fields</title></head><body><main>' +
+      '<input type="text" aria-label="Search" style="width:200px;height:24px;opacity:.02">' +
+      '<textarea aria-label="Notes" style="width:200px;height:40px;opacity:.02"></textarea>' +
+      '<input type="text" aria-label="Zero field" style="width:200px;height:24px;opacity:0">' +
+      '</main></body></html>');
+    assert.match(fields.text, /input "Search"/);
+    assert.match(fields.text, /textarea "Notes"/);
+    assert.doesNotMatch(fields.text, /Zero field/);
+    assert.doesNotMatch(JSON.stringify(fields.json), /Zero field/);
   } finally {
     await browser.close();
   }
