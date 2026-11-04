@@ -291,3 +291,25 @@ over stdio and passes 11/11 checks:
    itself an action.
 6. Do not claim that a hidden-then-shown control is found until the CSS index
    tracks show rules and source order (the Wikipedia and GitHub cases).
+
+## Latency after the fixes
+
+Measured on 2026-11-04 with `benchmark/realworld/run.js` (new `--out`, `loadMs`,
+and split timing) over `the-internet-checkboxes` and
+`the-internet-dynamic-loading`; raw data in
+`benchmark/realworld/results-latency.json` and
+`benchmark/realworld/repro/latency/repro.js`:
+
+| Page | loadMs | snapshot wall | snapshot in page | first act |
+|---|---:|---:|---:|---:|
+| the-internet-checkboxes | 3116 | 3 ms | 1.0 ms | 7895 ms |
+| the-internet-dynamic-loading | 3032 | 2–4 ms | 0.8–1.2 ms | 10019 ms |
+
+The scan is ~1 ms. The act number is the engine's settle wait, not the scan:
+the same click with `settle: false` dispatches in 8 ms, and the second act on
+the same page settles in 151 ms. The first act waits for engine-observed
+`fetch`/XHR to reach zero in-flight; one page request stays open for most of the
+wait. This is engine policy, not a harness artifact and not a slow scan. The
+harness now records `loadMs`, `jsonWallMs`/`jsonInPageMs`,
+`textWallMs`/`textInPageMs`, and `actMs`/`engineMs` separately so the two are
+never conflated again.

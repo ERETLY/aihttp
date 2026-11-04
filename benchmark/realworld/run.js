@@ -15,7 +15,7 @@ const ROOT = path.join(__dirname, '..', '..');
 const ENGINE = fs.readFileSync(path.join(ROOT, 'ahttp.js'), 'utf8');
 const CONFIG = require('./sites.json');
 const pkg = require(path.join(ROOT, 'package.json'));
-const OUT = path.join(__dirname, 'results.json');
+const OUT = path.join(__dirname, arg('out', 'results.json'));
 
 const NODE_VERSION = process.version;
 let PLAYWRIGHT_VERSION = 'unknown';
@@ -41,6 +41,19 @@ async function snapshot(page, options) {
   return page.evaluate(function (opts) {
     return window.ahttp.snapshot(opts);
   }, options || { format: 'json' });
+}
+
+// Wall time through page.evaluate includes CDP transport and serialization of
+// the whole snapshot. inPageMs is the engine call only. Keeping both apart is
+// how a harness artifact is told from a slow scan.
+async function snapshotTimed(page, options) {
+  const started = nowMs();
+  const data = await page.evaluate(function (opts) {
+    var t0 = performance.now();
+    var result = window.ahttp.snapshot(opts);
+    return { result: result, inPageMs: performance.now() - t0 };
+  }, options || { format: 'json' });
+  return { result: data.result, inPageMs: data.inPageMs, wallMs: nowMs() - started };
 }
 
 async function snapshotJson(page, options) {
@@ -94,9 +107,17 @@ function compactItem(item) {
 async function runPageChecks(page, out) {
   const full = await snapshotJson(page, { maxActions: 5000, force: true });
   const text = await snapshot(page, { format: 'text', maxActions: 5000, force: true });
-  const defaultJson = await snapshotJson(page, { force: true });
-  const defaultText = await snapshot(page, { format: 'text', force: true });
+  const defaultTimed = await snapshotTimed(page, { format: 'json', force: true });
+  const defaultTextTimed = await snapshotTimed(page, { format: 'text', force: true });
+  const defaultJson = defaultTimed.result;
+  const defaultText = defaultTextTimed.result;
   out.metrics = await collectMetrics(page, defaultJson, defaultText);
+  out.metrics.timing = {
+    jsonWallMs: defaultTimed.wallMs,
+    jsonInPageMs: defaultTimed.inPageMs,
+    textWallMs: defaultTextTimed.wallMs,
+    textInPageMs: defaultTextTimed.inPageMs
+  };
   out.metrics.fullActions = full.actions.length;
 
   let oracleData = { items: [] };
@@ -257,7 +278,8 @@ async function runScenarios(page, site, out) {
       for (const step of scenario.steps) {
         const stepStarted = nowMs();
         if (step.op === 'snapshot') {
-          const json = await snapshotJson(page, { maxActions: 500, force: true });
+          const timed = await snapshotTimed(page, { maxActions: 500, force: true });
+          const json = timed.result;
           last = json;
           const failures = await checkExpectations(page, { status: 'ok' }, step.expect || {}, out);
           if (step.expect && step.expect.actionDelta) {
@@ -265,7 +287,12 @@ async function runScenarios(page, site, out) {
             if (lastCount != null && count <= lastCount) failures.push('no new actions after scroll: ' + lastCount + ' -> ' + count);
           }
           lastCount = json.actions.length;
-          entry.steps.push({ op: 'snapshot', ok: !failures.length, failures, actions: json.actions.length, ms: nowMs() - stepStarted });
+          entry.steps.push({
+            op: 'snapshot', ok: !failures.length, failures, actions: json.actions.length,
+            wallMs: timed.wallMs, inPageMs: timed.inPageMs,
+            metaMs: json.meta && json.meta.ms != null ? json.meta.ms : null,
+            ms: nowMs() - stepStarted
+          });
           if (failures.length) break;
         } else if (step.op === 'scroll') {
           await page.evaluate(function (to) {
@@ -336,6 +363,7 @@ async function runScenarios(page, site, out) {
             ok: !failures.length,
             failures: failures,
             actMs: evaluatedMs,
+            engineMs: result && result.latencyMs != null ? result.latencyMs : null,
             navigationLost: navigationLost,
             latencyMs: nowMs() - actStarted,
             ms: nowMs() - stepStarted
@@ -424,6 +452,7 @@ async function runSite(browser, site) {
   });
   try {
     await page.addInitScript({ content: ENGINE });
+    const loadStarted = nowMs();
     let response = null;
     try {
       response = await page.goto(site.url, { waitUntil: 'domcontentloaded', timeout: 45000 });
@@ -435,6 +464,7 @@ async function runSite(browser, site) {
     result.httpStatus = response ? response.status() : null;
     await page.waitForTimeout(defaults.pauseMs || 1200);
     result.title = await page.title().catch(function () { return ''; });
+    result.loadMs = nowMs() - loadStarted;
     const bodyStart = await page.evaluate(function () { return (document.body ? document.body.innerText : '').slice(0, 800); }).catch(function () { return ''; });
     const blocked = isBlocked(result.httpStatus, result.title || '', bodyStart) || await consentWall(page, site);
     if (blocked) {
