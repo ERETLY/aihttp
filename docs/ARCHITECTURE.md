@@ -33,14 +33,39 @@ docs/                       API, security, decisions, research, roadmap
 1. `wake()` resolves the page window/document and installs the observer.
 2. `ensureScan(force)` returns a fresh scan (250 ms cache while observing).
 3. `scanDOM()` walks from the modal root, or `body`:
+   - Visibility has two sources. Browser layout mode reads
+     `getComputedStyle` and never consults the CSS index: the browser already
+     resolved media queries, specificity and inheritance. The static backend
+     (jsdom, `mini-dom`) has no computed style, so it builds a CSS index and
+     evaluates a Media Queries 4 subset (width, height, aspect-ratio,
+     resolution; `min-`/`max-`, range syntax, `and`/`or`/`not`, `calc`,
+     `em`/`rem`/`vw`/`vh`). An unknown feature or an unparsable query is
+     **false**, never true. The cascade picks `display`, `visibility`, `opacity`
+     and `cursor` per property by `!important`, then specificity, then source
+     order; inline style beats normal declarations.
    - `hiddenReason()` drops `display:none`, `visibility:hidden`, zero-size,
      off-screen, `aria-hidden` and closed `<dialog>` subtrees. A native
      checkbox/radio hidden only by soft heuristics is kept when a visible label
-     names it (`recoverableToggle()`), so custom switches remain operable. An
-     `aria-label`-only control is kept only with real layout, a box of at least
-     12x12 px inside the page, and opacity as the only hide mechanism.
+     names it (`recoverableControl()`), including a sibling `<label>` without
+     `for` or the direct text node next to the input. A native `select`,
+     `textarea` or text input hidden only by partial opacity
+     (`0 < opacity <= 0.05`) is kept when it has a real box inside the page and
+     a name; `opacity:0` and 1x1 beacons never come back. An `aria-label`-only
+     toggle is kept only with real layout, a box of at least 12x12 px inside
+     the page, and soft hiding.
    - `classify()` maps native controls and ARIA roles to `kind`
-     (`click`, `fill`, `select`, `toggle`, `file`).
+     (`click`, `fill`, `select`, `toggle`, `file`). A `<label>` is not an action
+     when its control will be in the snapshot; it stays clickable only when the
+     control is hard-hidden or missing (Bootstrap `btn-check`). A
+     `cursor:pointer` element with no handler and no role is dropped when
+     `elementFromPoint` finds a native control painted over its centre. An
+     element that owns an inline `onmouseover`/`onmouseenter` handler, or
+     matches a CSS `:hover` rule with a descendant combinator that reveals a
+     hidden descendant, becomes `kind: hover`. `act` applies the rule's
+     `display`/`visibility`/`opacity` declarations and fires the pointer events,
+     because synthetic events cannot activate CSS `:hover`. Its label is built
+     from visible text, `aria-label`, `title` or an image alt only, so the
+     content it reveals never leaks into the name.
    - `register()` stores the id and internal fields on an entry, including
      `label` (accessible-name subset), `name`, `domId`, `intent`, `testid`,
      `href`, `placeholder`, `role`, `path` and `fingerprint`.

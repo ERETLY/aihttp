@@ -276,7 +276,55 @@ over stdio and passes 11/11 checks:
 - **No engine changes** were made. Every finding is a pending corpus case or a
   Chromium-only repro; the pending cases fail on the current engine by design.
 
-## README recommendations (not applied)
+## After the fixes
+
+The original run above used the old oracle. The oracle now treats content under
+a closed `<details>` as hidden (its first `<summary>` stays visible), so both
+sides were measured again on 2026-11-04 with the corrected oracle and the same
+harness. Before is the pre-fix engine at `6ee22e7`; after is the engine from
+`630f153..fcdd48f` plus hover support. Raw data in
+`benchmark/realworld/results-before-fixed-oracle.json` and
+`benchmark/realworld/results-after-fixes.json`.
+
+| Site | Recall before | Recall after | Scanned actions |
+|---|---:|---:|---:|
+| wikipedia-http | 95.4% | 97.6% | 60 |
+| github-ahttp | 41.1% | 98.9% | 60 |
+| mdn-http | 10.4% | 96.3% | 60 |
+| bbc-news | 74.2% | 84.6% | 60 |
+| all scanned pages (mean) | 93.1% (26) | 99.1% (26) | |
+
+- **Scenarios:** the current engine passes 30/30; under the same scenarios the
+  old engine passes 24/30.
+- **Corrected scenario expectations, no engine change:** `wikipedia-http` and
+  `todomvc-react` now pass. Wikipedia's `/wiki/Hypertext_Transfer_Protocol`
+  redirects to `/wiki/HTTP`, and after typing, the snapshot exposes the
+  suggestion overlay, so the scenario clicks the first suggestion and asserts
+  `/wiki/HTTP_cookie`. TodoMVC became reachable at the toggle step, and the old
+  expectation asked for the completed `Task one` after the Active filter; the
+  filter correctly hides it, so the step asserts `Task two`, `Task three` and
+  that no list item contains `Task one`.
+- **Hover card:** `the-internet-hovers` now passes. Its avatar is a `<div>` whose
+  `.figcaption` is revealed only by `.figure:hover .figcaption`; the engine
+  classifies it as `kind: hover` and `act` applies the rule's `display`
+  declaration and fires the pointer events, because synthetic events cannot
+  activate CSS `:hover`. The action name is `User Avatar` from the image alt, so
+  the hidden `name: user1` never appears in the snapshot before the hover.
+- **Unblocked:** `bbc-news` now passes. The wall lives in a `privacy-mgmt.com`
+  cross-origin frame; when a site declares the frame and the button, the harness
+  presses "I do not agree" and keeps `blocked` only if the full-viewport overlay
+  remains. The page scans at 84.6% recall after the fixes.
+- **MDN:** 10.4% → 96.3% (157/163). The old 3.3% counted 353 links inside five
+  closed sidebar `<details>` as visible. Six visible controls are still
+  unmatched (the JavaScript menu tab and five HTTP sidebar links); the engine
+  reports 159 actions over 570 nodes. The oracle change is a visibility rule,
+  not engine tuning.
+
+Items 1, 2, 3 and 5 of the recommendations below are now applied; item 6 no
+longer reproduces because browser layout mode reads computed style; item 4 was
+already accurate.
+
+## README recommendations (original run, applied where noted)
 
 1. State that a `display:contents` wrapper is transparent for visibility; its
    children are the targets, not the wrapper.
@@ -291,3 +339,25 @@ over stdio and passes 11/11 checks:
    itself an action.
 6. Do not claim that a hidden-then-shown control is found until the CSS index
    tracks show rules and source order (the Wikipedia and GitHub cases).
+
+## Latency after the fixes
+
+Measured on 2026-11-04 with `benchmark/realworld/run.js` (new `--out`, `loadMs`,
+and split timing) over `the-internet-checkboxes` and
+`the-internet-dynamic-loading`; raw data in
+`benchmark/realworld/results-latency.json` and
+`benchmark/realworld/repro/latency/repro.js`:
+
+| Page | loadMs | snapshot wall | snapshot in page | first act |
+|---|---:|---:|---:|---:|
+| the-internet-checkboxes | 3116 | 3 ms | 1.0 ms | 7895 ms |
+| the-internet-dynamic-loading | 3032 | 2–4 ms | 0.8–1.2 ms | 10019 ms |
+
+The scan is ~1 ms. The act number is the engine's settle wait, not the scan:
+the same click with `settle: false` dispatches in 8 ms, and the second act on
+the same page settles in 151 ms. The first act waits for engine-observed
+`fetch`/XHR to reach zero in-flight; one page request stays open for most of the
+wait. This is engine policy, not a harness artifact and not a slow scan. The
+harness now records `loadMs`, `jsonWallMs`/`jsonInPageMs`,
+`textWallMs`/`textInPageMs`, and `actMs`/`engineMs` separately so the two are
+never conflated again.

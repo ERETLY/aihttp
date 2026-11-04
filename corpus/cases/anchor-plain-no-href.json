@@ -1,0 +1,15 @@
+{
+  "id": "anchor-plain-no-href",
+  "html": "fixtures/anchor-plain-no-href.html",
+  "url": "https://corpus.test/anchor-plain-no-href",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [],
+      "expectText": [
+        "Plain text only",
+        "Named anchor"
+      ]
+    }
+  ]
+}

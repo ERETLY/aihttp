@@ -791,13 +791,6 @@
     return out;
   }
 
-  function cssProp(ruleStyle, name) {
-    if (!ruleStyle) return '';
-    var v = ruleStyle[name];
-    if (v == null && ruleStyle.getPropertyValue) v = ruleStyle.getPropertyValue(name);
-    return v == null ? '' : String(v);
-  }
-
   function cssRulesOf(node) {
     try { return node.cssRules || null; } catch (e) { return null; }
   }
@@ -836,44 +829,711 @@
     return out;
   }
 
-  function mediaMatches(text, win) {
-    var value = String(text || '').trim().toLowerCase();
-    if (!value) return true;
-    var queries = value.split(',');
-    for (var q = 0; q < queries.length; q++) {
-      var query = queries[q].trim();
-      if (!query) return true;
-      var terms = query.split(/\s+and\s+/);
-      var ok = true;
-      for (var i = 0; i < terms.length; i++) {
-        var term = terms[i].trim();
-        if (!term) continue;
-        if (term === 'all' || term === 'screen' || term === 'only screen') continue;
-        if (term === 'print' || term === 'speech' || term === 'tty' || term === 'projection') { ok = false; break; }
-        var m = term.match(/^\(\s*(min|max)-(width|height)\s*:\s*([\d.]+)\s*(px|em|rem)?\s*\)$/);
-        if (!m) continue;
-        var scale = m[4] === 'em' || m[4] === 'rem' ? 16 : 1;
-        var limit = parseFloat(m[3]) * scale;
-        var actual = m[2] === 'width'
-          ? (win && win.innerWidth ? win.innerWidth : 1280)
-          : (win && win.innerHeight ? win.innerHeight : 720);
-        if (m[1] === 'min' && actual < limit) { ok = false; break; }
-        if (m[1] === 'max' && actual > limit) { ok = false; break; }
+  // Media Queries 4 subset, evaluated without a browser. The window used here
+  // is the static one (jsdom or mini-dom); in layout mode the index is not
+  // built at all. An unknown feature, an unparsable query or an over-long
+  // query is false, never true: a wrong "true" hides visible content.
+  var MQ_MAX_LENGTH = 500;
+
+  function mqTrim(value) {
+    return String(value == null ? '' : value).trim();
+  }
+
+  function mqSplitTop(text, sep) {
+    var out = [];
+    var buf = '';
+    var depth = 0;
+    var quote = '';
+    var s = String(text == null ? '' : text);
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charAt(i);
+      if (quote) {
+        buf += c;
+        if (c === quote && s.charAt(i - 1) !== '\\') quote = '';
+        continue;
       }
-      if (ok) return true;
+      if (c === '"' || c === "'") { quote = c; buf += c; continue; }
+      if (c === '(' || c === '[') { depth++; buf += c; continue; }
+      if (c === ')' || c === ']') { if (depth > 0) depth--; buf += c; continue; }
+      if (c === sep && depth === 0) { out.push(buf); buf = ''; continue; }
+      buf += c;
+    }
+    out.push(buf);
+    return out;
+  }
+
+  function mqSplitWord(text, word) {
+    var out = [];
+    var buf = '';
+    var depth = 0;
+    var quote = '';
+    var s = String(text == null ? '' : text);
+    var lower = s.toLowerCase();
+    var i = 0;
+    while (i < s.length) {
+      var c = s.charAt(i);
+      if (quote) {
+        buf += c;
+        if (c === quote && s.charAt(i - 1) !== '\\') quote = '';
+        i++;
+        continue;
+      }
+      if (c === '"' || c === "'") { quote = c; buf += c; i++; continue; }
+      if (c === '(' || c === '[') { depth++; buf += c; i++; continue; }
+      if (c === ')' || c === ']') { if (depth > 0) depth--; buf += c; i++; continue; }
+      if (depth === 0 && lower.substr(i, word.length) === word) {
+        var before = i === 0 ? '' : s.charAt(i - 1);
+        var after = s.charAt(i + word.length);
+        if ((!before || !mqIdentChar(before)) && (!after || !mqIdentChar(after))) {
+          out.push(buf);
+          buf = '';
+          i += word.length;
+          continue;
+        }
+      }
+      buf += c;
+      i++;
+    }
+    out.push(buf);
+    return out;
+  }
+
+  function mqIdentChar(c) {
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
+      (c >= '0' && c <= '9') || c === '_' || c === '-';
+  }
+
+  function mqCloseAt(text, open) {
+    var depth = 0;
+    var quote = '';
+    var s = String(text == null ? '' : text);
+    for (var i = open; i < s.length; i++) {
+      var c = s.charAt(i);
+      if (quote) {
+        if (c === quote && s.charAt(i - 1) !== '\\') quote = '';
+        continue;
+      }
+      if (c === '"' || c === "'") { quote = c; continue; }
+      if (c === '(') depth++;
+      else if (c === ')') {
+        depth--;
+        if (depth === 0) return i;
+      }
+    }
+    return -1;
+  }
+
+  function mqSplitOps(text) {
+    var parts = [];
+    var ops = [];
+    var buf = '';
+    var depth = 0;
+    var s = String(text == null ? '' : text);
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charAt(i);
+      if (c === '(') { depth++; buf += c; continue; }
+      if (c === ')') { if (depth > 0) depth--; buf += c; continue; }
+      if (depth === 0 && (c === '<' || c === '>' || c === '=')) {
+        var op = c;
+        if (c !== '=' && s.charAt(i + 1) === '=') { op += '='; i++; }
+        parts.push(buf);
+        ops.push(op);
+        buf = '';
+        continue;
+      }
+      buf += c;
+    }
+    parts.push(buf);
+    return { parts: parts, ops: ops };
+  }
+
+  function mqTopColon(text) {
+    var depth = 0;
+    var s = String(text == null ? '' : text);
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charAt(i);
+      if (c === '(') depth++;
+      else if (c === ')') { if (depth > 0) depth--; }
+      else if (c === ':' && depth === 0) return i;
+    }
+    return -1;
+  }
+
+  function mqWindow(win) {
+    var w = 1280;
+    var h = 720;
+    if (win) {
+      if (win.innerWidth) w = Number(win.innerWidth) || w;
+      if (win.innerHeight) h = Number(win.innerHeight) || h;
+    }
+    return { w: w, h: h };
+  }
+
+  function mqUnit(number, unit, win) {
+    var dims = mqWindow(win);
+    var u = String(unit || '').toLowerCase();
+    if (!u || u === 'px') return number;
+    if (u === 'em' || u === 'rem') return number * 16;
+    if (u === 'vw') return number * dims.w / 100;
+    if (u === 'vh') return number * dims.h / 100;
+    return null;
+  }
+
+  function mqLength(value, win) {
+    var v = mqTrim(value).toLowerCase();
+    if (!v) return null;
+    if (v.indexOf('calc(') === 0 && mqCloseAt(v, 4) === v.length - 1) {
+      return mqCalc(v.slice(5, v.length - 1), win);
+    }
+    var m = v.match(/^([+-]?[0-9]*\.?[0-9]+)\s*(px|em|rem|vw|vh)?$/);
+    if (!m) return null;
+    return mqUnit(parseFloat(m[1]), m[2], win);
+  }
+
+  function mqCalc(expr, win) {
+    var toks = [];
+    var s = String(expr == null ? '' : expr);
+    var i = 0;
+    while (i < s.length) {
+      var c = s.charAt(i);
+      if (c === ' ' || c === '\t' || c === '\n' || c === '\r') { i++; continue; }
+      if (c === '+' || c === '-' || c === '*' || c === '/' || c === '(' || c === ')') {
+        toks.push({ op: c });
+        i++;
+        continue;
+      }
+      if ((c >= '0' && c <= '9') || c === '.') {
+        var start = i;
+        i++;
+        while (i < s.length) {
+          var d = s.charAt(i);
+          if ((d >= '0' && d <= '9') || d === '.') i++;
+          else break;
+        }
+        var number = parseFloat(s.slice(start, i));
+        var ustart = i;
+        while (i < s.length) {
+          var u = s.charAt(i).toLowerCase();
+          if ((u >= 'a' && u <= 'z') || u === '%') i++;
+          else break;
+        }
+        var px = mqUnit(number, s.slice(ustart, i), win);
+        if (px == null) return null;
+        toks.push({ num: px });
+        continue;
+      }
+      return null;
+    }
+    var pos = 0;
+    function peek() { return pos < toks.length ? toks[pos] : null; }
+    function primary() {
+      var t = peek();
+      if (!t) return null;
+      if (t.op === '(') {
+        pos++;
+        var value = sum();
+        if (value == null) return null;
+        var close = peek();
+        if (!close || close.op !== ')') return null;
+        pos++;
+        return value;
+      }
+      if (t.num != null) { pos++; return t.num; }
+      return null;
+    }
+    function unary() {
+      var t = peek();
+      if (!t) return null;
+      if (t.op === '+') { pos++; return unary(); }
+      if (t.op === '-') { pos++; var neg = unary(); return neg == null ? null : -neg; }
+      return primary();
+    }
+    function term() {
+      var value = unary();
+      if (value == null) return null;
+      var t = peek();
+      while (t && (t.op === '*' || t.op === '/')) {
+        pos++;
+        var right = unary();
+        if (right == null) return null;
+        if (t.op === '*') value = value * right;
+        else {
+          if (!right) return null;
+          value = value / right;
+        }
+        t = peek();
+      }
+      return value;
+    }
+    function sum() {
+      var value = term();
+      if (value == null) return null;
+      var t = peek();
+      while (t && (t.op === '+' || t.op === '-')) {
+        pos++;
+        var right = term();
+        if (right == null) return null;
+        value = t.op === '+' ? value + right : value - right;
+        t = peek();
+      }
+      return value;
+    }
+    var result = sum();
+    if (result == null || pos !== toks.length) return null;
+    return result;
+  }
+
+  function mqRatio(value) {
+    var v = mqTrim(value).toLowerCase();
+    var m = v.match(/^([0-9]*\.?[0-9]+)\s*\/\s*([0-9]*\.?[0-9]+)$/);
+    if (m) {
+      var den = parseFloat(m[2]);
+      return den ? parseFloat(m[1]) / den : null;
+    }
+    var n = parseFloat(v);
+    return isNaN(n) ? null : n;
+  }
+
+  function mqResolution(value) {
+    var v = mqTrim(value).toLowerCase();
+    var m = v.match(/^([0-9]*\.?[0-9]+)\s*(dppx|x)$/);
+    if (m) return parseFloat(m[1]);
+    m = v.match(/^([0-9]*\.?[0-9]+)\s*dpi$/);
+    if (m) return parseFloat(m[1]) / 96;
+    return null;
+  }
+
+  function mqActualOf(name, win) {
+    var n = mqTrim(name).toLowerCase();
+    var dims = mqWindow(win);
+    if (n === 'width') return dims.w;
+    if (n === 'height') return dims.h;
+    if (n === 'aspect-ratio') return dims.h > 0 ? dims.w / dims.h : null;
+    if (n === 'resolution') return 1;
+    return null;
+  }
+
+  function mqValueOf(name, raw, win) {
+    var n = mqTrim(name).toLowerCase();
+    if (n === 'aspect-ratio') return mqRatio(raw);
+    if (n === 'resolution') return mqResolution(raw);
+    return mqLength(raw, win);
+  }
+
+  function mqFlipOp(op) {
+    if (op === '<') return '>';
+    if (op === '<=') return '>=';
+    if (op === '>') return '<';
+    if (op === '>=') return '<=';
+    return op;
+  }
+
+  function mqCompare(x, op, y) {
+    if (op === '<') return x < y;
+    if (op === '<=') return x <= y;
+    if (op === '>') return x > y;
+    if (op === '>=') return x >= y;
+    if (op === '=') return Math.abs(x - y) < 0.5;
+    return false;
+  }
+
+  function mqComparePair(a, op, b, win) {
+    var fa = mqActualOf(a, win);
+    var fb = mqActualOf(b, win);
+    var actual;
+    var value;
+    var oper;
+    if (fa != null && fb == null) {
+      actual = fa;
+      value = mqValueOf(a, b, win);
+      oper = op;
+    } else if (fb != null && fa == null) {
+      actual = fb;
+      value = mqValueOf(b, a, win);
+      oper = mqFlipOp(op);
+    } else {
+      return false;
+    }
+    if (actual == null || value == null) return false;
+    return mqCompare(actual, oper, value);
+  }
+
+  function mqNamedFeature(name, value, win) {
+    var n = mqTrim(name).toLowerCase();
+    var v = mqTrim(value).toLowerCase();
+    var dims = mqWindow(win);
+    if (n === 'hover' || n === 'any-hover') {
+      if (!v) return true;
+      return v === 'hover';
+    }
+    if (n === 'pointer' || n === 'any-pointer') {
+      if (!v) return true;
+      return v === 'fine';
+    }
+    if (n === 'prefers-color-scheme') return v === 'light';
+    if (n === 'prefers-reduced-motion') return v === 'no-preference';
+    if (n === 'prefers-contrast') return v === 'no-preference';
+    if (n === 'forced-colors') return v === 'none';
+    if (n === 'display-mode') return v === 'browser';
+    if (n === 'scripting') return v === 'enabled';
+    if (n === 'orientation') return (dims.w >= dims.h ? 'landscape' : 'portrait') === v;
+    if (n === 'color') {
+      if (!v) return true;
+      var colors = parseInt(v, 10);
+      return !isNaN(colors) && 24 >= colors;
+    }
+    var minmax = n.match(/^(min-|max-)?(width|height|aspect-ratio|resolution)$/);
+    if (minmax) {
+      var actual = mqActualOf(minmax[2], win);
+      var target = mqValueOf(minmax[2], v, win);
+      if (actual == null || target == null) return false;
+      if (minmax[1] === 'min-') return actual >= target;
+      if (minmax[1] === 'max-') return actual <= target;
+      return Math.abs(actual - target) < 0.5;
+    }
+    if (n === '-webkit-min-device-pixel-ratio') {
+      var minRatio = parseFloat(v);
+      return !isNaN(minRatio) && 1 >= minRatio;
+    }
+    if (n === '-webkit-max-device-pixel-ratio') {
+      var maxRatio = parseFloat(v);
+      return !isNaN(maxRatio) && 1 <= maxRatio;
+    }
+    if (n === '-webkit-device-pixel-ratio') {
+      var ratio = parseFloat(v);
+      return !isNaN(ratio) && Math.abs(ratio - 1) < 0.5;
     }
     return false;
   }
 
+  function mqFeatureExpr(src, win) {
+    var s = mqTrim(src).toLowerCase();
+    if (!s) return false;
+    var range = mqSplitOps(s);
+    if (range.ops.length) {
+      if (range.ops.length === 1) return mqComparePair(range.parts[0], range.ops[0], range.parts[1], win);
+      if (range.parts.length === 3 && range.ops.length === 2) {
+        return mqComparePair(range.parts[0], range.ops[0], range.parts[1], win) &&
+          mqComparePair(range.parts[1], range.ops[1], range.parts[2], win);
+      }
+      return false;
+    }
+    var colon = mqTopColon(s);
+    if (colon >= 0) return mqNamedFeature(s.slice(0, colon), s.slice(colon + 1), win);
+    return mqNamedFeature(s, '', win);
+  }
+
+  function mqFeature(src, win) {
+    var s = mqTrim(src).toLowerCase();
+    if (!s) return false;
+    if (s.charAt(0) === '(' && mqCloseAt(s, 0) === s.length - 1) {
+      var inner = mqTrim(s.slice(1, s.length - 1));
+      if (!inner) return false;
+      if (inner.indexOf('(') >= 0 || inner.indexOf('not ') === 0 ||
+          mqSplitWord(inner, 'and').length > 1 || mqSplitWord(inner, 'or').length > 1) {
+        return mqCondition(inner, win);
+      }
+      return mqFeatureExpr(inner, win);
+    }
+    return mqFeatureExpr(s, win);
+  }
+
+  function mqCondition(src, win) {
+    var s = mqTrim(src).toLowerCase();
+    if (!s) return true;
+    var parts = mqSplitWord(s, 'or');
+    if (parts.length > 1) {
+      for (var i = 0; i < parts.length; i++) {
+        if (mqCondition(parts[i], win)) return true;
+      }
+      return false;
+    }
+    parts = mqSplitWord(s, 'and');
+    if (parts.length > 1) {
+      for (var j = 0; j < parts.length; j++) {
+        if (!mqCondition(parts[j], win)) return false;
+      }
+      return true;
+    }
+    if (s.indexOf('not ') === 0) return !mqCondition(s.slice(4), win);
+    if (s.indexOf('not(') === 0) return !mqCondition(s.slice(3), win);
+    return mqFeature(s, win);
+  }
+
+  function mqQuery(query, win) {
+    var s = mqTrim(query);
+    if (!s) return false;
+    var negate = false;
+    if (s.indexOf('not ') === 0) {
+      negate = true;
+      s = mqTrim(s.slice(4));
+    } else if (s.indexOf('only ') === 0) {
+      s = mqTrim(s.slice(5));
+    } else if (s.indexOf('not(') === 0) {
+      negate = true;
+      s = mqTrim(s.slice(3));
+    }
+    var type = '';
+    var m = s.match(/^([a-z][a-z0-9-]*)/);
+    if (m) {
+      var word = m[1];
+      if (word !== 'and' && word !== 'or' && word !== 'not') {
+        type = word;
+        s = mqTrim(s.slice(word.length));
+      }
+    }
+    if (type && type !== 'all' && type !== 'screen' && type !== 'print' && type !== 'speech' &&
+        type !== 'tty' && type !== 'tv' && type !== 'projection' && type !== 'handheld' &&
+        type !== 'braille' && type !== 'embossed' && type !== 'aural') {
+      return false;
+    }
+    var ok;
+    if (type) {
+      var typeOk = type === 'all' || type === 'screen';
+      if (!typeOk) {
+        ok = false;
+      } else {
+        if (s.indexOf('and ') === 0) s = mqTrim(s.slice(4));
+        ok = !s || mqCondition(s, win);
+      }
+    } else {
+      ok = mqCondition(s, win);
+    }
+    return negate ? !ok : ok;
+  }
+
+  function mediaMatches(text, win) {
+    var value = mqTrim(text).toLowerCase();
+    if (!value) return true;
+    if (value.length > MQ_MAX_LENGTH) return false;
+    var list = mqSplitTop(value, ',');
+    for (var i = 0; i < list.length; i++) {
+      var item = mqTrim(list[i]);
+      if (!item) continue;
+      if (mqQuery(item, win)) return true;
+    }
+    return false;
+  }
+
+  // Fast path for the simple selectors that make up most utility CSS. Falls
+  // back to element.matches(): the static backends parse selectors per call.
+  function cssFastKind(sel) {
+    if (/^\.[A-Za-z0-9_-]+$/.test(sel)) return 'class';
+    if (/^#[A-Za-z0-9_-]+$/.test(sel)) return 'id';
+    if (/^[A-Za-z][A-Za-z0-9-]*$/.test(sel)) return 'tag';
+    if (/^\[\s*[A-Za-z0-9_-]+\s*\]$/.test(sel)) return 'attr';
+    return '';
+  }
+
+  function cssRuleMatches(el, rule) {
+    var kind = rule.fastKind;
+    if (!kind) return matches(el, rule.sel);
+    var name = rule.fastName;
+    if (kind === 'class') {
+      if (el.classList && typeof el.classList.contains === 'function') return el.classList.contains(name);
+      var cls = el.className;
+      if (cls && typeof cls === 'object' && cls.baseVal != null) cls = cls.baseVal;
+      return typeof cls === 'string' && cls.split(/\s+/).indexOf(name) >= 0;
+    }
+    if (kind === 'id') return attr(el, 'id') === name;
+    if (kind === 'tag') return tagOf(el) === name;
+    if (kind === 'attr') return attr(el, name) != null;
+    return false;
+  }
+
+  function cssHasPseudoElement(sel) {
+    var s = String(sel || '');
+    if (s.indexOf('::') >= 0) return true;
+    return /:(before|after|first-line|first-letter)([^a-z0-9_-]|$)/i.test(s);
+  }
+
+  function cssDynamicPseudo(sel) {
+    return /:(hover|focus|focus-within|focus-visible|active|visited|target)([^a-z0-9_-]|$)/i.test(String(sel || ''));
+  }
+
+  function cssSkipIdent(s, i) {
+    var j = i;
+    while (j < s.length && mqIdentChar(s.charAt(j))) j++;
+    return j;
+  }
+
+  function cssSkipBracket(s, i) {
+    var quote = '';
+    for (var j = i + 1; j < s.length; j++) {
+      var c = s.charAt(j);
+      if (quote) {
+        if (c === quote) quote = '';
+        continue;
+      }
+      if (c === '"' || c === "'") { quote = c; continue; }
+      if (c === ']') return j;
+    }
+    return s.length - 1;
+  }
+
+  function cssSkipParen(s, i) {
+    var close = mqCloseAt(s, i);
+    return close < 0 ? s.length - 1 : close;
+  }
+
+  function cssSpecCmp(a, b) {
+    if (!a || !b) return 0;
+    if (a.a !== b.a) return a.a > b.a ? 1 : -1;
+    if (a.b !== b.b) return a.b > b.b ? 1 : -1;
+    if (a.c !== b.c) return a.c > b.c ? 1 : -1;
+    return 0;
+  }
+
+  // Specificity approximation: :where() is zero; :is()/:not()/:has() use the
+  // most specific argument; pseudo-elements count as tags. Selectors with
+  // pseudo-elements or interaction pseudo-classes are dropped before this runs.
+  function cssSpecificity(sel) {
+    var a = 0;
+    var b = 0;
+    var c = 0;
+    var s = String(sel || '');
+    var i = 0;
+    while (i < s.length) {
+      var ch = s.charAt(i);
+      if (ch === '#') {
+        a++;
+        i = cssSkipIdent(s, i + 1);
+        continue;
+      }
+      if (ch === '.') {
+        b++;
+        i = cssSkipIdent(s, i + 1);
+        continue;
+      }
+      if (ch === '[') {
+        b++;
+        i = cssSkipBracket(s, i) + 1;
+        continue;
+      }
+      if (ch === ':') {
+        var dbl = s.charAt(i + 1) === ':';
+        var j = i + (dbl ? 2 : 1);
+        var start = j;
+        while (j < s.length && mqIdentChar(s.charAt(j))) j++;
+        var name = s.slice(start, j).toLowerCase();
+        if (!dbl && (name === 'is' || name === 'not' || name === 'has' || name === 'matches')) {
+          var open = j < s.length && s.charAt(j) === '(' ? j : -1;
+          var close = open >= 0 ? cssSkipParen(s, open) : j - 1;
+          var args = open >= 0 ? s.slice(open + 1, close) : '';
+          var best = null;
+          var list = mqSplitTop(args, ',');
+          for (var k = 0; k < list.length; k++) {
+            var spec = cssSpecificity(list[k]);
+            if (!best || cssSpecCmp(spec, best) > 0) best = spec;
+          }
+          if (best) {
+            a += best.a;
+            b += best.b;
+            c += best.c;
+          }
+          i = close + 1;
+          continue;
+        }
+        if (!dbl && name === 'where') {
+          var wopen = j < s.length && s.charAt(j) === '(' ? j : -1;
+          i = wopen >= 0 ? cssSkipParen(s, wopen) + 1 : j;
+          continue;
+        }
+        if (dbl) c++;
+        else b++;
+        i = j;
+        if (i < s.length && s.charAt(i) === '(') i = cssSkipParen(s, i) + 1;
+        continue;
+      }
+      if (ch === '*' || ch === '>' || ch === '+' || ch === '~' || ch === ',' || ch === ' ' ||
+          ch === '\t' || ch === '\n' || ch === '\r' || ch === '|') {
+        i++;
+        continue;
+      }
+      if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch === '-') {
+        var prev = i > 0 ? s.charAt(i - 1) : '';
+        if (!prev || prev === ' ' || prev === '\t' || prev === '\n' || prev === '\r' ||
+            prev === '>' || prev === '+' || prev === '~' || prev === ',' || prev === '(' || prev === '|') {
+          c++;
+        }
+        i = cssSkipIdent(s, i + 1);
+        continue;
+      }
+      i++;
+    }
+    return { a: a, b: b, c: c };
+  }
+
+  function cssPropValue(style, name) {
+    if (!style) return '';
+    var value = style[name];
+    if (value == null && style.getPropertyValue) {
+      try { value = style.getPropertyValue(name); } catch (e) { value = ''; }
+    }
+    return mqTrim(value).toLowerCase();
+  }
+
+  // inherit/initial/unset/revert and var() depend on the cascade we cannot see
+  // in css mode; ignore the declaration instead of guessing a value.
+  function cssPropUsable(value) {
+    if (!value) return false;
+    if (value.indexOf('var(') >= 0) return false;
+    if (value === 'inherit' || value === 'initial' || value === 'unset' ||
+        value === 'revert' || value === 'revert-layer') return false;
+    return true;
+  }
+
+  function cssPropImportant(style, name) {
+    if (!style) return false;
+    try {
+      if (typeof style.getPropertyPriority === 'function' &&
+          style.getPropertyPriority(name) === 'important') return true;
+    } catch (e) {}
+    var text = '';
+    try { text = String(style.cssText || ''); } catch (e) { text = ''; }
+    if (!text) return false;
+    var parts = text.split(';');
+    for (var i = 0; i < parts.length; i++) {
+      var at = parts[i].indexOf(':');
+      if (at < 0) continue;
+      if (mqTrim(parts[i].slice(0, at)).toLowerCase() !== name) continue;
+      return /![\s]*important/i.test(parts[i].slice(at + 1));
+    }
+    return false;
+  }
+
+  var CSS_NO_IMPORTANT = { display: false, visibility: false, opacity: false, cursor: false };
+
   function buildCssIndex(doc) {
     var idx = { buckets: new Map(), rules: 0 };
     var sheets = [];
+    var win = doc.defaultView || S.win || null;
     try { sheets = doc.styleSheets || []; } catch (e) { sheets = []; }
     var order = 0;
-    function addRule(sel, hide, pointer, hard) {
+    var mediaCache = new Map();
+    function addRule(rawSel, decls) {
+      var sel = mqTrim(rawSel);
+      if (!sel) return;
+      if (sel.indexOf(':') >= 0 && (cssHasPseudoElement(sel) || cssDynamicPseudo(sel))) return;
       order++;
       idx.rules++;
-      var rule = { sel: sel, order: order, hide: hide, pointer: pointer, hard: !!hard };
+      var fastKind = cssFastKind(sel);
+      var fastName = '';
+      if (fastKind === 'class' || fastKind === 'id') fastName = sel.slice(1);
+      else if (fastKind === 'tag') fastName = sel.toLowerCase();
+      else if (fastKind === 'attr') fastName = sel.slice(1, sel.length - 1).trim().toLowerCase();
+      var rule = {
+        sel: sel,
+        order: order,
+        spec: null,
+        fastKind: fastKind,
+        fastName: fastName,
+        display: decls.display,
+        visibility: decls.visibility,
+        opacity: decls.opacity,
+        cursor: decls.cursor,
+        imp: decls.imp
+      };
       var key = selectorKey(sel);
       var arr = idx.buckets.get(key);
       if (!arr) { arr = []; idx.buckets.set(key, arr); }
@@ -881,65 +1541,125 @@
     }
     function visit(rule, media) {
       if (!rule) return;
-      if (rule.type === 7 || (rule.name && !rule.selectorText) || (rule.cssText && /@(?:-\w+-)?keyframes/i.test(rule.cssText))) return;
-      var ruleMedia = rule.media && rule.media.mediaText ? rule.media.mediaText : (typeof rule.media === 'string' ? rule.media : media);
-      var matches = !ruleMedia || mediaMatches(ruleMedia, S.win);
-      if (rule.selectorText && matches) {
-        var st = rule.style;
-        var display = cssProp(st, 'display').toLowerCase().trim();
-        var visibility = cssProp(st, 'visibility').toLowerCase().trim();
-        var opacity = cssProp(st, 'opacity').trim();
-        var cursor = cssProp(st, 'cursor').toLowerCase().trim();
-        var hard = display === 'none' || visibility === 'hidden' || visibility === 'collapse';
-        var hide = hard || isZeroOpacity(opacity);
-        var pointer = cursor === 'pointer';
-        if (hide || pointer) addRule(rule.selectorText, hide, pointer, hard);
+      if (rule.type === 7 || (rule.name && !rule.selectorText) ||
+          (rule.cssText && /@(?:-\w+-)?keyframes/i.test(rule.cssText))) return;
+      var own = '';
+      try {
+        if (rule.media && typeof rule.media.mediaText === 'string') own = rule.media.mediaText;
+        else if (typeof rule.media === 'string') own = rule.media;
+      } catch (e) { own = ''; }
+      var scopeMedia = own ? (media ? media + ' and ' + own : own) : media;
+      if (scopeMedia) {
+        var mediaOk = mediaCache.get(scopeMedia);
+        if (mediaOk === undefined) {
+          mediaOk = mediaMatches(scopeMedia, win);
+          mediaCache.set(scopeMedia, mediaOk);
+        }
+        if (!mediaOk) return;
+      }
+      if (typeof rule.selectorText === 'string' && rule.style) {
+        var display = cssPropValue(rule.style, 'display');
+        var visibility = cssPropValue(rule.style, 'visibility');
+        var opacity = cssPropValue(rule.style, 'opacity');
+        var cursor = cssPropValue(rule.style, 'cursor');
+        var decls = {
+          display: cssPropUsable(display) ? display : null,
+          visibility: cssPropUsable(visibility) ? visibility : null,
+          opacity: cssPropUsable(opacity) ? opacity : null,
+          cursor: cssPropUsable(cursor) ? cursor : null,
+          imp: null
+        };
+        if (decls.display || decls.visibility || decls.opacity || decls.cursor) {
+          var importantText = '';
+          try { importantText = String(rule.style.cssText || ''); } catch (e) { importantText = ''; }
+          var mayImportant = !importantText || /![\s]*important/i.test(importantText);
+          decls.imp = mayImportant ? {
+            display: decls.display ? cssPropImportant(rule.style, 'display') : false,
+            visibility: decls.visibility ? cssPropImportant(rule.style, 'visibility') : false,
+            opacity: decls.opacity ? cssPropImportant(rule.style, 'opacity') : false,
+            cursor: decls.cursor ? cssPropImportant(rule.style, 'cursor') : false
+          } : CSS_NO_IMPORTANT;
+          if (rule.selectorText.indexOf(',') < 0) {
+            addRule(rule.selectorText, decls);
+          } else {
+            var list = mqSplitTop(rule.selectorText, ',');
+            for (var s = 0; s < list.length; s++) addRule(list[s], decls);
+          }
+        }
       }
       var nested = cssRulesOf(rule);
       if (nested) {
-        for (var j = 0; j < nested.length; j++) visit(nested[j], ruleMedia || media);
+        for (var j = 0; j < nested.length; j++) visit(nested[j], scopeMedia);
       }
     }
     for (var i = 0; i < sheets.length; i++) {
       var rules = cssRulesOf(sheets[i]);
       if (!rules) continue;
-      for (var j = 0; j < rules.length; j++) visit(rules[j]);
+      for (var j = 0; j < rules.length; j++) visit(rules[j], '');
     }
     return idx;
+  }
+
+  function cssPick(current, rule, prop) {
+    if (!rule[prop]) return current;
+    var spec = rule.spec || (rule.spec = cssSpecificity(rule.sel));
+    if (!current) return rule;
+    if (rule.imp[prop] !== current.imp[prop]) return rule.imp[prop] ? rule : current;
+    var currentSpec = current.spec || (current.spec = cssSpecificity(current.sel));
+    var cmp = cssSpecCmp(spec, currentSpec);
+    if (cmp !== 0) return cmp > 0 ? rule : current;
+    return rule.order > current.order ? rule : current;
+  }
+
+  function cssInline(value) {
+    if (value == null) return '';
+    var v = mqTrim(value).toLowerCase();
+    return cssPropUsable(v) ? v : '';
   }
 
   function cssState(el, ctx) {
     if (!ctx.css || !ctx.css.buckets.size) return EMPTY_CSS;
     var cached = ctx.cssCache.get(el);
     if (cached) return cached;
-    var result = { hidden: false, pointer: false, hard: false };
     var css = ctx.css;
-    if (css && css.buckets.size) {
-      var tokens = tokensOf(el);
-      var seen = ctx.cssSeen || (ctx.cssSeen = new Set());
-      seen.clear();
-      var bestHide = 0;
-      var bestPointer = 0;
-      var hardHide = false;
-      for (var i = 0; i < tokens.length; i++) {
-        var arr = css.buckets.get(tokens[i]);
-        if (!arr) continue;
-        for (var j = 0; j < arr.length; j++) {
-          var rule = arr[j];
-          if (seen.has(rule)) continue;
-          seen.add(rule);
-          if (!matches(el, rule.sel)) continue;
-          if (rule.hide && rule.order > bestHide) bestHide = rule.order;
-          if (rule.hide && rule.hard) hardHide = true;
-          if (rule.pointer && rule.order > bestPointer) bestPointer = rule.order;
-        }
+    var tokens = tokensOf(el);
+    var seen = ctx.cssSeen || (ctx.cssSeen = new Set());
+    seen.clear();
+    var winners = { display: null, visibility: null, opacity: null, cursor: null };
+    for (var i = 0; i < tokens.length; i++) {
+      var arr = css.buckets.get(tokens[i]);
+      if (!arr) continue;
+      for (var j = 0; j < arr.length; j++) {
+        var rule = arr[j];
+        if (seen.has(rule)) continue;
+        seen.add(rule);
+        if (!cssRuleMatches(el, rule)) continue;
+        winners.display = cssPick(winners.display, rule, 'display');
+        winners.visibility = cssPick(winners.visibility, rule, 'visibility');
+        winners.opacity = cssPick(winners.opacity, rule, 'opacity');
+        winners.cursor = cssPick(winners.cursor, rule, 'cursor');
       }
-      result.hidden = bestHide > 0;
-      result.pointer = bestPointer > 0;
-      result.hard = hardHide;
     }
+    var inline = styleOf(el, ctx).inline || {};
+    var display = cssEffective(winners.display, cssInline(inline.display), 'display');
+    var visibility = cssEffective(winners.visibility, cssInline(inline.visibility), 'visibility');
+    var opacity = cssEffective(winners.opacity, cssInline(inline.opacity), 'opacity');
+    var cursor = cssEffective(winners.cursor, cssInline(inline.cursor), 'cursor');
+    var result = {
+      hidden: display === 'none' || visibility === 'hidden' || visibility === 'collapse' ||
+        isZeroOpacity(opacity),
+      pointer: cursor === 'pointer',
+      hard: display === 'none' || visibility === 'hidden' || visibility === 'collapse'
+    };
     ctx.cssCache.set(el, result);
     return result;
+  }
+
+  // Inline style beats normal declarations but loses to !important ones.
+  function cssEffective(winner, inlineValue, prop) {
+    if (winner && winner.imp[prop]) return winner[prop];
+    if (inlineValue) return inlineValue;
+    return winner ? winner[prop] : '';
   }
 
   function detectLayout(doc) {
@@ -1142,11 +1862,7 @@
     };
     var own = check(st);
     if (own) return own;
-    var inline = st.inline || {};
-    var inlineOverrides = (inline.display && String(inline.display).toLowerCase() !== 'none') ||
-      (inline.visibility && ['hidden', 'collapse'].indexOf(String(inline.visibility).toLowerCase()) < 0) ||
-      (inline.opacity != null && !isZeroOpacity(inline.opacity));
-    if (!inlineOverrides && ctx.css) {
+    if (ctx.css && !ctx.layout) {
       var css = cssState(el, ctx);
       if (css.hidden) return { hidden: true, suspicious: false };
     }
@@ -1156,7 +1872,9 @@
         if (rect && el.nodeType === 1) {
           var hasText = countTextNodes(el, 1) > 0;
           var offset = st.position === 'fixed' ? { x: 0, y: 0 } : scrollOffset(ctx.win);
-          if (hasText && ((!rect.width && !rect.height) ||
+          var boxless = st.display === 'contents';
+          var clips = !st.overflow || st.overflow !== 'visible';
+          if (!boxless && hasText && ((!rect.width && !rect.height && clips) ||
               (rect.right + offset.x) <= 0 ||
               (rect.bottom + offset.y) <= 0)) {
             return { hidden: true, suspicious: true };
@@ -1211,10 +1929,70 @@
     return type === 'checkbox' || type === 'radio' ? type : '';
   }
 
+  // Native fields whose value the agent fills or picks. Used by the soft-hidden
+  // recovery: a real box at partial opacity is a styled control, not a beacon.
+  function nativeTextField(el) {
+    var tag = tagOf(el);
+    if (tag === 'textarea' || tag === 'select') return true;
+    if (tag !== 'input') return false;
+    var type = String(el.type || attr(el, 'type') || 'text').toLowerCase();
+    return type !== 'hidden' && type !== 'checkbox' && type !== 'radio' &&
+      type !== 'file' && type !== 'submit' && type !== 'button' &&
+      type !== 'reset' && type !== 'image' && type !== 'range' && type !== 'color';
+  }
+
+  function hasControlName(el) {
+    if (normText(attr(el, 'aria-label'))) return true;
+    if (normText(attr(el, 'placeholder'))) return true;
+    if (normText(attr(el, 'title'))) return true;
+    var targets = labelTargets(el);
+    for (var i = 0; i < targets.length; i++) {
+      if (normText(textOf(targets[i]))) return true;
+    }
+    return false;
+  }
+
   function labelIsVisible(node, ctx) {
     if (!node || node.nodeType !== 1) return false;
     if (!normText(textOf(node))) return false;
     return !deepHiddenReason(node, ctx);
+  }
+
+  // TodoMVC-style rows put the checkbox and its <label> side by side without
+  // for/id. A sibling <label> with no for and no control of its own is that
+  // checkbox's name; one that owns a control belongs to a different field.
+  function siblingLabelOf(el) {
+    if (!toggleType(el)) return null;
+    var sides = [el.nextElementSibling, el.previousElementSibling];
+    for (var i = 0; i < sides.length; i++) {
+      var side = sides[i];
+      if (!side || tagOf(side) !== 'label') continue;
+      if (hasAttr(side, 'for')) continue;
+      var owns = null;
+      try { owns = side.querySelector ? side.querySelector('input,textarea,select,button') : null; } catch (e) { owns = null; }
+      if (owns) continue;
+      if (!normText(textOf(side))) continue;
+      return side;
+    }
+    return null;
+  }
+
+  // A checkbox with no label element can still be named by the text right next
+  // to it: <input type=checkbox> Accept the terms. Only a direct text node
+  // counts, so a following element is not mistaken for its name.
+  function adjacentTextName(el) {
+    if (!toggleType(el)) return '';
+    var next = el.nextSibling;
+    if (next && next.nodeType === 3) {
+      var after = normText(next.nodeValue);
+      if (after) return after;
+    }
+    var prev = el.previousSibling;
+    if (prev && prev.nodeType === 3) {
+      var before = normText(prev.nodeValue);
+      if (before) return before;
+    }
+    return '';
   }
 
   function labelTargets(el) {
@@ -1248,19 +2026,29 @@
         if (target && out.indexOf(target) < 0) out.push(target);
       }
     }
+    if (!out.length) {
+      var sibling = siblingLabelOf(el);
+      if (sibling) out.push(sibling);
+    }
     return out;
   }
 
-  // A native checkbox/radio whose only name is aria-label has no label element
-  // to check for visibility. It may stay only when the page really has layout,
-  // the control itself is a real box inside the page, and opacity is the only
-  // thing hiding it. A 1x1 or off-screen input with aria-label is an invisible
+  // A native control whose only name is aria-label (or a styled field with no
+  // label element) has nothing to prove visibility with. It may stay only when
+  // the page really has layout, the control is a real box inside the page, and
+  // only soft hiding applies. A 1x1 or off-screen input is an invisible
   // prompt-injection channel, not a control; a MUI overlay is the real case.
-  function ariaLabelOnlyToggleVisible(el, ctx) {
+  // `partialOnly` is for non-toggle fields: opacity must be greater than zero,
+  // so a fully transparent field is never recovered.
+  function realBoxSoftHidden(el, ctx, partialOnly) {
     if (!ctx.layout) return false;
     var doc = el.ownerDocument || S.doc;
     if (!doc || !detectLayout(doc)) return false;
     var st = styleOf(el, ctx);
+    if (partialOnly) {
+      var op = opacityNum(st.opacity);
+      if (!(op > 0 && op <= 0.05)) return false;
+    }
     if (pxNum(st.fontSize) === 0) return false;
     var clip = String(st.clip || '').toLowerCase();
     if (clip && clip !== 'auto' && clip !== 'none') return false;
@@ -1297,7 +2085,7 @@
       if (labelIsVisible(targets[i], ctx)) return true;
     }
     if (targets.length) return false;
-    if (normText(attr(el, 'aria-label'))) return ariaLabelOnlyToggleVisible(el, ctx);
+    if (normText(attr(el, 'aria-label'))) return realBoxSoftHidden(el, ctx, false);
     return false;
   }
 
@@ -1316,10 +2104,7 @@
       if (tag === 'details' && !node.open && child && tagOf(child) !== 'summary') return true;
       var st = styleOf(node, ctx);
       if (st.display === 'none' || st.visibility === 'hidden' || st.visibility === 'collapse') return true;
-      var inline = st.inline || {};
-      var inlineOverrides = (inline.display && String(inline.display).toLowerCase() !== 'none') ||
-        (inline.visibility && ['hidden', 'collapse'].indexOf(String(inline.visibility).toLowerCase()) < 0);
-      if (!inlineOverrides && ctx.css) {
+      if (ctx.css && !ctx.layout) {
         var css = cssState(node, ctx);
         if (css.hidden && css.hard) return true;
       }
@@ -1333,6 +2118,19 @@
     if (!reason || !toggleType(el)) return false;
     if (hardHidden(el, ctx)) return false;
     return hasVisibleToggleLabel(el, ctx);
+  }
+
+  // A styled native field can be hidden only by partial opacity: saucedemo
+  // paints a span and covers it with a real <select> at opacity:0.001. The box
+  // must exist, carry a name and stay on the page. display:none, opacity:0 and
+  // 1x1 beacons never come back.
+  function recoverableControl(el, ctx, reason) {
+    if (!reason) return false;
+    if (toggleType(el)) return recoverableToggle(el, ctx, reason);
+    if (!nativeTextField(el)) return false;
+    if (hardHidden(el, ctx)) return false;
+    if (!hasControlName(el)) return false;
+    return realBoxSoftHidden(el, ctx, true);
   }
 
   function regionOf(el, current) {
@@ -1373,6 +2171,177 @@
     return r.split(/\s+/)[0];
   }
 
+  // <label style="cursor:pointer"> next to its own field is not a second
+  // button: clicking it only focuses the field. The label stays clickable only
+  // when its control will not be in the snapshot anyway (display:none, inert or
+  // missing), which is how Bootstrap btn-check-style markup delegates the click.
+  function labelProxyControl(el, ctx) {
+    var control = null;
+    var forId = attr(el, 'for');
+    if (forId) {
+      control = byId(el, forId);
+    } else {
+      try { control = el.querySelector ? el.querySelector('input,textarea,select') : null; } catch (e) { control = null; }
+    }
+    if (!control) return null;
+    var reason = deepHiddenReason(control, ctx);
+    if (!reason) return control;
+    if (recoverableToggle(control, ctx, reason)) return control;
+    return null;
+  }
+
+  // A cursor:pointer element that only looks clickable is a dead proxy when a
+  // real native control is painted over it (saucedemo paints a span and covers
+  // it with the true <select>). elementFromPoint sees the topmost box, so a hit
+  // on the element itself or on its own subtree is not covered.
+  function coveredByNativeControl(el, ctx) {
+    var doc = el.ownerDocument || S.doc;
+    if (!doc || typeof doc.elementFromPoint !== 'function') return false;
+    var rect = null;
+    try { rect = el.getBoundingClientRect ? el.getBoundingClientRect() : null; } catch (e) { rect = null; }
+    if (!rect || !(rect.width > 0) || !(rect.height > 0)) return false;
+    var hit = null;
+    try { hit = doc.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2); } catch (e) { hit = null; }
+    if (!hit) return false;
+    var node = hit;
+    var guard = 0;
+    while (node && guard++ < 8) {
+      if (node === el) return false;
+      if (nativeTextField(node) || toggleType(node) || tagOf(node) === 'button') return true;
+      node = parentOf(node);
+    }
+    return false;
+  }
+
+  // A CSS rule that reveals a hidden descendant on hover is the common hover
+  // card (`.figure:hover .figcaption { display:block }`). Only rules that set a
+  // visible display/visibility/opacity and reference a descendant after
+  // `:hover` are kept, so `a:hover { color: ... }` never becomes an action.
+  function hoverRulesFor(ctx) {
+    if (ctx.hoverRules) return ctx.hoverRules;
+    var rules = [];
+    ctx.hoverRules = rules;
+    if (!ctx.layout || !ctx.doc || !ctx.doc.styleSheets) return rules;
+    var win = ctx.win || ctx.doc.defaultView || null;
+    function styleValue(style, name) {
+      if (!style) return '';
+      if (style.getPropertyValue) {
+        var value = style.getPropertyValue(name);
+        if (value) return String(value);
+      }
+      return String(style[name] || '');
+    }
+    function reveals(style) {
+      var display = styleValue(style, 'display');
+      if (display && display !== 'none') return true;
+      if (styleValue(style, 'visibility') === 'visible') return true;
+      var opacity = parseFloat(styleValue(style, 'opacity'));
+      return !isNaN(opacity) && opacity > 0.05;
+    }
+    function addRule(rule, mediaOk) {
+      if (!mediaOk) return;
+      var selector = rule.selectorText || '';
+      if (selector.indexOf(':hover') < 0 || !reveals(rule.style)) return;
+      var props = [];
+      var names = ['display', 'visibility', 'opacity'];
+      for (var n = 0; n < names.length; n++) {
+        var value = styleValue(rule.style, names[n]);
+        if (!value) continue;
+        props.push({
+          name: names[n],
+          value: value,
+          priority: rule.style && rule.style.getPropertyPriority ? rule.style.getPropertyPriority(names[n]) : ''
+        });
+      }
+      if (!props.length) return;
+      var parts = selector.split(',');
+      for (var i = 0; i < parts.length; i++) {
+        var part = normText(parts[i]);
+        var at = part.indexOf(':hover');
+        if (at < 0) continue;
+        var before = part.slice(0, at).replace(/[\s>+~]+$/, '');
+        var compound = before.split(/[\s>+~]+/).pop();
+        var after = part.slice(at + 6);
+        if (!compound || !after || !/^[\s>+~]/.test(after)) continue;
+        rules.push({ base: compound, full: part.replace(':hover', ''), props: props });
+      }
+    }
+    function walk(list, mediaOk) {
+      for (var i = 0; i < list.length; i++) {
+        var rule = list[i];
+        if (rule.selectorText) {
+          addRule(rule, mediaOk);
+          continue;
+        }
+        if (!rule.cssRules) continue;
+        var ok = mediaOk;
+        if (rule.media && win && typeof win.matchMedia === 'function') {
+          try { ok = ok && win.matchMedia(rule.media.mediaText).matches; } catch (e) {}
+        }
+        walk(rule.cssRules, ok);
+      }
+    }
+    for (var s = 0; s < ctx.doc.styleSheets.length; s++) {
+      var list = null;
+      try { list = ctx.doc.styleSheets[s].cssRules; } catch (e) { list = null; }
+      if (list) walk(list, true);
+    }
+    return rules;
+  }
+
+  function hoverReveal(el, ctx) {
+    if (hasAttr(el, 'onmouseover') || hasAttr(el, 'onmouseenter')) return true;
+    if (!ctx.layout) return false;
+    var rules = hoverRulesFor(ctx);
+    for (var i = 0; i < rules.length; i++) {
+      var rule = rules[i];
+      var match = false;
+      try { match = typeof el.matches === 'function' && el.matches(rule.base); } catch (e) { match = false; }
+      if (!match) continue;
+      var target = null;
+      try { target = el.querySelector(rule.full); } catch (e) { target = null; }
+      if (!target) continue;
+      var st = styleOf(target, ctx);
+      if (st.display === 'none' || st.visibility === 'hidden' || parseFloat(st.opacity) <= 0.05) return true;
+    }
+    return false;
+  }
+
+  // Synthetic mouse events cannot activate a CSS :hover rule, so a hover
+  // action applies the declarations of the matching reveal rule to the hidden
+  // target. Inline handlers still receive the events.
+  function hoverEffectsFor(el, ctx) {
+    var out = [];
+    if (!ctx.layout) return out;
+    var rules = hoverRulesFor(ctx);
+    for (var i = 0; i < rules.length; i++) {
+      var rule = rules[i];
+      var match = false;
+      try { match = typeof el.matches === 'function' && el.matches(rule.base); } catch (e) { match = false; }
+      if (!match) continue;
+      var target = null;
+      try { target = el.querySelector(rule.full); } catch (e) { target = null; }
+      if (!target) continue;
+      var st = styleOf(target, ctx);
+      if (!(st.display === 'none' || st.visibility === 'hidden' || parseFloat(st.opacity) <= 0.05)) continue;
+      out.push({ node: target, props: rule.props });
+    }
+    return out;
+  }
+
+  function applyHoverEffects(entry) {
+    var list = entry.hoverEffects || [];
+    for (var i = 0; i < list.length; i++) {
+      var item = list[i];
+      var style = item.node && item.node.style;
+      if (!style || typeof style.setProperty !== 'function') continue;
+      for (var j = 0; j < item.props.length; j++) {
+        var prop = item.props[j];
+        try { style.setProperty(prop.name, prop.value, prop.priority || ''); } catch (e) {}
+      }
+    }
+  }
+
   function classify(el, st, ctx) {
     var tag = tagOf(el);
     var role = roleOf(el);
@@ -1388,15 +2357,18 @@
     if (tag === 'select') return { kind: 'select', role: 'combobox', native: true };
     if (tag === 'button') return { kind: 'click', role: 'button', native: true };
     if (tag === 'summary') return { kind: 'click', role: 'button', native: true };
-    if (tag === 'a') {
-      if (hasAttr(el, 'href')) return { kind: 'click', role: 'link', native: true };
-      return null;
-    }
+    if (tag === 'a' && hasAttr(el, 'href')) return { kind: 'click', role: 'link', native: true };
     if (isEditable(el)) return { kind: 'fill', role: 'textbox', native: true, editable: true };
     if (role && ROLE_KINDS[role]) return { kind: ROLE_KINDS[role], role: role, native: false, custom: true };
-    var pointer = st.cursor === 'pointer' || cssState(el, ctx).pointer;
+    var pointer = st.cursor === 'pointer' || (!ctx.layout && cssState(el, ctx).pointer);
     var handler = hasAttr(el, 'onclick') || hasAttr(el, 'onmousedown') || hasAttr(el, 'onkeydown') || hasAttr(el, 'onkeyup');
-    if (pointer || handler) return { kind: 'click', role: 'button', native: false, custom: true };
+    if (tag === 'label' && !handler && labelProxyControl(el, ctx)) return null;
+    if (pointer || handler) {
+      return { kind: 'click', role: 'button', native: false, custom: true, pointerOnly: !!pointer && !handler };
+    }
+    if (hoverReveal(el, ctx)) {
+      return { kind: 'hover', role: 'hover', native: false, custom: true };
+    }
     var ti = attr(el, 'tabindex');
     if (ti != null && parseInt(ti, 10) >= 0) return { kind: 'click', role: 'button', native: false, custom: true };
     return null;
@@ -1480,6 +2452,13 @@
       }
       node = parentOf(node);
     }
+    var siblingLabel = siblingLabelOf(el);
+    if (siblingLabel) {
+      var siblingLabelText = normText(textOf(siblingLabel));
+      if (siblingLabelText) return siblingLabelText;
+    }
+    var adjacent = adjacentTextName(el);
+    if (adjacent) return adjacent;
     var alt = normText(attr(el, 'alt'));
     if (alt && (tag === 'img' || tag === 'area' || (tag === 'input' && String(attr(el, 'type')).toLowerCase() === 'image'))) return alt;
     var inputType = tag === 'input' ? String(attr(el, 'type')).toLowerCase() : '';
@@ -1538,6 +2517,51 @@
     var hrefRaw = normText(attr(el, 'href'));
     if (hrefRaw) return hrefRaw;
     return tag;
+  }
+
+  // Hover-only actions must not take their name from hidden text: a hover card
+  // usually contains the very content it reveals. Use only the visible name
+  // sources and the alt of a visible image.
+  function visibleInnerText(el) {
+    var inner = '';
+    try { inner = el.innerText; } catch (e) { inner = ''; }
+    return typeof inner === 'string' ? normText(inner) : '';
+  }
+
+  function hoverName(el) {
+    var intent = normText(attr(el, 'data-ahttp-intent'));
+    if (intent) return intent;
+    var aria = normText(attr(el, 'aria-label'));
+    if (aria) return aria;
+    var by = attr(el, 'aria-labelledby');
+    if (by) {
+      var ids = by.split(/\s+/);
+      var parts = [];
+      for (var i = 0; i < ids.length; i++) {
+        var target = byId(el, ids[i]);
+        if (target) {
+          var partText = visibleInnerText(target);
+          if (partText) parts.push(partText);
+        }
+      }
+      if (parts.length) return parts.join(' ');
+    }
+    var title = normText(attr(el, 'title'));
+    if (title) return title;
+    var alt = normText(attr(el, 'alt'));
+    if (alt) return alt;
+    var img = el.querySelector ? el.querySelector('img[alt]') : null;
+    if (img) {
+      var imgAlt = normText(attr(img, 'alt'));
+      if (imgAlt) return imgAlt;
+    }
+    var visible = visibleInnerText(el);
+    if (visible) return visible;
+    var testid = normText(attr(el, 'data-testid'));
+    if (testid) return testid;
+    var id = attr(el, 'id');
+    if (id) return id;
+    return tagOf(el);
   }
 
   function optionInfo(el) {
@@ -1628,7 +2652,7 @@
 
   function register(el, info, region, ctx, form, confirmWarn, readonlyGuard) {
     var entry = entryFor(el);
-    var label = labelFrom(el, info);
+    var label = info.kind === 'hover' ? hoverName(el) : labelFrom(el, info);
     var type = String(el.type || '').toLowerCase();
     var href = null;
     if (tagOf(el) === 'a') {
@@ -1639,6 +2663,7 @@
     entry.tag = tagOf(el);
     entry.role = info.role || entry.tag;
     entry.kind = info.kind;
+    entry.hoverEffects = info.kind === 'hover' ? hoverEffectsFor(el, ctx) : null;
     entry.native = !!info.native;
     entry.editable = !!info.editable;
     entry.label = label;
@@ -1654,7 +2679,7 @@
     entry.title = normText(attr(el, 'title'));
     entry.alt = normText(attr(el, 'alt'));
     entry.ariaLabel = normText(attr(el, 'aria-label'));
-    entry.visibleText = normText(textOf(el));
+    entry.visibleText = info.kind === 'hover' ? visibleInnerText(el) : normText(textOf(el));
     entry.value = readValue(el, info);
     entry.checked = info.kind === 'toggle' ? el.checked === true : undefined;
     entry.required = el.required === true || hasAttr(el, 'required');
@@ -1726,11 +2751,12 @@
       var subDoc = null;
       try { subDoc = el.contentDocument || null; } catch (e) { subDoc = null; }
       if (subDoc && (subDoc.body || subDoc.documentElement)) {
+        var subLayout = detectLayout(subDoc);
         var sub = {
           doc: subDoc,
           win: subDoc.defaultView || ctx.win,
-          layout: detectLayout(subDoc),
-          css: buildCssIndex(subDoc),
+          layout: subLayout,
+          css: subLayout ? { buckets: new Map(), rules: 0 } : buildCssIndex(subDoc),
           styleCache: new Map(),
           actions: ctx.actions,
           text: ctx.text,
@@ -1772,7 +2798,7 @@
     if (hasAttr(el, 'data-ahttp-ignore')) { ctx.ignored++; return 0; }
     var reason = hiddenReason(el, ctx);
     if (reason) {
-      if (!recoverableToggle(el, ctx, reason)) {
+      if (!recoverableControl(el, ctx, reason)) {
         if (reason.suspicious) {
           var hiddenTexts = countTextNodes(el, 50);
           if (hiddenTexts > 0) ctx.sanitized += hiddenTexts;
@@ -1789,6 +2815,7 @@
     region = regionOf(el, region);
     var st = styleOf(el, ctx);
     var info = classify(el, st, ctx);
+    if (info && info.pointerOnly && ctx.layout && coveredByNativeControl(el, ctx)) info = null;
     var childTextOff = textOff;
     if (!info && !textOff) {
       var blockLike = TEXT_BLOCKS[tag] || !el.firstElementChild;
@@ -1832,7 +2859,7 @@
       doc: doc,
       win: env,
       layout: S.layout,
-      css: buildCssIndex(doc),
+      css: S.layout ? { buckets: new Map(), rules: 0 } : buildCssIndex(doc),
       styleCache: new Map(),
       actions: [],
       text: [],
@@ -3069,6 +4096,7 @@
       return { ok: true, action: actionInfo(entry, 'key'), method: 'key' };
     }
     if (p.hover) {
+      applyHoverEffects(entry);
       fire(el, 'pointerover', { bubbles: true }, doc);
       fire(el, 'mouseover', { bubbles: true }, doc);
       fire(el, 'mousemove', { bubbles: true }, doc);
@@ -3152,6 +4180,13 @@
       var want = p.checked != null ? !!p.checked : (p.value != null ? String(p.value) === 'true' : !el.checked);
       if (!!el.checked !== want) clickSequence(el, opts);
       return { ok: true, action: actionInfo(entry, 'toggle'), method: 'toggle' };
+    }
+    if (kind === 'hover') {
+      applyHoverEffects(entry);
+      fire(el, 'pointerover', { bubbles: true }, doc);
+      fire(el, 'mouseover', { bubbles: true }, doc);
+      fire(el, 'mousemove', { bubbles: true }, doc);
+      return { ok: true, action: actionInfo(entry, 'hover'), method: 'hover' };
     }
     clickSequence(el, opts);
     var href = entry.href || null;

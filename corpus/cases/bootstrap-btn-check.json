@@ -1,0 +1,19 @@
+{
+  "id": "bootstrap-btn-check",
+  "html": "fixtures/bootstrap-btn-check.html",
+  "url": "https://corpus.test/bootstrap-btn-check",
+  "notes": "display:none checkbox: the visible label is the only way to operate it, so the label stays an action",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2"
+      ],
+      "expectText": [
+        "label role=button \"Dark mode\"",
+        "button \"Save\""
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Adjacent text names</title></head>
+<body>
+<main>
+<p><input type="checkbox"> Accept the terms</p>
+<p>Email me <input type="checkbox"></p>
+<p><input type="checkbox" name="newsletter"> Subscribe to news</p>
+<p>Options: <input type="checkbox"> Accept <input type="checkbox"> Reject</p>
+<p id="out">idle</p>
+</main>
+<script>
+document.querySelector('input').addEventListener('change', function () {
+  document.getElementById('out').textContent = this.checked ? 'checked' : 'unchecked';
+});
+</script>
+</body>
+</html>

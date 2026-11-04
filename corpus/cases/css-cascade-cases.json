@@ -1,0 +1,30 @@
+{
+  "id": "css-cascade-cases",
+  "html": "fixtures/css-cascade-cases.html",
+  "url": "https://corpus.test/css-cascade-cases",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectText": [
+        "button \"ORDER_SHOW\"",
+        "button \"IMPORTANT\"",
+        "button \"INLINE\"",
+        "button \"OPACITY_SHOW\"",
+        "button \"VISIBILITY_SHOW\"",
+        "button \"WHERE_ZERO\"",
+        "button \"LIST_B\"",
+        "button \"INHERIT\"",
+        "button \"VAR\"",
+        "button \"PSEUDO\"",
+        "button \"HOVER\""
+      ],
+      "expectNotText": [
+        "button \"ORDER_HIDE\"",
+        "button \"SPEC_ID\"",
+        "button \"INLINE_IMPORTANT\"",
+        "button \"IS_MAX\"",
+        "button \"LIST_A\""
+      ]
+    }
+  ]
+}

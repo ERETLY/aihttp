@@ -1,0 +1,16 @@
+{
+  "id": "anchor-tabindex-no-href",
+  "html": "fixtures/anchor-tabindex-no-href.html",
+  "url": "https://corpus.test/anchor-tabindex-no-href",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1"
+      ],
+      "expectText": [
+        "button \"Focus target\""
+      ]
+    }
+  ]
+}

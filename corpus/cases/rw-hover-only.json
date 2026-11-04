@@ -2,7 +2,6 @@
   "id": "rw-hover-only",
   "html": "fixtures/rw-hover-only.html",
   "url": "https://corpus.test/rw-hover-only",
-  "pending": "real-world: the-internet /hovers reveals 'name: user1' on mouseover, but a figure with onmouseover is not an action, so the agent cannot hover it",
   "steps": [
     {
       "action": "snapshot",

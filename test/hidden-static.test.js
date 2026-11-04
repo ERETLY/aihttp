@@ -2,8 +2,12 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 const http = require('node:http');
-const { openPage } = require('../lib/page');
+const { openPage, openHtml } = require('../lib/page');
+
+const FIXTURES = path.join(__dirname, '..', 'corpus', 'fixtures');
 
 function listen(handler) {
   return new Promise((resolve) => {
@@ -53,4 +57,42 @@ test('the static backend hides zero-opacity variants and inert subtrees', async 
   } finally {
     await close(server);
   }
+});
+
+test('the static backend evaluates media ranges, nested media and the cascade', () => {
+  const read = (name) => fs.readFileSync(path.join(FIXTURES, name), 'utf8');
+  const snapshot = (html) => openHtml(html, 'https://fixture.test/').api.snapshot({ format: 'text', force: true });
+
+  const media = snapshot(read('rw-media-query-range.html'));
+  assert.match(media, /button "Nav"/);
+  assert.match(media, /button "Side"/);
+
+  const shown = snapshot(read('rw-css-hidden-then-shown.html'));
+  assert.match(shown, /input\[search\] "Search Wikipedia"/);
+  assert.match(shown, /button "Save"/);
+
+  const utility = snapshot(read('rw-utility-class-show.html'));
+  assert.match(utility, /button "Open"/);
+
+  const nested = snapshot('<!doctype html><html><head><title>Nested</title><style>' +
+    '@media screen and (min-width: 900px){.hidden-a{display:none}}' +
+    '@media (width <= 900px){.hidden-b{display:none}}' +
+    '@media screen{@media (min-width: 900px){.hidden-c{display:none}}}' +
+    '</style></head><body><main>' +
+    '<button class="hidden-a">HIDDEN_A</button>' +
+    '<button class="hidden-b">VISIBLE_B</button>' +
+    '<button class="hidden-c">HIDDEN_C</button>' +
+    '</main></body></html>');
+  assert.doesNotMatch(nested, /HIDDEN_A/);
+  assert.match(nested, /VISIBLE_B/);
+  assert.doesNotMatch(nested, /HIDDEN_C/);
+
+  const cascade = snapshot('<!doctype html><html><head><title>Cascade</title><style>' +
+    '.imp{display:none !important}.early{display:none}.early{display:block}' +
+    '</style></head><body><main>' +
+    '<button class="imp" style="display:block">INLINE_VS_IMPORTANT</button>' +
+    '<button class="early">LATER_WINS</button>' +
+    '</main></body></html>');
+  assert.doesNotMatch(cascade, /INLINE_VS_IMPORTANT/);
+  assert.match(cascade, /LATER_WINS/);
 });

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>CSS cascade cases</title>
+<style>
+.order-a{display:none}
+.order-a{display:block}
+.order-hide{display:block}
+.order-hide{display:none}
+.spec{display:block}
+#spec{display:none}
+#imp{display:none}
+.imp-visible{display:block !important}
+.inline-hide{display:none}
+.inline-imp{display:none !important}
+.op-a{opacity:0}
+.op-a{opacity:1}
+.vis-a{visibility:hidden}
+.vis-a{visibility:visible}
+:where(#zero){display:none}
+button{display:block}
+:is(#isid){display:none}
+.is-cls{display:block}
+.list-a, .list-b{display:none}
+.list-b{display:block}
+.inh{display:inherit}
+.varhide{display:var(--missing)}
+.pseudo::before{display:none}
+.hov:hover{display:none}
+</style>
+</head>
+<body>
+<main>
+<button class="order-a">ORDER_SHOW</button>
+<button class="order-hide">ORDER_HIDE</button>
+<button id="spec" class="spec">SPEC_ID</button>
+<button id="imp" class="imp-visible">IMPORTANT</button>
+<button class="inline-hide" style="display:block">INLINE</button>
+<button class="inline-imp" style="display:block">INLINE_IMPORTANT</button>
+<button class="op-a">OPACITY_SHOW</button>
+<button class="vis-a">VISIBILITY_SHOW</button>
+<button id="zero">WHERE_ZERO</button>
+<button id="isid" class="is-cls">IS_MAX</button>
+<button class="list-a">LIST_A</button>
+<button class="list-b">LIST_B</button>
+<button class="inh">INHERIT</button>
+<button class="varhide">VAR</button>
+<button class="pseudo">PSEUDO</button>
+<button class="hov">HOVER</button>
+</main>
+</body>
+</html>

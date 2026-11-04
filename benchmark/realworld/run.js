@@ -15,7 +15,7 @@ const ROOT = path.join(__dirname, '..', '..');
 const ENGINE = fs.readFileSync(path.join(ROOT, 'ahttp.js'), 'utf8');
 const CONFIG = require('./sites.json');
 const pkg = require(path.join(ROOT, 'package.json'));
-const OUT = path.join(__dirname, 'results.json');
+const OUT = path.join(__dirname, arg('out', 'results.json'));
 
 const NODE_VERSION = process.version;
 let PLAYWRIGHT_VERSION = 'unknown';
@@ -41,6 +41,19 @@ async function snapshot(page, options) {
   return page.evaluate(function (opts) {
     return window.ahttp.snapshot(opts);
   }, options || { format: 'json' });
+}
+
+// Wall time through page.evaluate includes CDP transport and serialization of
+// the whole snapshot. inPageMs is the engine call only. Keeping both apart is
+// how a harness artifact is told from a slow scan.
+async function snapshotTimed(page, options) {
+  const started = nowMs();
+  const data = await page.evaluate(function (opts) {
+    var t0 = performance.now();
+    var result = window.ahttp.snapshot(opts);
+    return { result: result, inPageMs: performance.now() - t0 };
+  }, options || { format: 'json' });
+  return { result: data.result, inPageMs: data.inPageMs, wallMs: nowMs() - started };
 }
 
 async function snapshotJson(page, options) {
@@ -94,9 +107,17 @@ function compactItem(item) {
 async function runPageChecks(page, out) {
   const full = await snapshotJson(page, { maxActions: 5000, force: true });
   const text = await snapshot(page, { format: 'text', maxActions: 5000, force: true });
-  const defaultJson = await snapshotJson(page, { force: true });
-  const defaultText = await snapshot(page, { format: 'text', force: true });
+  const defaultTimed = await snapshotTimed(page, { format: 'json', force: true });
+  const defaultTextTimed = await snapshotTimed(page, { format: 'text', force: true });
+  const defaultJson = defaultTimed.result;
+  const defaultText = defaultTextTimed.result;
   out.metrics = await collectMetrics(page, defaultJson, defaultText);
+  out.metrics.timing = {
+    jsonWallMs: defaultTimed.wallMs,
+    jsonInPageMs: defaultTimed.inPageMs,
+    textWallMs: defaultTextTimed.wallMs,
+    textInPageMs: defaultTextTimed.inPageMs
+  };
   out.metrics.fullActions = full.actions.length;
 
   let oracleData = { items: [] };
@@ -192,6 +213,24 @@ async function resolveTarget(page, json, target) {
   return { id: matches[index].id, action: matches[index] };
 }
 
+// A click that submits a form tears down the JS context. The act step waits for
+// load, but a navigation that commits late still races the text/dom check.
+// Retry the read on that error instead of reporting it as a failed expectation.
+async function evaluateStable(page, fn, arg) {
+  let last = null;
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      return await page.evaluate(fn, arg);
+    } catch (e) {
+      last = e;
+      if (!/Execution context was destroyed|Cannot find context|navigat/i.test(String((e && e.message) || e))) throw e;
+      await page.waitForLoadState('domcontentloaded', { timeout: 8000 }).catch(function () {});
+      await page.waitForTimeout(250);
+    }
+  }
+  throw last;
+}
+
 async function checkExpectations(page, result, expect, context) {
   const failures = [];
   const status = result && result.status ? result.status : (result && result.ok ? 'ok' : 'error');
@@ -210,7 +249,7 @@ async function checkExpectations(page, result, expect, context) {
     if (!hit) failures.push('dialog ' + expect.dialog + ' not observed');
   }
   if (expect.text || expect.dom || expect.count) {
-    const verdict = await page.evaluate(function (rules) {
+    const verdict = await evaluateStable(page, function (rules) {
       var out = [];
       var body = document.body ? document.body.innerText : '';
       if (rules.text) {
@@ -257,7 +296,8 @@ async function runScenarios(page, site, out) {
       for (const step of scenario.steps) {
         const stepStarted = nowMs();
         if (step.op === 'snapshot') {
-          const json = await snapshotJson(page, { maxActions: 500, force: true });
+          const timed = await snapshotTimed(page, { format: 'json', maxActions: 500, force: true });
+          const json = timed.result;
           last = json;
           const failures = await checkExpectations(page, { status: 'ok' }, step.expect || {}, out);
           if (step.expect && step.expect.actionDelta) {
@@ -265,7 +305,12 @@ async function runScenarios(page, site, out) {
             if (lastCount != null && count <= lastCount) failures.push('no new actions after scroll: ' + lastCount + ' -> ' + count);
           }
           lastCount = json.actions.length;
-          entry.steps.push({ op: 'snapshot', ok: !failures.length, failures, actions: json.actions.length, ms: nowMs() - stepStarted });
+          entry.steps.push({
+            op: 'snapshot', ok: !failures.length, failures, actions: json.actions.length,
+            wallMs: timed.wallMs, inPageMs: timed.inPageMs,
+            metaMs: json.meta && json.meta.ms != null ? json.meta.ms : null,
+            ms: nowMs() - stepStarted
+          });
           if (failures.length) break;
         } else if (step.op === 'scroll') {
           await page.evaluate(function (to) {
@@ -336,6 +381,7 @@ async function runScenarios(page, site, out) {
             ok: !failures.length,
             failures: failures,
             actMs: evaluatedMs,
+            engineMs: result && result.latencyMs != null ? result.latencyMs : null,
             navigationLost: navigationLost,
             latencyMs: nowMs() - actStarted,
             ms: nowMs() - stepStarted
@@ -348,7 +394,7 @@ async function runScenarios(page, site, out) {
         }
       }
     } catch (e) {
-      entry.error = String(e.message || e);
+      entry.error = String(e && e.stack ? e.stack : (e && e.message ? e.message : e));
     }
     entry.latencyMs = nowMs() - started;
     entry.ok = !entry.error && entry.steps.length > 0 && entry.steps.every(function (step) { return step.ok; });
@@ -367,30 +413,64 @@ function isBlocked(status, title, bodyStart) {
   return null;
 }
 
-// A full-viewport consent overlay is not something the harness may dismiss.
-// The selector is declared per site so this cannot silently swallow a page
-// that merely has a small cookie bar (which stays testable).
+// A full-viewport consent overlay is not something the engine can click when it
+// lives in a cross-origin iframe. A site may declare the frame and the button
+// for the harness to press before scanning; without that declaration the wall
+// stays a block. The selector and the button are per site so a small cookie bar
+// is never swallowed silently.
+async function overlayBox(page, selector) {
+  return page.evaluate(function (sel) {
+    const el = document.querySelector(sel);
+    if (!el) return null;
+    const cs = getComputedStyle(el);
+    if (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) === 0) return null;
+    const rect = el.getBoundingClientRect();
+    return {
+      area: rect.width * rect.height,
+      viewport: window.innerWidth * window.innerHeight,
+      width: Math.round(rect.width),
+      height: Math.round(rect.height)
+    };
+  }, selector).catch(function () { return null; });
+}
+
+async function dismissConsent(page, consent) {
+  if (!consent || !consent.buttonText) return false;
+  const frames = page.frames().filter(function (frame) {
+    return !consent.frameUrlContains || frame.url().indexOf(consent.frameUrlContains) >= 0;
+  });
+  for (const frame of frames) {
+    try {
+      const button = frame.getByRole('button', { name: consent.buttonText, exact: false }).first();
+      if (!(await button.count())) continue;
+      await button.click({ timeout: consent.timeoutMs || 5000 });
+      await page.waitForTimeout(400);
+      return true;
+    } catch (e) {}
+  }
+  return false;
+}
+
 async function consentWall(page, site) {
   if (!site.blockedSelector) return null;
+  const consent = site.consent || null;
+  let tried = false;
   // Sourcepoint injects the container before the iframe and the iframe before
   // it has a box. Poll for a full-viewport overlay instead of assuming the
   // first DOM match is ready.
   const deadline = Date.now() + 8000;
   while (Date.now() < deadline) {
-    const wall = await page.evaluate(function (selector) {
-      const el = document.querySelector(selector);
-      if (!el) return null;
-      const cs = getComputedStyle(el);
-      if (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) === 0) return null;
-      const rect = el.getBoundingClientRect();
-      return {
-        area: rect.width * rect.height,
-        viewport: window.innerWidth * window.innerHeight,
-        width: Math.round(rect.width),
-        height: Math.round(rect.height)
-      };
-    }, site.blockedSelector).catch(function () { return null; });
-    if (wall && wall.viewport && wall.area >= wall.viewport * 0.5) return site.blockedReason || 'consent wall';
+    const wall = await overlayBox(page, site.blockedSelector);
+    if (wall && wall.viewport && wall.area >= wall.viewport * 0.5) {
+      if (consent && !tried) {
+        tried = true;
+        await dismissConsent(page, consent);
+        await new Promise(function (resolve) { setTimeout(resolve, 500); });
+        if (!(await overlayBox(page, site.blockedSelector))) return null;
+        continue;
+      }
+      return site.blockedReason || 'consent wall';
+    }
     await new Promise(function (resolve) { setTimeout(resolve, 250); });
   }
   return null;
@@ -424,6 +504,7 @@ async function runSite(browser, site) {
   });
   try {
     await page.addInitScript({ content: ENGINE });
+    const loadStarted = nowMs();
     let response = null;
     try {
       response = await page.goto(site.url, { waitUntil: 'domcontentloaded', timeout: 45000 });
@@ -435,6 +516,7 @@ async function runSite(browser, site) {
     result.httpStatus = response ? response.status() : null;
     await page.waitForTimeout(defaults.pauseMs || 1200);
     result.title = await page.title().catch(function () { return ''; });
+    result.loadMs = nowMs() - loadStarted;
     const bodyStart = await page.evaluate(function () { return (document.body ? document.body.innerText : '').slice(0, 800); }).catch(function () { return ''; });
     const blocked = isBlocked(result.httpStatus, result.title || '', bodyStart) || await consentWall(page, site);
     if (blocked) {

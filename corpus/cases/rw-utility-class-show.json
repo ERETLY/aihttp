@@ -2,7 +2,6 @@
   "id": "rw-utility-class-show",
   "html": "fixtures/rw-utility-class-show.html",
   "url": "https://corpus.test/rw-utility-class-show",
-  "pending": "real-world: github.com renders desktop controls as class='d-none d-lg-flex'; the hide rule .d-none is indexed, the later show rule .d-lg-flex is not, so the control is dropped even though it is visible",
   "steps": [
     {
       "action": "snapshot",

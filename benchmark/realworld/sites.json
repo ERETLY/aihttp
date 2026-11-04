@@ -103,7 +103,7 @@
         {
           "name": "hover first avatar",
           "steps": [
-            { "op": "act", "target": { "tag": "img", "index": 0 }, "payload": { "hover": true }, "expect": { "status": "ok", "text": ["name: user1"] } }
+            { "op": "act", "target": { "tag": "div", "nameContains": "User Avatar" }, "payload": { "hover": true }, "expect": { "status": "ok", "text": ["name: user1"] } }
           ]
         }
       ]
@@ -215,7 +215,7 @@
             { "op": "act", "target": { "tag": "input", "type": "text", "index": 0 }, "payload": { "value": "Task three" }, "expect": { "status": "ok" } },
             { "op": "act", "target": { "tag": "input", "type": "text", "index": 0 }, "payload": { "key": "Enter" }, "expect": { "status": "ok", "text": ["Task three"] } },
             { "op": "act", "target": { "tag": "input", "type": "checkbox", "index": 0 }, "payload": { "checked": true }, "expect": { "status": "ok" } },
-            { "op": "act", "target": { "tag": "a", "name": "Active" }, "expect": { "status": "ok", "text": ["Task one", "Task two"] } },
+            { "op": "act", "target": { "tag": "a", "name": "Active" }, "expect": { "status": "ok", "text": ["Task two", "Task three"], "count": [{ "selector": ".todo-list li", "equals": 2 }, { "selector": ".todo-list li", "contains": "Task one", "equals": 0 }] } },
             { "op": "act", "target": { "tag": "a", "name": "Completed" }, "expect": { "status": "ok" } },
             { "op": "act", "target": { "role": "button", "name": "Clear completed" }, "expect": { "status": "ok" } }
           ]
@@ -304,10 +304,10 @@
         {
           "name": "search field and article",
           "steps": [
-            { "op": "act", "target": { "tag": "input", "nameContains": "Search Wikipedia" }, "payload": { "value": "Hypertext Transfer Protocol" }, "expect": { "status": "ok" } },
-            { "op": "act", "target": { "tag": "input", "nameContains": "Search Wikipedia" }, "payload": { "key": "Enter" }, "expect": { "status": "ok", "urlContains": "Hypertext_Transfer_Protocol" } },
+            { "op": "act", "target": { "tag": "input", "nameContains": "Search Wikipedia" }, "payload": { "value": "HTTP cookie" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "tag": "a", "nameContains": "HTTP cookie" }, "expect": { "status": "ok", "urlContains": "wiki/HTTP_cookie" } },
             { "op": "scroll", "to": "bottom" },
-            { "op": "snapshot", "expect": { "text": ["Hypertext Transfer Protocol"] } }
+            { "op": "snapshot", "expect": { "text": ["HTTP cookie"] } }
           ]
         }
       ]
@@ -361,13 +361,13 @@
       "id": "bbc-news",
       "url": "https://www.bbc.com/",
       "blockedSelector": "[id^=\"sp_message_container\"][aria-modal=\"true\"]",
-      "blockedReason": "consent wall: Sourcepoint iframe covers the viewport; not bypassed",
+      "blockedReason": "consent wall: Sourcepoint iframe covers the viewport; dismissal failed",
+      "consent": { "frameUrlContains": "privacy-mgmt.com", "buttonText": "I do not agree", "timeoutMs": 5000 },
       "scenarios": [
         {
-          "name": "cookie banner and snapshot",
+          "name": "cookie wall rejected, page scanned",
           "steps": [
-            { "op": "snapshot", "label": "banner" },
-            { "op": "act", "target": { "nameContains": "Reject" }, "expect": { "status": "ok" } }
+            { "op": "snapshot", "label": "after reject", "expect": { "text": ["BBC"] } }
           ]
         }
       ]
