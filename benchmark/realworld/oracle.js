@@ -95,6 +95,20 @@ function oracle() {
     return reasons;
   }
 
+  function isClosedDetails(node) {
+    return !!node.tagName && node.tagName.toLowerCase() === 'details' && !node.hasAttribute('open');
+  }
+
+  // Only the first <summary> child is the disclosure widget; everything else
+  // inside a closed <details> is not rendered.
+  function inFirstSummary(details, el) {
+    var summary = null;
+    for (var i = 0; i < details.children.length; i++) {
+      if (details.children[i].tagName.toLowerCase() === 'summary') { summary = details.children[i]; break; }
+    }
+    return !!(summary && (summary === el || summary.contains(el)));
+  }
+
   function ancestorReasons(el) {
     var reasons = [];
     var node = el;
@@ -103,6 +117,7 @@ function oracle() {
       if (node.hidden) reasons.push('hidden-attr');
       if (node.getAttribute && node.getAttribute('aria-hidden') === 'true') reasons.push('aria-hidden');
       if (node.hasAttribute && node.hasAttribute('inert')) reasons.push('inert');
+      if (isClosedDetails(node) && !inFirstSummary(node, el)) reasons.push('closed-details');
       node = node.parentElement;
     }
     return reasons;
