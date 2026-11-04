@@ -8,7 +8,7 @@ Page snapshots for LLM agents. ahttp scans the DOM, gives every control a short 
 
 It is one browser file with no dependencies, plus a CLI and an MCP server. The server runs on Node with either a small built-in DOM or real Chromium.
 
-**Experimental, pre-1.0.** One maintainer. The API can still change; additive fields and new options are documented before any breaking change.
+**Experimental, pre-2.0.** One maintainer. The API can still change; additive fields and new options are documented before any breaking change.
 
 ## Quick start
 
