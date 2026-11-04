@@ -279,10 +279,11 @@ over stdio and passes 11/11 checks:
 ## After the fixes
 
 The original run above used the old oracle. The oracle now treats content under
-a closed `<details>` as hidden (its first `<summary>` stays visible), so both
-sides were measured again on 2026-11-04 with the corrected oracle and the same
-harness. Before is the pre-fix engine at `6ee22e7`; after is the engine from
-`630f153..fcdd48f` plus hover support. Raw data in
+a closed `<details>` as hidden (its first `<summary>` stays visible), and the
+matcher compares the 160-character name cap consistently on both sides, so both
+sides were measured again on 2026-11-04 with the corrected oracle and matcher.
+Before is the pre-fix engine at `6ee22e7`; after is the current engine
+(`630f153..fcdd48f` plus hover support). Raw data in
 `benchmark/realworld/results-before-fixed-oracle.json` and
 `benchmark/realworld/results-after-fixes.json`.
 
@@ -291,8 +292,8 @@ harness. Before is the pre-fix engine at `6ee22e7`; after is the engine from
 | wikipedia-http | 95.4% | 97.6% | 60 |
 | github-ahttp | 41.1% | 98.9% | 60 |
 | mdn-http | 10.4% | 96.3% | 60 |
-| bbc-news | 74.2% | 84.6% | 60 |
-| all scanned pages (mean) | 93.1% (26) | 99.1% (26) | |
+| bbc-news | 84.2% | 99.2% | 60 |
+| all scanned pages (mean) | 93.5% (26) | 99.7% (26) | |
 
 - **Scenarios:** the current engine passes 30/30; under the same scenarios the
   old engine passes 24/30.
@@ -313,7 +314,13 @@ harness. Before is the pre-fix engine at `6ee22e7`; after is the engine from
 - **Unblocked:** `bbc-news` now passes. The wall lives in a `privacy-mgmt.com`
   cross-origin frame; when a site declares the frame and the button, the harness
   presses "I do not agree" and keeps `blocked` only if the full-viewport overlay
-  remains. The page scans at 84.6% recall after the fixes.
+  remains. The page scans at 99.2% recall after the matcher fix.
+- **BBC name cap:** the oracle stores at most 160 characters of a name, while the
+  engine keeps the full label. The matcher now compares the common prefix once
+  the shorter name reaches the cap and ignores whitespace before punctuation.
+  That recovers 35 cards and removes all 36 phantom duplicates; the two remaining
+  misses are a `<button>` nested inside an `<a>` (`Register`, `Sign In`), which
+  the oracle counts twice and the engine correctly reports once.
 - **MDN:** 10.4% → 96.3% (157/163). The old 3.3% counted 353 links inside five
   closed sidebar `<details>` as visible. Six visible controls are still
   unmatched (the JavaScript menu tab and five HTTP sidebar links); the engine

@@ -4,9 +4,38 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const { playwright, chromiumAvailable, browserGate } = require('../tools/browser-env');
-const { oracle } = require('../benchmark/realworld/oracle');
+const { oracle, matchActions } = require('../benchmark/realworld/oracle');
 
 const gate = browserGate(chromiumAvailable(), process.env.AHTTP_REQUIRE_BROWSER === '1');
+
+function item(name, href) {
+  return { tag: 'a', type: '', role: 'link', name: name, href: href || '', reasons: [], visible: true };
+}
+
+function action(label, href) {
+  return { id: 'a1', tag: 'a', type: '', role: 'link', label: label, href: href || '', kind: 'click' };
+}
+
+test('the matcher pairs a name the oracle truncated at 160 with the engine full name', () => {
+  const long = 'A'.repeat(200);
+  const result = matchActions([action(long)], [item(long.slice(0, 160))]);
+  assert.equal(result.matchedVisible, 1);
+  assert.equal(result.missed.length, 0);
+  assert.equal(result.phantom.length, 0);
+});
+
+test('the matcher ignores whitespace before punctuation in names', () => {
+  const result = matchActions([action('Live. updates')], [item('LIVE . updates')]);
+  assert.equal(result.matchedVisible, 1);
+  assert.equal(result.missed.length, 0);
+});
+
+test('the matcher does not pair short names that only share a prefix', () => {
+  const result = matchActions([action('Save changes')], [item('Save')]);
+  assert.equal(result.matchedVisible, 0);
+  assert.equal(result.missed.length, 1);
+  assert.equal(result.phantom.length, 1);
+});
 
 test('the oracle hides a closed details subtree and keeps its first summary', { skip: gate.skip, timeout: 90000 }, async () => {
   if (gate.fail) assert.fail(gate.reason);

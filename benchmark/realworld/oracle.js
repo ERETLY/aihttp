@@ -213,7 +213,25 @@ function oracle() {
 }
 
 function normalizeName(value) {
-  return String(value == null ? '' : value).replace(/\s+/g, ' ').trim().toLowerCase();
+  return String(value == null ? '' : value)
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+([,.;:!?)\]])/g, '$1');
+}
+
+// nameOf() stores at most 160 characters, while the engine keeps the full
+// label. A truncated name and its full form are the same control, so compare
+// the common prefix once the shorter key is at the cap.
+var NAME_CAP = 160;
+
+function namesMatch(left, right) {
+  var a = normalizeName(left);
+  var b = normalizeName(right);
+  if (a === b) return true;
+  var shorter = Math.min(a.length, b.length);
+  if (shorter < NAME_CAP - 1) return false;
+  return a.slice(0, shorter) === b.slice(0, shorter);
 }
 
 function normalizeHref(value) {
@@ -230,7 +248,7 @@ function matchActions(actions, items) {
       if (used.has(i)) continue;
       const action = actions[i];
       if (action.tag !== item.tag && action.role !== item.role) continue;
-      if (normalizeName(action.label) !== normalizeName(item.name)) continue;
+      if (!namesMatch(action.label, item.name)) continue;
       if (requireHref && item.href && normalizeHref(action.href) !== normalizeHref(item.href)) continue;
       return i;
     }
@@ -278,7 +296,7 @@ function matchActions(actions, items) {
     for (let i = 0; i < actions.length; i++) {
       if (used.has(i)) continue;
       const action = actions[i];
-      if (normalizeName(action.label) !== normalizeName(item.name) || !item.name) continue;
+      if (!item.name || !namesMatch(action.label, item.name)) continue;
       if (action.tag !== item.tag && action.role !== item.role) continue;
       used.add(i);
       hiddenPairs.push({ item: item, action: action });

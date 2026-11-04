@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-04T07:58:35.411Z",
+  "generatedAt": "2026-11-04T08:25:11.654Z",
   "engine": {
     "version": "0.1.0",
-    "sha": "2bf0d1a"
+    "sha": "3bf9a88"
   },
   "runtime": {
     "node": "v26.13.0",
@@ -38,10 +38,10 @@
         "compressionVsRaw": 0.42433383609854197,
         "compressionVsAria": 0.8061127029608405,
         "timing": {
-          "jsonWallMs": 2,
-          "jsonInPageMs": 0.5,
-          "textWallMs": 3,
-          "textInPageMs": 0.900000000372529
+          "jsonWallMs": 5,
+          "jsonInPageMs": 1.200000001117587,
+          "textWallMs": 2,
+          "textInPageMs": 0.599999999627471
         },
         "fullActions": 1
       },
@@ -95,19 +95,19 @@
               "ok": true,
               "failures": [],
               "actions": 1,
-              "wallMs": 2,
-              "inPageMs": 0.39999999944120646,
-              "metaMs": 1,
-              "ms": 4
+              "wallMs": 4,
+              "inPageMs": 0.599999999627471,
+              "metaMs": 0,
+              "ms": 8
             }
           ],
-          "latencyMs": 4,
+          "latencyMs": 8,
           "status": null
         }
       ],
       "dialogs": [],
-      "loadMs": 1814,
-      "totalMs": 3363
+      "loadMs": 1816,
+      "totalMs": 3539
     },
     {
       "id": "the-internet-checkboxes",
@@ -120,7 +120,7 @@
       "metrics": {
         "actions": 5,
         "actionCap": 0,
-        "scanMs": 2,
+        "scanMs": 3,
         "sanitized": 0,
         "modal": false,
         "textChars": 389,
@@ -132,10 +132,10 @@
         "compressionVsRaw": 0.18331762488218661,
         "compressionVsAria": 1.0318302387267904,
         "timing": {
-          "jsonWallMs": 3,
-          "jsonInPageMs": 1.6000000005587935,
-          "textWallMs": 4,
-          "textInPageMs": 1.7000000001862645
+          "jsonWallMs": 6,
+          "jsonInPageMs": 3.099999999627471,
+          "textWallMs": 7,
+          "textInPageMs": 3.899999998509884
         },
         "fullActions": 5
       },
@@ -209,20 +209,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 8087,
-              "engineMs": 8081,
+              "actMs": 7996,
+              "engineMs": 7990,
               "navigationLost": null,
-              "latencyMs": 8453,
-              "ms": 8460
+              "latencyMs": 8355,
+              "ms": 8361
             }
           ],
-          "latencyMs": 8460,
+          "latencyMs": 8361,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 3039,
-      "totalMs": 13042
+      "loadMs": 3171,
+      "totalMs": 13156
     },
     {
       "id": "the-internet-dropdown",
@@ -248,9 +248,9 @@
         "compressionVsAria": 0.836027713625866,
         "timing": {
           "jsonWallMs": 4,
-          "jsonInPageMs": 1.699999999254942,
+          "jsonInPageMs": 1.800000000745058,
           "textWallMs": 3,
-          "textInPageMs": 1.5
+          "textInPageMs": 2.100000001490116
         },
         "fullActions": 4
       },
@@ -328,20 +328,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 159,
-              "engineMs": 155,
+              "actMs": 156,
+              "engineMs": 152,
               "navigationLost": null,
-              "latencyMs": 527,
-              "ms": 531
+              "latencyMs": 522,
+              "ms": 525
             }
           ],
-          "latencyMs": 531,
+          "latencyMs": 525,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 3893,
-      "totalMs": 5947
+      "loadMs": 3139,
+      "totalMs": 5233
     },
     {
       "id": "the-internet-add-remove",
@@ -366,10 +366,10 @@
         "compressionVsRaw": 0.1531279178338002,
         "compressionVsAria": 0.9136490250696379,
         "timing": {
-          "jsonWallMs": 5,
-          "jsonInPageMs": 2.2999999998137355,
-          "textWallMs": 3,
-          "textInPageMs": 1.7000000001862645
+          "jsonWallMs": 4,
+          "jsonInPageMs": 1.799999998882413,
+          "textWallMs": 4,
+          "textInPageMs": 2.699999999254942
         },
         "fullActions": 4
       },
@@ -441,11 +441,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 7378,
-              "engineMs": 7372,
+              "actMs": 8007,
+              "engineMs": 8003,
               "navigationLost": null,
-              "latencyMs": 7736,
-              "ms": 7739
+              "latencyMs": 8375,
+              "ms": 8380
             },
             {
               "op": "act",
@@ -462,11 +462,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 156,
-              "engineMs": 152,
+              "actMs": 162,
+              "engineMs": 157,
               "navigationLost": null,
-              "latencyMs": 514,
-              "ms": 518
+              "latencyMs": 516,
+              "ms": 522
             },
             {
               "op": "act",
@@ -475,10 +475,10 @@
               "status": "ambiguous",
               "ok": true,
               "failures": [],
-              "actMs": 4,
+              "actMs": 5,
               "engineMs": null,
               "navigationLost": null,
-              "latencyMs": 366,
+              "latencyMs": 364,
               "ms": 371
             },
             {
@@ -496,20 +496,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 156,
-              "engineMs": 151,
+              "actMs": 161,
+              "engineMs": 154,
               "navigationLost": null,
-              "latencyMs": 510,
-              "ms": 514
+              "latencyMs": 525,
+              "ms": 530
             }
           ],
-          "latencyMs": 9142,
+          "latencyMs": 9803,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 3562,
-      "totalMs": 14231
+      "loadMs": 2997,
+      "totalMs": 14340
     },
     {
       "id": "the-internet-dynamic-loading",
@@ -522,7 +522,7 @@
       "metrics": {
         "actions": 4,
         "actionCap": 0,
-        "scanMs": 2,
+        "scanMs": 3,
         "sanitized": 0,
         "modal": false,
         "textChars": 374,
@@ -535,9 +535,9 @@
         "compressionVsAria": 0.8904761904761904,
         "timing": {
           "jsonWallMs": 4,
-          "jsonInPageMs": 1.8999999994412065,
-          "textWallMs": 3,
-          "textInPageMs": 1.6000000005587935
+          "jsonInPageMs": 2.400000000372529,
+          "textWallMs": 5,
+          "textInPageMs": 2.300000000745058
         },
         "fullActions": 4
       },
@@ -609,20 +609,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 8108,
-              "engineMs": 8104,
+              "actMs": 7869,
+              "engineMs": 7862,
               "navigationLost": null,
-              "latencyMs": 8475,
-              "ms": 8479
+              "latencyMs": 8228,
+              "ms": 8233
             }
           ],
-          "latencyMs": 8479,
+          "latencyMs": 8233,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 3031,
-      "totalMs": 13036
+      "loadMs": 4106,
+      "totalMs": 13909
     },
     {
       "id": "the-internet-dynamic-controls",
@@ -635,7 +635,7 @@
       "metrics": {
         "actions": 7,
         "actionCap": 0,
-        "scanMs": 3,
+        "scanMs": 4,
         "sanitized": 0,
         "modal": false,
         "textChars": 544,
@@ -648,9 +648,9 @@
         "compressionVsAria": 0.9283276450511946,
         "timing": {
           "jsonWallMs": 7,
-          "jsonInPageMs": 3,
-          "textWallMs": 3,
-          "textInPageMs": 2.199999999254942
+          "jsonInPageMs": 3.700000001117587,
+          "textWallMs": 7,
+          "textInPageMs": 4.199999999254942
         },
         "fullActions": 7
       },
@@ -722,10 +722,10 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 11061,
-              "engineMs": 11055,
+              "actMs": 11060,
+              "engineMs": 11050,
               "navigationLost": null,
-              "latencyMs": 11420,
+              "latencyMs": 11418,
               "ms": 11424
             },
             {
@@ -743,11 +743,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 157,
-              "engineMs": 153,
+              "actMs": 164,
+              "engineMs": 157,
               "navigationLost": null,
-              "latencyMs": 510,
-              "ms": 515
+              "latencyMs": 528,
+              "ms": 536
             },
             {
               "op": "wait",
@@ -769,20 +769,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 160,
-              "engineMs": 156,
+              "actMs": 162,
+              "engineMs": 154,
               "navigationLost": null,
-              "latencyMs": 513,
-              "ms": 518
+              "latencyMs": 517,
+              "ms": 525
             }
           ],
-          "latencyMs": 16471,
+          "latencyMs": 16488,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 3337,
-      "totalMs": 21348
+      "loadMs": 3375,
+      "totalMs": 21472
     },
     {
       "id": "the-internet-login",
@@ -795,7 +795,7 @@
       "metrics": {
         "actions": 6,
         "actionCap": 0,
-        "scanMs": 1,
+        "scanMs": 5,
         "sanitized": 0,
         "modal": false,
         "textChars": 548,
@@ -807,10 +807,10 @@
         "compressionVsRaw": 0.220700765203383,
         "compressionVsAria": 0.6409356725146199,
         "timing": {
-          "jsonWallMs": 4,
-          "jsonInPageMs": 1.900000000372529,
-          "textWallMs": 4,
-          "textInPageMs": 1.900000000372529
+          "jsonWallMs": 9,
+          "jsonInPageMs": 5.300000000745058,
+          "textWallMs": 6,
+          "textInPageMs": 3.299999998882413
         },
         "fullActions": 6
       },
@@ -883,11 +883,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 160,
-              "engineMs": 156,
+              "actMs": 171,
+              "engineMs": 160,
               "navigationLost": null,
-              "latencyMs": 511,
-              "ms": 517
+              "latencyMs": 528,
+              "ms": 539
             },
             {
               "op": "act",
@@ -905,11 +905,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 159,
+              "actMs": 160,
               "engineMs": 155,
               "navigationLost": null,
-              "latencyMs": 516,
-              "ms": 522
+              "latencyMs": 513,
+              "ms": 521
             },
             {
               "op": "act",
@@ -926,20 +926,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 1920,
+              "actMs": 1931,
               "engineMs": null,
               "navigationLost": "page.evaluate: Execution context was destroyed, most likely because of a navigation.",
-              "latencyMs": 2286,
-              "ms": 2291
+              "latencyMs": 2294,
+              "ms": 2301
             }
           ],
-          "latencyMs": 3330,
+          "latencyMs": 3361,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 3007,
-      "totalMs": 7849
+      "loadMs": 3112,
+      "totalMs": 8108
     },
     {
       "id": "the-internet-hovers",
@@ -952,7 +952,7 @@
       "metrics": {
         "actions": 6,
         "actionCap": 0,
-        "scanMs": 2,
+        "scanMs": 3,
         "sanitized": 0,
         "modal": false,
         "textChars": 421,
@@ -964,10 +964,10 @@
         "compressionVsRaw": 0.16907630522088354,
         "compressionVsAria": 0.9745370370370371,
         "timing": {
-          "jsonWallMs": 6,
-          "jsonInPageMs": 2.799999998882413,
-          "textWallMs": 4,
-          "textInPageMs": 2.599999999627471
+          "jsonWallMs": 7,
+          "jsonInPageMs": 3.300000000745058,
+          "textWallMs": 6,
+          "textInPageMs": 3.099999999627471
         },
         "fullActions": 6
       },
@@ -1057,20 +1057,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 158,
+              "actMs": 160,
               "engineMs": 154,
               "navigationLost": null,
-              "latencyMs": 517,
-              "ms": 521
+              "latencyMs": 521,
+              "ms": 527
             }
           ],
-          "latencyMs": 521,
+          "latencyMs": 527,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 5029,
-      "totalMs": 7075
+      "loadMs": 3143,
+      "totalMs": 5270
     },
     {
       "id": "the-internet-key-presses",
@@ -1083,7 +1083,7 @@
       "metrics": {
         "actions": 4,
         "actionCap": 0,
-        "scanMs": 2,
+        "scanMs": 4,
         "sanitized": 0,
         "modal": false,
         "textChars": 438,
@@ -1095,10 +1095,10 @@
         "compressionVsRaw": 0.10693359375,
         "compressionVsAria": 0.9049586776859504,
         "timing": {
-          "jsonWallMs": 4,
-          "jsonInPageMs": 1.699999999254942,
-          "textWallMs": 3,
-          "textInPageMs": 1.799999998882413
+          "jsonWallMs": 8,
+          "jsonInPageMs": 4.299999998882413,
+          "textWallMs": 6,
+          "textInPageMs": 5
         },
         "fullActions": 4
       },
@@ -1170,20 +1170,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 158,
-              "engineMs": 154,
+              "actMs": 160,
+              "engineMs": 155,
               "navigationLost": null,
-              "latencyMs": 524,
-              "ms": 528
+              "latencyMs": 514,
+              "ms": 518
             }
           ],
-          "latencyMs": 528,
+          "latencyMs": 518,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 5283,
-      "totalMs": 7318
+      "loadMs": 3066,
+      "totalMs": 5176
     },
     {
       "id": "the-internet-challenging-dom",
@@ -1196,22 +1196,22 @@
       "metrics": {
         "actions": 26,
         "actionCap": 0,
-        "scanMs": 5,
+        "scanMs": 8,
         "sanitized": 7,
         "modal": false,
         "textChars": 1530,
-        "textTokens": 597,
+        "textTokens": 598,
         "rawChars": 7012,
-        "rawTokens": 1978,
+        "rawTokens": 1980,
         "ariaChars": 4823,
-        "ariaTokens": 1551,
+        "ariaTokens": 1552,
         "compressionVsRaw": 0.21819737592698232,
         "compressionVsAria": 0.3172299398714493,
         "timing": {
-          "jsonWallMs": 11,
-          "jsonInPageMs": 5.800000000745058,
-          "textWallMs": 7,
-          "textInPageMs": 5.099999999627471
+          "jsonWallMs": 14,
+          "jsonInPageMs": 8.199999999254942,
+          "textWallMs": 11,
+          "textInPageMs": 7.699999999254942
         },
         "fullActions": 26
       },
@@ -1273,10 +1273,10 @@
               "ok": true,
               "failures": [],
               "actions": 26,
-              "wallMs": 8,
-              "inPageMs": 4.099999999627471,
-              "metaMs": 4,
-              "ms": 9
+              "wallMs": 15,
+              "inPageMs": 8.099999999627471,
+              "metaMs": 8,
+              "ms": 18
             },
             {
               "op": "act",
@@ -1285,11 +1285,11 @@
               "status": "ambiguous",
               "ok": true,
               "failures": [],
-              "actMs": 7,
+              "actMs": 10,
               "engineMs": null,
               "navigationLost": null,
-              "latencyMs": 367,
-              "ms": 374
+              "latencyMs": 374,
+              "ms": 388
             },
             {
               "op": "act",
@@ -1306,20 +1306,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 165,
-              "engineMs": 158,
+              "actMs": 1006,
+              "engineMs": 994,
               "navigationLost": null,
-              "latencyMs": 530,
-              "ms": 539
+              "latencyMs": 1358,
+              "ms": 1369
             }
           ],
-          "latencyMs": 922,
+          "latencyMs": 1775,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 4142,
-      "totalMs": 6657
+      "loadMs": 3024,
+      "totalMs": 6545
     },
     {
       "id": "the-internet-large",
@@ -1332,7 +1332,7 @@
       "metrics": {
         "actions": 3,
         "actionCap": 0,
-        "scanMs": 72,
+        "scanMs": 116,
         "sanitized": 50,
         "modal": false,
         "textChars": 1984,
@@ -1344,10 +1344,10 @@
         "compressionVsRaw": 0.010858678459424993,
         "compressionVsAria": 0.028670520231213872,
         "timing": {
-          "jsonWallMs": 76,
-          "jsonInPageMs": 72.40000000037253,
-          "textWallMs": 65,
-          "textInPageMs": 63.79999999888241
+          "jsonWallMs": 123,
+          "jsonInPageMs": 116.5,
+          "textWallMs": 116,
+          "textInPageMs": 113.09999999962747
         },
         "fullActions": 3
       },
@@ -1409,19 +1409,19 @@
               "ok": true,
               "failures": [],
               "actions": 3,
-              "wallMs": 64,
-              "inPageMs": 61.09999999962747,
-              "metaMs": 61,
-              "ms": 66
+              "wallMs": 133,
+              "inPageMs": 127.90000000037253,
+              "metaMs": 127,
+              "ms": 137
             }
           ],
-          "latencyMs": 66,
+          "latencyMs": 137,
           "status": null
         }
       ],
       "dialogs": [],
-      "loadMs": 4996,
-      "totalMs": 7487
+      "loadMs": 3077,
+      "totalMs": 6286
     },
     {
       "id": "the-internet-shadowdom",
@@ -1434,7 +1434,7 @@
       "metrics": {
         "actions": 3,
         "actionCap": 0,
-        "scanMs": 1,
+        "scanMs": 2,
         "sanitized": 0,
         "modal": false,
         "textChars": 396,
@@ -1446,10 +1446,10 @@
         "compressionVsRaw": 0.15213215520553208,
         "compressionVsAria": 0.8552915766738661,
         "timing": {
-          "jsonWallMs": 3,
-          "jsonInPageMs": 1.799999998882413,
-          "textWallMs": 4,
-          "textInPageMs": 1.799999998882413
+          "jsonWallMs": 5,
+          "jsonInPageMs": 2.599999999627471,
+          "textWallMs": 7,
+          "textInPageMs": 3.099999999627471
         },
         "fullActions": 3
       },
@@ -1511,19 +1511,19 @@
               "ok": true,
               "failures": [],
               "actions": 3,
-              "wallMs": 3,
-              "inPageMs": 1.5,
-              "metaMs": 1,
-              "ms": 3
+              "wallMs": 6,
+              "inPageMs": 2.799999998882413,
+              "metaMs": 3,
+              "ms": 6
             }
           ],
-          "latencyMs": 3,
+          "latencyMs": 6,
           "status": null
         }
       ],
       "dialogs": [],
-      "loadMs": 3148,
-      "totalMs": 4651
+      "loadMs": 3128,
+      "totalMs": 4730
     },
     {
       "id": "the-internet-iframe",
@@ -1548,10 +1548,10 @@
         "compressionVsRaw": 0.060856248751581334,
         "compressionVsAria": 0.6312154696132597,
         "timing": {
-          "jsonWallMs": 6,
-          "jsonInPageMs": 3.400000000372529,
-          "textWallMs": 5,
-          "textInPageMs": 3.400000000372529
+          "jsonWallMs": 9,
+          "jsonInPageMs": 4.799999998882413,
+          "textWallMs": 7,
+          "textInPageMs": 5
         },
         "fullActions": 22
       },
@@ -1620,19 +1620,19 @@
               "ok": true,
               "failures": [],
               "actions": 22,
-              "wallMs": 8,
-              "inPageMs": 4.399999998509884,
-              "metaMs": 5,
-              "ms": 8
+              "wallMs": 12,
+              "inPageMs": 7.599999999627471,
+              "metaMs": 7,
+              "ms": 12
             }
           ],
-          "latencyMs": 8,
+          "latencyMs": 12,
           "status": null
         }
       ],
       "dialogs": [],
-      "loadMs": 3107,
-      "totalMs": 4687
+      "loadMs": 3291,
+      "totalMs": 4963
     },
     {
       "id": "the-internet-nested-frames",
@@ -1645,7 +1645,7 @@
       "metrics": {
         "actions": 0,
         "actionCap": 0,
-        "scanMs": 0,
+        "scanMs": 1,
         "sanitized": 0,
         "modal": false,
         "textChars": 82,
@@ -1658,9 +1658,9 @@
         "compressionVsAria": null,
         "timing": {
           "jsonWallMs": 2,
-          "jsonInPageMs": 0.40000000037252903,
-          "textWallMs": 2,
-          "textInPageMs": 0.3999999985098839
+          "jsonInPageMs": 0.5,
+          "textWallMs": 3,
+          "textInPageMs": 0.5
         },
         "fullActions": 0
       },
@@ -1714,19 +1714,19 @@
               "ok": true,
               "failures": [],
               "actions": 0,
-              "wallMs": 2,
-              "inPageMs": 0.40000000037252903,
+              "wallMs": 3,
+              "inPageMs": 0.5,
               "metaMs": 0,
-              "ms": 2
+              "ms": 3
             }
           ],
-          "latencyMs": 2,
+          "latencyMs": 3,
           "status": null
         }
       ],
       "dialogs": [],
-      "loadMs": 1923,
-      "totalMs": 33432
+      "loadMs": 1970,
+      "totalMs": 33518
     },
     {
       "id": "the-internet-alerts",
@@ -1739,7 +1739,7 @@
       "metrics": {
         "actions": 6,
         "actionCap": 0,
-        "scanMs": 2,
+        "scanMs": 3,
         "sanitized": 0,
         "modal": false,
         "textChars": 557,
@@ -1751,10 +1751,10 @@
         "compressionVsRaw": 0.21464354527938342,
         "compressionVsAria": 0.889776357827476,
         "timing": {
-          "jsonWallMs": 5,
-          "jsonInPageMs": 2.300000000745058,
-          "textWallMs": 4,
-          "textInPageMs": 2.099999999627471
+          "jsonWallMs": 8,
+          "jsonInPageMs": 4,
+          "textWallMs": 8,
+          "textInPageMs": 4.800000000745058
         },
         "fullActions": 6
       },
@@ -1826,14 +1826,14 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 7820,
-              "engineMs": 7814,
+              "actMs": 7726,
+              "engineMs": 7718,
               "navigationLost": null,
-              "latencyMs": 8183,
-              "ms": 8189
+              "latencyMs": 8094,
+              "ms": 8102
             }
           ],
-          "latencyMs": 8189,
+          "latencyMs": 8102,
           "status": "ok"
         }
       ],
@@ -1843,8 +1843,8 @@
           "message": "I am a JS Alert"
         }
       ],
-      "loadMs": 3010,
-      "totalMs": 12725
+      "loadMs": 3076,
+      "totalMs": 12816
     },
     {
       "id": "the-internet-upload",
@@ -1857,7 +1857,7 @@
       "metrics": {
         "actions": 5,
         "actionCap": 0,
-        "scanMs": 2,
+        "scanMs": 3,
         "sanitized": 0,
         "modal": false,
         "textChars": 430,
@@ -1869,10 +1869,10 @@
         "compressionVsRaw": 0.15040223854494578,
         "compressionVsAria": 0.9148936170212766,
         "timing": {
-          "jsonWallMs": 4,
-          "jsonInPageMs": 1.900000000372529,
-          "textWallMs": 3,
-          "textInPageMs": 1.900000000372529
+          "jsonWallMs": 7,
+          "jsonInPageMs": 4,
+          "textWallMs": 7,
+          "textInPageMs": 4.400000000372529
         },
         "fullActions": 5
       },
@@ -1934,19 +1934,19 @@
               "ok": true,
               "failures": [],
               "actions": 5,
-              "wallMs": 3,
-              "inPageMs": 1.400000000372529,
-              "metaMs": 1,
-              "ms": 5
+              "wallMs": 8,
+              "inPageMs": 3.599999999627471,
+              "metaMs": 3,
+              "ms": 12
             }
           ],
-          "latencyMs": 5,
+          "latencyMs": 12,
           "status": null
         }
       ],
       "dialogs": [],
-      "loadMs": 3163,
-      "totalMs": 4712
+      "loadMs": 4313,
+      "totalMs": 5981
     },
     {
       "id": "the-internet-infinite-scroll",
@@ -1959,22 +1959,22 @@
       "metrics": {
         "actions": 3,
         "actionCap": 0,
-        "scanMs": 5,
+        "scanMs": 2,
         "sanitized": 0,
         "modal": false,
         "textChars": 697,
-        "textTokens": 170,
-        "rawChars": 6178,
-        "rawTokens": 1393,
-        "ariaChars": 4390,
-        "ariaTokens": 901,
-        "compressionVsRaw": 0.112819682745225,
-        "compressionVsAria": 0.15876993166287015,
+        "textTokens": 164,
+        "rawChars": 6200,
+        "rawTokens": 1385,
+        "ariaChars": 4412,
+        "ariaTokens": 893,
+        "compressionVsRaw": 0.11241935483870968,
+        "compressionVsAria": 0.15797824116047143,
         "timing": {
-          "jsonWallMs": 10,
-          "jsonInPageMs": 5,
+          "jsonWallMs": 5,
+          "jsonInPageMs": 2.899999998509884,
           "textWallMs": 6,
-          "textInPageMs": 4.199999999254942
+          "textInPageMs": 3.5
         },
         "fullActions": 3
       },
@@ -2006,12 +2006,12 @@
             },
             {
               "at": "middle",
-              "y": 153,
+              "y": 145,
               "actions": 3
             },
             {
               "at": "bottom",
-              "y": 307,
+              "y": 291,
               "actions": 3
             }
           ],
@@ -2036,10 +2036,10 @@
               "ok": true,
               "failures": [],
               "actions": 3,
-              "wallMs": 4,
-              "inPageMs": 1.800000000745058,
+              "wallMs": 5,
+              "inPageMs": 2.300000000745058,
               "metaMs": 2,
-              "ms": 4
+              "ms": 5
             },
             {
               "op": "scroll",
@@ -2056,19 +2056,19 @@
               "ok": true,
               "failures": [],
               "actions": 3,
-              "wallMs": 5,
-              "inPageMs": 2.300000000745058,
-              "metaMs": 2,
-              "ms": 7
+              "wallMs": 10,
+              "inPageMs": 4.699999999254942,
+              "metaMs": 5,
+              "ms": 15
             }
           ],
-          "latencyMs": 2133,
+          "latencyMs": 2137,
           "status": null
         }
       ],
       "dialogs": [],
-      "loadMs": 3196,
-      "totalMs": 6895
+      "loadMs": 3035,
+      "totalMs": 6762
     },
     {
       "id": "todomvc-react",
@@ -2081,7 +2081,7 @@
       "metrics": {
         "actions": 12,
         "actionCap": 0,
-        "scanMs": 2,
+        "scanMs": 4,
         "sanitized": 0,
         "modal": false,
         "textChars": 1353,
@@ -2093,10 +2093,10 @@
         "compressionVsRaw": 0.411371237458194,
         "compressionVsAria": 0.6875,
         "timing": {
-          "jsonWallMs": 5,
-          "jsonInPageMs": 1.700000001117587,
-          "textWallMs": 3,
-          "textInPageMs": 1.6000000014901161
+          "jsonWallMs": 8,
+          "jsonInPageMs": 4.100000001490116,
+          "textWallMs": 5,
+          "textInPageMs": 3.199999999254942
         },
         "fullActions": 12
       },
@@ -2161,11 +2161,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 160,
-              "engineMs": 155,
+              "actMs": 161,
+              "engineMs": 153,
               "navigationLost": null,
-              "latencyMs": 521,
-              "ms": 525
+              "latencyMs": 524,
+              "ms": 530
             },
             {
               "op": "act",
@@ -2184,11 +2184,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 179,
-              "engineMs": 175,
+              "actMs": 192,
+              "engineMs": 185,
               "navigationLost": null,
-              "latencyMs": 538,
-              "ms": 544
+              "latencyMs": 553,
+              "ms": 561
             },
             {
               "op": "act",
@@ -2206,11 +2206,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 153,
-              "engineMs": 149,
+              "actMs": 159,
+              "engineMs": 152,
               "navigationLost": null,
-              "latencyMs": 516,
-              "ms": 521
+              "latencyMs": 525,
+              "ms": 532
             },
             {
               "op": "act",
@@ -2229,11 +2229,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 172,
-              "engineMs": 168,
+              "actMs": 177,
+              "engineMs": 171,
               "navigationLost": null,
-              "latencyMs": 535,
-              "ms": 540
+              "latencyMs": 539,
+              "ms": 546
             },
             {
               "op": "act",
@@ -2251,11 +2251,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 155,
-              "engineMs": 151,
+              "actMs": 160,
+              "engineMs": 153,
               "navigationLost": null,
-              "latencyMs": 507,
-              "ms": 513
+              "latencyMs": 511,
+              "ms": 519
             },
             {
               "op": "act",
@@ -2275,9 +2275,9 @@
               "ok": true,
               "failures": [],
               "actMs": 176,
-              "engineMs": 171,
+              "engineMs": 170,
               "navigationLost": null,
-              "latencyMs": 535,
+              "latencyMs": 533,
               "ms": 541
             },
             {
@@ -2297,11 +2297,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 166,
+              "actMs": 169,
               "engineMs": 160,
               "navigationLost": null,
-              "latencyMs": 517,
-              "ms": 524
+              "latencyMs": 528,
+              "ms": 538
             },
             {
               "op": "act",
@@ -2318,10 +2318,10 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 177,
-              "engineMs": 172,
+              "actMs": 179,
+              "engineMs": 171,
               "navigationLost": null,
-              "latencyMs": 538,
+              "latencyMs": 539,
               "ms": 548
             },
             {
@@ -2339,11 +2339,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 175,
-              "engineMs": 171,
+              "actMs": 178,
+              "engineMs": 170,
               "navigationLost": null,
-              "latencyMs": 539,
-              "ms": 545
+              "latencyMs": 533,
+              "ms": 541
             },
             {
               "op": "act",
@@ -2360,14 +2360,14 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 175,
-              "engineMs": 170,
+              "actMs": 178,
+              "engineMs": 171,
               "navigationLost": null,
-              "latencyMs": 539,
-              "ms": 545
+              "latencyMs": 534,
+              "ms": 541
             }
           ],
-          "latencyMs": 5346,
+          "latencyMs": 5397,
           "status": "ok"
         },
         {
@@ -2390,11 +2390,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 157,
-              "engineMs": 152,
+              "actMs": 168,
+              "engineMs": 155,
               "navigationLost": null,
-              "latencyMs": 507,
-              "ms": 513
+              "latencyMs": 533,
+              "ms": 540
             },
             {
               "op": "act",
@@ -2413,11 +2413,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 172,
+              "actMs": 174,
               "engineMs": 168,
               "navigationLost": null,
-              "latencyMs": 527,
-              "ms": 532
+              "latencyMs": 537,
+              "ms": 542
             },
             {
               "op": "act",
@@ -2434,11 +2434,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 176,
-              "engineMs": 171,
+              "actMs": 181,
+              "engineMs": 173,
               "navigationLost": null,
-              "latencyMs": 527,
-              "ms": 531
+              "latencyMs": 547,
+              "ms": 554
             },
             {
               "op": "act",
@@ -2455,20 +2455,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 174,
-              "engineMs": 170,
+              "actMs": 179,
+              "engineMs": 172,
               "navigationLost": null,
-              "latencyMs": 533,
-              "ms": 533
+              "latencyMs": 537,
+              "ms": 537
             }
           ],
-          "latencyMs": 2109,
+          "latencyMs": 2173,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 2741,
-      "totalMs": 11719
+      "loadMs": 2292,
+      "totalMs": 11502
     },
     {
       "id": "saucedemo",
@@ -2481,7 +2481,7 @@
       "metrics": {
         "actions": 3,
         "actionCap": 0,
-        "scanMs": 1,
+        "scanMs": 4,
         "sanitized": 0,
         "modal": false,
         "textChars": 318,
@@ -2493,10 +2493,10 @@
         "compressionVsRaw": 0.11584699453551912,
         "compressionVsAria": 0.954954954954955,
         "timing": {
-          "jsonWallMs": 3,
-          "jsonInPageMs": 1.599999999627471,
-          "textWallMs": 3,
-          "textInPageMs": 1.199999999254942
+          "jsonWallMs": 9,
+          "jsonInPageMs": 4.5,
+          "textWallMs": 5,
+          "textInPageMs": 2.099999999627471
         },
         "fullActions": 3
       },
@@ -2562,11 +2562,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 168,
-              "engineMs": 161,
+              "actMs": 153,
+              "engineMs": 148,
               "navigationLost": null,
-              "latencyMs": 520,
-              "ms": 529
+              "latencyMs": 506,
+              "ms": 514
             },
             {
               "op": "act",
@@ -2585,11 +2585,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 161,
-              "engineMs": 157,
+              "actMs": 157,
+              "engineMs": 153,
               "navigationLost": null,
-              "latencyMs": 525,
-              "ms": 534
+              "latencyMs": 516,
+              "ms": 523
             },
             {
               "op": "act",
@@ -2608,11 +2608,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 257,
-              "engineMs": 250,
+              "actMs": 243,
+              "engineMs": 238,
               "navigationLost": null,
-              "latencyMs": 615,
-              "ms": 624
+              "latencyMs": 606,
+              "ms": 613
             },
             {
               "op": "act",
@@ -2630,11 +2630,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 181,
-              "engineMs": 174,
+              "actMs": 182,
+              "engineMs": 173,
               "navigationLost": null,
-              "latencyMs": 534,
-              "ms": 542
+              "latencyMs": 545,
+              "ms": 555
             },
             {
               "op": "act",
@@ -2652,21 +2652,21 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 178,
+              "actMs": 179,
               "engineMs": 172,
               "navigationLost": null,
-              "latencyMs": 539,
-              "ms": 546
+              "latencyMs": 543,
+              "ms": 554
             },
             {
               "op": "snapshot",
               "ok": true,
               "failures": [],
               "actions": 20,
-              "wallMs": 13,
+              "wallMs": 11,
               "inPageMs": 5.699999999254942,
               "metaMs": 6,
-              "ms": 20
+              "ms": 14
             },
             {
               "op": "act",
@@ -2682,14 +2682,14 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 203,
-              "engineMs": 188,
+              "actMs": 179,
+              "engineMs": 171,
               "navigationLost": null,
-              "latencyMs": 565,
-              "ms": 586
+              "latencyMs": 545,
+              "ms": 556
             }
           ],
-          "latencyMs": 3381,
+          "latencyMs": 3329,
           "status": "ok"
         },
         {
@@ -2718,11 +2718,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 180,
-              "engineMs": 159,
+              "actMs": 158,
+              "engineMs": 153,
               "navigationLost": null,
-              "latencyMs": 547,
-              "ms": 574
+              "latencyMs": 513,
+              "ms": 524
             },
             {
               "op": "act",
@@ -2741,11 +2741,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 165,
-              "engineMs": 157,
+              "actMs": 158,
+              "engineMs": 152,
               "navigationLost": null,
-              "latencyMs": 518,
-              "ms": 542
+              "latencyMs": 514,
+              "ms": 522
             },
             {
               "op": "act",
@@ -2764,11 +2764,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 201,
-              "engineMs": 194,
+              "actMs": 187,
+              "engineMs": 181,
               "navigationLost": null,
-              "latencyMs": 559,
-              "ms": 571
+              "latencyMs": 547,
+              "ms": 553
             },
             {
               "op": "act",
@@ -2793,20 +2793,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 180,
-              "engineMs": 167,
+              "actMs": 168,
+              "engineMs": 162,
               "navigationLost": null,
-              "latencyMs": 547,
-              "ms": 572
+              "latencyMs": 530,
+              "ms": 541
             }
           ],
-          "latencyMs": 3514,
+          "latencyMs": 3372,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 2263,
-      "totalMs": 10698
+      "loadMs": 2393,
+      "totalMs": 10673
     },
     {
       "id": "books-toscrape",
@@ -2819,7 +2819,7 @@
       "metrics": {
         "actions": 60,
         "actionCap": 54,
-        "scanMs": 27,
+        "scanMs": 28,
         "sanitized": 0,
         "modal": false,
         "textChars": 4391,
@@ -2832,9 +2832,9 @@
         "compressionVsAria": 0.2635337894610491,
         "timing": {
           "jsonWallMs": 39,
-          "jsonInPageMs": 28.09999999962747,
-          "textWallMs": 39,
-          "textInPageMs": 35.399999998509884
+          "jsonInPageMs": 28.90000000037253,
+          "textWallMs": 38,
+          "textInPageMs": 34.5
         },
         "fullActions": 114
       },
@@ -2898,14 +2898,14 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 222,
-              "engineMs": 190,
+              "actMs": 228,
+              "engineMs": 191,
               "navigationLost": null,
-              "latencyMs": 590,
-              "ms": 636
+              "latencyMs": 591,
+              "ms": 634
             }
           ],
-          "latencyMs": 636,
+          "latencyMs": 634,
           "status": "ok"
         },
         {
@@ -2932,11 +2932,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 201,
-              "engineMs": 171,
+              "actMs": 219,
+              "engineMs": 183,
               "navigationLost": null,
-              "latencyMs": 558,
-              "ms": 621
+              "latencyMs": 585,
+              "ms": 647
             },
             {
               "op": "act",
@@ -2953,20 +2953,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 208,
-              "engineMs": 174,
+              "actMs": 221,
+              "engineMs": 185,
               "navigationLost": null,
-              "latencyMs": 564,
-              "ms": 631
+              "latencyMs": 587,
+              "ms": 664
             }
           ],
-          "latencyMs": 2500,
+          "latencyMs": 2598,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 2987,
-      "totalMs": 8307
+      "loadMs": 2921,
+      "totalMs": 8304
     },
     {
       "id": "httpbin-form",
@@ -2979,7 +2979,7 @@
       "metrics": {
         "actions": 13,
         "actionCap": 0,
-        "scanMs": 3,
+        "scanMs": 2,
         "sanitized": 0,
         "modal": false,
         "textChars": 707,
@@ -2991,10 +2991,10 @@
         "compressionVsRaw": 0.49823819591261453,
         "compressionVsAria": 0.7752192982456141,
         "timing": {
-          "jsonWallMs": 7,
-          "jsonInPageMs": 3.099999999627471,
+          "jsonWallMs": 8,
+          "jsonInPageMs": 3.199999999254942,
           "textWallMs": 4,
-          "textInPageMs": 2.900000000372529
+          "textInPageMs": 2.400000000372529
         },
         "fullActions": 13
       },
@@ -3062,8 +3062,8 @@
               "actMs": 160,
               "engineMs": 154,
               "navigationLost": null,
-              "latencyMs": 524,
-              "ms": 530
+              "latencyMs": 517,
+              "ms": 523
             },
             {
               "op": "act",
@@ -3081,11 +3081,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 156,
-              "engineMs": 153,
+              "actMs": 162,
+              "engineMs": 156,
               "navigationLost": null,
-              "latencyMs": 512,
-              "ms": 517
+              "latencyMs": 515,
+              "ms": 524
             },
             {
               "op": "act",
@@ -3103,11 +3103,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 156,
+              "actMs": 155,
               "engineMs": 150,
               "navigationLost": null,
-              "latencyMs": 511,
-              "ms": 515
+              "latencyMs": 517,
+              "ms": 523
             },
             {
               "op": "act",
@@ -3127,11 +3127,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 156,
-              "engineMs": 152,
+              "actMs": 160,
+              "engineMs": 153,
               "navigationLost": null,
-              "latencyMs": 509,
-              "ms": 513
+              "latencyMs": 516,
+              "ms": 524
             },
             {
               "op": "act",
@@ -3151,11 +3151,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 156,
-              "engineMs": 151,
+              "actMs": 160,
+              "engineMs": 154,
               "navigationLost": null,
-              "latencyMs": 511,
-              "ms": 515
+              "latencyMs": 520,
+              "ms": 528
             },
             {
               "op": "act",
@@ -3172,20 +3172,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 157,
-              "engineMs": 154,
+              "actMs": 163,
+              "engineMs": 158,
               "navigationLost": null,
-              "latencyMs": 511,
-              "ms": 515
+              "latencyMs": 524,
+              "ms": 532
             }
           ],
-          "latencyMs": 3105,
+          "latencyMs": 3154,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 2201,
-      "totalMs": 6869
+      "loadMs": 1974,
+      "totalMs": 6743
     },
     {
       "id": "wikipedia-http",
@@ -3198,7 +3198,7 @@
       "metrics": {
         "actions": 60,
         "actionCap": 968,
-        "scanMs": 233,
+        "scanMs": 363,
         "sanitized": 1,
         "modal": false,
         "textChars": 3886,
@@ -3210,10 +3210,10 @@
         "compressionVsRaw": 0.004667010147084079,
         "compressionVsAria": 0.022012257984116733,
         "timing": {
-          "jsonWallMs": 243,
-          "jsonInPageMs": 235.30000000074506,
-          "textWallMs": 303,
-          "textInPageMs": 288.19999999925494
+          "jsonWallMs": 374,
+          "jsonInPageMs": 364.59999999962747,
+          "textWallMs": 505,
+          "textInPageMs": 449.40000000037253
         },
         "fullActions": 1028
       },
@@ -3502,11 +3502,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 1557,
-              "engineMs": 1263,
+              "actMs": 1664,
+              "engineMs": 1278,
               "navigationLost": null,
-              "latencyMs": 1917,
-              "ms": 2210
+              "latencyMs": 2029,
+              "ms": 2476
             },
             {
               "op": "act",
@@ -3523,11 +3523,11 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 2329,
+              "actMs": 2372,
               "engineMs": null,
               "navigationLost": "page.evaluate: Execution context was destroyed, most likely because of a navigation.",
-              "latencyMs": 2690,
-              "ms": 3287
+              "latencyMs": 2723,
+              "ms": 3153
             },
             {
               "op": "scroll",
@@ -3539,19 +3539,19 @@
               "ok": true,
               "failures": [],
               "actions": 500,
-              "wallMs": 469,
-              "inPageMs": 413.69999999925494,
-              "metaMs": 405,
-              "ms": 480
+              "wallMs": 447,
+              "inPageMs": 391.80000000074506,
+              "metaMs": 387,
+              "ms": 459
             }
           ],
-          "latencyMs": 6615,
+          "latencyMs": 6705,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 2119,
-      "totalMs": 14767
+      "loadMs": 2258,
+      "totalMs": 16875
     },
     {
       "id": "hacker-news",
@@ -3564,22 +3564,22 @@
       "metrics": {
         "actions": 60,
         "actionCap": 167,
-        "scanMs": 169,
+        "scanMs": 41,
         "sanitized": 0,
         "modal": false,
-        "textChars": 3763,
-        "textTokens": 1246,
-        "rawChars": 34366,
-        "rawTokens": 11665,
-        "ariaChars": 40222,
-        "ariaTokens": 10048,
-        "compressionVsRaw": 0.10949775941337368,
-        "compressionVsAria": 0.09355576550146685,
+        "textChars": 3786,
+        "textTokens": 1266,
+        "rawChars": 34306,
+        "rawTokens": 11650,
+        "ariaChars": 40007,
+        "ariaTokens": 9992,
+        "compressionVsRaw": 0.11035970384189354,
+        "compressionVsAria": 0.09463343914814908,
         "timing": {
-          "jsonWallMs": 188,
-          "jsonInPageMs": 173,
-          "textWallMs": 102,
-          "textInPageMs": 95.5
+          "jsonWallMs": 49,
+          "jsonInPageMs": 42.399999998509884,
+          "textWallMs": 52,
+          "textInPageMs": 48
         },
         "fullActions": 227
       },
@@ -3636,21 +3636,21 @@
                 "tag": "a",
                 "role": "link",
                 "kind": "click",
-                "label": "38 comments",
+                "label": "42 comments",
                 "region": "main",
                 "href": "item?id=50361268"
               },
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 232,
-              "engineMs": 195,
+              "actMs": 248,
+              "engineMs": 200,
               "navigationLost": null,
-              "latencyMs": 594,
-              "ms": 662
+              "latencyMs": 614,
+              "ms": 677
             }
           ],
-          "latencyMs": 662,
+          "latencyMs": 677,
           "status": "ok"
         },
         {
@@ -3677,20 +3677,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 570,
-              "engineMs": 290,
+              "actMs": 227,
+              "engineMs": 181,
               "navigationLost": null,
-              "latencyMs": 930,
-              "ms": 1230
+              "latencyMs": 591,
+              "ms": 662
             }
           ],
-          "latencyMs": 2730,
+          "latencyMs": 2162,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 2482,
-      "totalMs": 9278
+      "loadMs": 2438,
+      "totalMs": 7563
     },
     {
       "id": "github-ahttp",
@@ -3703,22 +3703,22 @@
       "metrics": {
         "actions": 60,
         "actionCap": 123,
-        "scanMs": 124,
+        "scanMs": 211,
         "sanitized": 12,
         "modal": false,
-        "textChars": 30026,
-        "textTokens": 7742,
-        "rawChars": 495279,
-        "rawTokens": 192340,
-        "ariaChars": 69138,
-        "ariaTokens": 19339,
-        "compressionVsRaw": 0.06062441573335433,
-        "compressionVsAria": 0.4342908386126298,
+        "textChars": 31836,
+        "textTokens": 8147,
+        "rawChars": 501604,
+        "rawTokens": 194197,
+        "ariaChars": 72597,
+        "ariaTokens": 20174,
+        "compressionVsRaw": 0.06346839339399207,
+        "compressionVsAria": 0.4385305177899913,
         "timing": {
-          "jsonWallMs": 142,
-          "jsonInPageMs": 125.20000000111759,
-          "textWallMs": 132,
-          "textInPageMs": 128.19999999925494
+          "jsonWallMs": 224,
+          "jsonInPageMs": 213.2000000011176,
+          "textWallMs": 242,
+          "textInPageMs": 238.60000000149012
         },
         "fullActions": 183
       },
@@ -3771,7 +3771,7 @@
               "id": "a173",
               "tag": "div",
               "role": "button",
-              "label": "ahttp Public Notifications You must be signed in to change notification settings Fork 0 (0) Star 0 (0) You must be signed in to star a repository About Executable page snapshots for LLM agents and people. One browser file, one userscript, CLI and MCP server. No dependencies, no server. Topics accessibility ai-agents ai-agents-automation browser-automation dom javascript llm-tools mcp mcp-server no-server nodejs playwright prompt-injection self-hosted tampermonkey tool-calling userscript violentmonkey web-scraping webmcp Resources Readme License Code of conduct Code of conduct Contributing Contributing Security policy Security policy Activity Stars 0 stars Watchers 0 watching Forks 0 forks Report repository main 5 Branches 1 Tag Go to file Code Open more actions menu Latest commit ERETLY Merge pull request #3 from ERETLY/fix/real-world-gaps Open commit details success Nov 3, 2026 ec1f988 · Nov 3, 2026 History 20 Commits Open commit details 20 Commits Folders and files Name Name Last commit message Last commit date.github.github Initial commit Nov 1, 2026 bench bench fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 benchmark benchmark bench: time script, timing tables generated from time-results.json Nov 1, 2026 bin bin feat: report no_effect when an expected change is missing Nov 2, 2026 corpus corpus fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 docs docs fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 examples examples docs: add a 30-second quick start, MCP config and limitations Nov 2, 2026 lib lib Initial commit Nov 1, 2026 scripts scripts bench: time script, timing tables generated from time-results.json Nov 1, 2026 self self fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 test test fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 tools tools Initial commit Nov 1, 2026 types types Initial commit Nov 1, 2026.gitattributes.gitattributes Initial commit Nov 1, 2026.gitignore.gitignore Initial commit Nov 1, 2026 CHANGELOG.md CHANGELOG.md fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 CODE_OF_CONDUCT.md CODE_OF_CONDUCT.md Initial commit Nov 1, 2026 CONTRIBUTING.md CONTRIBUTING.md Initial commit Nov 1, 2026 LICENSE LICENSE Initial commit Nov 1, 2026 README.md README.md fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 SECURITY.md SECURITY.md Initial commit Nov 1, 2026 ahttp.d.ts ahttp.d.ts fix: score disabled twins without letting them win Nov 3, 2026 ahttp.js ahttp.js fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 ahttp.min.js ahttp.min.js fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 eslint.config.js eslint.config.js Initial commit Nov 1, 2026 llms.txt llms.txt docs: add a 30-second quick start, MCP config and limitations Nov 2, 2026 package-lock.json package-lock.json Initial commit Nov 1, 2026 package.json package.json test: add matching regression corpus and runner Nov 2, 2026 tsconfig.json tsconfig.json Initial commit Nov 1, 2026 View all files Repository files navigation README Code of conduct Contributing License Security More items ahttp Page snapshots for LLM agents. ahttp scans the DOM, gives every control a short id, and after each action returns a diff instead of the whole page. It is one browser file with no dependencies, plus a CLI and an MCP server. The server runs on Node with either a small built-in DOM or real Chromium. Experimental, pre-1.0. One maintainer. The API can still change; additive fields and new options are documented before any breaking change. Quick start Userscript: first snapshot in about 30 seconds Install Tampermonkey or Violentmonkey. Open the raw self/ahttp.user.js and confirm the install. If the client does not offer the install, create a new script and paste the file. Open any http(s) page and press Alt+Shift+A (or click the ahttp button). The panel shows the snapshot; type an id and press Act. This path needs no clone and no server. The script uses @grant none and uploads nothing. MCP: one config block Clone and install once: git clone https://github.com/ERETLY/ahttp.git cd ahttp npm ci npx playwright install chromium Then paste this into Claude Desktop or Cursor and replace /absolute/path/to/ahttp: { \"mcpServers\": { \"ahttp\": { \"command\": \" node \", \"args\": [\" /absolute/path/to/ahttp/bin/ahttp-mcp.js \", \" --browser \"] } } } Restart the client and call ahttp_open with a URL. The tools are ahttp_open, ahttp_snapshot and ahttp_act. --browser runs page JavaScript; drop it only for static HTML. Owner auth and legacy options are in MCP server. Agent loop on a local page node examples/agent-loop.js It prints a snapshot, picks a control by label, clicks it with an expect rule, and prints the diff. No network: a local fixture is loaded in Chromium. Example A snapshot is a few lines of text: ahttp | Widget shop | https://shop.test/cart a1 input \"Email\" ph=\"you@example.com\" a2 button \"Add to cart\" a3 a \"Shipping help\" -> /help [text: untrusted] Cart (1 item) $49.00 The agent passes an id to act: const step = await ahttp. act ('a2'); // step.ok === true // step.diff.text === '+ text \"Added to cart\"' Files You want to Use Run it on any page, no server self/ahttp.user.js Ship the engine on a site ahttp.min.js Read or debug the engine ahttp.js Inspect a page from a terminal bin/ahttp-cli.js Give an MCP client browser tools bin/ahttp-mcp.js Drive Chromium from Node lib/browser.js + Playwright ahttp.min.js is built from ahttp.js and has the same API. Not on npm yet. Install from git: git clone https://github.com/ERETLY/ahttp.git cd ahttp npm install Node 18+. Playwright is an optional peer dependency, needed only for the browser backend. Userscript self/ahttp.user.js is the engine plus a small panel. No server, no npm. Install Tampermonkey, Violentmonkey or similar. Create a new script and paste in self/ahttp.user.js. Open any http(s) page and press Alt+Shift+A, or click the ahttp button in the bottom-right corner. The panel scans the page, shows the snapshot and runs an action by id. Guarded actions need a second Confirm click. It uses @grant none and skips iframes. Rebuild it with npm run build:self. In a page < script src =\" /assets/ahttp.min.js \" > </ script > < script > document. addEventListener ('DOMContentLoaded', function () { console. log (ahttp. snapshot ({ maxActions: 20, maxText: 500 })); }); // in an async function: const step = await ahttp.act('a2'); </ script > Loading the file does nothing: no observer, no DOM walk, no patched globals. snapshot() is synchronous, act() returns a promise. Snapshot The first line is tool name, title and URL. Long URLs are cut to the origin plus the last two path segments; format: 'json' and verbose keep the full one. An action line is an id, a tag, a quoted label and optional suffixes: Suffix Meaning val=\"...\" Current value ph=\"...\" Placeholder opts=2(Small|Large) Select options (shown when there are six or fewer) checked / unchecked Checkbox or switch state disabled, readonly, required Control state -> /path Link target confirm=\"...\" Needs confirmation Plain text inputs print as input; other types keep their type (input[email]). Region headers ([modal], [main], [nav]) appear only when more than one region has actions. A [meta] line appears when actions were capped, nodes were sanitized, or the page is owned or read-only. verbose: true adds forms, control counts, layout mode, scan time and engine version. Page text is marked [text: untrusted]. Treat it as data, not instructions. Common options: Option Default Effect maxActions 60 Cap on action lines maxText 1400 Cap on page text, in characters includeText true false drops page text query none Keep actions matching a string scope all main, chrome, modal, all or a CSS selector force false Ignore the scan cache format text json for structured output Everything else is in docs/API.md. Actions act(id, payload) resolves the id, checks policy and confirmation, dispatches the event, waits for network and DOM activity to settle, rescans and returns: { ok: true, action: { id: 'a2', method: 'click', kind: 'click', label: 'Add to cart' }, diff: { text: '+ text \"Added to cart\"' }, snapshot: '...', snapshotMeta: { chars: 214, tokens: 54 } } Errors are returned, not thrown: { ok: false, error: 'unknown_action' }. A blocked action (policy_denied) never touches the page. A string payload fills the target. An object payload can carry: Key Meaning value Fill text or select an option checked Set a checkbox or switch read Read the value, change nothing key Enter, Escape, Tab, arrows, space hover / scroll Hover or scroll into view confirm Accept a guarded action settle, timeout, quiet, minWait, networkQuiet Settle behavior; see docs/API.md diff / snapshot false leaves that part out of the reply If a framework replaces the node, the engine rescans and relocates it by stable anchors: intent, test id, DOM id, name, accessible name, visible text, title, placeholder, alt and href. The old fingerprint is only a low-weight structural signal. If two candidates are too close, the action is not dispatched; act returns status: 'ambiguous' with the candidates. confirm: true does not override that. Weights and thresholds are in docs/MATCHING.md. Pass expect when the action must change something. If the change does not happen, the result keeps ok: true but reports status: 'no_effect' with the failed rules; re-snapshot instead of retrying the same click. await ahttp. act ('a2', { expect: { diff: true, textAdded: ['Added to cart'] } }); Actions marked data-ahttp-confirm do not run on the first call. The engine returns requiresConfirmation; call again with { confirm: true }. This stops accidents. It does not prove a human approved anything. Benchmarks Compared with raw HTML, Markdown (Readability + Turndown), Jina Reader, Firecrawl and the Chromium accessibility tree, on five pinned pages (benchmark/pinned/, SHA-256 checked), a five-step checkout and a 20-task scripted run. The block below is generated from benchmark/results.json and benchmark/self-results.json; a test fails if it drifts. Last run: 2026-11-01T05:13:00.818Z. ahttp 0.1.0 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base. Tokens Tokens an agent reads, lower is better. Checkout is five snapshots of one purchase flow, each page column is one snapshot of a pinned page, 20 tasks is every step of the scripted suite. Total adds the non-empty cells in a row. Method What you get Can act Checkout (5 steps) Hacker News Wikipedia Lobsters GitHub MDN Total 20 tasks Raw HTML serialized DOM no 3,983 11,771 191,129 17,909 105,767 59,787 390,346 25,896 Markdown Readability + Turndown no 68 5,136 26,579 6,542 1,387 3,008 42,720 n/a Jina Reader hosted Markdown no n/a 5,536 27,977 6,293 1,342 3,180 44,328 n/a Firecrawl hosted Markdown no n/a 5,291 39,364 7,433 42,589 3,850 98,527 n/a Accessibility tree roles and names no 346 10,099 73,404 5,918 5,404 7,381 102,552 5,360 ahttp actions, text, ids yes 289 1,162 1,136 1,105 4,198 1,149 9,039 5,104 ahttp self actions, text, ids yes 289 1,170 1,148 1,116 4,208 1,242 9,173 5,104 Only the two ahttp rows can click; the baselines score 0/20 on the task suite because they only read. ahttp self is the same engine loaded as self/ahttp.user.js in Chromium. Time Wall-clock numbers from one machine, relative at best. Live and scan come from benchmark/time-results.json (2026-11-01T05:58:12.040Z). Checkout. Average per step over five local snapshots. The hosted readers cannot run it. Method Time per step Accessibility tree 3.9 ms Raw HTML 4.5 ms Markdown 12.9 ms ahttp 86.5 ms ahttp self 84.9 ms Live. URL to content, one request per page, 2026-11-01: Method Hacker News Wikipedia Lobsters GitHub MDN ahttp 1,847 ms 4,379 ms 2,151 ms 2,430 ms 1,430 ms ahttp self 1,456 ms 1,499 ms 1,595 ms 2,413 ms 855 ms Jina Reader 1,179 ms 1,506 ms 748 ms 756 ms 427 ms Firecrawl 1,320 ms 1,576 ms 1,169 ms 1,589 ms 468 ms Single runs, not medians. ahttp fetches the page and its linked stylesheets in Node and scans it. ahttp self loads the page in Chromium with the userscript injected and takes a snapshot. The hosted readers return Markdown only. Scan. One snapshot per pinned page. Raw HTML, the accessibility tree and ahttp self run in Chromium on the page served from localhost; Markdown and ahttp run in Node. Method Hacker News Wikipedia Lobsters GitHub MDN Raw HTML 26 ms 212 ms 20 ms 38 ms 14 ms Markdown 274 ms 869 ms 398 ms 205 ms 252 ms Accessibility tree 87 ms 288 ms 71 ms 92 ms 77 ms ahttp 39 ms 3,165 ms 4 ms 18 ms 13 ms ahttp self 25 ms 194 ms 25 ms 34 ms 19 ms Hosted readers have no separate scan step; their time is in Live time. Caveats No LLM in the loop. The task runner is a script. One win32 x64 machine. Scan time is the least portable number. Accessibility token counts depend on the Chromium build. Jina Reader (r.jina.ai) and Firecrawl (v2 scrape) fetch the live page, not the pinned HTML. Without JINA_API_KEY, Jina can return 403 on GitHub. Reproduce (needs Chromium): npm run bench # tokens, checkout, tasks: benchmark/run.js npm run bench:self # userscript in Chromium: benchmark/self.js npm run bench:time # scan and live timings: benchmark/time.js npm run bench:render # rewrite the block above Keys are read from JINA_API_KEY and FIRECRAWL_API_KEY and never written to disk. bench calls Jina without a key (AHTTP_JINA=0 skips it) and skips Firecrawl without one (AHTTP_FIRECRAWL=0 skips it explicitly). bench:time times a hosted reader only when its key is set. MCP server { \"mcpServers\": { \"ahttp\": { \"command\": \" node \", \"args\": [\" /absolute/path/to/ahttp/bin/ahttp-mcp.js \"] } } } Add \"--browser\" to the args for Chromium and pages that need JavaScript. Add \"--allow-private\" only if you want loopback or private addresses reachable. Tool Arguments Notes ahttp_open { url, maxActions? } Returns a pageId and a snapshot ahttp_snapshot { pageId?, scope?, query?, maxActions?, maxText?, includeText?, verbose?, format? } Read-only ahttp_act { pageId?, id, value?, key?, confirmationToken? } Runs one action Keep the pageId. 2026-07-28 clients must send it; legacy clients may omit it while one page is open. The first ahttp_act on a guarded control fires no event and returns a one-time, expiring confirmationToken bound to that page and action. Repeat the call with the token to execute it. Owner credentials come from the environment: { \"mcpServers\": { \"ahttp\": { \"command\": \" node \", \"args\": [\" /absolute/path/to/ahttp/bin/ahttp-mcp.js \", \" --browser \"], \"env\": { \"AHTTP_AUTH_TOKEN\": \" short-lived-server-token \", \"AHTTP_OWNER_KEY\": \" optional-soft-gate-key \" } } } } JSON-RPC 2.0 over stdio. Supports the legacy initialize handshake through 2025-11-25 and the 2026-07-28 discovery model. CLI node bin/ahttp-cli.js https://example.com node bin/ahttp-cli.js https://example.com --query \" Buy \" --max-actions 20 The CLI fetches the HTML, attaches the engine to the parsed DOM and prints the snapshot. It never clicks. docs/DEMO.md is a terminal transcript against a local page; node scripts/demo.js regenerates it. To see an action change the page and come back as a diff, load ahttp.min.js in a page or run the MCP server with --browser. For site owners You do not have to change anything; the engine reads the DOM as is. These attributes let a page declare intent and limits: Attribute Effect data-ahttp-intent Stable name for policy and agent code data-ahttp-confirm=\"reason\" Requires confirmation before execution data-ahttp-readonly Readable, not writable data-ahttp-ignore Removes the subtree from actions and text data-ahttp-access public, dev, gate or owner data-ahttp-auth-endpoint Server-verified authorization endpoint data-ahttp-allow / data-ahttp-deny Policy filters data-ahttp-max-actions Hard action cap data-ahttp-intent is the one to set. Without it the engine identifies a control by its visible text or accessible name, which changes when the copy does. Access mode Meaning public Any agent that loads the page can read and act dev Open only on localhost, 127.0.0.1,::1 or file: gate A SHA-256 in the page hides the graph from casual agents. Soft gate, not authentication owner Server-verified session with a short-lived policy owner is the production path. The page ships no secret: the agent authenticates against your backend, receives a short-lived token and policy, and the engine relocks when the token expires. gate is fine for pages that are not sensitive: < script src =\" ahttp.min.js \" data-ahttp-access =\" gate \" data-ahttp-key-hash =\" <sha256> \" > </ script > node bin/ahttp-cli.js --hash-key ' owner-secret ' AHTTP_OWNER_KEY= ' owner-secret ' node bin/ahttp-mcp.js Client-side JavaScript cannot enforce authorization. Whatever performs the mutation must re-check agent, tenant, object and intent on the server. See docs/OWNER_MODE.md, docs/SECURITY.md and the reference backend in examples/auth-server/. For the draft WebMCP API, ahttp.installWebMCP() registers ahttp_snapshot and ahttp_act when document.modelContext exists. It is opt-in; see docs/RESEARCH.md. Security Locks, hidden actions and data-ahttp-confirm are not authorization. The server must authorize every sensitive mutation. gate is a hint. The hash is in the page source. Action labels, URLs and values come from the page too, not only the text block. Treat every page-derived string as untrusted. includeText: false or maxText: 0 drops the text block. Hidden-text filtering is heuristic. Don't put secrets in a page you wouldn't show the agent. The static MCP backend does not run JavaScript. Use --browser for script-dependent pages. The browser backend blocks private targets and non-HTTP schemes at the route layer. DNS rebinding is still possible; run it on a network you control. confirmationToken is one-time and expiring. It is not proof of human approval. No third-party audit. Report vulnerabilities privately, see SECURITY.md. Warning CDP mode attaches to a real browser. ahttp creates a fresh context by default; --cdp-use-existing-profile lets the agent act inside your signed-in profile and read its cookies. Use a dedicated profile. Known limitations Matching and rerenders Matching is heuristic, not a proof of identity. Stable anchors (intent, test id, DOM id, name, accessible name, text, title, placeholder, alt, href) are tried first; the fingerprint is a low-weight fallback. Two near-identical controls can land in the ambiguity band. The engine then returns status: 'ambiguous' with candidates and dispatches nothing. It does not guess. When the id is not in the registry, act() can resolve by data-ahttp-intent or by label. A lookup that matches more than one action returns status: 'ambiguous' with candidates instead of clicking the first one. confirm: true does not resolve ambiguity. Re-snapshot, disambiguate with data-ahttp-intent or data-testid, or use query / scope. A disabled replacement is not an active target. An action whose expected effect is missing returns status: 'no_effect' when an expect rule is supplied; re-snapshot instead of retrying. Position and DOM order are tie-breakers only. A virtualized list that unmounts a row produces not_found, not a click on a recycled row. A disabled twin participates in the ranking but can never win: if it is the best candidate alone you get not_found, and if an active twin is not clearly ahead you get ambiguous with both candidates. A clearly better active twin still runs. pointer-events: none does not hide a control; it is still listed. With an expect rule, a change that never comes returns no_effect only after timeout (1200 ms by default); pass a smaller timeout to fail faster. Shadow DOM and iframes Open shadow roots and <slot> content are scanned when the page exposes them. Closed shadow roots are unreachable. Same-origin iframe documents are scanned up to two levels deep. Cross-origin iframes are skipped, and the userscript skips all iframes (@noframes). Accessible names are a subset of the spec: aria-owns, some SVG name rules and references across shadow boundaries are missing. Browser mode includes CSS::before /::after text and SVG titles. The userscript panel shows one page and does not cross iframe boundaries. Virtualized lists Only mounted rows exist in the snapshot. An id from a row that was unmounted cannot be matched; the engine returns not_found. The engine does not scroll a virtualized container to revive a row. Do that with scroll on the container or a page-specific control, then re-snapshot. Other The hidden-text filter misses text drawn on canvas, set as a background image, or hidden by a stylesheet the page doesn't expose. A native checkbox/radio hidden only by soft CSS (opacity, clip, clip-path, font-size 0, off-screen absolute, text-indent, tiny size) stays in the snapshot when a visible label names it. Hard-hidden controls, or soft-hidden ones without a visible label, stay out; the label itself is not a separate action. When aria-label is the only name, the control needs real layout, its own box of at least 12x12 px inside the page, and opacity as the only hide mechanism; otherwise it stays out like any hidden text. mini-dom (static backend) is a hand-written parser, not an HTML5 tree builder: no foster parenting, no full table algorithm. Use --browser when exact parsing matters. The static backend follows @import three levels deep (16 sheets) and evaluates screen, print, min-width, max-width, min-height and max-height. Unknown media features count as matching. Legacy MCP clients get implicit page state. Modern clients carry pageId. The task benchmark is scripted, not an LLM evaluation. Breaking changes None in 0.1.x. The matching work adds status, candidates, targetHint, thresholds, effect and expect; existing fields, error codes and snapshot lines are unchanged. A change that cannot stay additive bumps the version and is listed here before release. Development npm ci npm test # unit, network, MCP and browser tests npm run typecheck npm run lint npm run test:bench # benchmark and regression suites, needs Chromium npm run smoke # runtime and CLI against a local fixture, no dev dependencies npm run build # regenerate ahttp.min.js and self/ahttp.user.js npm test skips the Playwright test when Chromium is missing. AHTTP_REQUIRE_BROWSER=1 turns that skip into a failure; CI sets it. The giant-DOM scan time warns above AHTTP_GIANT_MS (default 150 ms) and never fails the run. Matching corpus npm test runs the local regression corpus. To run or filter it directly: npm run test:corpus node corpus/runner.js --filter=login The runner prints case | match | diff | tokens | status, writes bench/results.json, and exits non-zero on a failure. Cases and fixtures live in corpus/; the format is in corpus/README.md. Everything runs in jsdom against local HTML: no network, no live site, no browser required. ahttp.js browser engine, no runtime dependencies ahttp.min.js generated minified build self/ahttp.user.js generated userscript: engine plus panel self/panel.js panel source bin/ahttp-cli.js CLI inspector bin/ahttp-mcp.js MCP stdio server lib/ page fetch, SSRF guard, mini-dom, Playwright/CDP backend benchmark/ torture, owner, pinned pages, checkout, tasks, MCP scripts/ build, demo, benchmark rendering test/ node:test suites docs/ API, security, decisions, research, roadmap examples/ Playwright, browser, MCP and server-auth examples License MIT, see LICENSE. About Executable page snapshots for LLM agents and people. One browser file, one userscript, CLI and MCP server. No dependencies, no server. Topics accessibility ai-agents ai-agents-automation browser-automation dom javascript llm-tools mcp mcp-server no-server nodejs playwright prompt-injection self-hosted tampermonkey tool-calling userscript violentmonkey web-scraping webmcp Resources Readme License Code of conduct Code of conduct Contributing Contributing Security policy Security policy Activity Stars 0 stars Watchers 0 watching Forks 0 forks Report repository Releases 1 tag Contributors 1 (1) ERETLY Languages HTML 72.9% JavaScript 27.1%"
+              "label": "ahttp Public Notifications You must be signed in to change notification settings Fork 0 (0) Star 0 (0) You must be signed in to star a repository About Executable page snapshots for LLM agents and people. One browser file, one userscript, CLI and MCP server. No dependencies, no server. Topics accessibility ai-agents ai-agents-automation browser-automation dom javascript llm-tools mcp mcp-server no-server nodejs playwright prompt-injection self-hosted tampermonkey tool-calling userscript violentmonkey web-scraping webmcp Resources Readme License Code of conduct Code of conduct Contributing Contributing Security policy Security policy Activity Stars 0 stars Watchers 0 watching Forks 0 forks Report repository main 1 Branch 1 Tag Go to file Code Open more actions menu Latest commit ERETLY Merge pull request #6 from ERETLY/test/realworld Open commit details success Nov 4, 2026 3bf9a88 · Nov 4, 2026 History 48 Commits Open commit details 48 Commits Folders and files Name Name Last commit message Last commit date.github.github Initial commit Nov 1, 2026 bench bench fix: gate aria-label-only toggles on layout and geometry Nov 3, 2026 benchmark benchmark test: rerun the real-world sites with hover support Nov 4, 2026 bin bin feat: report no_effect when an expected change is missing Nov 2, 2026 corpus corpus feat: treat hover-only targets as actions Nov 4, 2026 docs docs test: rerun the real-world sites with hover support Nov 4, 2026 examples examples docs: add a 30-second quick start, MCP config and limitations Nov 2, 2026 lib lib fix: evaluate media queries and the cascade in css mode Nov 4, 2026 scripts scripts bench: time script, timing tables generated from time-results.json Nov 1, 2026 self self feat: treat hover-only targets as actions Nov 4, 2026 test test feat: treat hover-only targets as actions Nov 4, 2026 tools tools Initial commit Nov 1, 2026 types types Initial commit Nov 1, 2026.gitattributes.gitattributes Initial commit Nov 1, 2026.gitignore.gitignore Initial commit Nov 1, 2026 CHANGELOG.md CHANGELOG.md feat: treat hover-only targets as actions Nov 4, 2026 CODE_OF_CONDUCT.md CODE_OF_CONDUCT.md Initial commit Nov 1, 2026 CONTRIBUTING.md CONTRIBUTING.md Initial commit Nov 1, 2026 LICENSE LICENSE Initial commit Nov 1, 2026 README.md README.md feat: treat hover-only targets as actions Nov 4, 2026 SECURITY.md SECURITY.md Initial commit Nov 1, 2026 ahttp.d.ts ahttp.d.ts fix: score disabled twins without letting them win Nov 3, 2026 ahttp.js ahttp.js feat: treat hover-only targets as actions Nov 4, 2026 ahttp.min.js ahttp.min.js feat: treat hover-only targets as actions Nov 4, 2026 eslint.config.js eslint.config.js Initial commit Nov 1, 2026 llms.txt llms.txt docs: add a 30-second quick start, MCP config and limitations Nov 2, 2026 package-lock.json package-lock.json Initial commit Nov 1, 2026 package.json package.json test: add real-world harness and first site group Nov 3, 2026 tsconfig.json tsconfig.json Initial commit Nov 1, 2026 View all files Repository files navigation README Code of conduct Contributing License Security More items ahttp Page snapshots for LLM agents. ahttp scans the DOM, gives every control a short id, and after each action returns a diff instead of the whole page. It is one browser file with no dependencies, plus a CLI and an MCP server. The server runs on Node with either a small built-in DOM or real Chromium. Experimental, pre-1.0. One maintainer. The API can still change; additive fields and new options are documented before any breaking change. Quick start Userscript: first snapshot in about 30 seconds Install Tampermonkey or Violentmonkey. Open the raw self/ahttp.user.js and confirm the install. If the client does not offer the install, create a new script and paste the file. Open any http(s) page and press Alt+Shift+A (or click the ahttp button). The panel shows the snapshot; type an id and press Act. This path needs no clone and no server. The script uses @grant none and uploads nothing. MCP: one config block Clone and install once: git clone https://github.com/ERETLY/ahttp.git cd ahttp npm ci npx playwright install chromium Then paste this into Claude Desktop or Cursor and replace /absolute/path/to/ahttp: { \"mcpServers\": { \"ahttp\": { \"command\": \" node \", \"args\": [\" /absolute/path/to/ahttp/bin/ahttp-mcp.js \", \" --browser \"] } } } Restart the client and call ahttp_open with a URL. The tools are ahttp_open, ahttp_snapshot and ahttp_act. --browser runs page JavaScript; drop it only for static HTML. Owner auth and legacy options are in MCP server. Agent loop on a local page node examples/agent-loop.js It prints a snapshot, picks a control by label, clicks it with an expect rule, and prints the diff. No network: a local fixture is loaded in Chromium. Example A snapshot is a few lines of text: ahttp | Widget shop | https://shop.test/cart a1 input \"Email\" ph=\"you@example.com\" a2 button \"Add to cart\" a3 a \"Shipping help\" -> /help [text: untrusted] Cart (1 item) $49.00 The agent passes an id to act: const step = await ahttp. act ('a2'); // step.ok === true // step.diff.text === '+ text \"Added to cart\"' Files You want to Use Run it on any page, no server self/ahttp.user.js Ship the engine on a site ahttp.min.js Read or debug the engine ahttp.js Inspect a page from a terminal bin/ahttp-cli.js Give an MCP client browser tools bin/ahttp-mcp.js Drive Chromium from Node lib/browser.js + Playwright ahttp.min.js is built from ahttp.js and has the same API. Not on npm yet. Install from git: git clone https://github.com/ERETLY/ahttp.git cd ahttp npm install Node 18+. Playwright is an optional peer dependency, needed only for the browser backend. Userscript self/ahttp.user.js is the engine plus a small panel. No server, no npm. Install Tampermonkey, Violentmonkey or similar. Create a new script and paste in self/ahttp.user.js. Open any http(s) page and press Alt+Shift+A, or click the ahttp button in the bottom-right corner. The panel scans the page, shows the snapshot and runs an action by id. Guarded actions need a second Confirm click. It uses @grant none and skips iframes. Rebuild it with npm run build:self. In a page < script src =\" /assets/ahttp.min.js \" > </ script > < script > document. addEventListener ('DOMContentLoaded', function () { console. log (ahttp. snapshot ({ maxActions: 20, maxText: 500 })); }); // in an async function: const step = await ahttp.act('a2'); </ script > Loading the file does nothing: no observer, no DOM walk, no patched globals. snapshot() is synchronous, act() returns a promise. Snapshot The first line is tool name, title and URL. Long URLs are cut to the origin plus the last two path segments; format: 'json' and verbose keep the full one. An action line is an id, a tag, a quoted label and optional suffixes: Suffix Meaning val=\"...\" Current value ph=\"...\" Placeholder opts=2(Small|Large) Select options (shown when there are six or fewer) checked / unchecked Checkbox or switch state disabled, readonly, required Control state -> /path Link target confirm=\"...\" Needs confirmation Plain text inputs print as input; other types keep their type (input[email]). Region headers ([modal], [main], [nav]) appear only when more than one region has actions. A [meta] line appears when actions were capped, nodes were sanitized, or the page is owned or read-only. verbose: true adds forms, control counts, layout mode, scan time and engine version. Page text is marked [text: untrusted]. Treat it as data, not instructions. Common options: Option Default Effect maxActions 60 Cap on action lines maxText 1400 Cap on page text, in characters includeText true false drops page text query none Keep actions matching a string scope all main, chrome, modal, all or a CSS selector force false Ignore the scan cache format text json for structured output Everything else is in docs/API.md. Actions act(id, payload) resolves the id, checks policy and confirmation, dispatches the event, waits for network and DOM activity to settle, rescans and returns: { ok: true, action: { id: 'a2', method: 'click', kind: 'click', label: 'Add to cart' }, diff: { text: '+ text \"Added to cart\"' }, snapshot: '...', snapshotMeta: { chars: 214, tokens: 54 } } Errors are returned, not thrown: { ok: false, error: 'unknown_action' }. A blocked action (policy_denied) never touches the page. A string payload fills the target. An object payload can carry: Key Meaning value Fill text or select an option checked Set a checkbox or switch read Read the value, change nothing key Enter, Escape, Tab, arrows, space hover / scroll Hover or scroll into view confirm Accept a guarded action settle, timeout, quiet, minWait, networkQuiet Settle behavior; see docs/API.md diff / snapshot false leaves that part out of the reply If a framework replaces the node, the engine rescans and relocates it by stable anchors: intent, test id, DOM id, name, accessible name, visible text, title, placeholder, alt and href. The old fingerprint is only a low-weight structural signal. If two candidates are too close, the action is not dispatched; act returns status: 'ambiguous' with the candidates. confirm: true does not override that. Weights and thresholds are in docs/MATCHING.md. Pass expect when the action must change something. If the change does not happen, the result keeps ok: true but reports status: 'no_effect' with the failed rules; re-snapshot instead of retrying the same click. await ahttp. act ('a2', { expect: { diff: true, textAdded: ['Added to cart'] } }); Actions marked data-ahttp-confirm do not run on the first call. The engine returns requiresConfirmation; call again with { confirm: true }. This stops accidents. It does not prove a human approved anything. Benchmarks Compared with raw HTML, Markdown (Readability + Turndown), Jina Reader, Firecrawl and the Chromium accessibility tree, on five pinned pages (benchmark/pinned/, SHA-256 checked), a five-step checkout and a 20-task scripted run. The block below is generated from benchmark/results.json and benchmark/self-results.json; a test fails if it drifts. Last run: 2026-11-01T05:13:00.818Z. ahttp 0.1.0 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base. Tokens Tokens an agent reads, lower is better. Checkout is five snapshots of one purchase flow, each page column is one snapshot of a pinned page, 20 tasks is every step of the scripted suite. Total adds the non-empty cells in a row. Method What you get Can act Checkout (5 steps) Hacker News Wikipedia Lobsters GitHub MDN Total 20 tasks Raw HTML serialized DOM no 3,983 11,771 191,129 17,909 105,767 59,787 390,346 25,896 Markdown Readability + Turndown no 68 5,136 26,579 6,542 1,387 3,008 42,720 n/a Jina Reader hosted Markdown no n/a 5,536 27,977 6,293 1,342 3,180 44,328 n/a Firecrawl hosted Markdown no n/a 5,291 39,364 7,433 42,589 3,850 98,527 n/a Accessibility tree roles and names no 346 10,099 73,404 5,918 5,404 7,381 102,552 5,360 ahttp actions, text, ids yes 289 1,162 1,136 1,105 4,198 1,149 9,039 5,104 ahttp self actions, text, ids yes 289 1,170 1,148 1,116 4,208 1,242 9,173 5,104 Only the two ahttp rows can click; the baselines score 0/20 on the task suite because they only read. ahttp self is the same engine loaded as self/ahttp.user.js in Chromium. Time Wall-clock numbers from one machine, relative at best. Live and scan come from benchmark/time-results.json (2026-11-01T05:58:12.040Z). Checkout. Average per step over five local snapshots. The hosted readers cannot run it. Method Time per step Accessibility tree 3.9 ms Raw HTML 4.5 ms Markdown 12.9 ms ahttp 86.5 ms ahttp self 84.9 ms Live. URL to content, one request per page, 2026-11-01: Method Hacker News Wikipedia Lobsters GitHub MDN ahttp 1,847 ms 4,379 ms 2,151 ms 2,430 ms 1,430 ms ahttp self 1,456 ms 1,499 ms 1,595 ms 2,413 ms 855 ms Jina Reader 1,179 ms 1,506 ms 748 ms 756 ms 427 ms Firecrawl 1,320 ms 1,576 ms 1,169 ms 1,589 ms 468 ms Single runs, not medians. ahttp fetches the page and its linked stylesheets in Node and scans it. ahttp self loads the page in Chromium with the userscript injected and takes a snapshot. The hosted readers return Markdown only. Scan. One snapshot per pinned page. Raw HTML, the accessibility tree and ahttp self run in Chromium on the page served from localhost; Markdown and ahttp run in Node. Method Hacker News Wikipedia Lobsters GitHub MDN Raw HTML 26 ms 212 ms 20 ms 38 ms 14 ms Markdown 274 ms 869 ms 398 ms 205 ms 252 ms Accessibility tree 87 ms 288 ms 71 ms 92 ms 77 ms ahttp 39 ms 3,165 ms 4 ms 18 ms 13 ms ahttp self 25 ms 194 ms 25 ms 34 ms 19 ms Hosted readers have no separate scan step; their time is in Live time. Caveats No LLM in the loop. The task runner is a script. One win32 x64 machine. Scan time is the least portable number. Accessibility token counts depend on the Chromium build. Jina Reader (r.jina.ai) and Firecrawl (v2 scrape) fetch the live page, not the pinned HTML. Without JINA_API_KEY, Jina can return 403 on GitHub. Reproduce (needs Chromium): npm run bench # tokens, checkout, tasks: benchmark/run.js npm run bench:self # userscript in Chromium: benchmark/self.js npm run bench:time # scan and live timings: benchmark/time.js npm run bench:render # rewrite the block above Keys are read from JINA_API_KEY and FIRECRAWL_API_KEY and never written to disk. bench calls Jina without a key (AHTTP_JINA=0 skips it) and skips Firecrawl without one (AHTTP_FIRECRAWL=0 skips it explicitly). bench:time times a hosted reader only when its key is set. MCP server { \"mcpServers\": { \"ahttp\": { \"command\": \" node \", \"args\": [\" /absolute/path/to/ahttp/bin/ahttp-mcp.js \"] } } } Add \"--browser\" to the args for Chromium and pages that need JavaScript. Add \"--allow-private\" only if you want loopback or private addresses reachable. Tool Arguments Notes ahttp_open { url, maxActions? } Returns a pageId and a snapshot ahttp_snapshot { pageId?, scope?, query?, maxActions?, maxText?, includeText?, verbose?, format? } Read-only ahttp_act { pageId?, id, value?, key?, confirmationToken? } Runs one action Keep the pageId. 2026-07-28 clients must send it; legacy clients may omit it while one page is open. The first ahttp_act on a guarded control fires no event and returns a one-time, expiring confirmationToken bound to that page and action. Repeat the call with the token to execute it. Owner credentials come from the environment: { \"mcpServers\": { \"ahttp\": { \"command\": \" node \", \"args\": [\" /absolute/path/to/ahttp/bin/ahttp-mcp.js \", \" --browser \"], \"env\": { \"AHTTP_AUTH_TOKEN\": \" short-lived-server-token \", \"AHTTP_OWNER_KEY\": \" optional-soft-gate-key \" } } } } JSON-RPC 2.0 over stdio. Supports the legacy initialize handshake through 2025-11-25 and the 2026-07-28 discovery model. CLI node bin/ahttp-cli.js https://example.com node bin/ahttp-cli.js https://example.com --query \" Buy \" --max-actions 20 The CLI fetches the HTML, attaches the engine to the parsed DOM and prints the snapshot. It never clicks. docs/DEMO.md is a terminal transcript against a local page; node scripts/demo.js regenerates it. To see an action change the page and come back as a diff, load ahttp.min.js in a page or run the MCP server with --browser. For site owners You do not have to change anything; the engine reads the DOM as is. These attributes let a page declare intent and limits: Attribute Effect data-ahttp-intent Stable name for policy and agent code data-ahttp-confirm=\"reason\" Requires confirmation before execution data-ahttp-readonly Readable, not writable data-ahttp-ignore Removes the subtree from actions and text data-ahttp-access public, dev, gate or owner data-ahttp-auth-endpoint Server-verified authorization endpoint data-ahttp-allow / data-ahttp-deny Policy filters data-ahttp-max-actions Hard action cap data-ahttp-intent is the one to set. Without it the engine identifies a control by its visible text or accessible name, which changes when the copy does. Access mode Meaning public Any agent that loads the page can read and act dev Open only on localhost, 127.0.0.1,::1 or file: gate A SHA-256 in the page hides the graph from casual agents. Soft gate, not authentication owner Server-verified session with a short-lived policy owner is the production path. The page ships no secret: the agent authenticates against your backend, receives a short-lived token and policy, and the engine relocks when the token expires. gate is fine for pages that are not sensitive: < script src =\" ahttp.min.js \" data-ahttp-access =\" gate \" data-ahttp-key-hash =\" <sha256> \" > </ script > node bin/ahttp-cli.js --hash-key ' owner-secret ' AHTTP_OWNER_KEY= ' owner-secret ' node bin/ahttp-mcp.js Client-side JavaScript cannot enforce authorization. Whatever performs the mutation must re-check agent, tenant, object and intent on the server. See docs/OWNER_MODE.md, docs/SECURITY.md and the reference backend in examples/auth-server/. For the draft WebMCP API, ahttp.installWebMCP() registers ahttp_snapshot and ahttp_act when document.modelContext exists. It is opt-in; see docs/RESEARCH.md. Security Locks, hidden actions and data-ahttp-confirm are not authorization. The server must authorize every sensitive mutation. gate is a hint. The hash is in the page source. Action labels, URLs and values come from the page too, not only the text block. Treat every page-derived string as untrusted. includeText: false or maxText: 0 drops the text block. Hidden-text filtering is heuristic. Don't put secrets in a page you wouldn't show the agent. The static MCP backend does not run JavaScript. Use --browser for script-dependent pages. The browser backend blocks private targets and non-HTTP schemes at the route layer. DNS rebinding is still possible; run it on a network you control. confirmationToken is one-time and expiring. It is not proof of human approval. No third-party audit. Report vulnerabilities privately, see SECURITY.md. Warning CDP mode attaches to a real browser. ahttp creates a fresh context by default; --cdp-use-existing-profile lets the agent act inside your signed-in profile and read its cookies. Use a dedicated profile. Known limitations Matching and rerenders Matching is heuristic, not a proof of identity. Stable anchors (intent, test id, DOM id, name, accessible name, text, title, placeholder, alt, href) are tried first; the fingerprint is a low-weight fallback. Two near-identical controls can land in the ambiguity band. The engine then returns status: 'ambiguous' with candidates and dispatches nothing. It does not guess. When the id is not in the registry, act() can resolve by data-ahttp-intent or by label. A lookup that matches more than one action returns status: 'ambiguous' with candidates instead of clicking the first one. confirm: true does not resolve ambiguity. Re-snapshot, disambiguate with data-ahttp-intent or data-testid, or use query / scope. A disabled replacement is not an active target. An action whose expected effect is missing returns status: 'no_effect' when an expect rule is supplied; re-snapshot instead of retrying. Position and DOM order are tie-breakers only. A virtualized list that unmounts a row produces not_found, not a click on a recycled row. A disabled twin participates in the ranking but can never win: if it is the best candidate alone you get not_found, and if an active twin is not clearly ahead you get ambiguous with both candidates. A clearly better active twin still runs. pointer-events: none does not hide a control; it is still listed. With an expect rule, a change that never comes returns no_effect only after timeout (1200 ms by default); pass a smaller timeout to fail faster. Shadow DOM and iframes Open shadow roots and <slot> content are scanned when the page exposes them. Closed shadow roots are unreachable. Same-origin iframe documents are scanned up to two levels deep. Cross-origin iframes are skipped, and the userscript skips all iframes (@noframes). Accessible names are a subset of the spec: aria-owns, some SVG name rules and references across shadow boundaries are missing. Browser mode includes CSS::before /::after text and SVG titles. The userscript panel shows one page and does not cross iframe boundaries. Virtualized lists Only mounted rows exist in the snapshot. An id from a row that was unmounted cannot be matched; the engine returns not_found. The engine does not scroll a virtualized container to revive a row. Do that with scroll on the container or a page-specific control, then re-snapshot. Other The hidden-text filter misses text drawn on canvas, set as a background image, or hidden by a stylesheet the page doesn't expose. A native checkbox/radio hidden only by soft CSS (opacity, clip, clip-path, font-size 0, off-screen absolute, text-indent, tiny size) stays in the snapshot when a visible label names it — either a wrapping label, a label[for], a sibling <label> without for (TodoMVC), or the direct text node next to an unlabelled checkbox. Hard-hidden controls, or soft-hidden ones with no visible name, stay out; the label itself is not a separate action. When aria-label is the only name, the control needs real layout, its own box of at least 12x12 px inside the page, and soft hiding; otherwise it stays out like any hidden text. A native select, textarea or text input hidden only by partial opacity (0 < opacity <= 0.05) is recovered in browser mode when it has a real 12x12 px box inside the page and a name (aria-label, label, placeholder or title). opacity:0, 1x1 and off-screen fields are not recovered. A cursor:pointer element with no handler is dropped when a native control is painted over it, so a painted label is not offered as a dead button. Hover-only targets are actions with role=hover and kind: hover when the element owns an inline onmouseover / onmouseenter handler, or matches a CSS:hover rule that reveals a hidden descendant (display, visibility, opacity). act(id) or act(id, { hover: true }) applies those declarations and fires pointer/mouse events; hover rules that only change colour are ignored. Cross-origin stylesheets are not read, so an effect defined only there is not detected. The action name comes from visible text, aria-label, title or an image alt, never from the hidden content it reveals. act() latency is dominated by the settle wait, not the scan. The scan on the-internet pages measures ~1–4 ms, while act() also waits for DOM mutations and engine-observed fetch /XHR to go quiet. A page request that stays open can hold the action for most of timeout (8–20 s in the real-world harness); pass settle: false when the caller does its own waiting, or a smaller timeout. mini-dom (static backend) is a hand-written parser, not an HTML5 tree builder: no foster parenting, no full table algorithm. Use --browser when exact parsing matters. The static backend follows @import three levels deep (16 sheets). Its Media Queries 4 subset covers width, height, aspect-ratio, resolution, min- / max-, range syntax, and / or / not, calc and em / rem / vw / vh, plus common preferences (hover, pointer, prefers-color-scheme, prefers-reduced-motion, forced-colors, display-mode, scripting, orientation, color). An unknown feature or an unparsable query evaluates false, never true. The cascade honours!important, specificity and source order for display, visibility, opacity and cursor; inline style beats normal declarations. Legacy MCP clients get implicit page state. Modern clients carry pageId. The task benchmark is scripted, not an LLM evaluation. Breaking changes None in 0.1.x. The matching work adds status, candidates, targetHint, thresholds, effect and expect; existing fields, error codes and snapshot lines are unchanged. A change that cannot stay additive bumps the version and is listed here before release. Development npm ci npm test # unit, network, MCP and browser tests npm run typecheck npm run lint npm run test:bench # benchmark and regression suites, needs Chromium npm run smoke # runtime and CLI against a local fixture, no dev dependencies npm run build # regenerate ahttp.min.js and self/ahttp.user.js npm test skips the Playwright test when Chromium is missing. AHTTP_REQUIRE_BROWSER=1 turns that skip into a failure; CI sets it. The giant-DOM scan time warns above AHTTP_GIANT_MS (default 150 ms) and never fails the run. Matching corpus npm test runs the local regression corpus. To run or filter it directly: npm run test:corpus node corpus/runner.js --filter=login The runner prints case | match | diff | tokens | status, writes bench/results.json, and exits non-zero on a failure. Cases and fixtures live in corpus/; the format is in corpus/README.md. Everything runs in jsdom against local HTML: no network, no live site, no browser required. ahttp.js browser engine, no runtime dependencies ahttp.min.js generated minified build self/ahttp.user.js generated userscript: engine plus panel self/panel.js panel source bin/ahttp-cli.js CLI inspector bin/ahttp-mcp.js MCP stdio server lib/ page fetch, SSRF guard, mini-dom, Playwright/CDP backend benchmark/ torture, owner, pinned pages, checkout, tasks, MCP scripts/ build, demo, benchmark rendering test/ node:test suites docs/ API, security, decisions, research, roadmap examples/ Playwright, browser, MCP and server-auth examples License MIT, see LICENSE. About Executable page snapshots for LLM agents and people. One browser file, one userscript, CLI and MCP server. No dependencies, no server. Topics accessibility ai-agents ai-agents-automation browser-automation dom javascript llm-tools mcp mcp-server no-server nodejs playwright prompt-injection self-hosted tampermonkey tool-calling userscript violentmonkey web-scraping webmcp Resources Readme License Code of conduct Code of conduct Contributing Contributing Security policy Security policy Activity Stars 0 stars Watchers 0 watching Forks 0 forks Report repository Releases 1 tag Contributors 1 (1) ERETLY Languages HTML 68.8% JavaScript 31.2%"
             }
           ],
           "phantomTotal": 4,
@@ -3794,12 +3794,12 @@
             },
             {
               "at": "middle",
-              "y": 5461,
+              "y": 5948,
               "actions": 183
             },
             {
               "at": "bottom",
-              "y": 11787,
+              "y": 12809,
               "actions": 183
             }
           ],
@@ -3824,10 +3824,10 @@
               "ok": true,
               "failures": [],
               "actions": 183,
-              "wallMs": 201,
-              "inPageMs": 177.2000000011176,
-              "metaMs": 177,
-              "ms": 206
+              "wallMs": 224,
+              "inPageMs": 196.69999999925494,
+              "metaMs": 196,
+              "ms": 228
             },
             {
               "op": "act",
@@ -3844,20 +3844,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 1268,
-              "engineMs": 1088,
+              "actMs": 2220,
+              "engineMs": 1972,
               "navigationLost": null,
-              "latencyMs": 1619,
-              "ms": 1808
+              "latencyMs": 2571,
+              "ms": 2778
             }
           ],
-          "latencyMs": 2014,
+          "latencyMs": 3006,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 12464,
-      "totalMs": 17949
+      "loadMs": 4056,
+      "totalMs": 11409
     },
     {
       "id": "mdn-http",
@@ -3870,22 +3870,22 @@
       "metrics": {
         "actions": 60,
         "actionCap": 99,
-        "scanMs": 25,
+        "scanMs": 26,
         "sanitized": 121,
         "modal": false,
         "textChars": 4652,
         "textTokens": 1296,
-        "rawChars": 139767,
-        "rawTokens": 39035,
-        "ariaChars": 31258,
-        "ariaTokens": 8248,
-        "compressionVsRaw": 0.033283965456795954,
-        "compressionVsAria": 0.14882590056945422,
+        "rawChars": 139771,
+        "rawTokens": 39041,
+        "ariaChars": 31256,
+        "ariaTokens": 8234,
+        "compressionVsRaw": 0.03328301292828985,
+        "compressionVsAria": 0.14883542359866905,
         "timing": {
           "jsonWallMs": 35,
-          "jsonInPageMs": 26.800000000745058,
-          "textWallMs": 25,
-          "textInPageMs": 22
+          "jsonInPageMs": 27,
+          "textWallMs": 31,
+          "textInPageMs": 28.5
         },
         "fullActions": 159
       },
@@ -3901,7 +3901,7 @@
               "name": "JavaScript",
               "href": "",
               "reasons": [],
-              "html": "<button class=\"menu__tab-button\" type=\"button\" slot=\"button\" aria-expanded=\"false\" aria-controls=\"uid_iz4qhrsd9qq\">\n                      <span class=\"menu__tab-label\" data-type=\"long\">JavaScript</spa"
+              "html": "<button class=\"menu__tab-button\" type=\"button\" slot=\"button\" aria-expanded=\"false\" aria-controls=\"uid_zb7u3eodd\">\n                      <span class=\"menu__tab-label\" data-type=\"long\">JavaScript</span>"
             },
             {
               "tag": "a",
@@ -3977,7 +3977,7 @@
             },
             {
               "at": "bottom",
-              "y": 5793,
+              "y": 5844,
               "actions": 159
             }
           ],
@@ -4002,10 +4002,10 @@
               "ok": true,
               "failures": [],
               "actions": 159,
-              "wallMs": 27,
-              "inPageMs": 16.59999999962747,
-              "metaMs": 16,
-              "ms": 29
+              "wallMs": 44,
+              "inPageMs": 27.800000000745058,
+              "metaMs": 27,
+              "ms": 47
             },
             {
               "op": "act",
@@ -4022,20 +4022,20 @@
               "status": "ok",
               "ok": true,
               "failures": [],
-              "actMs": 243,
-              "engineMs": 221,
+              "actMs": 264,
+              "engineMs": 228,
               "navigationLost": null,
-              "latencyMs": 602,
-              "ms": 631
+              "latencyMs": 618,
+              "ms": 660
             }
           ],
-          "latencyMs": 660,
+          "latencyMs": 707,
           "status": "ok"
         }
       ],
       "dialogs": [],
-      "loadMs": 2201,
-      "totalMs": 4924
+      "loadMs": 2069,
+      "totalMs": 5097
     },
     {
       "id": "bbc-news",
@@ -4047,31 +4047,31 @@
       "error": null,
       "metrics": {
         "actions": 60,
-        "actionCap": 183,
-        "scanMs": 37,
+        "actionCap": 184,
+        "scanMs": 57,
         "sanitized": 7,
         "modal": false,
-        "textChars": 4070,
-        "textTokens": 1148,
-        "rawChars": 694095,
-        "rawTokens": 236744,
-        "ariaChars": 68977,
-        "ariaTokens": 17499,
-        "compressionVsRaw": 0.005863750639321707,
-        "compressionVsAria": 0.05900517563825623,
+        "textChars": 4092,
+        "textTokens": 1155,
+        "rawChars": 695543,
+        "rawTokens": 236974,
+        "ariaChars": 69448,
+        "ariaTokens": 17629,
+        "compressionVsRaw": 0.005883173290508279,
+        "compressionVsAria": 0.05892178320469992,
         "timing": {
-          "jsonWallMs": 53,
-          "jsonInPageMs": 47.899999998509884,
-          "textWallMs": 40,
-          "textInPageMs": 37.70000000111759
+          "jsonWallMs": 65,
+          "jsonInPageMs": 57.29999999888241,
+          "textWallMs": 58,
+          "textInPageMs": 55.69999999925494
         },
-        "fullActions": 243
+        "fullActions": 244
       },
       "checks": {
         "recall": {
-          "visible": 241,
-          "matched": 204,
-          "ratio": 0.8464730290456431,
+          "visible": 242,
+          "matched": 240,
+          "ratio": 0.9917355371900827,
           "missed": [
             {
               "tag": "button",
@@ -4088,221 +4088,11 @@
               "href": "",
               "reasons": [],
               "html": "<button type=\"button\" aria-label=\"Sign In\" class=\"Button-styles__ButtonBase-sc-c0f7f974-2 Button-styles__UnboxedButton-sc-c0f7f974-5 gCqUYN jdLCIq\"><span data-testid=\"button-text\" aria-hidden=\"false\" "
-            },
-            {
-              "tag": "a",
-              "role": "link",
-              "name": "LIVE . updates",
-              "href": "https://www.bbc.com/news/live/cj1dw0ydn595t",
-              "reasons": [],
-              "html": "<a href=\"/news/live/cj1dw0ydn595t\" data-testid=\"us-election-banner-action-link\" class=\"ssrcss-p12od3-Link e16hqiom2\"><span data-testid=\"live-link-heading\" class=\"ssrcss-zw91jm-LiveContainer e16hqiom0\""
-            },
-            {
-              "tag": "a",
-              "role": "link",
-              "name": "James Talarico becomes first Democrat to win Texas Senate seat since 1988 \"This wasn't just a tsunami, not just a refere",
-              "href": "https://www.bbc.com/news/articles/c6n8dnn09jg7o",
-              "reasons": [],
-              "html": "<a href=\"/news/articles/c6n8dnn09jg7o\" data-testid=\"internal-link\" class=\"Anchor-styles__AnchorStyled-sc-651d33db-0 hygVWX\"><div data-testid=\"dundee-article\" class=\"Dundee-styles__CardStyled-sc-50abbc"
-            },
-            {
-              "tag": "a",
-              "role": "link",
-              "name": "Republican Susan Collins loses seat to Democrat, ending nearly 30 years in the Senate Maine's Senate race was mired in c",
-              "href": "https://www.bbc.com/news/articles/cred3jj69jvqo",
-              "reasons": [],
-              "html": "<a href=\"/news/articles/cred3jj69jvqo\" data-testid=\"internal-link\" class=\"Anchor-styles__AnchorStyled-sc-651d33db-0 hygVWX\"><div data-testid=\"dundee-article\" class=\"Dundee-styles__CardStyled-sc-50abbc"
-            },
-            {
-              "tag": "a",
-              "role": "link",
-              "name": "Florida Republicans fend off Democrats as state elects first black governor Republican Byron Donalds, who was backed by ",
-              "href": "https://www.bbc.com/news/articles/c9146d88pl32o",
-              "reasons": [],
-              "html": "<a href=\"/news/articles/c9146d88pl32o\" data-testid=\"internal-link\" class=\"Anchor-styles__AnchorStyled-sc-651d33db-0 hygVWX\"><div data-testid=\"dundee-article\" class=\"Dundee-styles__CardStyled-sc-50abbc"
-            },
-            {
-              "tag": "a",
-              "role": "link",
-              "name": "Amy Acton wins Ohio governor race after bitter race with billionaire Ramaswamy The raced heated up in its final weeks af",
-              "href": "https://www.bbc.com/news/articles/cmx2dlz8574jo",
-              "reasons": [],
-              "html": "<a href=\"/news/articles/cmx2dlz8574jo\" data-testid=\"internal-link\" class=\"Anchor-styles__AnchorStyled-sc-651d33db-0 hygVWX\"><div data-testid=\"dundee-article\" class=\"Dundee-styles__CardStyled-sc-50abbc"
-            },
-            {
-              "tag": "a",
-              "role": "link",
-              "name": "ANC under pressure to reverse South Africa decline As South Africans vote in local elections, residents tell the BBC the",
-              "href": "https://www.bbc.com/news/articles/cr4g1x6l77xyo",
-              "reasons": [],
-              "html": "<a href=\"/news/articles/cr4g1x6l77xyo\" data-testid=\"internal-link\" class=\"Anchor-styles__AnchorStyled-sc-651d33db-0 hygVWX\"><div data-testid=\"dundee-article\" class=\"Dundee-styles__CardStyled-sc-50abbc"
-            },
-            {
-              "tag": "a",
-              "role": "link",
-              "name": "Killer who escaped Tennessee prison captured after week-long manhunt Jacob Allen Morley was serving a life sentence for ",
-              "href": "https://www.bbc.com/news/articles/cmq8nj23v8qqo",
-              "reasons": [],
-              "html": "<a href=\"/news/articles/cmq8nj23v8qqo\" data-testid=\"internal-link\" class=\"Anchor-styles__AnchorStyled-sc-651d33db-0 hygVWX\"><div data-testid=\"dundee-article\" class=\"Dundee-styles__CardStyled-sc-50abbc"
-            },
-            {
-              "tag": "a",
-              "role": "link",
-              "name": "Weapon or wine bottle? China disputes reports of artillery shell in Papua New Guinea Papua New Guinea police had earlier",
-              "href": "https://www.bbc.com/news/articles/cm0qkxzv3j99o",
-              "reasons": [],
-              "html": "<a href=\"/news/articles/cm0qkxzv3j99o\" data-testid=\"internal-link\" class=\"Anchor-styles__AnchorStyled-sc-651d33db-0 hygVWX\"><div data-testid=\"manchester-article\" class=\"Manchester-styles__CardStyled-s"
-            },
-            {
-              "tag": "a",
-              "role": "link",
-              "name": "Delhi air quality worsens ahead of Diwali as firework restrictions enter force On Wednesday morning, Delhi's air quality",
-              "href": "https://www.bbc.com/news/articles/c699z8792n7ro",
-              "reasons": [],
-              "html": "<a href=\"/news/articles/c699z8792n7ro\" data-testid=\"internal-link\" class=\"Anchor-styles__AnchorStyled-sc-651d33db-0 hygVWX\"><div data-testid=\"manchester-article\" class=\"Manchester-styles__CardStyled-s"
-            },
-            {
-              "tag": "a",
-              "role": "link",
-              "name": "Young NYC Marathon runner collapses and dies two miles from finish line The city medical examiner's office said it is st",
-              "href": "https://www.bbc.com/news/articles/c59vz44epvk9o",
-              "reasons": [],
-              "html": "<a href=\"/news/articles/c59vz44epvk9o\" data-testid=\"internal-link\" class=\"Anchor-styles__AnchorStyled-sc-651d33db-0 hygVWX\"><div data-testid=\"manchester-article\" class=\"Manchester-styles__CardStyled-s"
-            },
-            {
-              "tag": "a",
-              "role": "link",
-              "name": "How 'mogging' went from toxic term to mainstream Mogging, named Collins English Dictionary's word of the year, was once ",
-              "href": "https://www.bbc.com/news/articles/cqkgj371jjk8o",
-              "reasons": [],
-              "html": "<a href=\"/news/articles/cqkgj371jjk8o\" data-testid=\"internal-link\" class=\"Anchor-styles__AnchorStyled-sc-651d33db-0 hygVWX\"><div data-testid=\"manchester-article\" class=\"Manchester-styles__CardStyled-s"
-            },
-            {
-              "tag": "a",
-              "role": "link",
-              "name": "Canva announces major job cuts after 'our hardest year yet' CEO Melanie Perkins says more than 1,000 staff will either l",
-              "href": "https://www.bbc.com/news/articles/cw77pg7neydmo",
-              "reasons": [],
-              "html": "<a href=\"/news/articles/cw77pg7neydmo\" data-testid=\"internal-link\" class=\"London-styles__LondonTextAreaAnchorStyled-sc-269f9f6d-2 qdrfG\"><div class=\"London-styles__LondonTextAreaStyled-sc-269f9f6d-1 j"
-            },
-            {
-              "tag": "a",
-              "role": "link",
-              "name": "No more rice grains in Kellogg's Rice Krispies in the UK due to changing weather The new recipes mean cereal packaging w",
-              "href": "https://www.bbc.com/news/articles/cqvg0y44ym7vo",
-              "reasons": [],
-              "html": "<a href=\"/news/articles/cqvg0y44ym7vo\" data-testid=\"internal-link\" class=\"Anchor-styles__AnchorStyled-sc-651d33db-0 hygVWX\"><div data-testid=\"dundee-article\" class=\"Dundee-styles__CardStyled-sc-50abbc"
             }
           ],
-          "missedTotal": 37,
-          "phantom": [
-            {
-              "id": "a18",
-              "tag": "a",
-              "role": "link",
-              "label": "Live. updates",
-              "href": "/news/live/cj1dw0ydn595t"
-            },
-            {
-              "id": "a25",
-              "tag": "a",
-              "role": "link",
-              "label": "James Talarico becomes first Democrat to win Texas Senate seat since 1988 \"This wasn't just a tsunami, not just a referendum, but this was a bloodbath,\" one expert told the BBC on Democrats' historic wins in Texas.",
-              "href": "/news/articles/c6n8dnn09jg7o"
-            },
-            {
-              "id": "a26",
-              "tag": "a",
-              "role": "link",
-              "label": "Republican Susan Collins loses seat to Democrat, ending nearly 30 years in the Senate Maine's Senate race was mired in controversy after Democratic nominee Graham Planter withdrew following multiple scandals.",
-              "href": "/news/articles/cred3jj69jvqo"
-            },
-            {
-              "id": "a27",
-              "tag": "a",
-              "role": "link",
-              "label": "Florida Republicans fend off Democrats as state elects first black governor Republican Byron Donalds, who was backed by President Donald Trump, will be the first black governor of Florida.",
-              "href": "/news/articles/c9146d88pl32o"
-            },
-            {
-              "id": "a28",
-              "tag": "a",
-              "role": "link",
-              "label": "Amy Acton wins Ohio governor race after bitter race with billionaire Ramaswamy The raced heated up in its final weeks after the Republican contender released an ad featuring Acton's mother.",
-              "href": "/news/articles/cmx2dlz8574jo"
-            },
-            {
-              "id": "a43",
-              "tag": "a",
-              "role": "link",
-              "label": "ANC under pressure to reverse South Africa decline As South Africans vote in local elections, residents tell the BBC they are tired of the poor quality of services they get. 8 hrs ago Africa",
-              "href": "/news/articles/cr4g1x6l77xyo"
-            },
-            {
-              "id": "a44",
-              "tag": "a",
-              "role": "link",
-              "label": "Killer who escaped Tennessee prison captured after week-long manhunt Jacob Allen Morley was serving a life sentence for murder before he escaped over a prison fence. 6 hrs ago US & Canada",
-              "href": "/news/articles/cmq8nj23v8qqo"
-            },
-            {
-              "id": "a45",
-              "tag": "a",
-              "role": "link",
-              "label": "Weapon or wine bottle? China disputes reports of artillery shell in Papua New Guinea Papua New Guinea police had earlier dismissed speculation that the 32kg object was \"merely a dummy\". 4 hrs ago Asia",
-              "href": "/news/articles/cm0qkxzv3j99o"
-            },
-            {
-              "id": "a46",
-              "tag": "a",
-              "role": "link",
-              "label": "Delhi air quality worsens ahead of Diwali as firework restrictions enter force On Wednesday morning, Delhi's air quality index reading stood at 377, in the \"very poor\" category. 24 mins ago India",
-              "href": "/news/articles/c699z8792n7ro"
-            },
-            {
-              "id": "a47",
-              "tag": "a",
-              "role": "link",
-              "label": "Young NYC Marathon runner collapses and dies two miles from finish line The city medical examiner's office said it is still investigating Rachel Apa's cause of death. 11 hrs ago US & Canada",
-              "href": "/news/articles/c59vz44epvk9o"
-            },
-            {
-              "id": "a48",
-              "tag": "a",
-              "role": "link",
-              "label": "How 'mogging' went from toxic term to mainstream Mogging, named Collins English Dictionary's word of the year, was once the preserve of the manosphere but has become part of everyday discourse. 14 hrs ago Culture",
-              "href": "/news/articles/cqkgj371jjk8o"
-            },
-            {
-              "id": "a80",
-              "tag": "a",
-              "role": "link",
-              "label": "Canva announces major job cuts after 'our hardest year yet' CEO Melanie Perkins says more than 1,000 staff will either lose their jobs or be asked to change roles. 8 hrs ago Business",
-              "href": "/news/articles/cw77pg7neydmo"
-            },
-            {
-              "id": "a81",
-              "tag": "a",
-              "role": "link",
-              "label": "No more rice grains in Kellogg's Rice Krispies in the UK due to changing weather The new recipes mean cereal packaging will now include a 'contains wheat gluten' warning. 6 hrs ago Business",
-              "href": "/news/articles/cqvg0y44ym7vo"
-            },
-            {
-              "id": "a82",
-              "tag": "a",
-              "role": "link",
-              "label": "Graduates are managing AI - but are they learning much else? Graduates are spending more time managing AI, but are they missing out on other work experience? 8 hrs ago Technology",
-              "href": "/news/articles/c820vz6wyp65o"
-            },
-            {
-              "id": "a83",
-              "tag": "a",
-              "role": "link",
-              "label": "Four tankers destroyed by naval mines in Strait of Hormuz, Iran's IRGC says Iran's Islamic Revolutionary Guard Corps says the vessels had hit sea mines while trying to cross a prohibited route. 46 mins ago Middle East",
-              "href": "/news/articles/c6d934npl9y8o"
-            }
-          ],
-          "phantomTotal": 35,
+          "missedTotal": 2,
+          "phantom": [],
+          "phantomTotal": 0,
           "hiddenMatched": [
             {
               "action": "a79",
@@ -4312,21 +4102,21 @@
               ]
             },
             {
-              "action": "a97",
+              "action": "a98",
               "name": "Glass-fronted sleeping pods cling to a sheer rocky cliff above Peru's Sacred Valley (Credit: Natura Viva)",
               "reasons": [
                 "zero-size"
               ]
             },
             {
-              "action": "a104",
+              "action": "a105",
               "name": "Laika the dog prepared for her space voyage (Credit: Alamy)",
               "reasons": [
                 "zero-size"
               ]
             },
             {
-              "action": "a196",
+              "action": "a197",
               "name": "The best of the BBC, delivered to you Get news and insights with BBC newsletters, sent direct to your inbox. Sign up for free. See more",
               "reasons": [
                 "zero-size"
@@ -4339,17 +4129,17 @@
             {
               "at": "top",
               "y": 0,
-              "actions": 243
+              "actions": 244
             },
             {
               "at": "middle",
-              "y": 7184,
-              "actions": 243
+              "y": 7199,
+              "actions": 244
             },
             {
               "at": "bottom",
-              "y": 14385,
-              "actions": 243
+              "y": 14415,
+              "actions": 244
             }
           ],
           "missingAtMiddle": [],
@@ -4359,8 +4149,8 @@
         "determinism": {
           "identicalText": true,
           "identicalIds": true,
-          "firstActions": 243,
-          "secondActions": 243
+          "firstActions": 244,
+          "secondActions": 244
         }
       },
       "scenarios": [
@@ -4372,20 +4162,20 @@
               "op": "snapshot",
               "ok": true,
               "failures": [],
-              "actions": 243,
-              "wallMs": 100,
-              "inPageMs": 53.90000000037253,
-              "metaMs": 53,
-              "ms": 193
+              "actions": 244,
+              "wallMs": 234,
+              "inPageMs": 80.90000000037253,
+              "metaMs": 80,
+              "ms": 248
             }
           ],
-          "latencyMs": 193,
+          "latencyMs": 248,
           "status": null
         }
       ],
       "dialogs": [],
-      "loadMs": 3617,
-      "totalMs": 8216
+      "loadMs": 2890,
+      "totalMs": 9203
     }
   ]
 }
