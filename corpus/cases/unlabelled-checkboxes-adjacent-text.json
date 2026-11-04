@@ -1,0 +1,37 @@
+{
+  "id": "unlabelled-checkboxes-adjacent-text",
+  "html": "fixtures/unlabelled-checkboxes-adjacent-text.html",
+  "url": "https://corpus.test/unlabelled-checkboxes-adjacent-text",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectIds": [
+        "a1",
+        "a2",
+        "a3",
+        "a4",
+        "a5"
+      ],
+      "expectText": [
+        "input[checkbox] \"Accept the terms\" unchecked",
+        "input[checkbox] \"Email me\" unchecked",
+        "input[checkbox] \"Subscribe to news\" unchecked",
+        "input[checkbox] \"Accept\" unchecked",
+        "input[checkbox] \"Reject\" unchecked"
+      ]
+    },
+    {
+      "action": "click",
+      "expectedId": "a1",
+      "payload": {
+        "checked": true
+      },
+      "expectEffect": {
+        "pageText": {
+          "selector": "#out",
+          "equals": "checked"
+        }
+      }
+    }
+  ]
+}

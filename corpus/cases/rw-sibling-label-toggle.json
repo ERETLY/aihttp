@@ -2,7 +2,6 @@
   "id": "rw-sibling-label-toggle",
   "html": "fixtures/rw-sibling-label-toggle.html",
   "url": "https://corpus.test/rw-sibling-label-toggle",
-  "pending": "real-world: TodoMVC React hides the todo checkbox with opacity:0 and names it only by a sibling <label> (no label[for], no aria-label), so the toggle is missing from the snapshot",
   "steps": [
     {
       "action": "snapshot",
@@ -10,7 +9,7 @@
         "a1"
       ],
       "expectText": [
-        "checkbox \"Task one\""
+        "input[checkbox] \"Task one\" unchecked"
       ]
     },
     {

@@ -1935,6 +1935,43 @@
     return !deepHiddenReason(node, ctx);
   }
 
+  // TodoMVC-style rows put the checkbox and its <label> side by side without
+  // for/id. A sibling <label> with no for and no control of its own is that
+  // checkbox's name; one that owns a control belongs to a different field.
+  function siblingLabelOf(el) {
+    if (!toggleType(el)) return null;
+    var sides = [el.nextElementSibling, el.previousElementSibling];
+    for (var i = 0; i < sides.length; i++) {
+      var side = sides[i];
+      if (!side || tagOf(side) !== 'label') continue;
+      if (hasAttr(side, 'for')) continue;
+      var owns = null;
+      try { owns = side.querySelector ? side.querySelector('input,textarea,select,button') : null; } catch (e) { owns = null; }
+      if (owns) continue;
+      if (!normText(textOf(side))) continue;
+      return side;
+    }
+    return null;
+  }
+
+  // A checkbox with no label element can still be named by the text right next
+  // to it: <input type=checkbox> Accept the terms. Only a direct text node
+  // counts, so a following element is not mistaken for its name.
+  function adjacentTextName(el) {
+    if (!toggleType(el)) return '';
+    var next = el.nextSibling;
+    if (next && next.nodeType === 3) {
+      var after = normText(next.nodeValue);
+      if (after) return after;
+    }
+    var prev = el.previousSibling;
+    if (prev && prev.nodeType === 3) {
+      var before = normText(prev.nodeValue);
+      if (before) return before;
+    }
+    return '';
+  }
+
   function labelTargets(el) {
     var out = [];
     var node = parentOf(el);
@@ -1965,6 +2002,10 @@
         var target = byId(el, ids[j]);
         if (target && out.indexOf(target) < 0) out.push(target);
       }
+    }
+    if (!out.length) {
+      var sibling = siblingLabelOf(el);
+      if (sibling) out.push(sibling);
     }
     return out;
   }
@@ -2192,6 +2233,13 @@
       }
       node = parentOf(node);
     }
+    var siblingLabel = siblingLabelOf(el);
+    if (siblingLabel) {
+      var siblingLabelText = normText(textOf(siblingLabel));
+      if (siblingLabelText) return siblingLabelText;
+    }
+    var adjacent = adjacentTextName(el);
+    if (adjacent) return adjacent;
     var alt = normText(attr(el, 'alt'));
     if (alt && (tag === 'img' || tag === 'area' || (tag === 'input' && String(attr(el, 'type')).toLowerCase() === 'image'))) return alt;
     var inputType = tag === 'input' ? String(attr(el, 'type')).toLowerCase() : '';
