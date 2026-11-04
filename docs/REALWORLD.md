@@ -282,7 +282,7 @@ The original run above used the old oracle. The oracle now treats content under
 a closed `<details>` as hidden (its first `<summary>` stays visible), so both
 sides were measured again on 2026-11-04 with the corrected oracle and the same
 harness. Before is the pre-fix engine at `6ee22e7`; after is the engine from
-`630f153..fcdd48f`. Raw data in
+`630f153..fcdd48f` plus hover support. Raw data in
 `benchmark/realworld/results-before-fixed-oracle.json` and
 `benchmark/realworld/results-after-fixes.json`.
 
@@ -291,11 +291,11 @@ harness. Before is the pre-fix engine at `6ee22e7`; after is the engine from
 | wikipedia-http | 95.4% | 97.6% | 60 |
 | github-ahttp | 41.1% | 98.9% | 60 |
 | mdn-http | 10.4% | 96.3% | 60 |
-| bbc-news | 74.2% | 85.7% | 60 |
-| all scanned pages (mean) | 93.1% (26) | 99.2% (26) | |
+| bbc-news | 74.2% | 84.6% | 60 |
+| all scanned pages (mean) | 93.1% (26) | 99.1% (26) | |
 
-- **Scenarios:** the current engine passes 29/30; under the same scenarios the
-  old engine passes 24/30. The only remaining failure is the hover-only case.
+- **Scenarios:** the current engine passes 30/30; under the same scenarios the
+  old engine passes 24/30.
 - **Corrected scenario expectations, no engine change:** `wikipedia-http` and
   `todomvc-react` now pass. Wikipedia's `/wiki/Hypertext_Transfer_Protocol`
   redirects to `/wiki/HTTP`, and after typing, the snapshot exposes the
@@ -304,12 +304,16 @@ harness. Before is the pre-fix engine at `6ee22e7`; after is the engine from
   expectation asked for the completed `Task one` after the Active filter; the
   filter correctly hides it, so the step asserts `Task two`, `Task three` and
   that no list item contains `Task one`.
-- **Still failing, by design:** `the-internet-hovers` is the hover-only case.
-  It stays a pending corpus case and is documented in README.
+- **Hover card:** `the-internet-hovers` now passes. Its avatar is a `<div>` whose
+  `.figcaption` is revealed only by `.figure:hover .figcaption`; the engine
+  classifies it as `kind: hover` and `act` applies the rule's `display`
+  declaration and fires the pointer events, because synthetic events cannot
+  activate CSS `:hover`. The action name is `User Avatar` from the image alt, so
+  the hidden `name: user1` never appears in the snapshot before the hover.
 - **Unblocked:** `bbc-news` now passes. The wall lives in a `privacy-mgmt.com`
   cross-origin frame; when a site declares the frame and the button, the harness
   presses "I do not agree" and keeps `blocked` only if the full-viewport overlay
-  remains. The page scans at 85.7% recall after the fixes.
+  remains. The page scans at 84.6% recall after the fixes.
 - **MDN:** 10.4% → 96.3% (157/163). The old 3.3% counted 353 links inside five
   closed sidebar `<details>` as visible. Six visible controls are still
   unmatched (the JavaScript menu tab and five HTTP sidebar links); the engine
