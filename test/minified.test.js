@@ -5,6 +5,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { JSDOM } = require('jsdom');
+const pkg = require('../package.json');
 
 test('minified build exposes the same public version and a working snapshot', () => {
   const source = fs.readFileSync(path.join(__dirname, '..', 'ahttp.min.js'), 'utf8');
@@ -13,7 +14,7 @@ test('minified build exposes the same public version and a working snapshot', ()
     runScripts: 'outside-only'
   });
   dom.window.eval(source);
-  assert.equal(dom.window.ahttp.version, '0.1.0');
+  assert.equal(dom.window.ahttp.version, pkg.version);
   const snapshot = dom.window.ahttp.snapshot({ format: 'json' });
   assert.equal(snapshot.actions.length, 1);
   assert.equal(snapshot.actions[0].label, 'Place order');

@@ -13,6 +13,36 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  version-check:
+    name: Version check
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - name: Require a version bump for engine changes
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin "$BASE_REF"
+          base_version=$(git show "origin/$BASE_REF:package.json" | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>process.stdout.write(JSON.parse(s).version))")
+          version=$(node -p "require('./package.json').version")
+          changed=$(git diff --name-only "origin/$BASE_REF...HEAD")
+          if echo "$changed" | grep -Eq '^(ahttp\.js|ahttp\.d\.ts|bin/|lib/)' && [ "$version" = "$base_version" ]; then
+            echo "::error title=Version bump required::engine files changed but version is still $version. run: npm run bump -- patch"
+            exit 1
+          fi
+          if ! grep -Eq "^## ${version}(,|$)" CHANGELOG.md; then
+            echo "::error title=Changelog missing::CHANGELOG.md has no '## ${version}' heading"
+            exit 1
+          fi
+          echo "version $version (base $base_version)"
+
   test:
     name: ${{ matrix.os }} / Node ${{ matrix.node }}
     runs-on: ${{ matrix.os }}

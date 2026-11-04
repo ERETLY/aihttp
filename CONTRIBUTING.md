@@ -14,6 +14,12 @@ npm audit --omit=dev
 
 If the change affects the browser engine, run the Playwright tests. If it affects the benchmark, run `npm run test:bench` and attach the output.
 
+## Versioning
+
+Every pull request that changes `ahttp.js`, `ahttp.d.ts`, `bin/` or `lib/` ends with `npm run bump -- patch`. Use `minor` for visible behaviour or API additions, and `major` only after 1.0.
+
+Describe the change under `## Unreleased` in `CHANGELOG.md` while you work. The bump moves that section to `## X.Y.Z, YYYY-MM-DD`, adds a fresh empty `## Unreleased`, updates every version file, and runs the build and smoke test. It does not commit, tag, push, or publish. The maintainer creates and pushes the tag after the merge.
+
 Do not add a runtime dependency to `ahttp.js` or the static MCP backend without a measurement and a decision entry in `docs/DECISIONS.md`. Optional browser support belongs behind a feature flag or a peer dependency.
 
 ## What to include

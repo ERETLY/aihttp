@@ -48,6 +48,7 @@
   "scripts": {
     "build": "node scripts/build-min.js && node scripts/build-self.js",
     "build:self": "node scripts/build-self.js",
+    "bump": "node scripts/bump-version.js",
     "bench": "node benchmark/run.js",
     "bench:self": "node benchmark/self.js",
     "bench:time": "node benchmark/time.js",
