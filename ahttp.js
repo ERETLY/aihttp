@@ -1156,7 +1156,9 @@
         if (rect && el.nodeType === 1) {
           var hasText = countTextNodes(el, 1) > 0;
           var offset = st.position === 'fixed' ? { x: 0, y: 0 } : scrollOffset(ctx.win);
-          if (hasText && ((!rect.width && !rect.height) ||
+          var boxless = st.display === 'contents';
+          var clips = !st.overflow || st.overflow !== 'visible';
+          if (!boxless && hasText && ((!rect.width && !rect.height && clips) ||
               (rect.right + offset.x) <= 0 ||
               (rect.bottom + offset.y) <= 0)) {
             return { hidden: true, suspicious: true };

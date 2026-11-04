@@ -26,3 +26,8 @@ Run: `node benchmark/realworld/repro/display-contents/repro.js`
 
 Expected after a fix: `display: contents` is transparent for visibility, the
 `Save` button is an action, and the article text is included.
+
+Status: closed by test. `test/realworld-layout.test.js` covers this fixture and
+the zero-size wrapper variants in Chromium; the script is kept for manual
+checks. `display: contents` elements skip the zero-box check, and a zero-size
+box only counts as hidden when it clips its content (`overflow` not `visible`).
