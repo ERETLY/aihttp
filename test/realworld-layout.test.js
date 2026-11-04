@@ -92,6 +92,35 @@ test('anchors without href stay actions when role, handler or tabindex says so',
   }
 });
 
+test('a label is an action only when its control is not in the snapshot', { skip: gate.skip, timeout: 90000 }, async () => {
+  if (gate.fail) assert.fail(gate.reason);
+  const browser = await playwright.chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+
+    const field = await snapshotOf(page, '<!doctype html><html><head><title>Label cursor</title>' +
+      '<style>label{cursor:pointer}</style></head><body><main>' +
+      '<label for="user">Username</label><input id="user" type="text"><button>Save</button>' +
+      '</main></body></html>');
+    assert.doesNotMatch(field.text, /label role=button/);
+    assert.match(field.text, /input "Username"/);
+
+    const check = await snapshotOf(page, '<!doctype html><html><head><title>Btn check</title>' +
+      '<style>.btn-check{display:none}.btn{cursor:pointer;display:inline-block}</style></head><body><main>' +
+      '<input class="btn-check" type="checkbox" id="dark"><label class="btn" for="dark">Dark mode</label>' +
+      '</main></body></html>');
+    assert.match(check.text, /label role=button "Dark mode"/);
+
+    const clicked = await page.evaluate(function () {
+      return window.ahttp.act('Dark mode', null, { quiet: 0, minWait: 0, timeout: 250, snapshot: false });
+    });
+    assert.equal(clicked.status, 'ok');
+    assert.equal(await page.evaluate(function () { return document.getElementById('dark').checked; }), true);
+  } finally {
+    await browser.close();
+  }
+});
+
 test('display: contents and zero-size wrappers stay visible', { skip: gate.skip, timeout: 90000 }, async () => {
   if (gate.fail) assert.fail(gate.reason);
   const browser = await playwright.chromium.launch({ headless: true });

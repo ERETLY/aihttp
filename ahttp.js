@@ -2129,6 +2129,25 @@
     return r.split(/\s+/)[0];
   }
 
+  // <label style="cursor:pointer"> next to its own field is not a second
+  // button: clicking it only focuses the field. The label stays clickable only
+  // when its control will not be in the snapshot anyway (display:none, inert or
+  // missing), which is how Bootstrap btn-check-style markup delegates the click.
+  function labelProxyControl(el, ctx) {
+    var control = null;
+    var forId = attr(el, 'for');
+    if (forId) {
+      control = byId(el, forId);
+    } else {
+      try { control = el.querySelector ? el.querySelector('input,textarea,select') : null; } catch (e) { control = null; }
+    }
+    if (!control) return null;
+    var reason = deepHiddenReason(control, ctx);
+    if (!reason) return control;
+    if (recoverableToggle(control, ctx, reason)) return control;
+    return null;
+  }
+
   function classify(el, st, ctx) {
     var tag = tagOf(el);
     var role = roleOf(el);
@@ -2149,6 +2168,7 @@
     if (role && ROLE_KINDS[role]) return { kind: ROLE_KINDS[role], role: role, native: false, custom: true };
     var pointer = st.cursor === 'pointer' || (!ctx.layout && cssState(el, ctx).pointer);
     var handler = hasAttr(el, 'onclick') || hasAttr(el, 'onmousedown') || hasAttr(el, 'onkeydown') || hasAttr(el, 'onkeyup');
+    if (tag === 'label' && !handler && labelProxyControl(el, ctx)) return null;
     if (pointer || handler) return { kind: 'click', role: 'button', native: false, custom: true };
     var ti = attr(el, 'tabindex');
     if (ti != null && parseInt(ti, 10) >= 0) return { kind: 'click', role: 'button', native: false, custom: true };
