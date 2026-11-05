@@ -38,10 +38,17 @@ npx playwright install chromium
 Paste this into Claude Desktop or Cursor, replacing `/absolute/path/to/ahttp`:
 
 ```json
-{ "mcpServers": { "ahttp": { "command": "node", "args": ["/absolute/path/to/ahttp/bin/ahttp-mcp.js", "--browser"] } } }
+{
+  "mcpServers": {
+    "ahttp": {
+      "command": "node",
+      "args": ["/absolute/path/to/ahttp/bin/ahttp-mcp.js", "--browser"]
+    }
+  }
+}
 ```
 
-Restart the client, call `ahttp_open` with a URL, then `ahttp_snapshot` or `ahttp_act`. Drop `--browser` for static HTML.
+Restart the client, call `ahttp_open` with a URL, then `ahttp_snapshot` or `ahttp_act`. Drop `--browser` for static HTML. Node 18 or newer; the Playwright step is only needed for `--browser`.
 
 ### CLI and local loop
 
@@ -116,12 +123,12 @@ Five pinned pages, one snapshot each:
 
 | Method | Tokens | Can act |
 |---|---:|---|
-| Raw HTML | 390,346 | no |
-| Markdown (Readability) | 42,720 | no |
+| Raw HTML | 386,363 | no |
+| Markdown (Readability) | 42,652 | no |
 | Jina Reader | 44,328 | no |
 | Firecrawl | 98,527 | no |
-| Chromium accessibility tree | 102,552 | no |
-| ahttp | 9,039 | yes |
+| Chromium accessibility tree | 102,206 | no |
+| ahttp | 8,750 | yes |
 
 On a five-step checkout ahttp uses 289 tokens against 3,983 for raw HTML. On 20 scripted tasks it uses 5,104 against 25,896 raw and 5,360 accessibility tree. Live time is 1.4–4.4 s per page; Jina and Firecrawl are 0.4–1.6 s, but they only return text. Scan time is 4–39 ms except Wikipedia at 3.2 s.
 
