@@ -492,9 +492,9 @@ async function runSite(browser, site) {
     dialogs: []
   };
   const context = await browser.newContext({
-    viewport: { width: 1280, height: 800 },
+    viewport: site.viewport || { width: 1280, height: 800 },
     userAgent: defaults.userAgent,
-    locale: 'en-US'
+    locale: site.locale || 'en-US'
   });
   const page = await context.newPage();
   page.setDefaultTimeout(30000);

@@ -2,6 +2,26 @@
 
 ## Unreleased
 
+### Parsing
+
+- A white-on-white container no longer hides its colored children. Pages
+  whose `<body>` inherits `color: white` and `background: white` while every
+  child overrides both used to scan as zero actions.
+- `role="dialog"` is only a scan root when it is actually modal:
+  `aria-modal="true"`, an open `<dialog>`, a backdrop, or a large overlay.
+  A small cookie banner with `aria-modal="false"` no longer replaces the page.
+- Custom comboboxes wait for options rendered after the click, search the
+  popup referenced by `aria-controls` / `aria-owns` before the whole page, and
+  `act(id, {})` opens the popup instead of returning `option_not_found`.
+  `act(id, { value })`, `{ label }`, `{ index }` and `{ choose }` select an
+  option; a button with `aria-haspopup` / `aria-expanded` works the same way.
+- `aria-activedescendant` and `aria-valuetext` are read as the value of a
+  custom combobox. `ElementInternals` `ariaLabel` and `role` are used for
+  custom elements. ID references resolve across a shadow boundary into the
+  light DOM.
+- MCP `ahttp_act` now waits for settle by default and accepts `expect`,
+  `checked`, `hover`, `read`, `choose`, `wait` and `timeout`.
+
 ## 0.2.1, 2026-11-05
 
 ### Performance

@@ -371,6 +371,325 @@
           ]
         }
       ]
+    },
+    {
+      "id": "wikipedia-ru",
+      "url": "https://ru.wikipedia.org/wiki/HTTP",
+      "locale": "ru-RU",
+      "scenarios": [
+        {
+          "name": "Cyrillic text and search field",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["HTTP"] } },
+            { "op": "act", "target": { "tag": "input", "type": "search", "index": 0 }, "payload": { "value": "HTML" },
+              "expect": { "status": "ok", "dom": [ { "selector": "input[name=\"search\"]", "prop": "value", "equals": "HTML" } ] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wikipedia-ar",
+      "url": "https://ar.wikipedia.org/wiki/HTTP",
+      "locale": "ar-SA",
+      "scenarios": [
+        {
+          "name": "RTL article and search field",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["بروتوكول", "HTTP"] } },
+            { "op": "act", "target": { "tag": "input", "type": "search", "index": 0 }, "payload": { "value": "HTML" },
+              "expect": { "status": "ok", "dom": [ { "selector": "input[name=\"search\"]", "prop": "value", "equals": "HTML" } ] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wikipedia-ja",
+      "url": "https://ja.wikipedia.org/wiki/HTTP",
+      "locale": "ja-JP",
+      "scenarios": [
+        {
+          "name": "CJK article and search field",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["HTTP"] } },
+            { "op": "act", "target": { "tag": "input", "type": "search", "index": 0 }, "payload": { "value": "HTML" },
+              "expect": { "status": "ok", "dom": [ { "selector": "input[name=\"search\"]", "prop": "value", "equals": "HTML" } ] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wikipedia-mobile",
+      "url": "https://en.m.wikipedia.org/wiki/HTTP",
+      "viewport": { "width": 390, "height": 844 },
+      "scenarios": [
+        {
+          "name": "mobile viewport snapshot and scroll",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["HTTP"] } },
+            { "op": "scroll", "to": "bottom" },
+            { "op": "snapshot", "expect": { "text": ["HTTP"] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shoelace",
+      "url": "https://shoelace.style/",
+      "scenarios": [
+        {
+          "name": "web components docs navigation",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["Shoelace"] } },
+            { "op": "act", "target": { "role": "link", "nameContains": "Installation" }, "expect": { "status": "ok" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mui-select",
+      "url": "https://mui.com/material-ui/react-select/",
+      "scenarios": [
+        {
+          "name": "dismiss cookie dialog then scan the page",
+          "steps": [
+            { "op": "act", "target": { "role": "button", "name": "Essential only" }, "expect": { "status": "ok" } },
+            { "op": "wait", "ms": 500 },
+            { "op": "snapshot", "expect": { "text": ["Select"] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "headlessui-listbox",
+      "url": "https://headlessui.com/react/listbox",
+      "scenarios": [
+        {
+          "name": "custom listbox option click",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["Listbox"] } },
+            { "op": "act", "target": { "role": "option", "nameContains": "Tom Cook" }, "expect": { "status": "ok" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "react-select",
+      "url": "https://react-select.com/home",
+      "scenarios": [
+        {
+          "name": "custom combobox fill",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["React Select"] } },
+            { "op": "act", "target": { "role": "combobox", "index": 0 }, "payload": { "value": "Ocean" }, "expect": { "status": "ok" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gov-uk-visa",
+      "url": "https://www.gov.uk/check-uk-visa",
+      "scenarios": [
+        {
+          "name": "multi-step form start",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["Check if you need a UK visa"] } },
+            { "op": "act", "target": { "role": "link", "name": "Start now" }, "expect": { "status": "ok", "urlContains": "/check-uk-visa/y" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shopify-dawn",
+      "url": "https://theme-dawn-demo.myshopify.com/",
+      "scenarios": [
+        {
+          "name": "storefront to catalog",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["Shop now"] } },
+            { "op": "act", "target": { "role": "link", "name": "Shop now" }, "expect": { "status": "ok", "urlContains": "/collections" } }
+          ]
+        },
+        {
+          "name": "lazy sections appear after scroll",
+          "steps": [
+            { "op": "goto", "url": "https://theme-dawn-demo.myshopify.com/" },
+            { "op": "snapshot", "expect": { "text": ["Shop now"] } },
+            { "op": "scroll", "to": "bottom" },
+            { "op": "snapshot", "expect": { "text": ["Bags"] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "excalidraw",
+      "url": "https://excalidraw.com/",
+      "scenarios": [
+        {
+          "name": "canvas app toolbar",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["Excalidraw"] } },
+            { "op": "act", "target": { "role": "button", "nameContains": "Rectangle" }, "expect": { "status": "ok" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "caniuse",
+      "url": "https://caniuse.com/",
+      "scenarios": [
+        {
+          "name": "feature search",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["Can I use"] } },
+            { "op": "act", "target": { "role": "textbox", "nameContains": "Search" }, "payload": { "value": "flexbox" }, "expect": { "status": "ok" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "github-vscode-issues",
+      "url": "https://github.com/microsoft/vscode/issues",
+      "scenarios": [
+        {
+          "name": "issues list to pull requests",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["Issues"] } },
+            { "op": "act", "target": { "role": "link", "nameContains": "Pull requests" }, "expect": { "status": "ok", "urlContains": "/pulls" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stripe-payments-demo",
+      "url": "https://stripe-payments-demo.appspot.com/",
+      "scenarios": [
+        {
+          "name": "payment form inside cross-origin Stripe frames",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["STRIPE PAYMENTS DEMO"] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lightning-design-system",
+      "url": "https://www.lightningdesignsystem.com/",
+      "scenarios": [
+        {
+          "name": "cookie banner then web components",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["LIGHTNING DESIGN SYSTEM"] } },
+            { "op": "act", "target": { "role": "button", "name": "Reject all" }, "expect": { "status": "ok" } },
+            { "op": "snapshot", "expect": { "text": ["Get Started"] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "notion-help",
+      "url": "https://www.notion.com/help",
+      "scenarios": [
+        {
+          "name": "help center sections",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["Help Center"] } },
+            { "op": "act", "target": { "role": "button", "nameContains": "Expand Get started" }, "expect": { "status": "ok" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "linear-docs",
+      "url": "https://linear.app/docs",
+      "scenarios": [
+        {
+          "name": "docs navigation",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["Linear Docs"] } },
+            { "op": "act", "target": { "role": "link", "name": "Start Guide" }, "expect": { "status": "ok" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jira-public",
+      "url": "https://issues.apache.org/jira/",
+      "scenarios": [
+        {
+          "name": "public Jira dashboard",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["System Dashboard"] } },
+            { "op": "act", "target": { "role": "link", "name": "Projects" }, "expect": { "status": "ok" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "youtube-video",
+      "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "scenarios": [
+        {
+          "name": "cookie consent then video page",
+          "steps": [
+            { "op": "act", "target": { "role": "button", "nameContains": "Reject the use of cookies" }, "expect": { "status": "ok" } },
+            { "op": "wait", "ms": 800 },
+            { "op": "snapshot", "expect": { "text": ["Rick Astley"] } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shadcn-otp",
+      "url": "https://ui.shadcn.com/docs/components/input-otp",
+      "scenarios": [
+        {
+          "name": "segmented OTP input",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["Input OTP"] } },
+            { "op": "act", "target": { "role": "textbox", "nameContains": "Verification code" }, "payload": { "value": "123456" }, "expect": { "status": "ok" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "guru99-upload",
+      "url": "https://demo.guru99.com/test/upload/",
+      "scenarios": [
+        {
+          "name": "visible file input and terms toggle",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["Select file to send"], "count": [ { "selector": "input[type=file]", "equals": 1 } ] } },
+            { "op": "act", "target": { "tag": "input", "type": "checkbox", "index": 0 }, "payload": { "checked": true }, "expect": { "status": "ok" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "altoro-bank",
+      "url": "http://demo.testfire.net/login.jsp",
+      "scenarios": [
+        {
+          "name": "bank login fields",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["ONLINE BANKING LOGIN"] } },
+            { "op": "act", "target": { "tag": "input", "name": "uid" }, "payload": { "value": "jsmith" }, "expect": { "status": "ok", "dom": [ { "selector": "input[name=\"uid\"]", "prop": "value", "equals": "jsmith" } ] } },
+            { "op": "act", "target": { "tag": "input", "name": "passw" }, "payload": { "value": "password" }, "expect": { "status": "ok" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "guru99-bank",
+      "url": "https://demo.guru99.com/V4/",
+      "scenarios": [
+        {
+          "name": "bank login fields",
+          "steps": [
+            { "op": "snapshot", "expect": { "text": ["Guru99 Bank"] } },
+            { "op": "act", "target": { "tag": "input", "name": "uid" }, "payload": { "value": "demo" }, "expect": { "status": "ok" } }
+          ]
+        }
+      ]
     }
   ]
 }

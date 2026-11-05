@@ -107,6 +107,13 @@ const TOOLS = [
         pageId: { type: 'string', description: 'Page id returned by ahttp_open. Required by 2026-07-28 clients; optional for legacy clients.' },
         id: { type: 'string', description: 'Action id such as a12 from the latest snapshot.' },
         value: { type: 'string', maxLength: 10000, description: 'Text for fill/select actions. For toggles use "true" or "false".' },
+        checked: { type: 'boolean', description: 'Desired state for a checkbox, radio or switch.' },
+        hover: { type: 'boolean', description: 'Hover the target instead of clicking it.' },
+        read: { type: 'boolean', description: 'Read the target value without changing it.' },
+        choose: { type: 'string', maxLength: 1000, description: 'Option label for a custom combobox, listbox or menu.' },
+        wait: { type: 'integer', minimum: 0, maximum: 60000, description: 'Extra wait in ms for popup options to render.' },
+        timeout: { type: 'integer', minimum: 0, maximum: 60000, description: 'Settle timeout in ms.' },
+        expect: { type: 'object', description: 'Expectation rule; a missing effect returns no_effect instead of a silent success.' },
         key: { type: 'string', enum: ['Enter', 'Escape', 'Tab', 'ArrowDown', 'ArrowUp', ' '], description: 'Optional keyboard event to dispatch on the target.' },
         confirmationToken: { type: 'string', maxLength: 256, description: 'One-time token returned by a previous guarded call. Echo it with the same id and pageId.' }
       },
@@ -173,6 +180,18 @@ function stringArg(value, name, maxLength) {
   if (typeof value !== 'string' || value.length > maxLength) {
     throw new ProtocolError(-32602, name + ' must be a string of at most ' + maxLength + ' characters');
   }
+  return value;
+}
+
+function booleanArg(value, name) {
+  if (value === undefined || value === null) return undefined;
+  if (typeof value !== 'boolean') throw new ProtocolError(-32602, name + ' must be a boolean');
+  return value;
+}
+
+function objectArg(value, name) {
+  if (value === undefined || value === null) return undefined;
+  ensureObject(value, name);
   return value;
 }
 
@@ -355,10 +374,17 @@ async function toolSnapshot(args, ctx) {
 
 async function toolAct(args, ctx) {
   ensureObject(args, 'arguments');
-  checkKeys(args, ['pageId', 'id', 'value', 'key', 'confirmationToken']);
+  checkKeys(args, ['pageId', 'id', 'value', 'checked', 'hover', 'read', 'choose', 'wait', 'timeout', 'expect', 'key', 'confirmationToken']);
   const pageId = stringArg(args.pageId, 'pageId', 128);
   const id = stringArg(args.id, 'id', 128);
   const value = stringArg(args.value, 'value', 10000);
+  const checked = booleanArg(args.checked, 'checked');
+  const hover = booleanArg(args.hover, 'hover');
+  const read = booleanArg(args.read, 'read');
+  const choose = stringArg(args.choose, 'choose', 1000);
+  const wait = integerArg(args.wait, 'wait', 0, 60000);
+  const timeout = integerArg(args.timeout, 'timeout', 0, 60000);
+  const expect = objectArg(args.expect, 'expect');
   const key = stringArg(args.key, 'key', 16);
   const confirmationToken = stringArg(args.confirmationToken, 'confirmationToken', 256);
   if (!id) throw new ProtocolError(-32602, 'id is required');
@@ -376,11 +402,20 @@ async function toolAct(args, ctx) {
     consumed = consumeToken(confirmationToken, page, id);
     if (!consumed) return content('CONFIRMATION TOKEN INVALID: the token is expired, already used, or does not match this page and action. No changes were made.', true);
   }
-  const payload = { settle: false, snapshot: false };
+  const payload = { settle: true, snapshot: false };
   if (value !== undefined) payload.value = value;
+  if (checked !== undefined) payload.checked = checked;
+  if (hover !== undefined) payload.hover = hover;
+  if (read !== undefined) payload.read = read;
+  if (choose !== undefined) payload.choose = choose;
+  if (wait !== undefined) payload.wait = wait;
+  if (timeout !== undefined) payload.timeout = timeout;
+  if (expect !== undefined) payload.expect = expect;
   if (key) payload.key = key;
   if (consumed) payload.confirm = true;
-  const res = await page.api.act(id, payload, { settle: false, snapshot: false, diff: true });
+  const actOpts = { settle: true, snapshot: false, diff: true };
+  if (timeout !== undefined) actOpts.timeout = timeout;
+  const res = await page.api.act(id, payload, actOpts);
   if (ctx.signal && ctx.signal.aborted) throw new Error('cancelled');
   if (res.locked) {
     return content('AUTHORIZATION REQUIRED: this page is protected. Set AHTTP_AUTH_TOKEN or AHTTP_OWNER_KEY for the ahttp-mcp process.', true);

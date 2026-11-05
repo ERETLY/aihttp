@@ -721,7 +721,17 @@
       if (found) return found;
     }
     if (root && root.querySelector) {
-      try { return root.querySelector('[id="' + cssString(id) + '"]'); } catch (e) { return null; }
+      try {
+        var local = root.querySelector('[id="' + cssString(id) + '"]');
+        if (local) return local;
+      } catch (e) {}
+    }
+    // A shadow root can reference an id in the light DOM (aria-controls,
+    // aria-labelledby, aria-owns). Fall back to the document once.
+    var doc = el.ownerDocument;
+    if (doc && doc !== root && doc.getElementById) {
+      var inDoc = doc.getElementById(id);
+      if (inDoc) return inDoc;
     }
     return null;
   }
@@ -1882,7 +1892,12 @@
       }
       var c = normColor(s.color);
       var bg = normColor(s.background);
-      if (c && bg && c === bg && c !== 'transparent') return { hidden: true, suspicious: true };
+      // White-on-white is only evidence when this element renders the text.
+      // A container (body, main, app shell) often inherits white while every
+      // child overrides it; dropping the container hides the whole page.
+      if (c && bg && c === bg && c !== 'transparent' && !el.firstElementChild) {
+        return { hidden: true, suspicious: true };
+      }
       return null;
     };
     var own = check(st);
@@ -2167,6 +2182,44 @@
     return current;
   }
 
+  function hasBackdrop(el) {
+    var parent = el.parentElement;
+    if (!parent) return false;
+    var kids = parent.children || [];
+    for (var i = 0; i < kids.length; i++) {
+      var s = kids[i];
+      if (s === el) continue;
+      var sig = (String(s.id || '') + ' ' + String(s.className || '')).toLowerCase();
+      if (/backdrop|scrim|overlay|modal-mask|mask/.test(sig)) return true;
+    }
+    return false;
+  }
+
+  // A cookie banner is often role=dialog aria-modal=false and only 100x40 px.
+  // Scanning it as a modal hides the real page. A dialog becomes the scan root
+  // only when it is actually modal: aria-modal=true, an open <dialog>, a
+  // backdrop, or (with layout) a box covering a meaningful part of the viewport.
+  function isModalCandidate(el, ctx) {
+    if (!el || isIgnored(el)) return false;
+    if (deepHiddenReason(el, ctx)) return false;
+    var ariaModal = String(attr(el, 'aria-modal') || '').toLowerCase();
+    if (ariaModal === 'false') return false;
+    if (ariaModal === 'true') return true;
+    if (tagOf(el) === 'dialog' && hasAttr(el, 'open')) return true;
+    if (hasBackdrop(el)) return true;
+    if (ctx.layout) {
+      try {
+        var rect = el.getBoundingClientRect();
+        var win = el.ownerDocument.defaultView || ctx.win;
+        var vw = win && win.innerWidth ? win.innerWidth : 0;
+        var vh = win && win.innerHeight ? win.innerHeight : 0;
+        if (vw && vh && rect.width * rect.height >= vw * vh * 0.25) return true;
+      } catch (e) {}
+      return false;
+    }
+    return true;
+  }
+
   function findModal(doc, ctx) {
     var list;
     try {
@@ -2176,10 +2229,7 @@
     }
     var best = null;
     for (var i = 0; i < list.length; i++) {
-      var el = list[i];
-      if (isIgnored(el)) continue;
-      if (deepHiddenReason(el, ctx)) continue;
-      best = el;
+      if (isModalCandidate(list[i], ctx)) best = list[i];
     }
     return best;
   }
@@ -2192,6 +2242,12 @@
 
   function roleOf(el) {
     var r = String(attr(el, 'role') || '').toLowerCase().trim();
+    if (!r) {
+      // ElementInternals exposes the computed role on custom elements. Read it
+      // only there so native elements keep their tag-based classification.
+      var local = String(el.localName || '').toLowerCase();
+      if (local.indexOf('-') >= 0 && typeof el.role === 'string') r = el.role.toLowerCase().trim();
+    }
     if (!r) return '';
     return r.split(/\s+/)[0];
   }
@@ -2452,6 +2508,10 @@
     }
     var aria = normText(attr(el, 'aria-label'));
     if (aria) return aria;
+    // ElementInternals.ariaLabel is the computed ARIA name for a custom
+    // element; it also covers frameworks that set it through the AOM.
+    var aom = normText(el.ariaLabel);
+    if (aom) return aom;
     var id = attr(el, 'id');
     if (id) {
       var lab = null;
@@ -2617,6 +2677,20 @@
         return String(el.options[el.selectedIndex].value == null ? '' : el.options[el.selectedIndex].value);
       }
       return el.value == null ? '' : String(el.value);
+    }
+    if (info.role === 'combobox' || info.role === 'listbox' || info.role === 'menu') {
+      var activeId = attr(el, 'aria-activedescendant');
+      if (activeId) {
+        var active = byId(el, activeId);
+        if (active) {
+          var activeText = normText(textOf(active));
+          if (activeText) return activeText;
+        }
+      }
+      var valueText = normText(attr(el, 'aria-valuetext'));
+      if (valueText) return valueText;
+      var ownText = normText(textOf(el));
+      if (ownText) return ownText;
     }
     if (info.editable) return normText(el.textContent || '');
     return '';
@@ -4078,33 +4152,104 @@
     };
   }
 
-  function findCustomOption(entry, p) {
-    ensureScan(true);
-    var scan = S.scan;
-    var options = [];
-    var all = scan ? scan.actions : [];
-    for (var i = 0; i < all.length; i++) {
-      var e = all[i];
-      if (e === entry) continue;
-      if (e.role === 'option' || e.role === 'menuitem' || e.tag === 'option' || e.tag === 'li') options.push(e);
+  // A custom trigger points at its popup with aria-controls / aria-owns.
+  // Prefer that subtree: pages with several comboboxes otherwise match an
+  // option from a different widget.
+  function popupRoots(entry) {
+    var el = entry.node;
+    var roots = [];
+    var seen = new Set();
+    var refs = [];
+    var controls = attr(el, 'aria-controls');
+    var owns = attr(el, 'aria-owns');
+    if (controls) refs = refs.concat(controls.split(/\s+/));
+    if (owns) refs = refs.concat(owns.split(/\s+/));
+    for (var i = 0; i < refs.length; i++) {
+      var id = refs[i];
+      if (!id || seen.has(id)) continue;
+      seen.add(id);
+      var node = byId(el, id);
+      if (node) roots.push(node);
     }
+    return roots;
+  }
+
+  function optionFromNode(node) {
+    return {
+      node: node,
+      label: normText(textOf(node)),
+      value: attr(node, 'data-value') || attr(node, 'value') || '',
+      intent: attr(node, 'data-ahttp-intent') || ''
+    };
+  }
+
+  function optionCandidates(entry) {
+    var out = [];
+    var roots = popupRoots(entry);
+    for (var i = 0; i < roots.length; i++) {
+      var root = roots[i];
+      if (!root || !root.querySelectorAll) continue;
+      var role = String(attr(root, 'role') || '').toLowerCase();
+      var sel = '[role="option"],[role="menuitem"],[role="menuitemradio"],[role="menuitemcheckbox"],[role="treeitem"],option';
+      if (role === 'listbox' || role === 'menu' || role === 'tree' || role === 'grid') sel += ',li';
+      var list = [];
+      try { list = root.querySelectorAll(sel); } catch (e) { list = []; }
+      for (var j = 0; j < list.length; j++) out.push(optionFromNode(list[j]));
+    }
+    if (!out.length && S.scan) {
+      for (var k = 0; k < S.scan.actions.length; k++) {
+        var e = S.scan.actions[k];
+        if (e === entry) continue;
+        if (e.role === 'option' || e.role === 'menuitem' || e.role === 'menuitemradio' ||
+            e.role === 'menuitemcheckbox' || e.role === 'treeitem' || e.tag === 'option' || e.tag === 'li') {
+          out.push(e);
+        }
+      }
+    }
+    return out;
+  }
+
+  function pickOption(options, p) {
     var idx = p.index != null ? parseInt(p.index, 10) : null;
     if (idx != null && options[idx]) return options[idx];
-    var wanted = p.value != null ? String(p.value) : (p.label != null ? String(p.label) : '');
-    if (wanted) {
-      var lower = wanted.toLowerCase();
-      for (var j = 0; j < options.length; j++) {
-        var o = options[j];
-        var hay = [o.label, o.value, o.intent].filter(Boolean).join(' ').toLowerCase();
-        if (hay === lower) return o;
-      }
-      for (var k = 0; k < options.length; k++) {
-        var o2 = options[k];
-        var hay2 = [o2.label, o2.value, o2.intent].filter(Boolean).join(' ').toLowerCase();
-        if (hay2.indexOf(lower) >= 0) return o2;
-      }
+    var wanted = p.value != null ? String(p.value)
+      : (p.label != null ? String(p.label) : (p.choose != null ? String(p.choose) : ''));
+    if (!wanted) return null;
+    var lower = wanted.toLowerCase();
+    for (var i = 0; i < options.length; i++) {
+      var o = options[i];
+      var hay = [o.label, o.value, o.intent].filter(Boolean).join(' ').toLowerCase();
+      if (hay === lower) return o;
+    }
+    for (var j = 0; j < options.length; j++) {
+      var o2 = options[j];
+      var hay2 = [o2.label, o2.value, o2.intent].filter(Boolean).join(' ').toLowerCase();
+      if (hay2.indexOf(lower) >= 0) return o2;
     }
     return null;
+  }
+
+  function findCustomOption(entry, p, allowScan) {
+    var options = optionCandidates(entry);
+    var hit = pickOption(options, p);
+    if (hit) return hit;
+    if (options.length) return null;
+    if (allowScan === false) return null;
+    ensureScan(true);
+    return pickOption(optionCandidates(entry), p);
+  }
+
+  function waitForCustomOption(entry, p, timeout) {
+    var deadline = now() + (timeout == null ? 800 : timeout);
+    var attempt = 0;
+    function tick() {
+      var hit = findCustomOption(entry, p, attempt % 4 === 0);
+      attempt++;
+      if (hit) return Promise.resolve(hit);
+      if (now() >= deadline) return Promise.resolve(null);
+      return delay(40).then(tick);
+    }
+    return tick();
   }
 
   function execute(entry, payload, opts) {
@@ -4148,31 +4293,27 @@
       entry.value = value;
       return { ok: true, action: actionInfo(entry, 'fill'), method: 'fill' };
     }
+    var wanted = p.value != null || p.label != null || p.index != null || p.choose != null;
+    var popupTrigger = kind === 'click' && (hasAttr(el, 'aria-haspopup') || hasAttr(el, 'aria-expanded') || hasAttr(el, 'aria-controls'));
+    if ((kind === 'select' && tagOf(el) !== 'select') || (popupTrigger && wanted)) {
+      clickSequence(el, opts);
+      var waitMs = p.wait != null ? parseInt(p.wait, 10) : 800;
+      if (!isFinite(waitMs) || waitMs < 0) waitMs = 800;
+      return waitForCustomOption(entry, p, waitMs).then(function (option) {
+        if (!option) {
+          var available = optionCandidates(entry).map(function (cand) { return cand.label; }).filter(Boolean).slice(0, 12);
+          if (!wanted) {
+            return { ok: true, action: actionInfo(entry, 'select'), method: 'custom-select', opened: true, available: available };
+          }
+          return { ok: false, action: actionInfo(entry, 'select'), method: 'custom-select', error: 'option_not_found', available: available };
+        }
+        clickSequence(option.node, opts);
+        entry.value = option.label;
+        return { ok: true, action: actionInfo(entry, 'select'), method: 'custom-select', selected: option.label };
+      });
+    }
     if (kind === 'select') {
       var target = p.value != null ? String(p.value) : (p.label != null ? String(p.label) : '');
-      if (tagOf(el) !== 'select') {
-        clickSequence(el, opts);
-        return new Promise(function (resolve) {
-          delay(p.wait != null ? p.wait : 60).then(function () {
-            var option = findCustomOption(entry, p);
-            if (!option) {
-              var available = [];
-              if (S.scan) {
-                for (var i = 0; i < S.scan.actions.length; i++) {
-                  var cand = S.scan.actions[i];
-                  if (cand.role === 'option' || cand.role === 'menuitem' || cand.tag === 'li') available.push(cand.label);
-                  if (available.length >= 12) break;
-                }
-              }
-              resolve({ ok: false, action: actionInfo(entry, 'select'), method: 'custom-select', error: 'option_not_found', available: available });
-              return;
-            }
-            clickSequence(option.node, opts);
-            entry.value = option.label;
-            resolve({ ok: true, action: actionInfo(entry, 'select'), method: 'custom-select', selected: option.label });
-          });
-        });
-      }
       var changed = false;
       var targetIndex = p.index != null ? parseInt(p.index, 10) : null;
       if (el.options && el.options.length) {
