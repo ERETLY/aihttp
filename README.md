@@ -4,38 +4,29 @@
 [![version](https://img.shields.io/github/package-json/v/ERETLY/ahttp)](https://github.com/ERETLY/ahttp/blob/main/package.json)
 [![CI](https://github.com/ERETLY/ahttp/actions/workflows/ci.yml/badge.svg)](https://github.com/ERETLY/ahttp/actions/workflows/ci.yml)
 
-ahttp gives an agent a page it can actually use. It scans the DOM, lists the visible controls with short ids, and after an action returns only what changed.
+ahttp lets an agent use a page, not just read it: list the controls, click one, and get back only what changed.
 
-One browser file with no runtime dependencies. A CLI and an MCP server use the same engine. Nothing is hosted for you.
+One browser file with no runtime dependencies. The same engine runs as a userscript, a CLI, and an MCP server.
 
-**Experimental, pre-2.0.** One maintainer. The API can still change; additive fields and new options are documented before any breaking change.
+**Experimental, pre-2.0.** One maintainer. Additive changes are documented before any breaking one.
 
-**Use it if**
-- your agent has to click, type, or choose something on a real page;
-- you want a few thousand tokens per page instead of the full HTML;
-- you need stable ids and a diff after each step;
-- you would rather not run a separate browser grid.
+## Should you use it?
 
-**Skip it if**
-- you only need to read a static article once (fetch plus Readability is simpler);
-- you need screenshots, video, or a visual browser;
-- you need a multi-tenant hosted browser service. ahttp is something you run yourself.
+Use it when the agent has to do something on the page: click, type, choose, follow a link. It keeps working after a rerender without new selectors, sends a few thousand tokens per page instead of the full HTML, and needs no browser grid.
 
-Start with the [30-second userscript](#30-seconds-userscript), the [MCP setup](#five-minutes-mcp), or the [local agent loop](#agent-loop-on-a-local-page). If you own the site, read [For site owners](#for-site-owners) first. More detail: [how it works](#how-it-works), [benchmarks](#benchmarks), [limitations](#known-limitations).
+Skip it when the agent only needs to read. A static article: fetch it and use Readability. Clean Markdown for an LLM: Jina Reader or Firecrawl. Screenshots: ahttp does not take them.
+
+Jina, Firecrawl, and Readability turn a page into text. ahttp turns it into things an agent can operate. If you do not need the second part, use the first group. The benchmark is a tradeoff, not a winner.
 
 ## Quick start
 
-### 30 seconds: userscript
+### Userscript: 30 seconds
 
 1. Install [Tampermonkey](https://www.tampermonkey.net/) or Violentmonkey.
-2. Open the raw [`self/ahttp.user.js`](https://raw.githubusercontent.com/ERETLY/ahttp/main/self/ahttp.user.js) and confirm the install. If the client does not offer to install it, create a new script and paste the file.
-3. Open any `http(s)` page and press **Alt+Shift+A** (or click the **ahttp** button). The panel shows the snapshot. Type an id and press **Act**.
+2. Open [`self/ahttp.user.js`](https://raw.githubusercontent.com/ERETLY/ahttp/main/self/ahttp.user.js) and confirm the install.
+3. Open any `http(s)` page, press **Alt+Shift+A**, type an id in the panel, press **Act**. No clone, no server, no upload.
 
-This path needs no clone and no server. The script uses `@grant none` and uploads nothing.
-
-### Five minutes: MCP
-
-Clone and install once:
+### MCP: 5 minutes
 
 ```bash
 git clone https://github.com/ERETLY/ahttp.git
@@ -44,32 +35,24 @@ npm ci
 npx playwright install chromium
 ```
 
-Then paste this into Claude Desktop or Cursor and replace `/absolute/path/to/ahttp`:
+Paste this into Claude Desktop or Cursor, replacing `/absolute/path/to/ahttp`:
 
 ```json
-{
-  "mcpServers": {
-    "ahttp": {
-      "command": "node",
-      "args": ["/absolute/path/to/ahttp/bin/ahttp-mcp.js", "--browser"]
-    }
-  }
-}
+{ "mcpServers": { "ahttp": { "command": "node", "args": ["/absolute/path/to/ahttp/bin/ahttp-mcp.js", "--browser"] } } }
 ```
 
-Restart the client and call `ahttp_open` with a URL. The tools are `ahttp_open`, `ahttp_snapshot`, and `ahttp_act`. `--browser` runs page JavaScript. Drop it for static HTML.
+Restart the client, call `ahttp_open` with a URL, then `ahttp_snapshot` or `ahttp_act`. Drop `--browser` for static HTML.
 
-### Agent loop on a local page
+### CLI and local loop
 
 ```bash
+node bin/ahttp-cli.js https://example.com --query "Buy"
 node examples/agent-loop.js
 ```
 
-It loads a local fixture in Chromium, prints a snapshot, picks a control by label, clicks it with an `expect` rule, and prints the diff. No network.
+The CLI reads static HTML and never clicks. The local loop uses Chromium, clicks a control with an `expect` rule, and prints the diff. [docs/DEMO.md](docs/DEMO.md) is a terminal transcript; `node scripts/demo.js` regenerates it.
 
 ## What it looks like
-
-A snapshot is a short, line-oriented view of the page:
 
 ```text
 ahttp | Widget shop | https://shop.test/cart
@@ -81,137 +64,28 @@ Cart (1 item)
 $49.00
 ```
 
-The first line is tool, page title, and URL. Each action line has an id, a tag, a quoted label, and optional state or target. Text is marked untrusted because it comes from the page.
+Each action has an id, a tag, a label, and optional state or target. Page text is marked untrusted because it comes from the page.
 
-The agent acts on an id and gets the change back:
-
-```js
-const step = await ahttp.act('a2');
-// step.ok === true
-// step.action.label === 'Add to cart'
-// step.diff.text === '+ text "Added to cart"'
-```
-
-`act` waits for the page to settle, rescans, and returns the diff plus a fresh snapshot. It returns errors as values, not exceptions.
-
-## Why not raw HTML, Markdown, or Playwright?
-
-- **Raw HTML** is large, noisy, and not actionable. You still have to find the right element and build a selector.
-- **Markdown or a reader API** gives you text, but it cannot click, type, or choose.
-- **Playwright** gives you control, but you still need element identity, rerender handling, result checks, and a policy layer. ahttp adds those on top of a DOM scan.
-
-On five pinned pages, one snapshot is roughly 1.1k–4.2k tokens. Raw HTML is 12k–191k. Only the ahttp rows in the benchmark can also act. [Numbers and method](#benchmarks).
+`const step = await ahttp.act('a2')` returns `{ ok: true, action, diff }` plus a fresh snapshot. `act` waits for the page to settle; errors come back as values, not exceptions.
 
 ## How it works
 
-1. **Scan.** The engine walks the live DOM, keeps visible interactive elements, and assigns ids such as `a12`. It records labels, roles, state, links, and page text.
-2. **Act.** `act(id, payload)` resolves the id, checks policy and confirmation, dispatches the event, and waits for DOM, network, and timeout conditions to settle.
-3. **Diff.** It rescans and returns only changed text and actions. The next step starts from that diff, not from the whole page again.
+1. **Scan.** Keep visible interactive elements, assign ids like `a12`, record labels, roles, state, links, and page text.
+2. **Act.** Resolve the id, check policy and confirmation, dispatch the event, wait for the page to settle.
+3. **Diff.** Rescan and return only changed text and actions, so the next step starts from the diff.
 
-Element identity does not depend on one CSS selector. The engine scores stable anchors: `data-ahttp-intent`, test ids, DOM ids, names, accessible names, visible text, titles, placeholders, alt text, and hrefs. Position and DOM order are low-weight tie-breakers. If two candidates are too close, `act` returns `status: 'ambiguous'` and dispatches nothing. It does not guess.
+Identity does not depend on one CSS selector. The engine scores intent attributes, test ids, DOM ids, names, accessible names, text, titles, placeholders, alt text, and hrefs; position and DOM order are weak tie-breakers. If two candidates are too close, `act` returns `status: 'ambiguous'` and clicks nothing.
 
-Loading the file does nothing. There is no observer, no DOM walk, and no patched global until you call `snapshot()` or `act()`. `snapshot()` is synchronous; `act()` returns a promise.
-
-## Ways to use it
-
-| You want to | Use |
-|---|---|
-| Try it on any page, no server | `self/ahttp.user.js` |
-| Ship the engine on a site | `ahttp.min.js` |
-| Read or debug the engine | `ahttp.js` |
-| Inspect a page from a terminal | `bin/ahttp-cli.js` |
-| Give an MCP client browser tools | `bin/ahttp-mcp.js` |
-| Drive Chromium from Node | `lib/browser.js` with Playwright |
-
-Not on npm yet. Install from git:
-
-```bash
-git clone https://github.com/ERETLY/ahttp.git
-cd ahttp
-npm install
-```
-
-Node 18 or newer. Playwright is an optional peer dependency, needed only for the browser backend.
-
-## In a page
-
-```html
-<script src="/assets/ahttp.min.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    console.log(ahttp.snapshot({ maxActions: 20, maxText: 500 }));
-  });
-  // In an async function: const step = await ahttp.act('a2');
-</script>
-```
-
-`ahttp.min.js` is built from `ahttp.js` and has the same API. The userscript is the engine plus a small panel; rebuild it with `npm run build:self`.
-
-## MCP server
-
-Put this in the client config. The same block works for Claude Desktop or Cursor.
-
-```json
-{
-  "mcpServers": {
-    "ahttp": {
-      "command": "node",
-      "args": ["/absolute/path/to/ahttp/bin/ahttp-mcp.js"]
-    }
-  }
-}
-```
-
-Add `"--browser"` for Chromium and pages that need JavaScript. Add `"--allow-private"` only when you want loopback or private addresses reachable.
-
-| Tool | Arguments | Notes |
-|---|---|---|
-| `ahttp_open` | `{ url, maxActions? }` | Returns a `pageId` and a snapshot |
-| `ahttp_snapshot` | `{ pageId?, scope?, query?, maxActions?, maxText?, includeText?, verbose?, format? }` | Read-only |
-| `ahttp_act` | `{ pageId?, id, value?, key?, confirmationToken? }` | Runs one action |
-
-Keep the `pageId`. Clients on `2026-07-28` must send it; legacy clients may omit it while one page is open.
-
-The first `ahttp_act` on a guarded control fires no event and returns a one-time, expiring `confirmationToken` bound to that page and action. Repeat the call with the token to execute it.
-
-Owner credentials come from the environment:
-
-```json
-{
-  "mcpServers": {
-    "ahttp": {
-      "command": "node",
-      "args": ["/absolute/path/to/ahttp/bin/ahttp-mcp.js", "--browser"],
-      "env": {
-        "AHTTP_AUTH_TOKEN": "short-lived-server-token",
-        "AHTTP_OWNER_KEY": "optional-soft-gate-key"
-      }
-    }
-  }
-}
-```
-
-JSON-RPC 2.0 over stdio. The server supports the legacy `initialize` handshake through `2025-11-25` and the `2026-07-28` discovery model.
-
-## CLI
-
-```bash
-node bin/ahttp-cli.js https://example.com
-node bin/ahttp-cli.js https://example.com --query "Buy" --max-actions 20
-```
-
-The CLI fetches the HTML, attaches the engine to the parsed DOM, and prints the snapshot. It never clicks. For a scripted action that changes the page and returns a diff, use the MCP server with `--browser` or load `ahttp.min.js` in a page.
-
-[docs/DEMO.md](docs/DEMO.md) is a terminal transcript against a local page; `node scripts/demo.js` regenerates it.
+Loading the file does nothing. `snapshot()` is synchronous; `act()` returns a promise.
 
 ## For site owners
 
-You do not have to change your markup. The engine reads the DOM as it is. These attributes let a page declare intent and limits:
+You do not have to change your markup. These attributes declare intent and limits:
 
 | Attribute | Effect |
 |---|---|
 | `data-ahttp-intent` | Stable name for policy and agent code |
-| `data-ahttp-confirm="reason"` | Requires confirmation before execution |
+| `data-ahttp-confirm="reason"` | Requires confirmation |
 | `data-ahttp-readonly` | Readable, not writable |
 | `data-ahttp-ignore` | Removes the subtree from actions and text |
 | `data-ahttp-access` | `public`, `dev`, `gate`, or `owner` |
@@ -219,51 +93,40 @@ You do not have to change your markup. The engine reads the DOM as it is. These 
 | `data-ahttp-allow` / `data-ahttp-deny` | Policy filters |
 | `data-ahttp-max-actions` | Hard action cap |
 
-Set `data-ahttp-intent` on controls that matter. Without it, the engine identifies a control by its visible text or accessible name, and that changes when the copy changes.
+`public` is open. `dev` only works on localhost or `file:`. `gate` hides the graph behind a SHA-256 in the page; it is a hint, not authentication. `owner` is the production path: the agent authenticates with your backend, gets a short-lived token and policy, and the engine relocks when it expires.
 
-| Access mode | Meaning |
-|---|---|
-| `public` | Any agent that loads the page can read and act |
-| `dev` | Open only on localhost, `127.0.0.1`, `::1`, or `file:` |
-| `gate` | A SHA-256 in the page hides the graph from casual agents. Soft gate, not authentication |
-| `owner` | Server-verified session with a short-lived policy |
-
-`owner` is the production path. The page ships no secret: the agent authenticates against your backend, receives a short-lived token and policy, and the engine relocks when the token expires. `gate` is fine for pages that are not sensitive:
-
-```html
-<script src="ahttp.min.js"
-        data-ahttp-access="gate"
-        data-ahttp-key-hash="<sha256>"></script>
-```
-
-```bash
-node bin/ahttp-cli.js --hash-key 'owner-secret'
-AHTTP_OWNER_KEY='owner-secret' node bin/ahttp-mcp.js
-```
-
-Client-side JavaScript cannot enforce authorization. Whatever performs the mutation must re-check agent, tenant, object, and intent on the server. See [docs/OWNER_MODE.md](docs/OWNER_MODE.md), [docs/SECURITY.md](docs/SECURITY.md), and the reference backend in [`examples/auth-server/`](examples/auth-server/).
-
-For the draft WebMCP API, `ahttp.installWebMCP()` registers `ahttp_snapshot` and `ahttp_act` when `document.modelContext` exists. It is opt-in; see [docs/RESEARCH.md](docs/RESEARCH.md).
+Client-side JavaScript cannot enforce authorization. The server that performs the mutation must check agent, tenant, object, and intent. See [docs/OWNER_MODE.md](docs/OWNER_MODE.md), [docs/SECURITY.md](docs/SECURITY.md), and [`examples/auth-server/`](examples/auth-server/).
 
 ## Security
 
-- Locks, hidden actions, and `data-ahttp-confirm` are not authorization. The server must authorize every sensitive mutation.
-- `gate` is a hint. The hash is in the page source.
-- Action labels, URLs, and values come from the page too, not only the text block. Treat every page-derived string as untrusted. `includeText: false` or `maxText: 0` drops the text block.
-- Hidden-text filtering is heuristic. Do not put secrets in a page you would not show the agent.
-- The static MCP backend does not run JavaScript. Use `--browser` for script-dependent pages.
-- The browser backend blocks private targets and non-HTTP schemes at the route layer. DNS rebinding is still possible; run it on a network you control.
+- Locks, hidden actions, and `data-ahttp-confirm` are not authorization; `gate` is a hint and the hash is in the page source.
+- Treat labels, URLs, values, and text from the page as untrusted. `includeText: false` drops the text block.
+- The static backend does not run JavaScript. Use `--browser` when scripts matter.
 - `confirmationToken` is one-time and expiring. It is not proof of human approval.
-- No third-party audit. Report vulnerabilities privately, see [SECURITY.md](SECURITY.md).
+- No third-party audit. Report vulnerabilities privately; see [SECURITY.md](SECURITY.md).
 
 > [!WARNING]
-> CDP mode attaches to a real browser. ahttp creates a fresh context by default; `--cdp-use-existing-profile` lets the agent act inside your signed-in profile and read its cookies. Use a dedicated profile.
+> CDP mode attaches to a real browser. `--cdp-use-existing-profile` lets the agent act inside your signed-in profile and read its cookies. Use a dedicated profile.
 
 ## Benchmarks
 
-Compared with raw HTML, Markdown (Readability + Turndown), Jina Reader, Firecrawl, and the Chromium accessibility tree, on five pinned pages (`benchmark/pinned/`, SHA-256 checked), a five-step checkout, and a 20-task scripted run.
+If you only need text, Jina or Firecrawl are faster and cheaper. If you need to click, only the ahttp rows can.
 
-The block below is generated from `benchmark/results.json`, `benchmark/self-results.json`, and `benchmark/time-results.json`. A test fails if it drifts. It is the last checked-in run, measured on engine 0.1.0, not a promise for the current build; regenerate it when the engine changes.
+Five pinned pages, one snapshot each:
+
+| Method | Tokens | Can act |
+|---|---:|---|
+| Raw HTML | 390,346 | no |
+| Markdown (Readability) | 42,720 | no |
+| Jina Reader | 44,328 | no |
+| Firecrawl | 98,527 | no |
+| Chromium accessibility tree | 102,552 | no |
+| ahttp | 9,039 | yes |
+
+On a five-step checkout ahttp uses 289 tokens against 3,983 for raw HTML. On 20 scripted tasks it uses 5,104 against 25,896 raw and 5,360 accessibility tree. Live time is 1.4–4.4 s per page; Jina and Firecrawl are 0.4–1.6 s, but they only return text. Scan time is 4–39 ms except Wikipedia at 3.2 s.
+
+<details>
+<summary>Full benchmark tables and method</summary>
 
 <!-- BENCH:START -->
 
@@ -331,104 +194,52 @@ Hosted readers have no separate scan step; their time is in Live time.
 
 <!-- BENCH:END -->
 
-Reproduce (needs Chromium):
+</details>
 
-```bash
-npm run bench          # tokens, checkout, tasks: benchmark/run.js
-npm run bench:self     # userscript in Chromium: benchmark/self.js
-npm run bench:time     # scan and live timings: benchmark/time.js
-npm run bench:render   # rewrite the block above
-```
-
-Keys are read from `JINA_API_KEY` and `FIRECRAWL_API_KEY` and never written to disk. `bench` calls Jina without a key (`AHTTP_JINA=0` skips it) and skips Firecrawl without one (`AHTTP_FIRECRAWL=0` skips it explicitly). `bench:time` times a hosted reader only when its key is set.
+Reproduce with Chromium: `npm run bench` (tokens, checkout, tasks), `npm run bench:self` (userscript), `npm run bench:time` (timings). `npm run bench:render` rewrites the block above.
 
 ## Known limitations
 
 ### Matching and rerenders
 
-- Matching is heuristic, not a proof of identity. Stable anchors (intent, test id, DOM id, name, accessible name, text, title, placeholder, alt, href) are tried first; the fingerprint is a low-weight fallback.
-- Two near-identical controls can land in the ambiguity band. The engine then returns `status: 'ambiguous'` with candidates and dispatches nothing. It does not guess.
-- When the id is not in the registry, `act()` can resolve by `data-ahttp-intent` or by label. A lookup that matches more than one action returns `status: 'ambiguous'` with candidates instead of clicking the first one.
-- `confirm: true` does not resolve ambiguity. Re-snapshot, disambiguate with `data-ahttp-intent` or `data-testid`, or use `query`/`scope`.
-- A disabled replacement is not an active target. An action whose expected effect is missing returns `status: 'no_effect'` when an `expect` rule is supplied; re-snapshot instead of retrying.
-- Position and DOM order are tie-breakers only. A virtualized list that unmounts a row produces `not_found`, not a click on a recycled row.
-- A disabled twin participates in the ranking but can never win: if it is the best candidate alone you get `not_found`, and if an active twin is not clearly ahead you get `ambiguous` with both candidates. A clearly better active twin still runs.
-- `pointer-events: none` does not hide a control; it is still listed.
-- With an `expect` rule, a change that never comes returns `no_effect` only after `timeout` (1200 ms by default); pass a smaller `timeout` to fail faster.
+- Matching is heuristic. Stable anchors are tried first; the old fingerprint is a low-weight fallback.
+- Two close candidates return `status: 'ambiguous'` with no event. Re-snapshot, or add `data-ahttp-intent`/`data-testid`.
+- A disabled replacement is not an active target. With an `expect` rule, a missing change returns `status: 'no_effect'` after `timeout` (1200 ms by default).
 
 ### Shadow DOM and iframes
 
-- Open shadow roots and `<slot>` content are scanned when the page exposes them. Closed shadow roots are unreachable.
-- Same-origin iframe documents are scanned up to two levels deep. Cross-origin iframes are skipped, and the userscript skips all iframes (`@noframes`).
-- Accessible names are a subset of the spec: `aria-owns`, some SVG name rules, and references across shadow boundaries are missing. Browser mode includes CSS `::before`/`::after` text and SVG titles.
-- The userscript panel shows one page and does not cross iframe boundaries.
+- Open shadow roots and slots are scanned. Closed roots are unreachable.
+- Same-origin iframes are scanned two levels deep. Cross-origin frames are skipped; the userscript skips all iframes.
 
 ### Virtualized lists
 
-- Only mounted rows exist in the snapshot. An id from a row that was unmounted cannot be matched; the engine returns `not_found`.
-- The engine does not scroll a virtualized container to revive a row. Do that with `scroll` on the container or a page-specific control, then re-snapshot.
-
-### Hover-only controls
-
-- An element becomes a `hover` action when it owns inline `onmouseover`/`onmouseenter`, or matches a CSS `:hover` rule that reveals a hidden descendant through `display`, `visibility`, or `opacity`.
-- `act(id)` or `act(id, { hover: true })` applies those declarations and fires pointer and mouse events. Synthetic events cannot activate CSS `:hover` directly.
-- Hover rules that only change color are ignored. Cross-origin stylesheets are not read. The action name comes from visible text, `aria-label`, `title`, or an image alt, never from the hidden content it reveals.
+- Only mounted rows exist. An id from an unmounted row cannot be matched.
+- ahttp does not scroll the container to revive a row. Scroll it, then re-snapshot.
 
 ### Other
 
-- The hidden-text filter misses text drawn on canvas, set as a background image, or hidden by a stylesheet the page does not expose.
-- A native checkbox or radio hidden only by soft CSS (opacity, clip, clip-path, font-size 0, off-screen absolute, text-indent, tiny size) stays in the snapshot when a visible label names it: a wrapping label, `label[for]`, a sibling `<label>` without `for`, or the direct text node next to an unlabelled checkbox. Hard-hidden controls, or soft-hidden ones with no visible name, stay out. The label itself is not a separate action.
-- A native `select`, `textarea`, or text input hidden only by partial opacity (`0 < opacity <= 0.05`) is recovered in browser mode when it has a real 12x12 px box inside the page and a name (`aria-label`, label, placeholder, or title). `opacity:0`, 1x1, and off-screen fields are not recovered.
-- A `cursor:pointer` element with no handler is dropped when a native control is painted over it, so a painted label is not offered as a dead button.
-- `act()` latency is dominated by the settle wait, not the scan. On the-internet pages the scan is ~1–4 ms, while `act()` also waits for DOM mutations and engine-observed `fetch`/XHR to go quiet. A request that stays open can hold the action for most of `timeout` (8–20 s in the real-world harness). Pass `settle: false` when the caller does its own waiting, or a smaller `timeout`.
-- `mini-dom` (static backend) is a hand-written parser, not an HTML5 tree builder: no foster parenting, no full table algorithm. Use `--browser` when exact parsing matters.
-- The static backend follows `@import` three levels deep (16 sheets). Its Media Queries 4 subset covers `width`, `height`, `aspect-ratio`, `resolution`, `min-`/`max-`, range syntax, `and`/`or`/`not`, `calc`, and `em`/`rem`/`vw`/`vh`, plus common preferences (`hover`, `pointer`, `prefers-color-scheme`, `prefers-reduced-motion`, `forced-colors`, `display-mode`, `scripting`, `orientation`, `color`). An unknown feature or an unparsable query evaluates false, never true. The cascade honors `!important`, specificity, and source order for `display`, `visibility`, `opacity`, and `cursor`; inline style beats normal declarations.
-- Legacy MCP clients get implicit page state. Modern clients carry `pageId`.
-- The task benchmark is scripted, not an LLM evaluation.
+- Hover-only controls become `hover` actions when an inline handler or a CSS `:hover` rule reveals a hidden descendant. `act(id, { hover: true })` applies the reveal; color-only rules are ignored.
+- Hidden-text filtering is heuristic. Canvas text, background images, and stylesheets the page does not expose can be missed.
+- `act` latency is the settle wait, not the scan. A request that stays open can hold the action for most of `timeout`.
+- The static backend is a small HTML parser, not a full HTML5 tree builder. Use `--browser` when exact parsing matters.
 
 ## Breaking changes
 
-`0.2.0` made ambiguity explicit. `act` no longer clicks a near-tie: it returns `status: 'ambiguous'` with candidates. Results also carry `status`, and `expect` can return `status: 'no_effect'`. Existing fields and error codes are unchanged.
+`0.2.0` made ambiguity explicit. `act` no longer clicks a near-tie: it returns `status: 'ambiguous'`. Results also carry `status`, and `expect` can return `status: 'no_effect'`. Existing fields and error codes are unchanged.
 
-A change that cannot stay additive bumps the version and is listed here before release. The workflow is in [CONTRIBUTING.md](CONTRIBUTING.md): every PR that changes `ahttp.js`, `ahttp.d.ts`, `bin/`, or `lib/` must include `npm run bump -- patch` (or `minor`/`major` when appropriate). The maintainer tags after the merge.
+Every PR that changes `ahttp.js`, `ahttp.d.ts`, `bin/`, or `lib/` must include `npm run bump -- patch` (or `minor`/`major`). The maintainer tags after merge. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Development
 
 ```bash
 npm ci
-npm test                 # unit, network, MCP, and browser tests
-npm run typecheck
-npm run lint
-npm run test:bench       # benchmark and regression suites, needs Chromium
-npm run smoke            # runtime and CLI against a local fixture, no dev dependencies
-npm run build            # regenerate ahttp.min.js and self/ahttp.user.js
+npm test
+npm run typecheck && npm run lint
+npm run test:bench
+npm run build
 ```
 
-`npm test` skips Playwright tests when Chromium is missing. `AHTTP_REQUIRE_BROWSER=1` turns that skip into a failure; CI sets it. The giant-DOM scan time warns above `AHTTP_GIANT_MS` (default 150 ms) and never fails the run.
-
-The local corpus runs in jsdom against local HTML: no network, no live site, no browser required. `npm test` runs it, or run it directly:
-
-```bash
-npm run test:corpus
-node corpus/runner.js --filter=login
-```
-
-The runner prints `case | match | diff | tokens | status`, writes `bench/results.json`, and exits non-zero on a failure. Cases and fixtures live in `corpus/`; the format is in [corpus/README.md](corpus/README.md).
-
-```text
-ahttp.js                  browser engine, no runtime dependencies
-ahttp.min.js              generated minified build
-self/ahttp.user.js        generated userscript: engine plus panel
-self/panel.js             panel source
-bin/ahttp-cli.js          CLI inspector
-bin/ahttp-mcp.js          MCP stdio server
-lib/                      page fetch, SSRF guard, mini-dom, Playwright/CDP backend
-benchmark/                torture, owner, pinned pages, checkout, tasks, MCP
-scripts/                  build, demo, benchmark rendering, version bump
-test/                     node:test suites
-docs/                     API, security, decisions, research, roadmap
-examples/                 Playwright, browser, MCP, and server-auth examples
-```
+`npm test` skips Playwright tests when Chromium is missing; `AHTTP_REQUIRE_BROWSER=1` makes that a failure. The corpus runs in jsdom against local HTML: `npm run test:corpus` writes `bench/results.json` and exits non-zero on a failure. Release with `npm run bump -- patch|minor|major|X.Y.Z`.
 
 ## License
 
