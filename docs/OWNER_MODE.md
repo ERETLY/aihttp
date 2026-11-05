@@ -134,6 +134,7 @@ Owner mode can be configured in three ways, in priority order:
 | `data-ahttp-key-hash` | SHA-256 hex of the static gate key |
 | `data-ahttp-key` | Plaintext key for localhost only; rejected elsewhere |
 | `data-ahttp-auth-endpoint` | Server authorization endpoint; preferred |
+| `data-ahttp-auth-origins` | Comma-separated origins allowed for a cross-origin auth endpoint; same-origin is always allowed. Cross-origin requests omit cookies |
 | `data-ahttp-auth-timeout` | Authorization request timeout, 1000 to 60000 ms |
 | `data-ahttp-allow` | Comma-separated allow list |
 | `data-ahttp-deny` | Comma-separated deny list; wins over allow |
@@ -148,6 +149,7 @@ ahttp.configure({
   access: 'owner',
   owner: 'acme',
   authEndpoint: '/api/ahttp/authorize',
+  authOrigins: ['https://auth.example.com'],
   authTimeoutMs: 10000,
   allow: ['checkout_submit', 'support_lookup'],
   deny: ['delete_account'],

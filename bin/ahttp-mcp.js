@@ -372,6 +372,13 @@ async function toolSnapshot(args, ctx) {
   });
 }
 
+function currentPageUrl(page) {
+  if (page && page.page && typeof page.page.url === 'function') {
+    try { return page.page.url(); } catch (e) {}
+  }
+  return page && typeof page.url === 'string' ? page.url : '';
+}
+
 async function toolAct(args, ctx) {
   ensureObject(args, 'arguments');
   checkKeys(args, ['pageId', 'id', 'value', 'checked', 'hover', 'read', 'choose', 'wait', 'timeout', 'expect', 'key', 'confirmationToken']);
@@ -415,6 +422,7 @@ async function toolAct(args, ctx) {
   if (consumed) payload.confirm = true;
   const actOpts = { settle: true, snapshot: false, diff: true };
   if (timeout !== undefined) actOpts.timeout = timeout;
+  const urlBeforeAct = currentPageUrl(page);
   const res = await page.api.act(id, payload, actOpts);
   if (ctx.signal && ctx.signal.aborted) throw new Error('cancelled');
   if (res.locked) {
@@ -476,8 +484,16 @@ async function toolAct(args, ctx) {
   const parts = [];
   parts.push(res.diff && res.diff.text ? res.diff.text : 'no visible changes');
   if (res.href) {
-    let target = null;
-    try { target = new URL(res.href, page.url).href; } catch (e) { target = null; }
+    // A click can navigate before the act returns. Opening the href again
+    // repeats the request and breaks one-time links.
+    if (page.page && typeof page.page.waitForTimeout === 'function') {
+      try { await page.page.waitForTimeout(100); } catch (e) {}
+    }
+    const navigated = currentPageUrl(page) !== urlBeforeAct;
+    if (navigated) page.url = currentPageUrl(page);
+    if (!navigated) {
+      let target = null;
+      try { target = new URL(res.href, page.url).href; } catch (e) { target = null; }
     if (target && target.indexOf('#') !== 0 && target !== page.url) {
       const next = await openTarget(target, {
         timeout: REQUEST_TIMEOUT,
@@ -501,6 +517,7 @@ async function toolAct(args, ctx) {
       resolved = { page: page, id: handle };
       const snap = await page.api.snapshot({ format: 'text', maxActions: 60, maxText: 1000 });
       return content(parts.join('\n') + '\nnavigated to ' + page.url + '\n\npageId: ' + handle + '\n' + snap, false, { pageId: handle, url: page.url });
+    }
     }
   }
   const snap = await page.api.snapshot({ format: 'text', maxActions: 60, maxText: 1000 });

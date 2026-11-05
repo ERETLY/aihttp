@@ -2,6 +2,31 @@
 
 ## Unreleased
 
+### Security
+
+- The server authorization endpoint must share the page origin unless
+  `data-ahttp-auth-origins` explicitly allows it. A page can no longer point
+  `data-ahttp-auth-endpoint` at an attacker's origin and receive the Bearer
+  token. Cross-origin authorization requests omit cookies.
+
+### Performance
+
+- `waitSettled` ignores requests that were already in flight when the action
+  started. A long-lived request from an earlier action no longer delays every
+  subsequent click.
+
+### Encoding
+
+- The static backend detects the response charset from a BOM, the
+  `Content-Type` header or `<meta charset>` instead of assuming UTF-8.
+  windows-1251, Shift_JIS and similar pages no longer turn into replacement
+  characters.
+
+### MCP
+
+- A link click that already navigated no longer reopens its `href`, so
+  one-time links are not consumed twice.
+
 ### Parsing
 
 - A white-on-white container no longer hides its colored children. Pages

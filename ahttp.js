@@ -101,7 +101,7 @@
     wakeMs: 0,
     wakeCount: 0,
     lastLatencyMs: 0,
-    net: { patched: false, count: 0, inflight: 0, restore: null, log: [], saved: null },
+    net: { patched: false, count: 0, inflight: 0, pending: new Set(), restore: null, log: [], saved: null },
     autoTimer: null,
     config: null,
     configLoaded: false,
@@ -227,6 +227,7 @@
       key: input.key ? String(input.key) : '',
       keyHash: input.keyHash ? String(input.keyHash).toLowerCase().replace(/^sha256:/, '').trim() : '',
       authEndpoint: authEndpoint,
+      authOrigins: parsePolicyList(input.authOrigins),
       authTimeoutMs: authTimeoutMs,
       authorizeAction: typeof input.authorizeAction === 'function' ? input.authorizeAction : null,
       allow: parsePolicyList(input.allow),
@@ -242,7 +243,7 @@
     function get(name) { return el.getAttribute(name); }
     function has(name) { return el.hasAttribute ? el.hasAttribute(name) : get(name) != null; }
     var names = ['data-ahttp-owner', 'data-ahttp-private', 'data-ahttp-key', 'data-ahttp-key-hash',
-      'data-ahttp-access', 'data-ahttp-auth-endpoint', 'data-ahttp-auth-timeout',
+      'data-ahttp-access', 'data-ahttp-auth-endpoint', 'data-ahttp-auth-origins', 'data-ahttp-auth-timeout',
       'data-ahttp-allow', 'data-ahttp-deny', 'data-ahttp-confirm', 'data-ahttp-readonly', 'data-ahttp-max-actions'];
     var present = false;
     for (var i = 0; i < names.length; i++) if (has(names[i])) present = true;
@@ -254,6 +255,7 @@
       keyHash: get('data-ahttp-key-hash') || '',
       access: get('data-ahttp-access') || '',
       authEndpoint: get('data-ahttp-auth-endpoint') || '',
+      authOrigins: get('data-ahttp-auth-origins') || '',
       authTimeoutMs: get('data-ahttp-auth-timeout') || null,
       allow: get('data-ahttp-allow') || '',
       deny: get('data-ahttp-deny') || '',
@@ -299,7 +301,7 @@
     if (!doc || !doc.querySelector) return;
     var el = null;
     try {
-      el = doc.querySelector('script[data-ahttp-owner],script[data-ahttp-private],script[data-ahttp-key-hash],script[data-ahttp-access],script[data-ahttp-auth-endpoint]');
+      el = doc.querySelector('script[data-ahttp-owner],script[data-ahttp-private],script[data-ahttp-key-hash],script[data-ahttp-access],script[data-ahttp-auth-endpoint],script[data-ahttp-auth-origins]');
     } catch (e) { el = null; }
     var cfg = el ? readConfigElement(el) : null;
     if (cfg) applyConfig(cfg);
@@ -318,6 +320,7 @@
       deny: c.deny.slice(),
       confirm: c.confirm.slice(),
       serverAuth: !!c.authEndpoint,
+      authOrigins: (c.authOrigins || []).slice(),
       authTimeoutMs: c.authEndpoint ? c.authTimeoutMs : null,
       keyConfigured: !!(c.key || c.keyHash),
       keyHashConfigured: !!c.keyHash,
@@ -531,6 +534,22 @@
     if (endpoint.protocol !== 'https:' && !(endpoint.protocol === 'http:' && isLocalHostname(endpoint.hostname))) {
       return { ok: false, locked: true, error: 'insecure_auth_endpoint' };
     }
+    var pageOrigin = '';
+    try { pageOrigin = new URL(baseUrl).origin; } catch (e) { pageOrigin = ''; }
+    var sameOrigin = !!pageOrigin && endpoint.origin === pageOrigin;
+    var allowedOrigins = [];
+    var listedOrigins = cfg.authOrigins || [];
+    for (var oi = 0; oi < listedOrigins.length; oi++) {
+      var rawOrigin = String(listedOrigins[oi] || '').trim();
+      if (!rawOrigin) continue;
+      try {
+        var normalizedOrigin = new URL(rawOrigin, baseUrl).origin;
+        if (normalizedOrigin) allowedOrigins.push(normalizedOrigin);
+      } catch (e2) {}
+    }
+    if (!sameOrigin && allowedOrigins.indexOf(endpoint.origin) < 0) {
+      return { ok: false, locked: true, error: 'auth_endpoint_origin' };
+    }
     var fetchFn = env && typeof env.fetch === 'function'
       ? env.fetch
       : (GLOBAL && typeof GLOBAL.fetch === 'function' ? GLOBAL.fetch : null);
@@ -550,7 +569,7 @@
     try {
       var response = await fetchFn.call(env, endpoint.href, {
         method: 'POST',
-        credentials: 'include',
+        credentials: sameOrigin ? 'include' : 'omit',
         mode: 'cors',
         headers: headers,
         body: JSON.stringify({ action: 'authorize', owner: cfg.owner || null, version: VERSION }),
@@ -3820,10 +3839,12 @@
         } catch (e) {}
         S.net.log.push(rec);
         if (S.net.log.length > 60) S.net.log.shift();
+        S.net.pending.add(rec.id);
         S.net.inflight++;
         var promise = saved.fetch.apply(this, arguments);
         var done = function (status) {
           rec.status = status;
+          S.net.pending.delete(rec.id);
           S.net.inflight = Math.max(0, S.net.inflight - 1);
           S.dirty = true;
         };
@@ -3858,11 +3879,13 @@
           var rec = { id: ++S.net.count, method: xhr.__ahttpMethod || 'GET', url: xhr.__ahttpUrl || '', status: null, at: now() };
           S.net.log.push(rec);
           if (S.net.log.length > 60) S.net.log.shift();
+          S.net.pending.add(rec.id);
           S.net.inflight++;
           var done = function () {
             if (xhr.__ahttpState === 2) return;
             xhr.__ahttpState = 2;
             rec.status = xhr.status || 0;
+            S.net.pending.delete(rec.id);
             S.net.inflight = Math.max(0, S.net.inflight - 1);
             S.dirty = true;
           };
@@ -3917,7 +3940,7 @@
     return counter;
   }
 
-  function waitSettled(o, counter, requestsBefore) {
+  function waitSettled(o, counter, requestsBefore, ignorePending) {
     if (o && o.settle === false) return Promise.resolve();
     var timeout = o && o.timeout != null ? o.timeout : 1200;
     var networkQuiet = o && o.networkQuiet != null ? o.networkQuiet : 220;
@@ -3937,7 +3960,15 @@
         } else if (quietSince === null) {
           quietSince = now();
         }
-        var settled = quietSince !== null && now() - quietSince >= quiet && elapsed >= minWait && S.net.inflight === 0;
+        var busy = 0;
+        if (S.net.pending && typeof S.net.pending.forEach === 'function') {
+          S.net.pending.forEach(function (id) {
+            if (!ignorePending || !ignorePending.has(id)) busy++;
+          });
+        } else {
+          busy = S.net.inflight;
+        }
+        var settled = quietSince !== null && now() - quietSince >= quiet && elapsed >= minWait && busy === 0;
         if (settled || elapsed >= timeout) return resolve();
         setTimeout(tick, 16);
       }
@@ -4479,12 +4510,13 @@
       var proceed = function () {
         var t0 = now();
         var requestsBefore = S.net.count;
+        var pendingBefore = new Set(S.net.pending);
         var before = (o.diff === false && !expect) ? null : captureState();
         var counter = startMutationCounter();
         patchNetwork();
         return Promise.resolve(execute(entry, p, o)).then(function (res) {
           S.dirty = true;
-          return waitSettled(o, counter, requestsBefore).then(function () {
+          return waitSettled(o, counter, requestsBefore, pendingBefore).then(function () {
             return waitForExpectation(expect, before, o, t0);
           }).then(function () {
             if (counter.observer) { try { counter.observer.disconnect(); } catch (e) {} }
@@ -4797,6 +4829,7 @@
       key: input.key != null ? input.key : base.key,
       keyHash: input.keyHash != null ? input.keyHash : base.keyHash,
       authEndpoint: input.authEndpoint != null ? input.authEndpoint : base.authEndpoint,
+      authOrigins: input.authOrigins != null ? input.authOrigins : base.authOrigins,
       authTimeoutMs: input.authTimeoutMs != null ? input.authTimeoutMs : base.authTimeoutMs,
       authorizeAction: input.authorizeAction != null ? input.authorizeAction : base.authorizeAction,
       allow: input.allow != null ? input.allow : base.allow,

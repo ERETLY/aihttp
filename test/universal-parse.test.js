@@ -66,6 +66,25 @@ test('a custom combobox chooses an option rendered after the click', async () =>
   assert.equal(result.selected, 'Two');
 });
 
+test('settle ignores a request that was already in flight', async () => {
+  const window = load('<!doctype html><body>' +
+    '<button id="slow">Slow</button><button id="fast">Fast</button></body>');
+  const document = window.document;
+  window.fetch = function () { return new Promise(function () {}); };
+  document.getElementById('slow').addEventListener('click', function () { window.fetch('/slow'); });
+  const snapshot = window.ahttp.snapshot({ format: 'json' });
+  const slow = snapshot.actions.find(function (action) { return action.label === 'Slow'; });
+  const fast = snapshot.actions.find(function (action) { return action.label === 'Fast'; });
+  assert.ok(slow && fast);
+
+  await window.ahttp.act(slow.id, {}, { quiet: 0, minWait: 0, timeout: 120 });
+  const started = Date.now();
+  const result = await window.ahttp.act(fast.id, {}, { quiet: 0, minWait: 0, timeout: 120 });
+  const elapsed = Date.now() - started;
+  assert.equal(result.status, 'ok');
+  assert.ok(elapsed < 100, 'second action waited ' + elapsed + ' ms for the first request');
+});
+
 test('a custom combobox reads aria-activedescendant as its value', async () => {
   const window = load('<!doctype html><body>' +
     '<div role="combobox" aria-activedescendant="opt2"><span id="opt2">Two</span></div></body>');
