@@ -182,8 +182,11 @@ function render(results, selfResults, timeResults) {
   const byKey = {};
   if (comparison) for (const method of comparison.methods) byKey[method.key] = method;
   const chromium = comparison && comparison.browserVersion;
+  const scanAt = time ? (time.scanGeneratedAt || time.generatedAt) : null;
+  const liveAt = time ? (time.liveGeneratedAt || time.generatedAt) : null;
+  const hostedAt = time ? time.hostedGeneratedAt : null;
 
-  lines.push('Last run: `' + results.generatedAt + '`. ahttp ' + results.version + ' on ' + results.platform + ' ' + results.arch + ', Node ' + results.node + (chromium ? ', Chromium ' + chromium : '') + ', gpt-tokenizer 4.1.0/o200k_base.');
+  lines.push('Token run: `' + results.generatedAt + '`. ahttp ' + results.version + ' on ' + results.platform + ' ' + results.arch + ', Node ' + results.node + (chromium ? ', Chromium ' + chromium : '') + ', gpt-tokenizer 4.1.0/o200k_base.');
   lines.push('');
 
   if (comparison && web.length) {
@@ -198,7 +201,7 @@ function render(results, selfResults, timeResults) {
 
     lines.push('### Time');
     lines.push('');
-    lines.push('Wall-clock numbers from one machine, relative at best.' + (time ? ' Live and scan come from `benchmark/time-results.json` (`' + time.generatedAt + '`).' : ''));
+    lines.push('Wall-clock numbers from one machine, relative at best.' + (time ? ' Scan from `' + scanAt + '`, live from `' + liveAt + '`' + (hostedAt && hostedAt !== liveAt ? '; Jina and Firecrawl from `' + hostedAt + '`' : '') + '.' : ''));
     lines.push('');
 
     const checkout = checkoutTimeTable(comparison, self);
@@ -211,7 +214,7 @@ function render(results, selfResults, timeResults) {
 
     const live = time ? liveTimeTable(web, time) : null;
     if (live) {
-      lines.push('**Live.** URL to content, one request per page, ' + time.generatedAt.slice(0, 10) + ':');
+      lines.push('**Live.** URL to content, one request per page, ' + (time.liveGeneratedAt || time.generatedAt).slice(0, 10) + ':');
       lines.push('');
       lines.push(live);
       lines.push('');
@@ -237,6 +240,9 @@ function render(results, selfResults, timeResults) {
   lines.push('- Accessibility token counts depend on the Chromium build.');
   if (web.some((site) => site.jinaTokens != null || site.firecrawlTokens != null)) {
     lines.push('- Jina Reader (`r.jina.ai`) and Firecrawl (v2 scrape) fetch the live page, not the pinned HTML. Without `JINA_API_KEY`, Jina can return 403 on GitHub.');
+    if (time && hostedAt && hostedAt !== liveAt) {
+      lines.push('- Jina and Firecrawl live timings are from `' + hostedAt + '`; local methods were re-measured.');
+    }
     if (results.jinaFallback) {
       lines.push('- The latest rerun got HTTP 451 from Jina for every page, so the Jina cells above are from the run at `' + results.jinaFallback.from + '`.');
     }

@@ -48,7 +48,7 @@ Paste this into Claude Desktop or Cursor, replacing `/absolute/path/to/ahttp`:
 }
 ```
 
-Restart the client, call `ahttp_open` with a URL, then `ahttp_snapshot` or `ahttp_act`. Drop `--browser` for static HTML. Node 18 or newer; the Playwright step is only needed for `--browser`.
+Restart the client, call `ahttp_open` with a URL, then `ahttp_snapshot` or `ahttp_act`. `--browser` runs a real Chromium and page JavaScript; without it the server parses static HTML only. Node 18 or newer; the Playwright step is only needed for `--browser`.
 
 ### CLI and local loop
 
@@ -74,6 +74,14 @@ $49.00
 Each action has an id, a tag, a label, and optional state or target. Page text is marked untrusted because it comes from the page.
 
 `const step = await ahttp.act('a2')` returns `{ ok: true, action, diff }` plus a fresh snapshot. `act` waits for the page to settle; errors come back as values, not exceptions.
+
+## Using it well
+
+- Put `data-ahttp-intent` on controls that matter. Text labels change with copy; the intent attribute does not.
+- Narrow the snapshot with `query` or `scope` instead of raising `maxActions`.
+- Pass an `expect` rule so a missing effect returns `no_effect` instead of a silent success.
+- Keep the `pageId` and re-snapshot after each action instead of reusing old ids.
+- For a SPA or any page that needs JavaScript, run the MCP server with `--browser`.
 
 ## How it works
 
@@ -117,7 +125,7 @@ Client-side JavaScript cannot enforce authorization. The server that performs th
 
 ## Benchmarks
 
-If you only need text, Jina or Firecrawl are faster and cheaper. If you need to click, only the ahttp rows can.
+If you only need text, Jina or Firecrawl are faster and cheaper. If you need to click, only the ahttp rows can. Jina and Firecrawl were called as real services; the accessibility row is Playwright's `ariaSnapshot`, not Playwright MCP.
 
 Five pinned pages, one snapshot each:
 
@@ -130,14 +138,14 @@ Five pinned pages, one snapshot each:
 | Chromium accessibility tree | 102,206 | no |
 | ahttp | 8,750 | yes |
 
-On a five-step checkout ahttp uses 289 tokens against 3,983 for raw HTML. On 20 scripted tasks it uses 5,104 against 25,896 raw and 5,360 accessibility tree. Live time is 1.4–4.4 s per page; Jina and Firecrawl are 0.4–1.6 s, but they only return text. Scan time is 4–39 ms except Wikipedia at 3.2 s.
+On a five-step checkout ahttp uses 289 tokens against 3,983 for raw HTML. On 20 scripted tasks it uses 5,104 against 25,896 raw and 5,360 accessibility tree. Live time is 1.1–2.5 s per page; Jina and Firecrawl are 0.4–1.6 s, but they only return text. Scan time is 6–25 ms, Wikipedia 92 ms.
 
 <details>
 <summary>Full benchmark tables and method</summary>
 
 <!-- BENCH:START -->
 
-Last run: `2026-11-01T05:13:00.818Z`. ahttp 0.1.0 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
+Token run: `2026-11-01T05:13:00.818Z`. ahttp 0.1.0 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
 
 ### Tokens
 
@@ -157,7 +165,7 @@ Only the two ahttp rows can click; the baselines score 0/20 on the task suite be
 
 ### Time
 
-Wall-clock numbers from one machine, relative at best. Live and scan come from `benchmark/time-results.json` (`2026-11-01T05:58:12.040Z`).
+Wall-clock numbers from one machine, relative at best. Scan from `2026-11-05T07:40:42.457Z`, live from `2026-11-05T07:40:42.457Z`; Jina and Firecrawl from `2026-11-01T05:58:12.040Z`.
 
 **Checkout.** Average per step over five local snapshots. The hosted readers cannot run it.
 
@@ -169,12 +177,12 @@ Wall-clock numbers from one machine, relative at best. Live and scan come from `
 | ahttp | 86.5 ms |
 | ahttp self | 84.9 ms |
 
-**Live.** URL to content, one request per page, 2026-11-01:
+**Live.** URL to content, one request per page, 2026-11-05:
 
 | Method | Hacker News | Wikipedia | Lobsters | GitHub | MDN |
 |---|---:|---:|---:|---:|---:|
-| ahttp | 1,847 ms | 4,379 ms | 2,151 ms | 2,430 ms | 1,430 ms |
-| ahttp self | 1,456 ms | 1,499 ms | 1,595 ms | 2,413 ms | 855 ms |
+| ahttp | 1,871 ms | 1,137 ms | 2,130 ms | 2,513 ms | 1,376 ms |
+| ahttp self | 1,462 ms | 1,465 ms | 1,409 ms | 2,687 ms | 1,051 ms |
 | Jina Reader | 1,179 ms | 1,506 ms | 748 ms | 756 ms | 427 ms |
 | Firecrawl | 1,320 ms | 1,576 ms | 1,169 ms | 1,589 ms | 468 ms |
 
@@ -184,11 +192,11 @@ Single runs, not medians. `ahttp` fetches the page and its linked stylesheets in
 
 | Method | Hacker News | Wikipedia | Lobsters | GitHub | MDN |
 |---|---:|---:|---:|---:|---:|
-| Raw HTML | 26 ms | 212 ms | 20 ms | 38 ms | 14 ms |
-| Markdown | 274 ms | 869 ms | 398 ms | 205 ms | 252 ms |
-| Accessibility tree | 87 ms | 288 ms | 71 ms | 92 ms | 77 ms |
-| ahttp | 39 ms | 3,165 ms | 4 ms | 18 ms | 13 ms |
-| ahttp self | 25 ms | 194 ms | 25 ms | 34 ms | 19 ms |
+| Raw HTML | 29 ms | 249 ms | 48 ms | 45 ms | 16 ms |
+| Markdown | 331 ms | 1,032 ms | 484 ms | 262 ms | 309 ms |
+| Accessibility tree | 95 ms | 310 ms | 77 ms | 85 ms | 97 ms |
+| ahttp | 16 ms | 92 ms | 6 ms | 20 ms | 25 ms |
+| ahttp self | 34 ms | 163 ms | 32 ms | 53 ms | 30 ms |
 
 Hosted readers have no separate scan step; their time is in Live time.
 
@@ -198,6 +206,7 @@ Hosted readers have no separate scan step; their time is in Live time.
 - One win32 x64 machine. Scan time is the least portable number.
 - Accessibility token counts depend on the Chromium build.
 - Jina Reader (`r.jina.ai`) and Firecrawl (v2 scrape) fetch the live page, not the pinned HTML. Without `JINA_API_KEY`, Jina can return 403 on GitHub.
+- Jina and Firecrawl live timings are from `2026-11-01T05:58:12.040Z`; local methods were re-measured.
 
 <!-- BENCH:END -->
 
@@ -227,7 +236,7 @@ Reproduce with Chromium: `npm run bench` (tokens, checkout, tasks), `npm run ben
 
 - Hover-only controls become `hover` actions when an inline handler or a CSS `:hover` rule reveals a hidden descendant. `act(id, { hover: true })` applies the reveal; color-only rules are ignored.
 - Hidden-text filtering is heuristic. Canvas text, background images, and stylesheets the page does not expose can be missed.
-- `act` latency is the settle wait, not the scan. A request that stays open can hold the action for most of `timeout`.
+- `act` latency is the settle wait, not the scan: about 40 ms with no network, and at least 220 ms of network quiet after a request, so roughly 240 ms or more. A request that stays open can hold the action for most of `timeout`.
 - The static backend is a small HTML parser, not a full HTML5 tree builder. Use `--browser` when exact parsing matters.
 
 ## Breaking changes

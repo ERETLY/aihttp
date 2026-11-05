@@ -14,6 +14,7 @@ const SELF = path.join(ROOT, 'self', 'ahttp.user.js');
 const PINNED = path.join(__dirname, 'pinned');
 const INDEX = JSON.parse(fs.readFileSync(path.join(PINNED, 'index.json'), 'utf8'));
 const OPTIONS = { format: 'text', maxActions: 60, maxText: 1200 };
+const LOCAL_ONLY = process.argv.includes('--local');
 
 function listen() {
   return new Promise((resolve) => {
@@ -103,7 +104,8 @@ async function scanBenchmark() {
   return out;
 }
 
-async function liveBenchmark() {
+async function liveBenchmark(options) {
+  const hosted = !options || options.hosted !== false;
   const browser = await chromium.launch({ headless: true });
   const out = [];
   try {
@@ -139,7 +141,7 @@ async function liveBenchmark() {
       }
       await context.close();
 
-      if (process.env.JINA_API_KEY) {
+      if (hosted && process.env.JINA_API_KEY) {
         started = performance.now();
         try {
           const response = await fetch('https://r.jina.ai/' + site.url, {
@@ -154,7 +156,7 @@ async function liveBenchmark() {
         }
       }
 
-      if (process.env.FIRECRAWL_API_KEY) {
+      if (hosted && process.env.FIRECRAWL_API_KEY) {
         started = performance.now();
         try {
           const response = await fetch('https://api.firecrawl.dev/v2/scrape', {
@@ -185,10 +187,28 @@ async function liveBenchmark() {
 }
 
 (async () => {
+  const target = path.join(__dirname, 'time-results.json');
+  let previous = null;
+  try { previous = JSON.parse(fs.readFileSync(target, 'utf8')); } catch (e) { previous = null; }
   const scan = await scanBenchmark();
-  const live = await liveBenchmark();
+  const live = await liveBenchmark({ hosted: !LOCAL_ONLY });
+  const now = new Date().toISOString();
+  if (LOCAL_ONLY && previous && Array.isArray(previous.live)) {
+    const old = new Map(previous.live.map((row) => [row.name, row]));
+    for (const row of live) {
+      const before = old.get(row.name);
+      if (!before) continue;
+      if (row.jina == null) row.jina = before.jina;
+      if (row.firecrawl == null) row.firecrawl = before.firecrawl;
+      if (!row.jinaError && before.jinaError) row.jinaError = before.jinaError;
+      if (!row.firecrawlError && before.firecrawlError) row.firecrawlError = before.firecrawlError;
+    }
+  }
   const out = {
-    generatedAt: new Date().toISOString(),
+    generatedAt: now,
+    scanGeneratedAt: now,
+    liveGeneratedAt: now,
+    hostedGeneratedAt: LOCAL_ONLY && previous ? (previous.hostedGeneratedAt || previous.generatedAt) : now,
     version: pkg.version,
     node: process.version,
     platform: process.platform,
@@ -196,8 +216,9 @@ async function liveBenchmark() {
     scan: scan,
     live: live
   };
-  fs.writeFileSync(path.join(__dirname, 'time-results.json'), JSON.stringify(out, null, 2) + '\n');
-  process.stdout.write('wrote benchmark/time-results.json\n');
+  fs.writeFileSync(target, JSON.stringify(out, null, 2) + '\n');
+  process.stdout.write('wrote benchmark/time-results.json' +
+    (LOCAL_ONLY ? ' (local methods only; hosted rows kept from ' + out.hostedGeneratedAt + ')' : '') + '\n');
 })().catch((error) => {
   process.stderr.write(String(error && error.stack ? error.stack : error) + '\n');
   process.exit(1);

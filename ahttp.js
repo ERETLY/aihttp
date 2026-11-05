@@ -1,4 +1,4 @@
-/*! ahttp.js v0.2.0 | MIT | DOM-to-action bridge for LLM agents */
+/*! ahttp.js v0.2.1 | MIT | DOM-to-action bridge for LLM agents */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) {
     module.exports = factory(root);
@@ -10,7 +10,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : this), function (GLOBAL) {
   'use strict';
 
-  var VERSION = '0.2.0';
+  var VERSION = '0.2.1';
   if (GLOBAL.ahttp && GLOBAL.ahttp.__ahttp === true) return GLOBAL.ahttp;
 
   var SKIP_TAGS = { script: 1, style: 1, noscript: 1, template: 1, meta: 1, link: 1, head: 1, base: 1, title: 1 };
@@ -724,6 +724,31 @@
       try { return root.querySelector('[id="' + cssString(id) + '"]'); } catch (e) { return null; }
     }
     return null;
+  }
+
+  // labelFrom runs for every registered element. A document-wide
+  // querySelector('label[for=...]') per element is quadratic on pages with
+  // thousands of links, so build one map per root per scan instead.
+  function labelForId(root, id) {
+    if (!root || !id) return null;
+    if (!root.querySelectorAll) {
+      if (!root.querySelector) return null;
+      try { return root.querySelector('label[for="' + escapeSel(id) + '"]'); } catch (e) { return null; }
+    }
+    var maps = S.labelMaps;
+    if (!maps) maps = S.labelMaps = new Map();
+    var map = maps.get(root);
+    if (!map) {
+      map = new Map();
+      var labels = [];
+      try { labels = root.querySelectorAll('label[for]'); } catch (e) { labels = []; }
+      for (var i = 0; i < labels.length; i++) {
+        var key = attr(labels[i], 'for');
+        if (key && !map.has(key)) map.set(key, labels[i]);
+      }
+      maps.set(root, map);
+    }
+    return map.get(id) || null;
   }
 
   function escapeSel(v) {
@@ -2432,12 +2457,8 @@
       var lab = null;
       var root = null;
       try { root = el.getRootNode ? el.getRootNode() : el.ownerDocument; } catch (e) { root = null; }
-      if (root && root.querySelector) {
-        try { lab = root.querySelector('label[for="' + escapeSel(id) + '"]'); } catch (e) { lab = null; }
-      }
-      if (!lab && el.ownerDocument && el.ownerDocument.querySelector) {
-        try { lab = el.ownerDocument.querySelector('label[for="' + escapeSel(id) + '"]'); } catch (e) { lab = null; }
-      }
+      lab = labelForId(root, id);
+      if (!lab && el.ownerDocument && el.ownerDocument !== root) lab = labelForId(el.ownerDocument, id);
       if (lab) {
         var labelText = normText(textOf(lab));
         if (labelText) return labelText;
@@ -2853,6 +2874,7 @@
     var doc = env.document;
     if (!doc || !doc.documentElement) return emptyScan(doc);
     var t0 = now();
+    S.labelMaps = null;
     S.layout = detectLayout(doc);
     S.canObserve = typeof env.MutationObserver === 'function';
     var ctx = {

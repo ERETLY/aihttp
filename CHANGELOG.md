@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 0.2.1, 2026-11-05
+
+### Performance
+
+- Label lookup is indexed once per scan instead of a document-wide
+  `label[for]` query per control. The pinned Wikipedia page scans in
+  about 100 ms instead of 3.2 s; the other pinned pages stay in single
+  digits or low tens of milliseconds.
+
 ## 0.2.0, 2026-11-04
 
 ### Matching
