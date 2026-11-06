@@ -20,7 +20,10 @@
   'use strict';
 
   var VERSION = '0.2.1';
-  if (GLOBAL.ahttp && GLOBAL.ahttp.__ahttp === true) return GLOBAL.ahttp;
+  if (GLOBAL.ahttp && GLOBAL.ahttp.__ahttp === true) {
+    try { GLOBAL.aiweb = GLOBAL.ahttp; } catch (e) {}
+    return GLOBAL.ahttp;
+  }
 
   var SKIP_TAGS = { script: 1, style: 1, noscript: 1, template: 1, meta: 1, link: 1, head: 1, base: 1, title: 1 };
   var REGION_NAMES = { modal: 1, main: 1, chrome: 1 };
@@ -5446,6 +5449,8 @@
     lock: lockEngine,
     hashKey: function (value) { return sha256Hex(value); }
   };
+  // The format is called aiweb; ahttp stays as the compatibility global.
+  try { GLOBAL.aiweb = api; } catch (e) {}
 
   api.installWebMCP = async function (options) {
     options = options || {};

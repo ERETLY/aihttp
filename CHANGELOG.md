@@ -4,7 +4,16 @@
 
 ### Added
 
-- Deterministic trace and replay. `ahttp.trace()` exports executed actions as
+- The product and wire format are now **aiweb** (AI-First Web Format). The
+  package name is `aiweb`, the npm binaries are `aiweb`, `aiweb-mcp` and
+  `aiweb-serve`, and `window.aiweb` is an alias for the engine. The engine
+  file, MCP tool names and `ahttp` globals stay as compatibility names.
+- `aiweb-serve` exposes the format over HTTP: `GET /?url=...` returns
+  `application/aiweb+json`, `POST /act` runs one action, `GET /health` reports
+  the protocol version. Supports `--browser`, `--allow-private` and an
+  `AIWEB_TOKEN` bearer token.
+- `docs/AIWEB.md` specifies `aiweb/1`: envelope, action schema, statuses,
+  trace/replay, transport, versioning and security rules. `ahttp.trace()` exports executed actions as
   portable fingerprints (`data-ahttp-intent`, test id, name, role, label,
   href) instead of scan-local ids. `ahttp.replay(trace)` resolves each step
   against the current DOM, follows navigations, and reports `not_found`,

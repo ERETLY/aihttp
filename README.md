@@ -1,14 +1,14 @@
-# ahttp
+# aiweb
 
 [![status: experimental](https://img.shields.io/badge/status-experimental-orange)](#)
 [![version](https://img.shields.io/github/package-json/v/ERETLY/ahttp)](https://github.com/ERETLY/ahttp/blob/main/package.json)
 [![CI](https://github.com/ERETLY/ahttp/actions/workflows/ci.yml/badge.svg)](https://github.com/ERETLY/ahttp/actions/workflows/ci.yml)
 
-ahttp lets an agent use a page, not just read it: list the controls, click one, and get back only what changed.
+**aiweb is the AI-First Web Format.** It turns a page into a compact, executable graph: the controls an agent can use, the text it can read, and the effect of each action. No screenshots, no raw DOM, no token bonfire.
 
-One browser file with no runtime dependencies. The same engine runs as a userscript, a CLI, and an MCP server.
+One engine with no runtime dependencies. It ships as a browser file, a CLI, an HTTP server (`aiweb-serve`) and an MCP server. `ahttp` remains the compatibility name for the engine file and the existing MCP tools; the format and the product are `aiweb`.
 
-**Experimental, pre-2.0.** One maintainer. Additive changes are documented before any breaking one.
+**Experimental, pre-2.0.** One maintainer. Additive changes are documented before any breaking one. The wire format is specified in [docs/AIWEB.md](docs/AIWEB.md).
 
 ## Should you use it?
 
@@ -58,6 +58,15 @@ node examples/agent-loop.js
 ```
 
 The CLI reads static HTML and never clicks. The local loop uses Chromium, clicks a control with an `expect` rule, and prints the diff. [docs/DEMO.md](docs/DEMO.md) is a terminal transcript; `node scripts/demo.js` regenerates it.
+
+### HTTP: the format as a service
+
+```bash
+npx aiweb-serve --port 8787
+curl 'http://127.0.0.1:8787/?url=https%3A%2F%2Fexample.com'
+```
+
+`GET /?url=...` returns `application/aiweb+json` with the same action graph as the engine. `POST /act` runs one action by id. `GET /health` reports the format version. Use `--browser` for JavaScript pages, `--allow-private` for local targets, and `AIWEB_TOKEN` to require a bearer token. The wire format is in [docs/AIWEB.md](docs/AIWEB.md).
 
 ## What it looks like
 

@@ -1,7 +1,7 @@
 {
-  "name": "ahttp",
+  "name": "aiweb",
   "version": "0.2.1",
-  "description": "Small, executable page snapshots for LLM agents. Zero-dependency browser file, CLI and MCP server.",
+  "description": "AI-First Web Format: compact executable page graphs for agents. Zero-dependency browser file, CLI, HTTP server and MCP server.",
   "main": "ahttp.js",
   "browser": "ahttp.js",
   "types": "ahttp.d.ts",
@@ -29,6 +29,9 @@
     "./package.json": "./package.json"
   },
   "bin": {
+    "aiweb": "./bin/ahttp-cli.js",
+    "aiweb-mcp": "./bin/ahttp-mcp.js",
+    "aiweb-serve": "./bin/aiweb-serve.js",
     "ahttp": "./bin/ahttp-cli.js",
     "ahttp-mcp": "./bin/ahttp-mcp.js"
   },
