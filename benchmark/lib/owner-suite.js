@@ -162,8 +162,23 @@ async function runOwnerTest() {
 
   const sAuth = await shttp.authorize({ token: 'owner-token' });
   c.ok(sAuth.ok === true && sAuth.mode === 'server', 'server token authorizes the page');
-  c.ok(lastAuth && lastAuth.init.credentials === 'include', 'authorize sends credentials for cookie sessions');
+  c.ok(lastAuth && lastAuth.init.credentials === 'omit', 'a cross-origin auth endpoint does not receive cookies');
   c.ok(lastAuth && lastAuth.init.headers.authorization === 'Bearer owner-token', 'bearer token sent only to the auth endpoint');
+
+  // Same-origin auth keeps cookie sessions working: the origin check only
+  // strips cookies when the endpoint lives somewhere else.
+  const sameOrigin = loadHtml('<!doctype html><body><main><button data-ahttp-intent="checkout_submit">Pay</button></main>' +
+    '<script data-ahttp-access="owner" data-ahttp-auth-endpoint="/api/ahttp/authorize"></script></body>',
+  'https://same-origin.test/');
+  let sameInit = null;
+  sameOrigin.window.fetch = async function (url, init) {
+    sameInit = init;
+    return { ok: true, status: 200, text: async function () { return JSON.stringify({ ok: true, policy: { allow: ['checkout_submit'] } }); } };
+  };
+  const sameAuth = await sameOrigin.ahttp.authorize({ token: 'owner-token' });
+  c.ok(sameAuth.ok === true, 'a same-origin auth endpoint authorizes');
+  c.ok(sameInit && sameInit.credentials === 'include', 'a same-origin auth endpoint receives cookies');
+  try { sameOrigin.window.close(); } catch (e) {}
   const sStatus = shttp.status();
   c.ok(sStatus.serverVerified === true && sStatus.authMode === 'server', 'status reports a verified server session');
   c.ok(sStatus.authExpiresAt > Date.now(), 'short-lived session expiry recorded');

@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+### Added
+
+- Deterministic trace and replay. `ahttp.trace()` exports executed actions as
+  portable fingerprints (`data-ahttp-intent`, test id, name, role, label,
+  href) instead of scan-local ids. `ahttp.replay(trace)` resolves each step
+  against the current DOM, follows navigations, and reports `not_found`,
+  `ambiguous`, `needs_value`, `needs_confirmation` or `url_mismatch` instead
+  of silently clicking the wrong control. Password values are redacted from
+  the trace; replay takes them through `values`. Exposed over MCP as
+  `ahttp_trace` and `ahttp_replay`.
+- The static backend binds a guarded `fetch` into the page window, so server
+  auth, `fetch`-based forms and page scripts work without a browser. Requests
+  still pass through the same private-address guard as the document loader.
+
 ### Security
 
 - The server authorization endpoint must share the page origin unless

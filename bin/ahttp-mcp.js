@@ -125,6 +125,50 @@ const TOOLS = [
       required: ['id'],
       additionalProperties: false
     }
+  },
+  {
+    name: 'ahttp_trace',
+    title: 'Export the action trace',
+    description: 'Export the actions executed on this page as portable fingerprints (intent, testid, name, label) instead of scan-local ids. The result can be replayed later with ahttp_replay.',
+    annotations: {
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false
+    },
+    inputSchema: {
+      type: 'object',
+      properties: {
+        pageId: { type: 'string', description: 'Page id returned by ahttp_open. Required by 2026-07-28 clients; optional for legacy clients.' },
+        clear: { type: 'boolean', description: 'Clear the trace after exporting it.' }
+      },
+      additionalProperties: false
+    }
+  },
+  {
+    name: 'ahttp_replay',
+    title: 'Replay a recorded trace',
+    description: 'Replay trace steps by resolving each portable fingerprint against the current page. Reports ok, not_found, ambiguous, needs_value, requires_confirmation or url_mismatch per step, so drift is visible instead of silently clicking the wrong control.',
+    annotations: {
+      readOnlyHint: false,
+      destructiveHint: true,
+      idempotentHint: false,
+      openWorldHint: true
+    },
+    inputSchema: {
+      type: 'object',
+      properties: {
+        pageId: { type: 'string', description: 'Page id returned by ahttp_open. Required by 2026-07-28 clients; optional for legacy clients.' },
+        trace: { type: 'object', description: 'Trace object returned by ahttp_trace, or an object with a steps array.' },
+        dryRun: { type: 'boolean', description: 'Resolve every step without executing it.' },
+        continueOnError: { type: 'boolean', description: 'Keep going after a missing or ambiguous step.' },
+        requireSameUrl: { type: 'boolean', description: 'Stop when the page URL differs from the recorded step URL.' },
+        confirm: { type: 'boolean', description: 'Confirm guarded actions recorded in the trace.' },
+        values: { type: 'array', items: { type: 'string', maxLength: 10000 }, maxItems: 200, description: 'Values for redacted steps, indexed like the trace steps.' }
+      },
+      required: ['trace'],
+      additionalProperties: false
+    }
   }
 ];
 
@@ -395,6 +439,59 @@ async function toolSnapshot(args, ctx) {
   });
 }
 
+async function toolTrace(args, ctx) {
+  ensureObject(args, 'arguments');
+  checkKeys(args, ['pageId', 'clear']);
+  const pageId = stringArg(args.pageId, 'pageId', 128);
+  if (args.clear !== undefined && typeof args.clear !== 'boolean') {
+    throw new ProtocolError(-32602, 'clear must be a boolean');
+  }
+  const resolved = resolvePage({ pageId: pageId }, ctx.modern);
+  const locked = await lockedToolError(resolved.page);
+  if (locked) return locked;
+  const trace = await resolved.page.api.trace();
+  if (args.clear === true) await resolved.page.api.clearTrace();
+  return content(JSON.stringify(trace, null, 2), false, { pageId: resolved.id, steps: trace.steps.length });
+}
+
+async function toolReplay(args, ctx) {
+  ensureObject(args, 'arguments');
+  checkKeys(args, ['pageId', 'trace', 'dryRun', 'continueOnError', 'requireSameUrl', 'confirm', 'values']);
+  const pageId = stringArg(args.pageId, 'pageId', 128);
+  const trace = objectArg(args.trace, 'trace');
+  if (!trace || !Array.isArray(trace.steps)) {
+    throw new ProtocolError(-32602, 'trace must be an object with a steps array');
+  }
+  if (args.dryRun !== undefined && typeof args.dryRun !== 'boolean') {
+    throw new ProtocolError(-32602, 'dryRun must be a boolean');
+  }
+  if (args.continueOnError !== undefined && typeof args.continueOnError !== 'boolean') {
+    throw new ProtocolError(-32602, 'continueOnError must be a boolean');
+  }
+  if (args.requireSameUrl !== undefined && typeof args.requireSameUrl !== 'boolean') {
+    throw new ProtocolError(-32602, 'requireSameUrl must be a boolean');
+  }
+  if (args.confirm !== undefined && typeof args.confirm !== 'boolean') {
+    throw new ProtocolError(-32602, 'confirm must be a boolean');
+  }
+  const values = arrayArg(args.values, 'values', 200, 10000);
+  const resolved = resolvePage({ pageId: pageId }, ctx.modern);
+  const locked = await lockedToolError(resolved.page);
+  if (locked) return locked;
+  const result = await resolved.page.api.replay(trace, {
+    dryRun: args.dryRun === true,
+    continueOnError: args.continueOnError === true,
+    requireSameUrl: args.requireSameUrl === true,
+    confirm: args.confirm === true,
+    values: values
+  });
+  return content(JSON.stringify(result, null, 2), result.ok !== true, {
+    pageId: resolved.id,
+    completed: result.completed,
+    total: result.total
+  });
+}
+
 function currentPageUrl(page) {
   if (page && page.page && typeof page.page.url === 'function') {
     try { return page.page.url(); } catch (e) {}
@@ -544,9 +641,16 @@ async function toolAct(args, ctx) {
         return nextLocked;
       }
       const handle = resolved.id;
+      // The new document gets a fresh engine. Carry the portable trace over so
+      // ahttp_trace keeps the steps that led here.
+      let carriedTrace = { steps: [] };
+      try { carriedTrace = await page.api.trace(); } catch (e) {}
       registry.replace(handle, next);
       page = next;
       resolved = { page: page, id: handle };
+      if (carriedTrace && Array.isArray(carriedTrace.steps) && carriedTrace.steps.length && typeof page.api.importTrace === 'function') {
+        try { await page.api.importTrace(carriedTrace.steps); } catch (e) {}
+      }
       const snap = await page.api.snapshot({ format: 'text', maxActions: 60, maxText: 1000 });
       return content(parts.join('\n') + '\nnavigated to ' + page.url + '\n\npageId: ' + handle + '\n' + snap, false, { pageId: handle, url: page.url });
     }
@@ -560,6 +664,8 @@ async function callTool(name, args, ctx) {
   if (name === 'ahttp_open') return toolOpen(args, ctx);
   if (name === 'ahttp_snapshot') return toolSnapshot(args, ctx);
   if (name === 'ahttp_act') return toolAct(args, ctx);
+  if (name === 'ahttp_trace') return toolTrace(args, ctx);
+  if (name === 'ahttp_replay') return toolReplay(args, ctx);
   throw new ProtocolError(-32602, 'unknown tool: ' + String(name));
 }
 

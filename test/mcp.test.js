@@ -96,9 +96,11 @@ test('MCP supports modern discovery, page handles, confirmation tokens and cance
 
     const listed = await client.call('tools/list', { _meta: MODERN_META });
     assert.equal(listed.resultType, 'complete');
-    assert.equal(listed.tools.length, 3);
+    assert.equal(listed.tools.length, 5);
     assert.equal(listed.tools[2].annotations.destructiveHint, true);
     assert.ok(listed.tools[2].inputSchema.properties.confirmationToken);
+    assert.ok(listed.tools.some((tool) => tool.name === 'ahttp_trace'));
+    assert.ok(listed.tools.some((tool) => tool.name === 'ahttp_replay'));
 
     await assert.rejects(
       client.call('tools/call', { name: 'not_a_tool', arguments: {}, _meta: MODERN_META }),
@@ -153,6 +155,34 @@ test('MCP supports modern discovery, page handles, confirmation tokens and cance
     });
     assert.equal(replay.isError, true);
     assert.match(replay.content[0].text, /INVALID/);
+
+    const exported = await client.call('tools/call', {
+      name: 'ahttp_trace',
+      arguments: { pageId },
+      _meta: MODERN_META
+    });
+    assert.equal(exported.isError, false);
+    const trace = JSON.parse(exported.content[0].text);
+    assert.equal(trace.steps.length, 1);
+    assert.equal(trace.steps[0].action.label, 'Delete account');
+    assert.equal(trace.steps[0].payload.value, undefined);
+
+    const dryRun = await client.call('tools/call', {
+      name: 'ahttp_replay',
+      arguments: { pageId, trace, dryRun: true },
+      _meta: MODERN_META
+    });
+    assert.equal(dryRun.isError, false);
+    const dryResult = JSON.parse(dryRun.content[0].text);
+    assert.equal(dryResult.steps[0].status, 'would_run');
+
+    const guardedReplay = await client.call('tools/call', {
+      name: 'ahttp_replay',
+      arguments: { pageId, trace },
+      _meta: MODERN_META
+    });
+    assert.equal(guardedReplay.isError, true);
+    assert.equal(JSON.parse(guardedReplay.content[0].text).steps[0].requiresConfirmation, true);
 
     const cancelledCall = client.call('tools/call', {
       name: 'ahttp_open',

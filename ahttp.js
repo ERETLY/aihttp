@@ -111,6 +111,8 @@
     wakeCount: 0,
     lastLatencyMs: 0,
     net: { patched: false, count: 0, inflight: 0, pending: new Set(), restore: null, log: [], saved: null },
+    trace: [],
+    traceDropped: 0,
     autoTimer: null,
     config: null,
     configLoaded: false,
@@ -4593,6 +4595,7 @@
         var counter = startMutationCounter();
         patchNetwork();
         return Promise.resolve(execute(entry, p, o)).then(function (res) {
+          var traceStep = res.ok !== false ? recordTrace(entry, p, res, o) : null;
           S.dirty = true;
           return waitSettled(o, counter, requestsBefore, pendingBefore).then(function () {
             return waitForExpectation(expect, before, o, t0);
@@ -4615,6 +4618,7 @@
               }
             };
             if (res.error) out.error = res.error;
+            if (traceStep) out.traceStep = traceStep;
             if (res.href) out.href = res.href;
             if (res.available) out.available = res.available;
             if (res.selected) out.selected = res.selected;
@@ -4990,6 +4994,299 @@
     };
   }
 
+  var TRACE_LIMIT = 200;
+
+  // A trace step stores the fingerprint, not the DOM id. Ids are scan-local;
+  // intent/testid/name/label survive a reload, a framework rerender or a
+  // deploy, which is what makes a recorded run replayable later.
+  function tracePayload(entry, p) {
+    var out = {};
+    var type = String(entry.type || '').toLowerCase();
+    var secret = p.secret === true || type === 'password';
+    if (p.key) out.key = String(p.key);
+    else if (p.checked != null) out.checked = p.checked === true;
+    else if (p.value != null || p.text != null) {
+      var value = p.value != null ? String(p.value) : String(p.text);
+      if (secret) {
+        out.redacted = true;
+        out.valueLength = value.length;
+      } else {
+        out.value = value;
+      }
+    } else if (p.hover === true) out.hover = true;
+    else if (p.scroll === true) out.scroll = true;
+    if (p.dialog === 'accept' || p.dialog === 'dismiss') {
+      out.dialog = p.dialog;
+      if (p.promptText != null) out.promptText = String(p.promptText);
+    }
+    return out;
+  }
+
+  function recordTrace(entry, p, res, o) {
+    if (o && o.record === false) return null;
+    if (!entry.fingerprint) return null;
+    var step = {
+      seq: S.trace.length + 1,
+      at: new Date().toISOString(),
+      url: currentUrl(),
+      title: docTitle(),
+      kind: res.method || entry.kind,
+      action: JSON.parse(JSON.stringify(entry.fingerprint)),
+      payload: tracePayload(entry, p),
+      ok: res.ok !== false
+    };
+    S.trace.push(step);
+    if (S.trace.length > TRACE_LIMIT) {
+      S.trace.shift();
+      S.traceDropped++;
+    }
+    return step;
+  }
+
+  // Capture what an action would record before it runs. A navigating click
+  // destroys the isolated world, so the browser backend uses this descriptor
+  // to keep the step in its own cross-navigation trace.
+  function describeAction(id, payload) {
+    ensureConfig();
+    ensureAuthFresh();
+    if (S.locked) return null;
+    wake();
+    ensureScan(false);
+    var resolved = resolveEntry(id);
+    if (resolved.status !== 'ok' || !resolved.entry || !resolved.entry.fingerprint) return null;
+    var entry = resolved.entry;
+    return {
+      seq: 0,
+      at: new Date().toISOString(),
+      url: currentUrl(),
+      title: docTitle(),
+      kind: entry.kind,
+      action: JSON.parse(JSON.stringify(entry.fingerprint)),
+      payload: tracePayload(entry, normalizePayload(payload)),
+      ok: true
+    };
+  }
+
+  function exportTrace() {
+    return {
+      version: VERSION,
+      url: currentUrl(),
+      title: docTitle(),
+      steps: JSON.parse(JSON.stringify(S.trace)),
+      dropped: S.traceDropped,
+      limit: TRACE_LIMIT
+    };
+  }
+
+  function importTrace(steps) {
+    if (!Array.isArray(steps)) return { ok: false, error: 'invalid_trace' };
+    for (var i = 0; i < steps.length; i++) {
+      var step = steps[i];
+      if (!step || !step.action) continue;
+      S.trace.push(JSON.parse(JSON.stringify(step)));
+      if (S.trace.length > TRACE_LIMIT) {
+        S.trace.shift();
+        S.traceDropped++;
+      }
+    }
+    for (var j = 0; j < S.trace.length; j++) S.trace[j].seq = j + 1;
+    return { ok: true, steps: S.trace.length };
+  }
+
+  // Same accept/margin policy as relocate(), but scored against a portable
+  // fingerprint instead of a stale registry entry.
+  function matchFingerprint(fp) {
+    ensureScan(true);
+    var scored = [];
+    for (var i = 0; i < S.scan.actions.length; i++) {
+      var cand = S.scan.actions[i];
+      if (!cand || !cand.node || !connected(cand.node)) continue;
+      var match = scoreMatch(fp, cand);
+      if (match.score <= 0) continue;
+      if (!hasContentSignal(match.signals)) continue;
+      scored.push({
+        entry: cand,
+        score: match.score,
+        content: match.content,
+        signals: match.signals,
+        disabled: !!cand.disabled
+      });
+    }
+    scored.sort(function (a, b) {
+      if (b.score !== a.score) return b.score - a.score;
+      return (a.entry.order || 0) - (b.entry.order || 0);
+    });
+    var best = null;
+    for (var j = 0; j < scored.length; j++) {
+      if (!scored[j].disabled) { best = scored[j]; break; }
+    }
+    var strongest = scored[0] || null;
+    if (!best || best.score < MATCH.ambiguous) {
+      return {
+        status: 'not_found',
+        bestScore: best ? best.score : 0,
+        secondScore: strongest && strongest !== best ? strongest.score : 0,
+        candidates: []
+      };
+    }
+    var ahead = true;
+    for (var k = 0; k < scored.length; k++) {
+      if (scored[k] === best) continue;
+      if ((best.score - scored[k].score) < MATCH.margin) ahead = false;
+      if ((best.content - scored[k].content) < MATCH.contentMargin) ahead = false;
+    }
+    if (best.score >= MATCH.accept && ahead) {
+      return {
+        status: 'ok',
+        entry: best.entry,
+        score: best.score,
+        signals: best.signals,
+        bestScore: best.score,
+        secondScore: strongest && strongest !== best ? strongest.score : 0
+      };
+    }
+    return {
+      status: 'ambiguous',
+      bestScore: best.score,
+      secondScore: strongest && strongest !== best ? strongest.score : 0,
+      candidates: scored.slice(0, MATCH.maxCandidates).map(function (row) {
+        return {
+          id: row.entry.id,
+          role: row.entry.role,
+          name: row.entry.label,
+          tag: row.entry.tag,
+          score: row.score,
+          signals: row.signals
+        };
+      })
+    };
+  }
+
+  function replayPayload(step, index, options) {
+    var src = (step && step.payload) || {};
+    var out = {};
+    if (src.redacted === true) {
+      var supplied = null;
+      if (options && options.values && options.values[index] != null) supplied = options.values[index];
+      else if (step && step.value != null) supplied = step.value;
+      if (supplied == null) return { needsValue: true, payload: out };
+      out.value = String(supplied);
+    } else if (src.value != null) out.value = String(src.value);
+    if (src.checked != null) out.checked = src.checked === true;
+    if (src.key) out.key = String(src.key);
+    if (src.hover === true) out.hover = true;
+    if (src.scroll === true) out.scroll = true;
+    if (src.dialog === 'accept' || src.dialog === 'dismiss') out.dialog = src.dialog;
+    if (src.promptText != null) out.promptText = String(src.promptText);
+    return { needsValue: false, payload: out };
+  }
+
+  // Public, DOM-free match result. The browser backend orchestrates replay
+  // across navigations because the page world dies on every navigation.
+  function publicMatch(fp) {
+    var m = matchFingerprint(fp);
+    var out = {
+      status: m.status,
+      bestScore: m.bestScore || 0,
+      secondScore: m.secondScore || 0,
+      candidates: m.candidates || []
+    };
+    if (m.status === 'ok') {
+      out.id = m.entry.id;
+      out.label = m.entry.label;
+      out.kind = m.entry.kind;
+      out.score = m.score;
+      out.signals = m.signals;
+    }
+    return out;
+  }
+
+  function replay(steps, options) {
+    var o = options || {};
+    var list = Array.isArray(steps) ? steps : (steps && Array.isArray(steps.steps) ? steps.steps : []);
+    var rows = [];
+    var index = 0;
+    function finish() {
+      var okCount = rows.filter(function (r) { return r.ok; }).length;
+      return {
+        ok: rows.length === list.length && okCount === rows.length,
+        dryRun: o.dryRun === true,
+        total: list.length,
+        completed: okCount,
+        failed: rows.length - okCount,
+        skipped: Math.max(0, list.length - rows.length),
+        steps: rows
+      };
+    }
+    function runOne() {
+      if (index >= list.length) return Promise.resolve(finish());
+      var i = index++;
+      var step = list[i] || {};
+      var fp = step.action || step.fingerprint || step;
+      var built = replayPayload(step, i, o);
+      if (built.needsValue) {
+        rows.push({ index: i, ok: false, status: 'needs_value', label: fp.label || null });
+        return o.continueOnError === true ? runOne() : Promise.resolve(finish());
+      }
+      if (o.requireSameUrl === true && step.url && currentUrl() && step.url !== currentUrl()) {
+        rows.push({ index: i, ok: false, status: 'url_mismatch', expected: step.url, actual: currentUrl() });
+        return o.continueOnError === true ? runOne() : Promise.resolve(finish());
+      }
+      var match = matchFingerprint(fp);
+      if (match.status !== 'ok') {
+        rows.push({
+          index: i,
+          ok: false,
+          status: match.status,
+          label: fp.label || null,
+          score: match.bestScore || 0,
+          candidates: match.candidates || []
+        });
+        return o.continueOnError === true ? runOne() : Promise.resolve(finish());
+      }
+      var base = {
+        index: i,
+        id: match.entry.id,
+        label: match.entry.label,
+        kind: match.entry.kind,
+        score: match.score,
+        signals: match.signals,
+        urlDrift: !!(step.url && currentUrl() && step.url !== currentUrl())
+      };
+      if (o.dryRun === true) {
+        base.ok = true;
+        base.status = 'would_run';
+        rows.push(base);
+        return runOne();
+      }
+      var actOpts = {
+        settle: o.settle,
+        timeout: o.timeout,
+        snapshot: false,
+        diff: o.diff === true,
+        record: false,
+        confirm: o.confirm === true || step.confirmed === true
+      };
+      return act(match.entry.id, built.payload, actOpts).then(function (res) {
+        base.ok = !!(res && res.ok);
+        base.status = base.ok ? 'ok' : (res && res.status ? res.status : 'failed');
+        if (res && res.error) base.error = res.error;
+        if (res && res.requiresConfirmation) base.requiresConfirmation = true;
+        if (res && res.diff) base.diff = res.diff;
+        rows.push(base);
+        return (base.ok || o.continueOnError === true) ? runOne() : finish();
+      });
+    }
+    return Promise.resolve().then(function () {
+      ensureConfig();
+      ensureAuthFresh();
+      if (S.locked) {
+        return { ok: false, locked: true, error: lockReason(), total: list.length, completed: 0, failed: 0, steps: [] };
+      }
+      return runOne();
+    });
+  }
+
   var bootConfig = readBootConfigQuick();
   if (bootConfig) {
     applyConfig(bootConfig);
@@ -5008,7 +5305,13 @@
       var entry = S.registry.get(String(id));
       return entry ? entry.node : null;
     },
+    describe: describeAction,
     act: act,
+    trace: exportTrace,
+    importTrace: importTrace,
+    clearTrace: function () { S.trace = []; S.traceDropped = 0; return { ok: true, steps: 0 }; },
+    replay: replay,
+    match: publicMatch,
     tools: tools,
     status: status,
     sleep: sleep,

@@ -157,8 +157,9 @@ async function runMcpTest(options) {
 
     const listed = await client.call('tools/list', {});
     const names = (listed.tools || []).map(function (t) { return t.name; });
-    ok(names.length === 3, 'three tools listed', names.join(','));
+    ok(names.length === 5, 'five tools listed', names.join(','));
     ok(names.indexOf('ahttp_open') >= 0 && names.indexOf('ahttp_snapshot') >= 0 && names.indexOf('ahttp_act') >= 0, 'tool names are correct', names.join(','));
+    ok(names.indexOf('ahttp_trace') >= 0 && names.indexOf('ahttp_replay') >= 0, 'trace and replay tools listed', names.join(','));
 
     const opened = await client.call('tools/call', { name: 'ahttp_open', arguments: { url: server.url } });
     const openText = opened.content && opened.content[0] ? opened.content[0].text : '';
@@ -173,6 +174,13 @@ async function runMcpTest(options) {
     ok(!filled.isError, 'ahttp_act fill succeeded');
     ok(/agent@example\.com/.test(fillText), 'diff reports the new value', fillText.split('\n')[0]);
 
+    const traceCall = await client.call('tools/call', { name: 'ahttp_trace', arguments: {} });
+    const trace = traceCall.content && traceCall.content[0] ? JSON.parse(traceCall.content[0].text) : { steps: [] };
+    ok(trace.steps.length === 1 && trace.steps[0].action.label === 'Email', 'trace records the fill as a portable step', String(trace.steps.length));
+    const dryReplay = await client.call('tools/call', { name: 'ahttp_replay', arguments: { trace: trace, dryRun: true } });
+    const dryText = dryReplay.content && dryReplay.content[0] ? JSON.parse(dryReplay.content[0].text) : { steps: [] };
+    ok(!dryReplay.isError && dryText.steps[0] && dryText.steps[0].status === 'would_run', 'a dry replay resolves the recorded step');
+
     const guardedId = (/^(a\d+) button "Delete account"/m.exec(openText) || [])[1];
     const blocked = await client.call('tools/call', { name: 'ahttp_act', arguments: { id: guardedId } });
     ok(blocked.isError === true, 'guarded action blocked over MCP');
@@ -184,6 +192,11 @@ async function runMcpTest(options) {
     ok(!navigated.isError, 'navigation action succeeded');
     ok(/Second page/.test(navText), 'new page snapshot returned after navigation');
     ok(/navigated to http/.test(navText), 'navigation recorded in the result');
+
+    const navTraceCall = await client.call('tools/call', { name: 'ahttp_trace', arguments: {} });
+    const navTrace = navTraceCall.content && navTraceCall.content[0] ? JSON.parse(navTraceCall.content[0].text) : { steps: [] };
+    ok(navTrace.steps.length === 2, 'the trace spans a navigation', String(navTrace.steps.length));
+    ok(navTrace.steps[1] && navTrace.steps[1].action.href === '/next', 'the navigating step keeps its href', navTrace.steps[1] && navTrace.steps[1].action.href);
 
     const afterNav = await client.call('tools/call', { name: 'ahttp_snapshot', arguments: {} });
     ok(!afterNav.isError && /Second page/.test(afterNav.content[0].text), 'ahttp_snapshot reads the current page');

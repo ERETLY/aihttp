@@ -75,6 +75,39 @@ Each action has an id, a tag, a label, and optional state or target. Page text i
 
 `const step = await ahttp.act('a2')` returns `{ ok: true, action, diff }` plus a fresh snapshot. `act` waits for the page to settle; errors come back as values, not exceptions.
 
+## Record once, replay deterministically
+
+This is the part you will not find in other DOM-to-LLM bridges. Every action is
+recorded as a portable fingerprint, not as `a12`. Export the trace, reload the
+page, redeploy the site, then replay it:
+
+```js
+const trace = ahttp.trace();                 // { steps: [...] }
+const check = await ahttp.replay(trace, { dryRun: true });
+// check.steps[0] => { status: 'would_run', signals: ['intent'], score: 100 }
+
+const run = await ahttp.replay(trace);       // follows navigations
+// run.steps[1] => { status: 'ambiguous', candidates: [...] }
+```
+
+Replay resolves intent, test ids, names, labels and hrefs with the same
+scoring and margin rules as `act`, so a renamed button still matches while two
+identical twins stop the run. The result says exactly what happened:
+
+| Status | Meaning |
+|---|---|
+| `ok` | Step executed |
+| `would_run` | `dryRun` resolved it without executing |
+| `not_found` | The anchor disappeared |
+| `ambiguous` | Several controls match; nothing was clicked |
+| `needs_value` | The step used a password and needs `values[index]` |
+| `requires_confirmation` | The action is guarded; pass `confirm: true` |
+| `url_mismatch` | `requireSameUrl` saw a different page |
+
+Over MCP the same feature is `ahttp_trace` and `ahttp_replay`. Password values
+never enter a trace: only their length is recorded, and replay takes the value
+from `values`.
+
 ## Using it well
 
 - Put `data-ahttp-intent` on controls that matter. Text labels change with copy; the intent attribute does not.
@@ -145,7 +178,7 @@ On a five-step checkout ahttp uses 289 tokens against 3,983 for raw HTML. On 20 
 
 <!-- BENCH:START -->
 
-Token run: `2026-11-01T05:13:00.818Z`. ahttp 0.1.0 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
+Token run: `2026-11-06T10:04:48.374Z`. ahttp 0.2.1 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
 
 ### Tokens
 
@@ -155,8 +188,7 @@ Tokens an agent reads, lower is better. Checkout is five snapshots of one purcha
 |---|---|---|---|---|---|---|---|---|---|---|
 | Raw HTML | serialized DOM | no | 3,983 | 11,771 | 191,129 | 17,909 | 105,767 | 59,787 | 390,346 | 25,896 |
 | Markdown | Readability + Turndown | no | 68 | 5,136 | 26,579 | 6,542 | 1,387 | 3,008 | 42,720 | n/a |
-| Jina Reader | hosted Markdown | no | n/a | 5,536 | 27,977 | 6,293 | 1,342 | 3,180 | 44,328 | n/a |
-| Firecrawl | hosted Markdown | no | n/a | 5,291 | 39,364 | 7,433 | 42,589 | 3,850 | 98,527 | n/a |
+| Jina Reader | hosted Markdown | no | n/a | 5,323 | 27,711 | 7,872 | 1,342 | 3,106 | 45,354 | n/a |
 | Accessibility tree | roles and names | no | 346 | 10,099 | 73,404 | 5,918 | 5,404 | 7,381 | 102,552 | 5,360 |
 | ahttp | actions, text, ids | yes | 289 | 1,162 | 1,136 | 1,105 | 4,198 | 1,149 | 9,039 | 5,104 |
 | ahttp self | actions, text, ids | yes | 289 | 1,170 | 1,148 | 1,116 | 4,208 | 1,242 | 9,173 | 5,104 |
@@ -171,10 +203,10 @@ Wall-clock numbers from one machine, relative at best. Scan from `2026-11-05T07:
 
 | Method | Time per step |
 |---|---:|
-| Accessibility tree | 3.9 ms |
-| Raw HTML | 4.5 ms |
-| Markdown | 12.9 ms |
-| ahttp | 86.5 ms |
+| Accessibility tree | 4.7 ms |
+| Raw HTML | 4.8 ms |
+| Markdown | 13.8 ms |
+| ahttp | 88.4 ms |
 | ahttp self | 84.9 ms |
 
 **Live.** URL to content, one request per page, 2026-11-05:
