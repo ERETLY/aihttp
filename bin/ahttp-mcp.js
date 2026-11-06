@@ -23,6 +23,7 @@ for (let i = 0; i < ARGS.length; i++) {
 const BROWSER_MODE = ARGS.includes('--browser') || !!cdpUrl || process.env.AHTTP_BROWSER === '1';
 const CDP_REUSE_PROFILE = ARGS.includes('--cdp-use-existing-profile') || process.env.AHTTP_CDP_USE_EXISTING_PROFILE === '1';
 const REQUEST_TIMEOUT = 30000;
+const CALL_DEADLINE_MS = Math.max(1000, parseInt(process.env.AHTTP_CALL_TIMEOUT_MS, 10) || 90000);
 const MAX_LINE = 1024 * 1024;
 const MAX_PAGES = 8;
 const CONFIRM_TTL_MS = 2 * 60 * 1000;
@@ -86,6 +87,7 @@ const TOOLS = [
         maxText: { type: 'integer', minimum: 0, maximum: 20000, description: 'Maximum visible text characters (default 1000).' },
         includeText: { type: 'boolean', description: 'Set false to omit page text entirely.' },
         verbose: { type: 'boolean', description: 'Add scan diagnostics to the text snapshot meta line.' },
+        lazy: { type: 'boolean', description: 'Scroll the page once to trigger lazy sections before scanning.' },
         format: { type: 'string', enum: ['text', 'json'], description: 'Snapshot format (default text).' }
       },
       additionalProperties: false
@@ -111,6 +113,9 @@ const TOOLS = [
         hover: { type: 'boolean', description: 'Hover the target instead of clicking it.' },
         read: { type: 'boolean', description: 'Read the target value without changing it.' },
         choose: { type: 'string', maxLength: 1000, description: 'Option label for a custom combobox, listbox or menu.' },
+        files: { type: 'array', items: { type: 'string', maxLength: 4096 }, maxItems: 10, description: 'Local file paths for a file action; the browser backend sets them on the input.' },
+        dialog: { type: 'string', enum: ['accept', 'dismiss'], description: 'Policy for a native alert/confirm/prompt raised by this action.' },
+        promptText: { type: 'string', maxLength: 1000, description: 'Text to type into a native prompt when dialog is accept.' },
         wait: { type: 'integer', minimum: 0, maximum: 60000, description: 'Extra wait in ms for popup options to render.' },
         timeout: { type: 'integer', minimum: 0, maximum: 60000, description: 'Settle timeout in ms.' },
         expect: { type: 'object', description: 'Expectation rule; a missing effect returns no_effect instead of a silent success.' },
@@ -195,6 +200,19 @@ function objectArg(value, name) {
   return value;
 }
 
+function arrayArg(value, name, maxItems, maxLength) {
+  if (value === undefined || value === null) return undefined;
+  if (!Array.isArray(value) || value.length > maxItems) {
+    throw new ProtocolError(-32602, name + ' must be an array of at most ' + maxItems + ' strings');
+  }
+  for (const item of value) {
+    if (typeof item !== 'string' || item.length === 0 || item.length > maxLength) {
+      throw new ProtocolError(-32602, name + ' entries must be non-empty strings of at most ' + maxLength + ' characters');
+    }
+  }
+  return value.slice();
+}
+
 function resolvePage(args, modern) {
   if (args.pageId) {
     const page = registry.get(args.pageId);
@@ -259,6 +277,7 @@ function snapshotOptions(args) {
   if (args.query) out.query = args.query;
   if (args.includeText === false) out.includeText = false;
   if (args.verbose === true) out.verbose = true;
+  if (args.lazy === true) out.lazy = true;
   return out;
 }
 
@@ -339,7 +358,7 @@ async function toolOpen(args, ctx) {
 
 async function toolSnapshot(args, ctx) {
   ensureObject(args, 'arguments');
-  checkKeys(args, ['pageId', 'scope', 'query', 'maxActions', 'maxText', 'includeText', 'verbose', 'format']);
+  checkKeys(args, ['pageId', 'scope', 'query', 'maxActions', 'maxText', 'includeText', 'verbose', 'lazy', 'format']);
   const pageId = stringArg(args.pageId, 'pageId', 128);
   const scope = stringArg(args.scope, 'scope', 1000);
   const query = stringArg(args.query, 'query', 1000);
@@ -350,6 +369,9 @@ async function toolSnapshot(args, ctx) {
   }
   if (args.verbose !== undefined && typeof args.verbose !== 'boolean') {
     throw new ProtocolError(-32602, 'verbose must be a boolean');
+  }
+  if (args.lazy !== undefined && typeof args.lazy !== 'boolean') {
+    throw new ProtocolError(-32602, 'lazy must be a boolean');
   }
   if (args.format !== undefined && args.format !== 'text' && args.format !== 'json') {
     throw new ProtocolError(-32602, 'format must be text or json');
@@ -364,6 +386,7 @@ async function toolSnapshot(args, ctx) {
     maxText: maxText,
     includeText: args.includeText,
     verbose: args.verbose,
+    lazy: args.lazy,
     format: args.format
   }));
   return content(typeof snap === 'string' ? snap : JSON.stringify(snap, null, 2), false, {
@@ -381,7 +404,7 @@ function currentPageUrl(page) {
 
 async function toolAct(args, ctx) {
   ensureObject(args, 'arguments');
-  checkKeys(args, ['pageId', 'id', 'value', 'checked', 'hover', 'read', 'choose', 'wait', 'timeout', 'expect', 'key', 'confirmationToken']);
+  checkKeys(args, ['pageId', 'id', 'value', 'checked', 'hover', 'read', 'choose', 'files', 'dialog', 'promptText', 'wait', 'timeout', 'expect', 'key', 'confirmationToken']);
   const pageId = stringArg(args.pageId, 'pageId', 128);
   const id = stringArg(args.id, 'id', 128);
   const value = stringArg(args.value, 'value', 10000);
@@ -389,6 +412,12 @@ async function toolAct(args, ctx) {
   const hover = booleanArg(args.hover, 'hover');
   const read = booleanArg(args.read, 'read');
   const choose = stringArg(args.choose, 'choose', 1000);
+  const files = arrayArg(args.files, 'files', 10, 4096);
+  const dialog = stringArg(args.dialog, 'dialog', 16);
+  const promptText = stringArg(args.promptText, 'promptText', 1000);
+  if (dialog !== undefined && dialog !== 'accept' && dialog !== 'dismiss') {
+    throw new ProtocolError(-32602, 'dialog must be accept or dismiss');
+  }
   const wait = integerArg(args.wait, 'wait', 0, 60000);
   const timeout = integerArg(args.timeout, 'timeout', 0, 60000);
   const expect = objectArg(args.expect, 'expect');
@@ -415,6 +444,9 @@ async function toolAct(args, ctx) {
   if (hover !== undefined) payload.hover = hover;
   if (read !== undefined) payload.read = read;
   if (choose !== undefined) payload.choose = choose;
+  if (files !== undefined) payload.files = files;
+  if (dialog !== undefined) payload.dialog = dialog;
+  if (promptText !== undefined) payload.promptText = promptText;
   if (wait !== undefined) payload.wait = wait;
   if (timeout !== undefined) payload.timeout = timeout;
   if (expect !== undefined) payload.expect = expect;
@@ -653,18 +685,43 @@ async function handleMessage(msg) {
     }
     const controller = new AbortController();
     active.set(id, controller);
+    // A handler must not hold the single queue forever. The deadline frees the
+    // queue even when the underlying page operation ignores the abort signal.
+    let timedOut = false;
+    let deadlineTimer = null;
+    const deadline = new Promise(function (_, reject) {
+      deadlineTimer = setTimeout(function () {
+        timedOut = true;
+        try { controller.abort(); } catch (e) {}
+        reject(new Error('tool call exceeded ' + CALL_DEADLINE_MS + ' ms'));
+      }, CALL_DEADLINE_MS);
+      if (deadlineTimer && typeof deadlineTimer.unref === 'function') deadlineTimer.unref();
+    });
+    const aborted = new Promise(function (_, reject) {
+      controller.signal.addEventListener('abort', function () {
+        reject(new Error('cancelled'));
+      }, { once: true });
+    });
     try {
       if (typeof params.name !== 'string') throw new ProtocolError(-32602, 'tool name is required');
-      const result = await callTool(params.name, params.arguments || {}, {
-        signal: controller.signal,
-        modern: modern
-      });
+      const result = await Promise.race([
+        callTool(params.name, params.arguments || {}, {
+          signal: controller.signal,
+          modern: modern
+        }),
+        deadline,
+        aborted
+      ]);
       if (controller.signal.aborted || cancelled.has(id)) {
         cancelled.delete(id);
         return;
       }
       respond(id, result, modern);
     } catch (err) {
+      if (timedOut) {
+        respond(id, content('ahttp: tool call exceeded ' + CALL_DEADLINE_MS + ' ms and was cancelled', true), modern);
+        return;
+      }
       if (controller.signal.aborted || cancelled.has(id)) {
         cancelled.delete(id);
         return;
@@ -675,6 +732,7 @@ async function handleMessage(msg) {
         respond(id, content('ahttp: ' + (err && err.message ? err.message : String(err)), true), modern);
       }
     } finally {
+      if (deadlineTimer) clearTimeout(deadlineTimer);
       active.delete(id);
     }
     return;

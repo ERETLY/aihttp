@@ -96,3 +96,25 @@ test('a custom combobox reads aria-activedescendant as its value', async () => {
   assert.equal(result.status, 'ok');
   assert.equal(result.value, 'Two');
 });
+
+test('aria-owns pulls an owned subtree into a modal scan', () => {
+  const window = load('<!doctype html><body>' +
+    '<div role="dialog" aria-modal="true">' +
+    '<button aria-owns="menu" aria-haspopup="menu">Open</button></div>' +
+    '<ul id="menu" role="menu"><li role="menuitem">Owned item</li></ul></body>');
+  const snapshot = window.ahttp.snapshot({ format: 'json' });
+  assert.equal(snapshot.actions.some(function (action) { return action.label === 'Owned item'; }), true);
+});
+
+test('maxNodes truncates a huge DOM without silently dropping the page', () => {
+  let html = '<!doctype html><body><main>';
+  for (let i = 0; i < 300; i++) html += '<button>Action ' + i + '</button>';
+  html += '</main></body>';
+  const window = load(html);
+  const small = window.ahttp.snapshot({ format: 'json', maxNodes: 120, force: true });
+  assert.equal(small.meta.truncated, true);
+  assert.ok(small.meta.nodes <= 130, 'nodes stopped near the cap, got ' + small.meta.nodes);
+  const large = window.ahttp.snapshot({ format: 'json', maxNodes: 5000, maxActions: 500, force: true });
+  assert.equal(large.meta.truncated, false);
+  assert.equal(large.actions.length, 300);
+});

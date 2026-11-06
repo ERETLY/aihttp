@@ -8,6 +8,19 @@
   `data-ahttp-auth-origins` explicitly allows it. A page can no longer point
   `data-ahttp-auth-endpoint` at an attacker's origin and receive the Bearer
   token. Cross-origin authorization requests omit cookies.
+- The browser backend runs the engine in a CDP isolated world. Page scripts
+  cannot read, replace or shadow `window.ahttp`, and the auth token never
+  enters the page world.
+- Cross-origin frames get their own isolated world per frame target. The main
+  engine still handles same-origin frames through `contentDocument`.
+- WebSocket connections go through the same private-address guard as HTTP.
+  `ws://127.0.0.1`, `wss://localhost` and link-local targets are blocked
+  unless `allowPrivate` is set.
+- The static backend creates one engine per page instead of sharing a
+  module-level singleton and a single `globalThis.__AHTTP_ENV__`.
+- An MCP tool call now has a deadline (`AHTTP_CALL_TIMEOUT_MS`, 90 s by
+  default). A stuck page load can no longer block the single request queue
+  forever.
 
 ### Performance
 
@@ -26,6 +39,10 @@
 
 - A link click that already navigated no longer reopens its `href`, so
   one-time links are not consumed twice.
+- `ahttp_act` accepts `files` (real uploads through the browser backend) and
+  `dialog` / `promptText` for native alert, confirm and prompt.
+- `ahttp_snapshot` accepts `lazy` to scroll the page once and reveal sections
+  built by IntersectionObserver.
 
 ### Parsing
 
@@ -46,6 +63,17 @@
   light DOM.
 - MCP `ahttp_act` now waits for settle by default and accepts `expect`,
   `checked`, `hover`, `read`, `choose`, `wait` and `timeout`.
+- A form with `<input name="hidden">` no longer hides itself: the engine reads
+  the `hidden` attribute instead of the form's named property.
+- A collapsed wrapper with height 0 and visible children (payment iframes)
+  is no longer treated as offscreen.
+- `aria-owns` subtrees are walked in the owner's region, including owned
+  popups outside a modal.
+- `snapshot({ maxNodes, maxDepth })` and `data-ahttp-max-nodes` /
+  `data-ahttp-max-depth` make the scan budget explicit; `meta.truncated`
+  reports a cut scan.
+- Native `alert` / `confirm` / `prompt` follow an accept or dismiss policy
+  per action.
 
 ## 0.2.1, 2026-11-05
 

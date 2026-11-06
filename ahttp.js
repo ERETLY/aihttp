@@ -1,7 +1,16 @@
 /*! ahttp.js v0.2.1 | MIT | DOM-to-action bridge for LLM agents */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) {
-    module.exports = factory(root);
+    var shared = factory(root);
+    // Every static page gets its own state. The default export stays a
+    // singleton for backwards compatibility; create(env) binds a fresh engine
+    // to one window instead of sharing S across every page in the process.
+    if (shared && typeof shared === 'object' && typeof shared.create !== 'function') {
+      shared.create = function (env) {
+        return factory(env && env.document ? env : root);
+      };
+    }
+    module.exports = shared;
   } else if (typeof define === 'function' && define.amd) {
     define([], function () { return factory(root); });
   } else {
@@ -220,6 +229,10 @@
     if (!isFinite(maxActions) || maxActions <= 0) maxActions = null;
     var authTimeoutMs = parseInt(input.authTimeoutMs, 10);
     if (!isFinite(authTimeoutMs) || authTimeoutMs < 1000 || authTimeoutMs > 60000) authTimeoutMs = 10000;
+    var maxNodes = parseInt(input.maxNodes, 10);
+    if (!isFinite(maxNodes) || maxNodes < 100 || maxNodes > 500000) maxNodes = null;
+    var maxDepth = parseInt(input.maxDepth, 10);
+    if (!isFinite(maxDepth) || maxDepth < 5 || maxDepth > 500) maxDepth = null;
     return {
       owner: String(input.owner == null ? '' : input.owner).trim(),
       access: access,
@@ -234,7 +247,9 @@
       deny: parsePolicyList(input.deny),
       confirm: parsePolicyList(input.confirm),
       readOnly: input.readOnly === true || input.readOnly === 'true' || input.readOnly === '',
-      maxActions: maxActions
+      maxActions: maxActions,
+      maxNodes: maxNodes,
+      maxDepth: maxDepth
     };
   }
 
@@ -244,7 +259,8 @@
     function has(name) { return el.hasAttribute ? el.hasAttribute(name) : get(name) != null; }
     var names = ['data-ahttp-owner', 'data-ahttp-private', 'data-ahttp-key', 'data-ahttp-key-hash',
       'data-ahttp-access', 'data-ahttp-auth-endpoint', 'data-ahttp-auth-origins', 'data-ahttp-auth-timeout',
-      'data-ahttp-allow', 'data-ahttp-deny', 'data-ahttp-confirm', 'data-ahttp-readonly', 'data-ahttp-max-actions'];
+      'data-ahttp-allow', 'data-ahttp-deny', 'data-ahttp-confirm', 'data-ahttp-readonly', 'data-ahttp-max-actions',
+      'data-ahttp-max-nodes', 'data-ahttp-max-depth'];
     var present = false;
     for (var i = 0; i < names.length; i++) if (has(names[i])) present = true;
     if (!present) return null;
@@ -261,7 +277,9 @@
       deny: get('data-ahttp-deny') || '',
       confirm: get('data-ahttp-confirm') || '',
       readOnly: has('data-ahttp-readonly'),
-      maxActions: get('data-ahttp-max-actions') || null
+      maxActions: get('data-ahttp-max-actions') || null,
+      maxNodes: get('data-ahttp-max-nodes') || null,
+      maxDepth: get('data-ahttp-max-depth') || null
     };
   }
 
@@ -316,6 +334,8 @@
       private: !!c.private,
       readOnly: !!c.readOnly,
       maxActions: c.maxActions || null,
+      maxNodes: c.maxNodes || null,
+      maxDepth: c.maxDepth || null,
       allow: c.allow.slice(),
       deny: c.deny.slice(),
       confirm: c.confirm.slice(),
@@ -1933,9 +1953,13 @@
           var offset = st.position === 'fixed' ? { x: 0, y: 0 } : scrollOffset(ctx.win);
           var boxless = st.display === 'contents';
           var clips = !st.overflow || st.overflow !== 'visible';
+          // A collapsed wrapper (height 0 with absolutely positioned or
+          // inline children) is common in payment iframes. Its box ends at
+          // y=0 while every child is visible, so only a strictly negative
+          // edge proves that the content is offscreen.
           if (!boxless && hasText && ((!rect.width && !rect.height && clips) ||
-              (rect.right + offset.x) <= 0 ||
-              (rect.bottom + offset.y) <= 0)) {
+              (rect.right + offset.x) < 0 ||
+              (rect.bottom + offset.y) < 0)) {
             return { hidden: true, suspicious: true };
           }
         }
@@ -1946,7 +1970,9 @@
 
   function hiddenReason(el, ctx) {
     var tag = tagOf(el);
-    if (el.hidden) return { hidden: true, suspicious: false };
+    // HTMLFormElement exposes a named control as a property, so a form with
+    // <input name="hidden"> makes form.hidden truthy. Read the attribute.
+    if (hasAttr(el, 'hidden')) return { hidden: true, suspicious: false };
     if (tag === 'input' && String(el.type || '').toLowerCase() === 'hidden') return { hidden: true, suspicious: false };
     if (tag === 'dialog' && !hasAttr(el, 'open')) return { hidden: true, suspicious: false };
     if (attr(el, 'aria-hidden') === 'true') return { hidden: true, suspicious: false };
@@ -1965,7 +1991,7 @@
     var guard = 0;
     while (node && guard++ < 60) {
       var tag = tagOf(node);
-      if (node.hidden) return true;
+      if (hasAttr(node, 'hidden')) return true;
       if (tag === 'dialog' && !hasAttr(node, 'open')) return true;
       if (attr(node, 'aria-hidden') === 'true') return true;
       if (hasAttr(node, 'inert')) return true;
@@ -2156,7 +2182,7 @@
     var guard = 0;
     while (node && node.nodeType === 1 && guard++ < 60) {
       var tag = tagOf(node);
-      if (node.hidden) return true;
+      if (hasAttr(node, 'hidden')) return true;
       if (tag === 'dialog' && !hasAttr(node, 'open')) return true;
       if (attr(node, 'aria-hidden') === 'true') return true;
       if (hasAttr(node, 'inert')) return true;
@@ -2842,6 +2868,7 @@
       if (node.nodeType === 3) {
         if (!textOff) addText(ctx, node.nodeValue, el, region);
       } else if (node.nodeType === 1) {
+        if (ctx.nodes > ctx.nodeLimit) { ctx.truncated = true; break; }
         ctx.indexMap.set(node, elemIdx++);
         registered += walk(node, region, depth + 1, ctx, textOff, form, confirmWarn, readonlyGuard);
       }
@@ -2902,11 +2929,32 @@
     return registered;
   }
 
+  // aria-owns moves a subtree under the owner for assistive technology even
+  // when the DOM keeps it elsewhere. Walk those nodes once, in the owner's
+  // region, and let the visited set prevent a second registration.
+  function walkOwned(el, region, depth, ctx, textOff, form, confirmWarn, readonlyGuard) {
+    var owns = attr(el, 'aria-owns');
+    if (!owns) return 0;
+    var ids = String(owns).split(/\s+/);
+    var count = 0;
+    var ownRegion = regionOf(el, region);
+    for (var i = 0; i < ids.length; i++) {
+      if (!ids[i]) continue;
+      var node = byId(el, ids[i]);
+      if (!node || node.nodeType !== 1) continue;
+      count += walk(node, ownRegion, depth + 1, ctx, textOff, form, confirmWarn, readonlyGuard);
+    }
+    return count;
+  }
+
   function walk(el, region, depth, ctx, textOff, form, confirmWarn, readonlyGuard) {
     if (!el || el.nodeType !== 1) return 0;
-    if (depth > 60) return 0;
-    ctx.nodes++;
+    if (!ctx.visited) ctx.visited = new Set();
+    if (ctx.visited.has(el)) return 0;
+    ctx.visited.add(el);
+    if (depth > (ctx.maxDepth || 60)) return 0;
     if (ctx.nodes > ctx.nodeLimit) { ctx.truncated = true; return 0; }
+    ctx.nodes++;
     var tag = tagOf(el);
     if (SKIP_TAGS[tag]) return 0;
     if (hasAttr(el, 'data-ahttp-ignore')) { ctx.ignored++; return 0; }
@@ -2944,9 +2992,11 @@
     if (info) {
       if (info.native) {
         register(el, info, region, ctx, ownForm, ownConfirm, ownReadonly);
+        walkOwned(el, region, depth, ctx, childTextOff, ownForm, ownConfirm, ownReadonly);
         return 1;
       }
       var below = walkChildren(el, region, depth, ctx, childTextOff, ownForm, ownConfirm, ownReadonly);
+      below += walkOwned(el, region, depth, ctx, childTextOff, ownForm, ownConfirm, ownReadonly);
       if (below > 0) return below;
       register(el, info, region, ctx, ownForm, ownConfirm, ownReadonly);
       return 1;
@@ -2955,6 +3005,7 @@
       if (ctx.forms.indexOf(el) < 0) ctx.forms.push(el);
     }
     walkChildren(el, region, depth, ctx, childTextOff, ownForm, ownConfirm, ownReadonly);
+    walkOwned(el, region, depth, ctx, childTextOff, ownForm, ownConfirm, ownReadonly);
     return 0;
   }
 
@@ -2962,7 +3013,11 @@
     return { actions: [], text: [], modal: null, at: now(), ms: 0, doc: doc, meta: { nodes: 0, sanitized: 0, ignored: 0, forms: 0, truncated: false } };
   }
 
-  function scanDOM() {
+  function scanDOM(limits) {
+    var wanted = limits || {};
+    var nodeLimit = wanted.nodeLimit ? Math.max(100, Math.min(500000, parseInt(wanted.nodeLimit, 10) || 0)) : 25000;
+    var maxDepth = wanted.maxDepth ? Math.max(5, Math.min(500, parseInt(wanted.maxDepth, 10) || 0)) : 60;
+    S.scanLimits = { nodeLimit: nodeLimit, maxDepth: maxDepth };
     var env = ENV();
     var doc = env.document;
     if (!doc || !doc.documentElement) return emptyScan(doc);
@@ -2979,7 +3034,8 @@
       actions: [],
       text: [],
       forms: [],
-      nodeLimit: 25000,
+      nodeLimit: nodeLimit,
+      maxDepth: maxDepth,
       nodes: 0,
       sanitized: 0,
       ignored: 0,
@@ -2990,7 +3046,8 @@
       truncated: false,
       cssCache: new Map(),
       cssSeen: new Set(),
-      indexMap: new Map()
+      indexMap: new Map(),
+      visited: new Set()
     };
     var modal = S.modalCache && S.modalCache.doc === doc && !S.dirty
       ? S.modalCache.value
@@ -3048,11 +3105,16 @@
     for (var i = 0; i < ids.length; i++) S.registry.delete(ids[i]);
   }
 
-  function ensureScan(force) {
+  function ensureScan(force, limits) {
     wake();
+    var wanted = limits || S.scanLimits || null;
+    if (wanted && S.scanLimits && (wanted.nodeLimit !== S.scanLimits.nodeLimit || wanted.maxDepth !== S.scanLimits.maxDepth)) {
+      S.scan = null;
+      S.dirty = true;
+    }
     var maxAge = S.canObserve ? 250 : 0;
     if (!force && S.scan && !S.dirty && now() - S.scanAt < maxAge) return S.scan;
-    return scanDOM();
+    return scanDOM(wanted);
   }
 
   function currentUrl() {
@@ -3216,7 +3278,11 @@
     ensureConfig();
     ensureAuthFresh();
     if (S.locked) return lockedSnapshot(opts);
-    var scan = ensureScan(!!opts.force);
+    var limits = {
+      nodeLimit: opts.maxNodes != null ? opts.maxNodes : (S.config && S.config.maxNodes ? S.config.maxNodes : 25000),
+      maxDepth: opts.maxDepth != null ? opts.maxDepth : (S.config && S.config.maxDepth ? S.config.maxDepth : 60)
+    };
+    var scan = ensureScan(!!opts.force, limits);
     var configCap = S.config && S.config.maxActions ? S.config.maxActions : 0;
     var requested = opts.maxActions == null ? 0 : Math.max(0, parseInt(opts.maxActions, 10) || 0);
     var maxActions = requested > 0
@@ -3940,6 +4006,17 @@
     return counter;
   }
 
+  // In an isolated world the engine cannot patch the page's own fetch/XHR.
+  // The browser backend mirrors its request count into this DOM attribute so
+  // settle still waits for page-initiated requests.
+  function externalPending(doc) {
+    if (!doc || !doc.documentElement || !doc.documentElement.getAttribute) return 0;
+    var raw = doc.documentElement.getAttribute('data-ahttp-net');
+    if (!raw) return 0;
+    var n = parseInt(raw, 10);
+    return isFinite(n) && n > 0 ? n : 0;
+  }
+
   function waitSettled(o, counter, requestsBefore, ignorePending) {
     if (o && o.settle === false) return Promise.resolve();
     var timeout = o && o.timeout != null ? o.timeout : 1200;
@@ -3968,6 +4045,7 @@
         } else {
           busy = S.net.inflight;
         }
+        busy += externalPending(S.doc);
         var settled = quietSince !== null && now() - quietSince >= quiet && elapsed >= minWait && busy === 0;
         if (settled || elapsed >= timeout) return resolve();
         setTimeout(tick, 16);
@@ -4836,7 +4914,9 @@
       deny: input.deny != null ? input.deny : base.deny,
       confirm: input.confirm != null ? input.confirm : base.confirm,
       readOnly: input.readOnly != null ? input.readOnly : base.readOnly,
-      maxActions: input.maxActions != null ? input.maxActions : base.maxActions
+      maxActions: input.maxActions != null ? input.maxActions : base.maxActions,
+      maxNodes: input.maxNodes != null ? input.maxNodes : base.maxNodes,
+      maxDepth: input.maxDepth != null ? input.maxDepth : base.maxDepth
     };
     resetRuntime();
     S.configLoaded = true;
@@ -4921,6 +5001,13 @@
     version: VERSION,
     wake: function () { wake(); return status(); },
     snapshot: function (opts) { return buildSnapshot(opts || {}); },
+    // Resolve an action id to its live DOM node. The browser backend uses it
+    // for file inputs, where the value cannot be set from page JavaScript.
+    element: function (id) {
+      ensureScan(false);
+      var entry = S.registry.get(String(id));
+      return entry ? entry.node : null;
+    },
     act: act,
     tools: tools,
     status: status,
