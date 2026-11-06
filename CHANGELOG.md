@@ -88,6 +88,16 @@
   reports a cut scan.
 - Native `alert` / `confirm` / `prompt` follow an accept or dismiss policy
   per action.
+- `@supports` blocks are evaluated instead of applied blindly. The engine uses
+  `CSS.supports` when present, otherwise probes the declaration against a real
+  style object or a known-property table. `@container` blocks are skipped when
+  there is no layout, so an unmatched query cannot hide a page. `@layer` rules
+  still apply.
+- `content-visibility: hidden` removes its subtree from the scan.
+- A closed `popover` is not exposed; an open popover is scanned normally.
+- A `<slot>` walks its assigned nodes instead of the fallback content.
+- `<frameset><frame>` documents are scanned through `contentDocument`, the
+  same way as same-origin iframes.
 
 ## 0.2.1, 2026-11-05
 

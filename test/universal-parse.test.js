@@ -5,6 +5,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { JSDOM } = require('jsdom');
+const { openHtml } = require('../lib/page');
 
 const ENGINE = fs.readFileSync(path.join(__dirname, '..', 'ahttp.js'), 'utf8');
 
@@ -117,4 +118,45 @@ test('maxNodes truncates a huge DOM without silently dropping the page', () => {
   const large = window.ahttp.snapshot({ format: 'json', maxNodes: 5000, maxActions: 500, force: true });
   assert.equal(large.meta.truncated, false);
   assert.equal(large.actions.length, 300);
+});
+
+test('an unmatched @supports block does not hide controls', () => {
+  const window = load('<!doctype html><body><style>' +
+    '@supports (display: grid) { .grid-only { display: none } }' +
+    '@supports (ahttp-unknown-prop: 1) { .never { display: none } }' +
+    '</style><main><button class="grid-only">Grid hidden</button>' +
+    '<button class="never">Never hidden</button></main></body>');
+  const labels = window.ahttp.snapshot({ format: 'json' }).actions.map(function (a) { return a.label; });
+  assert.equal(labels.indexOf('Grid hidden'), -1);
+  assert.ok(labels.indexOf('Never hidden') >= 0);
+});
+
+test('a container query block is skipped without layout', () => {
+  const page = openHtml('<style>@container (max-width: 1px) { .c { display: none } }</style>' +
+    '<main><button class="c">Container action</button></main>');
+  assert.match(page.api.snapshot({ format: 'text' }), /Container action/);
+});
+
+test('@layer rules still apply', () => {
+  const page = openHtml('<style>@layer base { .layered { display: none } }</style>' +
+    '<main><button class="layered">Layered hidden</button><button>Plain action</button></main>');
+  const text = page.api.snapshot({ format: 'text' });
+  assert.doesNotMatch(text, /Layered hidden/);
+  assert.match(text, /Plain action/);
+});
+
+test('content-visibility hidden removes the subtree', () => {
+  const page = openHtml('<main><div style="content-visibility:hidden"><button>CV action</button></div>' +
+    '<button>Visible action</button></main>');
+  const text = page.api.snapshot({ format: 'text' });
+  assert.doesNotMatch(text, /CV action/);
+  assert.match(text, /Visible action/);
+});
+
+test('a closed popover is not exposed', () => {
+  const page = openHtml('<main><button popovertarget="p">Open popover</button>' +
+    '<div id="p" popover><button>Inside popover</button></div></main>');
+  const text = page.api.snapshot({ format: 'text' });
+  assert.match(text, /Open popover/);
+  assert.doesNotMatch(text, /Inside popover/);
 });

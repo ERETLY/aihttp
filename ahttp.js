@@ -1391,6 +1391,94 @@
     return false;
   }
 
+  // CSS.supports is authoritative when the runtime has it. Without it the
+  // static backends validate the declaration against a real style object
+  // (jsdom) or a known-property table (mini-dom). An unknown condition is
+  // treated as unsupported so a block that never matched cannot hide a page.
+  var KNOWN_CSS_PROPS = {
+    'display': 1, 'position': 1, 'top': 1, 'right': 1, 'bottom': 1, 'left': 1, 'inset': 1,
+    'float': 1, 'clear': 1, 'visibility': 1, 'opacity': 1, 'color': 1,
+    'background': 1, 'background-color': 1, 'background-image': 1, 'background-size': 1,
+    'border': 1, 'border-color': 1, 'border-radius': 1, 'border-width': 1, 'border-style': 1,
+    'margin': 1, 'margin-top': 1, 'margin-right': 1, 'margin-bottom': 1, 'margin-left': 1,
+    'padding': 1, 'padding-top': 1, 'padding-right': 1, 'padding-bottom': 1, 'padding-left': 1,
+    'width': 1, 'height': 1, 'min-width': 1, 'min-height': 1, 'max-width': 1, 'max-height': 1,
+    'overflow': 1, 'overflow-x': 1, 'overflow-y': 1, 'box-sizing': 1, 'box-shadow': 1,
+    'flex': 1, 'flex-direction': 1, 'flex-wrap': 1, 'flex-grow': 1, 'flex-shrink': 1,
+    'justify-content': 1, 'align-items': 1, 'align-content': 1, 'align-self': 1, 'gap': 1,
+    'grid': 1, 'grid-template-columns': 1, 'grid-template-rows': 1, 'grid-column': 1, 'grid-row': 1,
+    'font': 1, 'font-size': 1, 'font-family': 1, 'font-weight': 1, 'line-height': 1,
+    'text-align': 1, 'text-decoration': 1, 'text-transform': 1, 'white-space': 1,
+    'letter-spacing': 1, 'word-break': 1, 'word-wrap': 1, 'vertical-align': 1,
+    'transform': 1, 'transform-origin': 1, 'transition': 1, 'animation': 1,
+    'cursor': 1, 'pointer-events': 1, 'z-index': 1, 'content-visibility': 1,
+    'aspect-ratio': 1, 'object-fit': 1, 'clip-path': 1, 'filter': 1, 'backdrop-filter': 1,
+    'user-select': 1, 'scroll-behavior': 1, 'scroll-snap-type': 1, 'contain': 1,
+    'writing-mode': 1, 'direction': 1, 'list-style': 1, 'outline': 1, 'resize': 1
+  };
+
+  function supportsOne(cond, win) {
+    var value = mqTrim(cond);
+    if (!value) return true;
+    if (/^not\s+/i.test(value)) {
+      var inner = supportsOne(value.replace(/^not\s+/i, ''), win);
+      return inner == null ? null : !inner;
+    }
+    var andParts = value.split(/\s+and\s+/i);
+    if (andParts.length > 1) {
+      var all = true;
+      for (var i = 0; i < andParts.length; i++) {
+        var r = supportsOne(andParts[i], win);
+        if (r === false) return false;
+        if (r == null) all = null;
+      }
+      return all;
+    }
+    var orParts = value.split(/\s+or\s+/i);
+    if (orParts.length > 1) {
+      var any = false;
+      for (var j = 0; j < orParts.length; j++) {
+        var o = supportsOne(orParts[j], win);
+        if (o === true) return true;
+        if (o == null) any = null;
+      }
+      return any;
+    }
+    var m = value.match(/^\(\s*([-\w]+)\s*:\s*([\s\S]+)\)$/);
+    if (!m) return null;
+    var prop = m[1].toLowerCase();
+    var val = m[2].trim();
+    if (prop.indexOf('--') === 0) return true;
+    if (/^-(?:webkit|moz|ms|o)-/.test(prop)) return true;
+    try {
+      var doc = win && win.document;
+      var probe = doc && doc.createElement ? doc.createElement('div') : null;
+      var style = probe && probe.style;
+      if (style && typeof style.setProperty === 'function') {
+        style.setProperty('ahttp-probe-unknown', '1');
+        var validates = style.getPropertyValue('ahttp-probe-unknown') === '';
+        if (validates) {
+          style.setProperty(prop, val);
+          return !!style.getPropertyValue(prop);
+        }
+      }
+    } catch (e) {}
+    return !!KNOWN_CSS_PROPS[prop];
+  }
+
+  function supportsMatches(text, win) {
+    var value = mqTrim(text);
+    if (!value) return true;
+    var ref = null;
+    try {
+      ref = win && win.CSS ? win.CSS : (GLOBAL && GLOBAL.CSS ? GLOBAL.CSS : null);
+    } catch (e) { ref = null; }
+    if (ref && typeof ref.supports === 'function') {
+      try { return ref.supports(value); } catch (e) { return null; }
+    }
+    return supportsOne(value, win);
+  }
+
   // Fast path for the simple selectors that make up most utility CSS. Falls
   // back to element.matches(): the static backends parse selectors per call.
   function cssFastKind(sel) {
@@ -1619,6 +1707,17 @@
       if (!rule) return;
       if (rule.type === 7 || (rule.name && !rule.selectorText) ||
           (rule.cssText && /@(?:-\w+-)?keyframes/i.test(rule.cssText))) return;
+      // A container query cannot be evaluated without layout; skipping the
+      // block is safer than applying a display:none that may not match.
+      var kindName = '';
+      try { kindName = rule.constructor && rule.constructor.name ? rule.constructor.name : ''; } catch (e) { kindName = ''; }
+      if (rule.container === true || kindName === 'CSSContainerRule' ||
+          (rule.conditionText && /@container/i.test(rule.cssText || ''))) return;
+      if (rule.supports || kindName === 'CSSSupportsRule' ||
+          (rule.conditionText && /@supports/i.test(rule.cssText || ''))) {
+        var supported = supportsMatches(rule.supports || rule.conditionText || '', win);
+        if (supported === false) return;
+      }
       var own = '';
       try {
         if (rule.media && typeof rule.media.mediaText === 'string') own = rule.media.mediaText;
@@ -1863,6 +1962,7 @@
       clip: decl && decl.clip || '',
       clipPath: decl && decl['clip-path'] || '',
       textIndent: decl && decl['text-indent'] || '',
+      contentVisibility: (decl && decl['content-visibility'] || '').toLowerCase(),
       cursor: (decl && decl.cursor || '').toLowerCase(),
       overflow: (decl && decl.overflow || '').toLowerCase(),
       inline: decl,
@@ -1885,6 +1985,7 @@
           out.clipPath = cs.clipPath || cs.webkitClipPath || out.clipPath;
           out.textIndent = cs.textIndent != null ? cs.textIndent : out.textIndent;
           out.cursor = (cs.cursor || out.cursor || '').toLowerCase();
+          out.contentVisibility = (cs.contentVisibility || out.contentVisibility || '').toLowerCase();
           out.overflow = (cs.overflow || out.overflow || '').toLowerCase();
         }
       } catch (e) {}
@@ -1916,6 +2017,7 @@
     if (st.empty && !ctx.layout && !hasCss) return null;
     var check = function (s) {
       if (s.display === 'none') return { hidden: true, suspicious: false };
+      if (s.contentVisibility === 'hidden') return { hidden: true, suspicious: false };
       if (s.visibility === 'hidden' || s.visibility === 'collapse') return { hidden: true, suspicious: false };
       if (isZeroOpacity(s.opacity)) return { hidden: true, suspicious: false };
       var fs = pxNum(s.fontSize);
@@ -1970,6 +2072,17 @@
     return null;
   }
 
+  function popoverHidden(el) {
+    if (!hasAttr(el, 'popover')) return false;
+    var opened = false;
+    try {
+      opened = typeof el.matches === 'function' && el.matches(':popover-open');
+    } catch (e) {
+      opened = false;
+    }
+    return !opened;
+  }
+
   function hiddenReason(el, ctx) {
     var tag = tagOf(el);
     // HTMLFormElement exposes a named control as a property, so a form with
@@ -1977,6 +2090,7 @@
     if (hasAttr(el, 'hidden')) return { hidden: true, suspicious: false };
     if (tag === 'input' && String(el.type || '').toLowerCase() === 'hidden') return { hidden: true, suspicious: false };
     if (tag === 'dialog' && !hasAttr(el, 'open')) return { hidden: true, suspicious: false };
+    if (popoverHidden(el)) return { hidden: true, suspicious: false };
     if (attr(el, 'aria-hidden') === 'true') return { hidden: true, suspicious: false };
     if (hasAttr(el, 'inert')) return { hidden: true, suspicious: false };
     var parent = parentOf(el);
@@ -1995,6 +2109,7 @@
       var tag = tagOf(node);
       if (hasAttr(node, 'hidden')) return true;
       if (tag === 'dialog' && !hasAttr(node, 'open')) return true;
+      if (popoverHidden(node)) return true;
       if (attr(node, 'aria-hidden') === 'true') return true;
       if (hasAttr(node, 'inert')) return true;
       if (tag === 'details' && !node.open && child && tagOf(child) !== 'summary') return true;
@@ -2186,6 +2301,7 @@
       var tag = tagOf(node);
       if (hasAttr(node, 'hidden')) return true;
       if (tag === 'dialog' && !hasAttr(node, 'open')) return true;
+      if (popoverHidden(node)) return true;
       if (attr(node, 'aria-hidden') === 'true') return true;
       if (hasAttr(node, 'inert')) return true;
       if (tag === 'details' && !node.open && child && tagOf(child) !== 'summary') return true;
@@ -2864,6 +2980,14 @@
   function walkChildren(el, region, depth, ctx, textOff, form, confirmWarn, readonlyGuard) {
     var registered = 0;
     var kids = el.childNodes || [];
+    // A slot renders its assigned light-DOM nodes, not its fallback children.
+    // Walking both is safe because ctx.visited dedupes, but the fallback is
+    // not rendered when an assignment exists.
+    if (tagOf(el) === 'slot' && typeof el.assignedNodes === 'function') {
+      var assigned = [];
+      try { assigned = el.assignedNodes({ flatten: true }) || []; } catch (e) { assigned = []; }
+      if (assigned.length) kids = assigned;
+    }
     var elemIdx = 0;
     for (var i = 0; i < kids.length; i++) {
       var node = kids[i];
@@ -2890,7 +3014,8 @@
         }
       }
     }
-    if (tagOf(el) === 'iframe' && ctx.iframeDepth < 2) {
+    var subTag = tagOf(el);
+    if ((subTag === 'iframe' || subTag === 'frame') && ctx.iframeDepth < 2) {
       var subDoc = null;
       try { subDoc = el.contentDocument || null; } catch (e) { subDoc = null; }
       if (subDoc && (subDoc.body || subDoc.documentElement)) {

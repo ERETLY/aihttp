@@ -264,3 +264,46 @@ test('MCP reports ambiguous when a label matches several actions', { timeout: 30
     await close(local.server);
   }
 });
+
+test('two MCP pages keep independent snapshots and actions', { timeout: 30000 }, async () => {
+  const local = await listen((req, res) => {
+    res.writeHead(200, { 'content-type': 'text/html' });
+    if (req.url === '/one') {
+      res.end('<!doctype html><body><main><h1>One</h1><button data-ahttp-intent="one">Only one</button></main></body>');
+      return;
+    }
+    if (req.url === '/two') {
+      res.end('<!doctype html><body><main><h1>Two</h1><button data-ahttp-intent="two">Only two</button></main></body>');
+      return;
+    }
+    res.end('<!doctype html><body><main><h1>Home</h1><a href="/one">One</a><a href="/two">Two</a></main></body>');
+  });
+  const proc = spawn(process.execPath, [path.join(__dirname, '..', 'bin', 'ahttp-mcp.js'), '--allow-private'], {
+    stdio: ['pipe', 'pipe', 'pipe']
+  });
+  const client = createClient(proc);
+  try {
+    const first = await client.call('tools/call', { name: 'ahttp_open', arguments: { url: local.url + '/one' } });
+    const second = await client.call('tools/call', { name: 'ahttp_open', arguments: { url: local.url + '/two' } });
+    const firstId = (/pageId: (page_[A-Za-z0-9_-]+)/.exec(first.content[0].text) || [])[1];
+    const secondId = (/pageId: (page_[A-Za-z0-9_-]+)/.exec(second.content[0].text) || [])[1];
+    assert.notEqual(firstId, secondId);
+
+    const firstSnap = await client.call('tools/call', { name: 'ahttp_snapshot', arguments: { pageId: firstId } });
+    const secondSnap = await client.call('tools/call', { name: 'ahttp_snapshot', arguments: { pageId: secondId } });
+    assert.match(firstSnap.content[0].text, /button "one"/);
+    assert.doesNotMatch(firstSnap.content[0].text, /button "two"/);
+    assert.match(secondSnap.content[0].text, /button "two"/);
+
+    const actionId = (/^(a\d+) button "two"/m.exec(secondSnap.content[0].text) || [])[1];
+    const acted = await client.call('tools/call', { name: 'ahttp_act', arguments: { pageId: secondId, id: actionId } });
+    assert.equal(acted.isError, false);
+
+    const firstAgain = await client.call('tools/call', { name: 'ahttp_snapshot', arguments: { pageId: firstId } });
+    assert.match(firstAgain.content[0].text, /button "one"/);
+    assert.doesNotMatch(firstAgain.content[0].text, /button "two"/);
+  } finally {
+    proc.kill();
+    await close(local.server);
+  }
+});
