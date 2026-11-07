@@ -10,7 +10,7 @@ What is not done yet.
 - Not run against the official MCP Inspector. The stdio server is covered by `test/mcp.test.js` and the benchmark's JSON-RPC suite.
 - No independent security review.
 - Developed on Windows. macOS and Linux are covered only by CI.
-- Not published to npm. Install from git with `npx github:ERETLY/ahttp`.
+- Not published to npm yet. The package name `aihttp` is free; `npm publish` requires the maintainer's login. Until then, install from git with `npx github:ERETLY/ahttp`.
 - No browser extension or bookmarklet. `docs/demo/index.html` is a static preview.
 
 ## Known gaps
