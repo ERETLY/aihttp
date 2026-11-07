@@ -10,6 +10,16 @@ function oracle() {
   var out = [];
   var seen = new Set();
 
+  // parentElement stops at a shadow root. A control slotted into a component
+  // is still inside the component's box, so walk through the host.
+  function parentOf(node) {
+    if (!node) return null;
+    if (node.parentElement) return node.parentElement;
+    var root = null;
+    try { root = node.getRootNode ? node.getRootNode() : null; } catch (e) { root = null; }
+    return root && root !== node && root.host ? root.host : null;
+  }
+
   function norm(value) {
     return String(value == null ? '' : value).replace(/\s+/g, ' ').trim();
   }
@@ -152,7 +162,7 @@ function oracle() {
       if (clip && clip !== 'auto' && !/rect\(\s*auto/i.test(clip)) reasons.push('ancestor-clip');
       var clipPath = String(st.clipPath || '');
       if (clipPath && /inset\(\s*50%/.test(clipPath)) reasons.push('ancestor-clip-path');
-      node = node.parentElement;
+      node = parentOf(node);
     }
     return reasons;
   }
@@ -162,6 +172,12 @@ function oracle() {
     for (var i = 0; i < labels.length; i++) {
       var label = labels[i];
       if (!norm(label.innerText)) continue;
+      // A visible label with a real box is the escape hatch for a styled
+      // checkbox (opacity:0 or a 1x1 input). A label inside a closed popover
+      // has no box and must not make its input reachable.
+      var box = null;
+      try { box = label.getBoundingClientRect(); } catch (e) { box = null; }
+      if (!box || !box.width || !box.height) continue;
       var bad = ownReasons(label).concat(ancestorReasons(label));
       if (!bad.length) return true;
     }
@@ -219,11 +235,47 @@ function oracle() {
     };
   }
 
+  // <button><div role="button" aria-label="Save">Save</div></button> is one
+  // control, not two: the inner div is not focusable and a click on either
+  // runs the same handler. The accessibility tree flattens nested interactive
+  // content, so the oracle must too. A hidden native ancestor does not count:
+  // a descendant can override visibility:hidden and become visible alone.
+  function nestedInNativeControl(el) {
+    var node = parentOf(el);
+    var guard = 0;
+    while (node && node.nodeType === 1 && guard++ < 60) {
+      var tag = node.tagName.toLowerCase();
+      var native = tag === 'button' || tag === 'summary' || tag === 'select' || tag === 'textarea' || tag === 'input' || (tag === 'a' && node.hasAttribute('href'));
+      if (native && ancestorReasons(node).length === 0) return true;
+      node = parentOf(node);
+    }
+    return false;
+  }
+
+  // <li role="menuitem"><a href="/x">Development</a></li> exposes the same
+  // destination twice: the menuitem wrapper and the link inside it. The engine
+  // registers the link, and a click on the wrapper runs the link, so the
+  // wrapper is a duplicate for coverage. A role on a native control is not a
+  // wrapper; a wrapper with its own handler is a real second control.
+  function wrapsNativeControl(el) {
+    var role = norm(el.getAttribute('role')).toLowerCase();
+    if (!role) return false;
+    var tag = el.tagName.toLowerCase();
+    if (tag === 'a' || tag === 'button' || tag === 'input' || tag === 'select' || tag === 'textarea' || tag === 'summary') return false;
+    if (el.hasAttribute('onclick') || el.hasAttribute('onmousedown') || el.hasAttribute('onkeydown') || el.hasAttribute('onkeyup')) return false;
+    if (el.hasAttribute('href')) return false;
+    var native = null;
+    try { native = el.querySelector('a[href], button, input, select, textarea, summary'); } catch (e) { native = null; }
+    return !!native;
+  }
+
   function add(el) {
     if (!el || el.nodeType !== 1 || seen.has(el)) return;
     seen.add(el);
     var role = roleOf(el);
     if (!role || ROLES.indexOf(role) < 0) return;
+    if (nestedInNativeControl(el)) return;
+    if (wrapsNativeControl(el)) return;
     out.push(describe(el, role));
   }
 

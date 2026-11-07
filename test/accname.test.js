@@ -12,12 +12,13 @@ const HTML = '<!doctype html><html><body><main>' +
   '<input id="i3" placeholder="Search">' +
   '<button id="b2" title="Print page"><svg><title>Print page</title></svg></button>' +
   '<button id="b3"><img alt="Save"></button>' +
+  '<a id="l1" href="/bluesky" title="Bluesky"><img alt="Open Library on Bluesky"></a>' +
   '</main></body></html>';
 
 test('common accessible names match dom-accessibility-api', () => {
   const { ahttp, document } = loadHtml(HTML, 'https://accname.test/');
   const snapshot = ahttp.snapshot({ format: 'json', maxActions: 40 });
-  const ids = ['b1', 'i1', 'i2', 'b2', 'b3'];
+  const ids = ['b1', 'i1', 'i2', 'b2', 'b3', 'l1'];
   const labels = snapshot.actions.map((action) => action.label);
   for (const id of ids) {
     const element = document.getElementById(id);

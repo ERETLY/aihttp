@@ -99,3 +99,51 @@ test('the oracle hides a link inside a clipped sr-only container', { skip: gate.
     await browser.close();
   }
 });
+
+test('the oracle follows the shadow boundary to a hidden host', { skip: gate.skip, timeout: 90000 }, async () => {
+  if (gate.fail) assert.fail(gate.reason);
+  const browser = await playwright.chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+    await page.setContent('<!doctype html><html><body>' +
+      '<div id="host" style="opacity:0"></div>' +
+      '<button>Visible button</button>' +
+      '</body></html>', { waitUntil: 'load' });
+    await page.evaluate(function () {
+      var host = document.getElementById('host');
+      host.attachShadow({ mode: 'open' }).innerHTML = '<button>Save book</button>';
+    });
+
+    const result = await page.evaluate(oracle);
+    const byName = new Map(result.items.map(function (item) { return [item.name, item]; }));
+    const save = byName.get('Save book');
+    assert.ok(save, 'oracle collects the button inside the shadow root');
+    assert.equal(save.visible, false, 'the opacity:0 host hides its shadow content');
+    assert.ok(save.reasons.join(',').indexOf('ancestor-opacity') >= 0, 'reason is ancestor-opacity: ' + save.reasons.join(','));
+    assert.equal(byName.get('Visible button').visible, true);
+  } finally {
+    await browser.close();
+  }
+});
+
+test('the oracle counts a nested role=button once, inside its native control', { skip: gate.skip, timeout: 90000 }, async () => {
+  if (gate.fail) assert.fail(gate.reason);
+  const browser = await playwright.chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+    await page.setContent('<!doctype html><html><body>' +
+      '<button title="Save item to board"><div role="button" aria-label="Save" aria-pressed="false">Save</div></button>' +
+      '<a href="/inner"><span role="button">Inner</span></a>' +
+      '</body></html>', { waitUntil: 'load' });
+
+    const result = await page.evaluate(oracle);
+    const buttons = result.items.filter(function (item) { return item.role === 'button'; });
+    assert.equal(buttons.length, 1, 'one button: ' + JSON.stringify(buttons.map(function (item) { return item.name; })));
+    assert.equal(buttons[0].name, 'Save');
+    const links = result.items.filter(function (item) { return item.role === 'link'; });
+    assert.equal(links.length, 1, 'one link: ' + JSON.stringify(links.map(function (item) { return item.name; })));
+    assert.equal(links[0].name, 'Inner');
+  } finally {
+    await browser.close();
+  }
+});

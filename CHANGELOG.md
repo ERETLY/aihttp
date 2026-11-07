@@ -37,6 +37,32 @@
   (Hashnode, Vaadin) is no longer counted as reachable: the engine was right
   to skip it, and the denominator was wrong.
 
+### Fixed
+
+- A custom element with `cursor:pointer` no longer swallows the real controls
+  in its light DOM. Reddit's `<shreddit-post-overflow-menu>` is a pointer
+  container with a native `<button>` inside; the host was registered and the
+  button was lost. Reddit measured 18.7% before and 99.7% after.
+- `cursor:pointer` is inherited, so a text span inside a clickable card is no
+  longer registered as a second button. The outermost pointer container (or an
+  element with its own handler or explicit role) is the control. Reddit's
+  phantom actions dropped from 485 to 88.
+- An offscreen carousel track no longer prunes counter-transformed slides.
+  Plaid translates the track to -9000px and each slide back into view; the
+  track's negative edge hid every slide. Plaid measured 64.6% before and 100%
+  after.
+- An image-only control takes its name from the image `alt` before the
+  `title` attribute, matching the accessible name. Open Library's footer
+  icons and logo measured 73.8% before and 100% after.
+- The oracle follows the shadow boundary when it checks ancestor opacity, so a
+  button inside an `opacity:0` hover overlay is hidden, not missed.
+- The oracle counts nested interactive content once (a `role=button` inside a
+  `<button>`) and does not count a `role=menuitem` wrapper and its inner link
+  as two controls. Wayfair and the Ant Design docs measured 100% after.
+- A visible label with no box no longer rescues a checkbox inside a closed
+  popover. Open Library's language filter is not part of the page until the
+  search dialog opens.
+
 ### Security
 
 - `aihttp-serve` compares the bearer token in constant time and refuses to

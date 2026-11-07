@@ -62,6 +62,11 @@ function isBlocked(status, title, bodyStart) {
   if (/captcha|are you a robot|access denied|just a moment|checking your browser|enable javascript and cookies/.test(probe)) {
     return 'bot wall';
   }
+  // Reddit and a few other sites answer a headless request with a security
+  // interstitial that is HTTP 200. It is a bot wall, not a 60% page.
+  if (/you've been blocked|you have been blocked|blocked by network security|whoa there|unusual traffic|verify you are human|request blocked/.test(probe)) {
+    return 'bot wall';
+  }
   return null;
 }
 

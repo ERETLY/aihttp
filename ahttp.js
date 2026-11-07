@@ -2054,6 +2054,27 @@
     return n;
   }
 
+  // A carousel track can sit at translateX(-9000px) while its slides are
+  // counter-transformed back into the viewport. The track's box is offscreen,
+  // but its children are reachable, so pruning the subtree loses every slide.
+  // Only prune an offscreen container when nothing inside it has a real box.
+  function hasVisibleDescendantBox(el, ctx) {
+    var nodes = null;
+    try { nodes = el.querySelectorAll ? el.querySelectorAll('*') : null; } catch (e) { nodes = null; }
+    if (!nodes) return false;
+    var limit = Math.min(nodes.length, 800);
+    for (var i = 0; i < limit; i++) {
+      var node = nodes[i];
+      var tag = tagOf(node);
+      if (tag === 'script' || tag === 'style' || tag === 'template') continue;
+      var rect = null;
+      try { rect = node.getBoundingClientRect ? node.getBoundingClientRect() : null; } catch (e) { rect = null; }
+      if (!rect || !rect.width || !rect.height) continue;
+      if (rect.right > 0 && rect.bottom > 0) return true;
+    }
+    return false;
+  }
+
   function hiddenAncestorChain(el, ctx, isTarget) {
     var st = styleOf(el, ctx);
     var hasCss = ctx.css && ctx.css.buckets.size;
@@ -2104,9 +2125,10 @@
           // inline children) is common in payment iframes. Its box ends at
           // y=0 while every child is visible, so only a strictly negative
           // edge proves that the content is offscreen.
+          var offRight = (rect.right + offset.x) < 0;
+          var offBottom = (rect.bottom + offset.y) < 0;
           if (!boxless && hasText && ((!rect.width && !rect.height && clips) ||
-              (rect.right + offset.x) < 0 ||
-              (rect.bottom + offset.y) < 0)) {
+              ((offRight || offBottom) && !hasVisibleDescendantBox(el, ctx)))) {
             return { hidden: true, suspicious: true };
           }
         }
@@ -2647,6 +2669,22 @@
     }
   }
 
+  // cursor:pointer is inherited. A text span inside a clickable card is not a
+  // second control; the card is. Only the outermost pointer container, or an
+  // element with its own handler or explicit role, becomes an action.
+  function inheritedPointer(el, ctx) {
+    var node = parentOf(el);
+    var guard = 0;
+    while (node && node.nodeType === 1 && guard++ < 6) {
+      var tag = tagOf(node);
+      if (tag === 'body' || tag === 'html') return false;
+      var s = styleOf(node, ctx);
+      if (s.cursor === 'pointer' || (!ctx.layout && cssState(node, ctx).pointer)) return true;
+      node = parentOf(node);
+    }
+    return false;
+  }
+
   function classify(el, st, ctx) {
     var tag = tagOf(el);
     var role = roleOf(el);
@@ -2689,6 +2727,7 @@
       // display:contents has no box of its own, so a pointer cursor inherited
       // from the component is not evidence that this element is clickable.
       if (pointer && !handler && st.display === 'contents') return null;
+      if (pointer && !handler && inheritedPointer(el, ctx)) return null;
       return { kind: 'click', role: 'button', native: false, custom: true, pointerOnly: !!pointer && !handler };
     }
     if (hoverReveal(el, ctx)) {
@@ -2710,7 +2749,12 @@
   var CLICK_HOST_ROLES = { button: 1, link: 1, tab: 1, menuitem: 1, option: 1, treeitem: 1, gridcell: 1 };
   function customClickHost(el, role) {
     if (!CLICK_HOST_ROLES[role]) return false;
-    return tagOf(el).indexOf('-') >= 0;
+    if (tagOf(el).indexOf('-') < 0) return false;
+    // A role inferred from cursor:pointer is not a declaration. Reddit's
+    // <shreddit-post-overflow-menu> has a pointer cursor and a real <button>
+    // in its light DOM; treating the host as the control swallowed the button.
+    // Only an explicit role makes the host the accessible control.
+    return normText(attr(el, 'role')) !== '';
   }
 
   function closestAttr(el, name) {
@@ -2816,24 +2860,28 @@
     }
     var generated = generatedText(el);
     if (generated) return generated;
-    var title = normText(attr(el, 'title'));
-    if (title) return title;
-    var ph = normText(attr(el, 'placeholder'));
-    if (ph) return ph;
+    // The accessible name of an image-only control is the image's alt text,
+    // not the title attribute. <a title="Bluesky"><img alt="Open Library on
+    // Bluesky"></a> is announced as "Open Library on Bluesky", and a screen
+    // reader user never hears the title.
+    var images = el.querySelectorAll ? el.querySelectorAll('img[alt]') : [];
+    for (var im = 0; im < images.length; im++) {
+      var imgText = normText(attr(images[im], 'alt'));
+      if (imgText) return imgText;
+    }
     var svg = el.querySelector ? el.querySelector('svg title, svg > title') : null;
     if (svg) {
       var svgText = normText(textOf(svg));
       if (svgText) return svgText;
     }
+    var title = normText(attr(el, 'title'));
+    if (title) return title;
+    var ph = normText(attr(el, 'placeholder'));
+    if (ph) return ph;
     var titled = el.querySelector ? el.querySelector('[title]') : null;
     if (titled) {
       var titledText = normText(attr(titled, 'title'));
       if (titledText) return titledText;
-    }
-    var img = el.querySelector ? el.querySelector('img[alt]') : null;
-    if (img) {
-      var imgText = normText(attr(img, 'alt'));
-      if (imgText) return imgText;
     }
     var prev = el.previousElementSibling;
     if (prev) {

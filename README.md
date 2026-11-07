@@ -307,8 +307,10 @@ mean), 21 sites below 90% and 3,928 phantom actions. The base run used the
 278-site list; the expansion run used the final timing (wait for `load`, then
 2.2 s) on the 67 new sites. Docs, tables, forms, testing grounds and
 design systems sit above 90%. News and heavy SPAs are lower because they hide
-the page behind consent or hydrate late. The matrix is a finding tool, not a
-scoreboard.
+the page behind consent or hydrate late. After these fixes the five lowest sites were re-measured:
+Ant Design 100%, Open Library 100%, Plaid 100%, Reddit 99.7% and Wayfair
+100% (Wayfair answered 429 on a repeat run). The matrix is a finding tool, not
+a scoreboard.
 
 A blocked site is not a coverage failure. A consent dialog with Accept/Reject
 controls is the page until a decision is made, so the matrix reports it
