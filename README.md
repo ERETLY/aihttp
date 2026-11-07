@@ -271,12 +271,15 @@ node benchmark/web-matrix.js --ids=mdn-input,wikipedia-en
 Each site is measured once after a scroll pass, so lazy sections exist. The
 matrix reports weighted recall (matched / oracle-visible controls), phantom
 actions, and separates blocked sites (bot wall, consent modal) from network
-errors. On the last full run: 278 sites, 167 loaded, 16 blocked, 93 network
-errors from the environment, 2 engine errors, 159 measured, **94.7% weighted
-recall** (95.6% mean), 16 sites below 90% and 2,291 phantom actions. Docs,
-tables, forms, testing grounds and design systems sit above 90%. News and
-heavy SPAs are lower because they hide the page behind consent or hydrate
-late. The matrix is a finding tool, not a scoreboard.
+errors. Snapshot and oracle run in the same synchronous frame: a virtualized
+feed (Mastodon) keeps off-screen items mounted at `opacity:0` and re-renders
+between two evaluates, which used to count them as visible. On the last full
+run: 278 sites, 185 loaded, 20 blocked, 71 network errors from the environment,
+2 engine errors, 177 measured, **97.4% weighted recall** (97.1% mean), 12 sites
+below 90% and 2,757 phantom actions. Docs, tables, forms, testing grounds and
+design systems sit above 90%. News and heavy SPAs are lower because they hide
+the page behind consent or hydrate late. The matrix is a finding tool, not a
+scoreboard.
 
 A blocked site is not a coverage failure. A consent dialog with Accept/Reject
 controls is the page until a decision is made, so the matrix reports it
