@@ -27,7 +27,10 @@
 - `benchmark/web-matrix.js` and `benchmark/web-sites.json` measure coverage on
   278 public sites against an independent oracle of reachable controls.
   `npm run bench:web` reports weighted recall, phantom actions, blocked sites
-  and network errors separately. It is a finding tool, not a CI gate.
+  and network errors separately. It is a finding tool, not a CI gate. Snapshot
+  and oracle run in one synchronous evaluate, so a virtualized feed cannot
+  re-render between them: Mastodon's off-screen items are mounted with inline
+  `opacity:0`, and measuring a second later counted them as visible.
 
 ### Security
 

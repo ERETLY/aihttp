@@ -41,11 +41,32 @@ async function measurePage(page, options) {
   const maxActions = opts.maxActions == null ? 5000 : opts.maxActions;
   const started = Date.now();
 
-  const timed = await page.evaluate(function (cap) {
-    var t0 = performance.now();
-    var result = window.ahttp.snapshot({ format: 'json', maxActions: cap, force: true });
-    return { result: result, inPageMs: performance.now() - t0 };
-  }, maxActions);
+  // Snapshot and oracle run in one synchronous evaluate. A virtualized list
+  // (Mastodon's feed) keeps off-screen items mounted with inline opacity:0 and
+  // re-renders between two evaluates; measuring them a second apart lets the
+  // oracle see items the snapshot was right to skip.
+  let timed = { result: { actions: [] }, inPageMs: 0 };
+  let oracleData = { items: [] };
+  let oracleError = null;
+  try {
+    const both = await page.evaluate(function (input) {
+      var cap = input.cap;
+      var oracleSrc = input.oracleSrc;
+      var t0 = performance.now();
+      var result = window.ahttp.snapshot({ format: 'json', maxActions: cap, force: true });
+      var inPageMs = performance.now() - t0;
+      var items = { items: [] };
+      var error = null;
+      try { items = eval('(' + oracleSrc + ')')(); }
+      catch (e) { error = String((e && e.message) || e); }
+      return { result: result, inPageMs: inPageMs, items: items, oracleError: error };
+    }, { cap: maxActions, oracleSrc: oracle.toString() });
+    timed = { result: both.result, inPageMs: both.inPageMs };
+    oracleData = both.items;
+    oracleError = both.oracleError;
+  } catch (e) {
+    oracleError = String((e && e.message) || e);
+  }
   const json = timed.result;
   const wallMs = Date.now() - started;
 
@@ -55,14 +76,6 @@ async function measurePage(page, options) {
 
   let rawHtml = '';
   try { rawHtml = await page.content(); } catch (e) { rawHtml = ''; }
-
-  let oracleData = { items: [] };
-  let oracleError = null;
-  try {
-    oracleData = await page.evaluate(oracle);
-  } catch (e) {
-    oracleError = String((e && e.message) || e);
-  }
 
   const match = matchActions(json.actions || [], oracleData.items || []);
   const visible = match.visible;
