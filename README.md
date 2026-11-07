@@ -135,6 +135,23 @@ Identity does not depend on one CSS selector. The engine scores intent attribute
 
 Loading the file does nothing. `snapshot()` is synchronous; `act()` returns a promise.
 
+## What it understands
+
+The scanner is written against the web platform, not against a list of sites. There is no per-domain code.
+
+| Layer | Covered |
+|---|---|
+| HTML controls | `input` (all text, date/time, number, range, color, file), `select` (single and multiple), `textarea`, `button`, `a[href]`, `summary`, `contenteditable` |
+| Forms | labels, `for`, wrapping labels, fieldsets, disabled state, `form.hidden` vs `<input type="hidden">`, submit/reset |
+| ARIA | roles and their kinds, `aria-label`, `aria-labelledby` (through shadow hosts), `aria-expanded` / `pressed` / `selected` / `checked`, tab/tree/grid/menu patterns |
+| Shadow DOM | open roots, `<slot>` and assigned text, custom elements with an ElementInternals role, host-level click roles |
+| CSS visibility | `display`, `visibility`, `opacity`, `clip` / `clip-path`, `text-indent`, zero font size, off-screen positioning, `content-visibility`, white-on-white, `inert`, `aria-hidden`, closed `<details>` |
+| Frames | same-origin iframes two levels deep; cross-origin frames are skipped and counted |
+| SVG | shapes are paint, not controls; `<title>` names the icon button around them |
+| Virtualized lists | the mounted viewport is measured; off-screen items kept at inline `opacity:0` are not invented |
+| Overlays | native `<dialog>`, backdrop, centered overlay; `aria-modal` alone is not enough; consent walls are reported as the page |
+| Text | main vs chrome regions, hidden-text sanitization, a token budget with a hard character cap |
+
 ## For site owners
 
 You do not have to change your markup. These attributes declare intent and limits:
