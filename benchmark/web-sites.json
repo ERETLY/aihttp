@@ -1667,6 +1667,408 @@
       "url": "https://www.ieee.org/",
       "category": "misc",
       "note": "portal"
+    },
+    {
+      "id": "discourse-meta",
+      "url": "https://meta.discourse.org/",
+      "category": "forum",
+      "note": "Discourse host"
+    },
+    {
+      "id": "discourse-python",
+      "url": "https://discuss.python.org/",
+      "category": "forum",
+      "note": "Discourse community"
+    },
+    {
+      "id": "discourse-openai",
+      "url": "https://community.openai.com/",
+      "category": "forum",
+      "note": "Discourse community"
+    },
+    {
+      "id": "discourse-hf",
+      "url": "https://discuss.huggingface.co/",
+      "category": "forum",
+      "note": "Discourse community"
+    },
+    {
+      "id": "phpbb",
+      "url": "https://www.phpbb.com/community/",
+      "category": "forum",
+      "note": "phpBB"
+    },
+    {
+      "id": "xenforo",
+      "url": "https://xenforo.com/community/",
+      "category": "forum",
+      "note": "XenForo"
+    },
+    {
+      "id": "nodebb",
+      "url": "https://community.nodebb.org/",
+      "category": "forum",
+      "note": "NodeBB"
+    },
+    {
+      "id": "flarum",
+      "url": "https://discuss.flarum.org/",
+      "category": "forum",
+      "note": "Flarum"
+    },
+    {
+      "id": "lemmy-world",
+      "url": "https://lemmy.world/",
+      "category": "forum",
+      "note": "Lemmy"
+    },
+    {
+      "id": "lemmy-sh",
+      "url": "https://sh.itjust.works/",
+      "category": "forum",
+      "note": "Lemmy"
+    },
+    {
+      "id": "mbin-fedia",
+      "url": "https://fedia.io/",
+      "category": "forum",
+      "note": "Mbin"
+    },
+    {
+      "id": "misskey-io",
+      "url": "https://misskey.io/",
+      "category": "forum",
+      "note": "Misskey"
+    },
+    {
+      "id": "fosstodon",
+      "url": "https://fosstodon.org/",
+      "category": "forum",
+      "note": "Mastodon instance"
+    },
+    {
+      "id": "mstdn-social",
+      "url": "https://mstdn.social/",
+      "category": "forum",
+      "note": "Mastodon instance"
+    },
+    {
+      "id": "superuser",
+      "url": "https://superuser.com/questions",
+      "category": "forum",
+      "note": "Stack Exchange"
+    },
+    {
+      "id": "serverfault",
+      "url": "https://serverfault.com/questions",
+      "category": "forum",
+      "note": "Stack Exchange"
+    },
+    {
+      "id": "stripe-payments",
+      "url": "https://stripe.com/payments",
+      "category": "payments",
+      "note": "payment platform"
+    },
+    {
+      "id": "paypal",
+      "url": "https://www.paypal.com/us/home",
+      "category": "payments",
+      "note": "payment platform"
+    },
+    {
+      "id": "checkout-com",
+      "url": "https://www.checkout.com/",
+      "category": "payments",
+      "note": "payment platform"
+    },
+    {
+      "id": "adyen",
+      "url": "https://www.adyen.com/",
+      "category": "payments",
+      "note": "payment platform"
+    },
+    {
+      "id": "square",
+      "url": "https://squareup.com/us/en",
+      "category": "payments",
+      "note": "payment platform"
+    },
+    {
+      "id": "braintree",
+      "url": "https://www.braintreepayments.com/",
+      "category": "payments",
+      "note": "payment platform"
+    },
+    {
+      "id": "klarna",
+      "url": "https://www.klarna.com/us/",
+      "category": "payments",
+      "note": "BNPL"
+    },
+    {
+      "id": "afterpay",
+      "url": "https://www.afterpay.com/en-US",
+      "category": "payments",
+      "note": "BNPL"
+    },
+    {
+      "id": "coinbase",
+      "url": "https://www.coinbase.com/",
+      "category": "payments",
+      "note": "crypto exchange"
+    },
+    {
+      "id": "binance",
+      "url": "https://www.binance.com/en",
+      "category": "payments",
+      "note": "crypto exchange"
+    },
+    {
+      "id": "kraken",
+      "url": "https://www.kraken.com/",
+      "category": "payments",
+      "note": "crypto exchange"
+    },
+    {
+      "id": "monzo",
+      "url": "https://monzo.com/",
+      "category": "payments",
+      "note": "neobank"
+    },
+    {
+      "id": "n26",
+      "url": "https://n26.com/en-eu",
+      "category": "payments",
+      "note": "neobank"
+    },
+    {
+      "id": "plaid",
+      "url": "https://plaid.com/",
+      "category": "payments",
+      "note": "open banking"
+    },
+    {
+      "id": "paddle",
+      "url": "https://www.paddle.com/",
+      "category": "payments",
+      "note": "merchant of record"
+    },
+    {
+      "id": "lemonsqueezy",
+      "url": "https://www.lemonsqueezy.com/",
+      "category": "payments",
+      "note": "merchant of record"
+    },
+    {
+      "id": "gumroad",
+      "url": "https://gumroad.com/",
+      "category": "payments",
+      "note": "creator commerce"
+    },
+    {
+      "id": "razorpay",
+      "url": "https://razorpay.com/",
+      "category": "payments",
+      "note": "payment platform"
+    },
+    {
+      "id": "mollie",
+      "url": "https://www.mollie.com/",
+      "category": "payments",
+      "note": "payment platform"
+    },
+    {
+      "id": "sumup",
+      "url": "https://www.sumup.com/",
+      "category": "payments",
+      "note": "payment platform"
+    },
+    {
+      "id": "x",
+      "url": "https://x.com/",
+      "category": "social",
+      "note": "microblog"
+    },
+    {
+      "id": "threads",
+      "url": "https://www.threads.net/",
+      "category": "social",
+      "note": "microblog"
+    },
+    {
+      "id": "facebook",
+      "url": "https://www.facebook.com/",
+      "category": "social",
+      "note": "social network"
+    },
+    {
+      "id": "instagram",
+      "url": "https://www.instagram.com/",
+      "category": "social",
+      "note": "photo network"
+    },
+    {
+      "id": "linkedin",
+      "url": "https://www.linkedin.com/",
+      "category": "social",
+      "note": "professional network"
+    },
+    {
+      "id": "vk",
+      "url": "https://vk.com/",
+      "category": "social",
+      "note": "social network"
+    },
+    {
+      "id": "okru",
+      "url": "https://ok.ru/",
+      "category": "social",
+      "note": "social network"
+    },
+    {
+      "id": "weibo",
+      "url": "https://weibo.com/",
+      "category": "social",
+      "note": "microblog"
+    },
+    {
+      "id": "tiktok",
+      "url": "https://www.tiktok.com/",
+      "category": "social",
+      "note": "video network"
+    },
+    {
+      "id": "snapchat",
+      "url": "https://www.snapchat.com/",
+      "category": "social",
+      "note": "messaging"
+    },
+    {
+      "id": "pinterest",
+      "url": "https://www.pinterest.com/",
+      "category": "social",
+      "note": "visual discovery"
+    },
+    {
+      "id": "tumblr",
+      "url": "https://www.tumblr.com/",
+      "category": "social",
+      "note": "microblog"
+    },
+    {
+      "id": "medium",
+      "url": "https://medium.com/",
+      "category": "social",
+      "note": "publishing"
+    },
+    {
+      "id": "substack",
+      "url": "https://substack.com/",
+      "category": "social",
+      "note": "publishing"
+    },
+    {
+      "id": "discord",
+      "url": "https://discord.com/",
+      "category": "social",
+      "note": "chat"
+    },
+    {
+      "id": "telegram",
+      "url": "https://telegram.org/",
+      "category": "social",
+      "note": "messaging"
+    },
+    {
+      "id": "signal",
+      "url": "https://signal.org/",
+      "category": "social",
+      "note": "messaging"
+    },
+    {
+      "id": "slack",
+      "url": "https://slack.com/",
+      "category": "social",
+      "note": "chat"
+    },
+    {
+      "id": "zoom",
+      "url": "https://zoom.us/",
+      "category": "social",
+      "note": "video"
+    },
+    {
+      "id": "danluu",
+      "url": "https://danluu.com/",
+      "category": "blog",
+      "note": "personal blog"
+    },
+    {
+      "id": "paulgraham",
+      "url": "https://paulgraham.com/",
+      "category": "blog",
+      "note": "personal blog"
+    },
+    {
+      "id": "jvns",
+      "url": "https://jvns.ca/",
+      "category": "blog",
+      "note": "personal blog"
+    },
+    {
+      "id": "simonwillison",
+      "url": "https://simonwillison.net/",
+      "category": "blog",
+      "note": "personal blog"
+    },
+    {
+      "id": "brandur",
+      "url": "https://brandur.org/",
+      "category": "blog",
+      "note": "personal blog"
+    },
+    {
+      "id": "hillelwayne",
+      "url": "https://www.hillelwayne.com/",
+      "category": "blog",
+      "note": "personal blog"
+    },
+    {
+      "id": "overreacted",
+      "url": "https://overreacted.io/",
+      "category": "blog",
+      "note": "personal blog"
+    },
+    {
+      "id": "fly-blog",
+      "url": "https://fly.io/blog/",
+      "category": "blog",
+      "note": "company blog"
+    },
+    {
+      "id": "github-blog",
+      "url": "https://github.blog/",
+      "category": "blog",
+      "note": "company blog"
+    },
+    {
+      "id": "cloudflare-blog",
+      "url": "https://blog.cloudflare.com/",
+      "category": "blog",
+      "note": "company blog"
+    },
+    {
+      "id": "rachelbythebay",
+      "url": "https://rachelbythebay.com/w/",
+      "category": "blog",
+      "note": "personal blog"
+    },
+    {
+      "id": "kottke",
+      "url": "https://kottke.org/",
+      "category": "blog",
+      "note": "personal blog"
     }
   ]
 }

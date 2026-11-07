@@ -1,14 +1,14 @@
-# aiweb
+# aihttp
 
-[![status: experimental](https://img.shields.io/badge/status-experimental-orange)](#)
+[![status: beta](https://img.shields.io/badge/status-beta-yellow)](#)
 [![version](https://img.shields.io/github/package-json/v/ERETLY/ahttp)](https://github.com/ERETLY/ahttp/blob/main/package.json)
 [![CI](https://github.com/ERETLY/ahttp/actions/workflows/ci.yml/badge.svg)](https://github.com/ERETLY/ahttp/actions/workflows/ci.yml)
 
-**aiweb is the AI-First Web Format.** It turns a page into a compact, executable graph: the controls an agent can use, the text it can read, and the effect of each action. No screenshots, no raw DOM, no token bonfire.
+**aihttp is the AI-First Web Format.** It turns a page into a compact, executable graph: the controls an agent can use, the text it can read, and the effect of each action. No screenshots, no raw DOM, no token bonfire.
 
-One engine with no runtime dependencies. It ships as a browser file, a CLI, an HTTP server (`aiweb-serve`) and an MCP server. `ahttp` remains the compatibility name for the engine file and the existing MCP tools; the format and the product are `aiweb`.
+One engine with no runtime dependencies. It ships as a browser file, a CLI, an HTTP server (`aihttp-serve`) and an MCP server. `ahttp` remains the compatibility name for the engine file and the existing MCP tools; the format and the product are `aihttp`.
 
-**Experimental, pre-2.0.** One maintainer. Additive changes are documented before any breaking one. The wire format is specified in [docs/AIWEB.md](docs/AIWEB.md).
+**Pre-2.0, one maintainer.** The format is stable enough to build on: additive changes are documented before any breaking one, and every release keeps the previous wire version readable. The spec is in [docs/AIHTTP.md](docs/AIHTTP.md).
 
 ## Should you use it?
 
@@ -62,11 +62,11 @@ The CLI reads static HTML and never clicks. The local loop uses Chromium, clicks
 ### HTTP: the format as a service
 
 ```bash
-npx aiweb-serve --port 8787
+npx aihttp-serve --port 8787
 curl 'http://127.0.0.1:8787/?url=https%3A%2F%2Fexample.com'
 ```
 
-`GET /?url=...` returns `application/aiweb+json` with the same action graph as the engine. `POST /act` runs one action by id. `GET /health` reports the format version. Use `--browser` for JavaScript pages, `--allow-private` for local targets, and `AIWEB_TOKEN` to require a bearer token. The wire format is in [docs/AIWEB.md](docs/AIWEB.md).
+`GET /?url=...` returns `application/aihttp+json` with the same action graph as the engine. `POST /act` runs one action by id. `GET /health` reports the format version. Use `--browser` for JavaScript pages, `--allow-private` for local targets, and `AIHTTP_TOKEN` to require a bearer token. The wire format is in [docs/AIHTTP.md](docs/AIHTTP.md).
 
 ## What it looks like
 

@@ -1,4 +1,4 @@
-/*! ahttp.js v0.2.1 | MIT | DOM-to-action bridge for LLM agents */
+/*! ahttp.js v0.3.0 | MIT | DOM-to-action bridge for LLM agents */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) {
     var shared = factory(root);
@@ -19,8 +19,9 @@
 })(typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : this), function (GLOBAL) {
   'use strict';
 
-  var VERSION = '0.2.1';
+  var VERSION = '0.3.0';
   if (GLOBAL.ahttp && GLOBAL.ahttp.__ahttp === true) {
+    try { GLOBAL.aihttp = GLOBAL.ahttp; } catch (e) {}
     try { GLOBAL.aiweb = GLOBAL.ahttp; } catch (e) {}
     return GLOBAL.ahttp;
   }
@@ -5561,7 +5562,8 @@
     lock: lockEngine,
     hashKey: function (value) { return sha256Hex(value); }
   };
-  // The format is called aiweb; ahttp stays as the compatibility global.
+  // The public name is aihttp; ahttp stays as the compatibility global.
+  try { GLOBAL.aihttp = api; } catch (e) {}
   try { GLOBAL.aiweb = api; } catch (e) {}
 
   api.installWebMCP = async function (options) {

@@ -4,15 +4,16 @@
 
 ### Added
 
-- The product and wire format are now **aiweb** (AI-First Web Format). The
-  package name is `aiweb`, the npm binaries are `aiweb`, `aiweb-mcp` and
-  `aiweb-serve`, and `window.aiweb` is an alias for the engine. The engine
-  file, MCP tool names and `ahttp` globals stay as compatibility names.
-- `aiweb-serve` exposes the format over HTTP: `GET /?url=...` returns
-  `application/aiweb+json`, `POST /act` runs one action, `GET /health` reports
+- The public product and wire format are **aihttp** (AI HTTP). The package
+  name is `aihttp`, the npm binaries are `aihttp`, `aihttp-mcp` and
+  `aihttp-serve`, and `window.aihttp` is the browser global. The engine file,
+  MCP tool names and `ahttp` globals stay as compatibility names. `aiweb` was
+  the working name during development and remains an alias.
+- `aihttp-serve` exposes the format over HTTP: `GET /?url=...` returns
+  `application/aihttp+json`, `POST /act` runs one action, `GET /health` reports
   the protocol version. Supports `--browser`, `--allow-private` and an
-  `AIWEB_TOKEN` bearer token.
-- `docs/AIWEB.md` specifies `aiweb/1`: envelope, action schema, statuses,
+  `AIHTTP_TOKEN` bearer token.
+- `docs/AIHTTP.md` specifies `aihttp/1`: envelope, action schema, statuses,
   trace/replay, transport, versioning and security rules. `ahttp.trace()` exports executed actions as
   portable fingerprints (`data-ahttp-intent`, test id, name, role, label,
   href) instead of scan-local ids. `ahttp.replay(trace)` resolves each step
@@ -25,15 +26,25 @@
   auth, `fetch`-based forms and page scripts work without a browser. Requests
   still pass through the same private-address guard as the document loader.
 - `benchmark/web-matrix.js` and `benchmark/web-sites.json` measure coverage on
-  278 public sites against an independent oracle of reachable controls.
+  345 public sites against an independent oracle of reachable controls.
   `npm run bench:web` reports weighted recall, phantom actions, blocked sites
   and network errors separately. It is a finding tool, not a CI gate. Snapshot
   and oracle run in one synchronous evaluate, so a virtualized feed cannot
   re-render between them: Mastodon's off-screen items are mounted with inline
   `opacity:0`, and measuring a second later counted them as visible.
+- The oracle now treats an ancestor clipped by `clip: rect(0,0,0,0)` or
+  `clip-path: inset(50%)` as hidden, matching the engine. `sr-only` navigation
+  (Hashnode, Vaadin) is no longer counted as reachable: the engine was right
+  to skip it, and the denominator was wrong.
 
 ### Security
 
+- `aihttp-serve` compares the bearer token in constant time and refuses to
+  bind a non-loopback interface without a token. A public bind without a token
+  would be an open SSRF proxy.
+- `aihttp-serve` rejects the `files` argument. File paths are a local trust
+  boundary: over HTTP they would let a caller read any file the server process
+  can read and upload it to a page. Use the MCP server for uploads.
 - The server authorization endpoint must share the page origin unless
   `data-ahttp-auth-origins` explicitly allows it. A page can no longer point
   `data-ahttp-auth-endpoint` at an attacker's origin and receive the Bearer

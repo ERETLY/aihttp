@@ -76,3 +76,26 @@ test('the oracle hides a closed details subtree and keeps its first summary', { 
     await browser.close();
   }
 });
+
+test('the oracle hides a link inside a clipped sr-only container', { skip: gate.skip, timeout: 90000 }, async () => {
+  if (gate.fail) assert.fail(gate.reason);
+  const browser = await playwright.chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+    await page.setContent('<!doctype html><html><body>' +
+      '<nav style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">' +
+      '<a href="/sr">Screen reader link</a></nav>' +
+      '<a href="/plain">Plain link</a>' +
+      '</body></html>', { waitUntil: 'load' });
+
+    const result = await page.evaluate(oracle);
+    const byName = new Map(result.items.map(function (item) { return [item.name, item]; }));
+    const sr = byName.get('Screen reader link');
+    assert.ok(sr, 'oracle collects the sr-only link');
+    assert.equal(sr.visible, false);
+    assert.ok(sr.reasons.indexOf('ancestor-clip') >= 0, 'reason is ancestor-clip: ' + sr.reasons.join(','));
+    assert.equal(byName.get('Plain link').visible, true);
+  } finally {
+    await browser.close();
+  }
+});

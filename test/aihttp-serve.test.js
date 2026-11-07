@@ -3,7 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const http = require('node:http');
-const { createServer } = require('../bin/aiweb-serve');
+const { createServer } = require('../bin/aihttp-serve');
 
 function listen(server) {
   return new Promise((resolve) => {
@@ -26,7 +26,7 @@ function target(handler) {
   });
 }
 
-test('aiweb serve returns the format envelope and a snapshot', { timeout: 30000 }, async (t) => {
+test('aihttp serve returns the format envelope and a snapshot', { timeout: 30000 }, async (t) => {
   const page = await target((req, res) => {
     res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
     res.end('<!doctype html><body><main><h1>Format</h1>' +
@@ -38,14 +38,14 @@ test('aiweb serve returns the format envelope and a snapshot', { timeout: 30000 
 
   const health = await fetch(base + '/health').then((r) => r.json());
   assert.equal(health.ok, true);
-  assert.equal(health.protocol, 'aiweb/1');
-  assert.equal(health.name, 'aiweb');
+  assert.equal(health.protocol, 'aihttp/1');
+  assert.equal(health.name, 'aihttp');
 
   const res = await fetch(base + '/?url=' + encodeURIComponent(page.url));
-  assert.match(res.headers.get('content-type'), /application\/aiweb\+json/);
+  assert.match(res.headers.get('content-type'), /application\/aihttp\+json/);
   const body = await res.json();
-  assert.equal(body.protocol, 'aiweb/1');
-  assert.equal(body.format, 'aiweb');
+  assert.equal(body.protocol, 'aihttp/1');
+  assert.equal(body.format, 'aihttp');
   assert.equal(body.formatVersion, 1);
   assert.ok(body.actions.some((action) => action.label === 'save'));
 
@@ -55,10 +55,10 @@ test('aiweb serve returns the format envelope and a snapshot', { timeout: 30000 
     body: JSON.stringify({ url: page.url, id: body.actions[0].id })
   }).then((r) => r.json());
   assert.equal(acted.ok, true);
-  assert.equal(acted.protocol, 'aiweb/1');
+  assert.equal(acted.protocol, 'aihttp/1');
 });
 
-test('aiweb serve enforces its bearer token', { timeout: 30000 }, async (t) => {
+test('aihttp serve enforces its bearer token', { timeout: 30000 }, async (t) => {
   const page = await target((req, res) => {
     res.writeHead(200, { 'content-type': 'text/html' });
     res.end('<!doctype html><body><button>Ping</button></body>');
@@ -78,7 +78,7 @@ test('aiweb serve enforces its bearer token', { timeout: 30000 }, async (t) => {
   assert.ok(body.actions.some((action) => action.label === 'Ping'));
 });
 
-test('aiweb serve rejects a non-http target', { timeout: 30000 }, async (t) => {
+test('aihttp serve rejects a non-http target', { timeout: 30000 }, async (t) => {
   const server = createServer({ allowPrivate: true, browser: false, token: '' });
   const base = await listen(server);
   t.after(async () => { await close(server); });
@@ -87,4 +87,29 @@ test('aiweb serve rejects a non-http target', { timeout: 30000 }, async (t) => {
   assert.equal(res.status, 400);
   const body = await res.json();
   assert.match(body.error, /http or https/);
+});
+
+test('aihttp serve refuses a public bind without a token', () => {
+  const { assertBindSafe } = require('../bin/aihttp-serve');
+  assert.doesNotThrow(() => assertBindSafe('127.0.0.1', ''));
+  assert.doesNotThrow(() => assertBindSafe('localhost', ''));
+  assert.doesNotThrow(() => assertBindSafe('::1', ''));
+  assert.doesNotThrow(() => assertBindSafe('0.0.0.0', 'secret'));
+  assert.throws(() => assertBindSafe('0.0.0.0', ''), /without a token/);
+  assert.throws(() => assertBindSafe('192.168.1.10', ''), /without a token/);
+});
+
+test('aihttp serve rejects local file paths over HTTP', { timeout: 30000 }, async (t) => {
+  const server = createServer({ allowPrivate: true, browser: false, token: '' });
+  const base = await listen(server);
+  t.after(async () => { await close(server); });
+
+  const res = await fetch(base + '/act', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ url: 'http://127.0.0.1:1/', id: 'a1', files: ['C:/Windows/win.ini'] })
+  });
+  assert.equal(res.status, 400);
+  const body = await res.json();
+  assert.match(body.error, /files are not accepted over HTTP/);
 });

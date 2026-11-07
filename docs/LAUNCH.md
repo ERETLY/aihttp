@@ -28,14 +28,28 @@ Any static file server works; the page has no server-side dependency.
 ## Release
 
 1. Update `package.json`, `CHANGELOG.md` and `ahttp.min.js` (`npm run build`).
-2. Run `npm test`, `npm run lint`, `npm run typecheck`, `npm audit` and `npm pack --dry-run`.
+2. Run `npm test`, `npm run test:corpus`, `npm run lint`, `npm run typecheck`, `npm audit` and `npm pack --dry-run`.
 3. Commit and tag the version:
    ```bash
-   git tag 0.1.0
+   git tag 0.3.0
    git push origin main --tags
    ```
 4. Create a GitHub release for the tag. Attach `self/ahttp.user.js` and `ahttp.min.js`.
-5. The package is not published to npm. Install from git:
-   ```bash
-   npx github:ERETLY/ahttp
-   ```
+
+## Publish to npm
+
+The package name is `aihttp`; the engine file and MCP tool names stay `ahttp` for compatibility.
+
+```bash
+npm login
+npm publish --access public
+npm view aihttp version
+```
+
+After the first publish, a release is `npm version patch|minor` followed by `git push --follow-tags` and `npm publish`. `prepublishOnly` is not configured, so run the test gate from the previous section first.
+
+## Install without npm
+
+```bash
+npx github:ERETLY/ahttp
+```

@@ -109,8 +109,10 @@ function oracle() {
     var out = cs ? {
       display: cs.display,
       opacity: cs.opacity,
-      contentVisibility: cs.contentVisibility
-    } : { display: '', opacity: '', contentVisibility: '' };
+      contentVisibility: cs.contentVisibility,
+      clip: cs.clip,
+      clipPath: cs.clipPath || cs.webkitClipPath
+    } : { display: '', opacity: '', contentVisibility: '', clip: '', clipPath: '' };
     styleCache.set(node, out);
     return out;
   }
@@ -143,6 +145,13 @@ function oracle() {
       var op = parseFloat(st.opacity);
       if (!isNaN(op) && op <= 0.05) reasons.push('ancestor-opacity:' + op);
       if (st.contentVisibility === 'hidden') reasons.push('ancestor-content-visibility:hidden');
+      // Tailwind's sr-only and every "visually hidden" utility clip a 1x1 box
+      // with clip: rect(0,0,0,0) or clip-path: inset(50%). The clip belongs to
+      // an ancestor, and a clipped ancestor clips its whole subtree.
+      var clip = String(st.clip || '');
+      if (clip && clip !== 'auto' && !/rect\(\s*auto/i.test(clip)) reasons.push('ancestor-clip');
+      var clipPath = String(st.clipPath || '');
+      if (clipPath && /inset\(\s*50%/.test(clipPath)) reasons.push('ancestor-clip-path');
       node = node.parentElement;
     }
     return reasons;

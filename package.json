@@ -1,7 +1,7 @@
 {
-  "name": "aiweb",
-  "version": "0.2.1",
-  "description": "AI-First Web Format: compact executable page graphs for agents. Zero-dependency browser file, CLI, HTTP server and MCP server.",
+  "name": "aihttp",
+  "version": "0.3.0",
+  "description": "AI HTTP: a compact, executable page graph for agents. Zero-dependency browser file, CLI, HTTP server and MCP server.",
   "main": "ahttp.js",
   "browser": "ahttp.js",
   "types": "ahttp.d.ts",
@@ -29,9 +29,9 @@
     "./package.json": "./package.json"
   },
   "bin": {
-    "aiweb": "./bin/ahttp-cli.js",
-    "aiweb-mcp": "./bin/ahttp-mcp.js",
-    "aiweb-serve": "./bin/aiweb-serve.js",
+    "aihttp": "./bin/ahttp-cli.js",
+    "aihttp-mcp": "./bin/ahttp-mcp.js",
+    "aihttp-serve": "./bin/aihttp-serve.js",
     "ahttp": "./bin/ahttp-cli.js",
     "ahttp-mcp": "./bin/ahttp-mcp.js"
   },
@@ -69,6 +69,7 @@
     "bench:web": "node benchmark/web-matrix.js"
   },
   "keywords": [
+    "aihttp",
     "ai-agents",
     "mcp",
     "mcp-server",

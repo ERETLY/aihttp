@@ -1,11 +1,11 @@
-# aiweb/1 — AI-First Web Format
+# aihttp/1 — AI-First Web Format
 
-aiweb is a wire format, not a site-specific scraper. It describes a page as a
+aihttp is a wire format, not a site-specific scraper. It describes a page as a
 compact graph of **actions** plus **untrusted text**, so an agent can act
 without parsing the DOM or looking at pixels.
 
-- Media type: `application/aiweb+json`
-- Protocol id: `aiweb/1`
+- Media type: `application/aihttp+json`
+- Protocol id: `aihttp/1`
 - Current implementation version: `0.2.1`
 - Compatibility: the engine file and MCP tools still use the `ahttp` prefix.
 
@@ -15,8 +15,8 @@ A response is the engine snapshot with three format fields:
 
 ```json
 {
-  "protocol": "aiweb/1",
-  "format": "aiweb",
+  "protocol": "aihttp/1",
+  "format": "aihttp",
   "formatVersion": 1,
   "version": "0.2.1",
   "url": "https://shop.test/cart",
@@ -35,7 +35,7 @@ A response is the engine snapshot with three format fields:
 
 | Field | Meaning |
 |---|---|
-| `protocol` | Always `aiweb/1` for this revision |
+| `protocol` | Always `aihttp/1` for this revision |
 | `formatVersion` | Integer, incremented on a breaking wire change |
 | `url`, `title` | The document the graph belongs to |
 | `locked` | The page exposes no actions until authorization |
@@ -99,15 +99,15 @@ redacted; supply them through `values`.
 
 ## Transport
 
-- HTTP: `aiweb-serve`, `GET /?url=...`, `POST /act`
+- HTTP: `aihttp-serve`, `GET /?url=...`, `POST /act`
 - MCP: `ahttp_open`, `ahttp_snapshot`, `ahttp_act`, `ahttp_trace`, `ahttp_replay`
-- Library: `require('aiweb')` / `window.aiweb` (`window.ahttp` is an alias)
+- Library: `require('aihttp')` / `window.aihttp` (`window.ahttp` is an alias)
 
 ## Versioning
 
 `formatVersion` changes only when a consumer must change code. New optional
 fields and new action kinds are additive. Unknown fields must be ignored.
-`protocol` identifies the revision (`aiweb/1`).
+`protocol` identifies the revision (`aihttp/1`).
 
 ## Security
 
@@ -115,4 +115,4 @@ The format is page-derived data. Authorization is origin-bound: the auth
 endpoint must share the page origin or be listed in
 `data-ahttp-auth-origins`. Browser mode runs the engine in an isolated world;
 static mode binds a guarded fetch. Private targets are blocked unless
-`allowPrivate` / `AIWEB_ALLOW_PRIVATE=1` is set.
+`allowPrivate` / `AIHTTP_ALLOW_PRIVATE=1` is set.

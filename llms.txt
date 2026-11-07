@@ -1,8 +1,12 @@
-# ahttp
+# aihttp
 
-> ahttp turns a live DOM into a compact, executable action graph and returns a semantic diff after each step. It is a zero-dependency browser file plus a Node CLI and MCP server. Version 0.1.0 is pre-1.0.
+> aihttp (AI HTTP) turns a live DOM into a compact, executable action graph and returns a semantic diff after each step. It is a zero-dependency browser file plus a Node CLI, an HTTP server and an MCP server. The wire format is `aihttp/1`; the engine file and MCP tool names stay `ahttp` for compatibility.
 
-Status: single-maintainer, no independent adoption and no third-party security audit. The repository's own suites pass; that is not external validation. The API can change.
+Install: `npm i aihttp` (package), `npx aihttp-serve --port 8787` (HTTP), `npx aihttp-mcp` (MCP). Format spec: https://github.com/ERETLY/ahttp/blob/main/docs/AIHTTP.md
+
+Status: beta, single maintainer, no independent adoption and no third-party security audit. The repository's own suites pass; that is not external validation. The format is versioned; breaking changes require a new wire version.
+
+Coverage: 345 public sites across forms, docs, design systems, forums, payments, social networks, news, commerce, government and small personal sites, measured against an independent oracle of reachable controls. Last full run: 221 measured, 95.4% weighted recall, 96.5% mean, 0 engine errors. Coverage is a finding tool, not a guarantee.
 
 Repository: https://github.com/ERETLY/ahttp
 Engine: https://github.com/ERETLY/ahttp/blob/main/ahttp.js

@@ -1,18 +1,19 @@
 #!/usr/bin/env node
 'use strict';
 
-// aiweb serve: the AI-First Web Format over HTTP.
+// aihttp serve: the AI HTTP format over HTTP.
 //
-//   GET  /?url=https://example.com            -> application/aiweb+json
+//   GET  /?url=https://example.com            -> application/aihttp+json
 //   POST /            { "url": "...", ... }   -> same, with a JSON body
 //   POST /act         { "url": "...", "id": "a3", "value": "..." }
 //   GET  /health
 //
 // The response is the same action graph the engine returns, wrapped in the
-// aiweb envelope. Pages are opened per request; use the MCP server when you
+// aihttp envelope. Pages are opened per request; use the MCP server when you
 // need a stateful session with cookies and multiple steps.
 
 const http = require('node:http');
+const crypto = require('node:crypto');
 const pkg = require('../package.json');
 
 const DEFAULTS = {
@@ -26,11 +27,11 @@ const DEFAULTS = {
 
 function parseArgs(argv) {
   const out = {
-    port: Number(process.env.AIWEB_PORT || DEFAULTS.port),
-    host: process.env.AIWEB_HOST || DEFAULTS.host,
-    browser: process.env.AIWEB_BROWSER === '1',
-    allowPrivate: process.env.AIWEB_ALLOW_PRIVATE === '1',
-    token: process.env.AIWEB_TOKEN || '',
+    port: Number(process.env.AIHTTP_PORT || process.env.AIWEB_PORT || DEFAULTS.port),
+    host: process.env.AIHTTP_HOST || process.env.AIWEB_HOST || DEFAULTS.host,
+    browser: process.env.AIHTTP_BROWSER || process.env.AIWEB_BROWSER === '1',
+    allowPrivate: process.env.AIHTTP_ALLOW_PRIVATE || process.env.AIWEB_ALLOW_PRIVATE === '1',
+    token: process.env.AIHTTP_TOKEN || '',
     help: false
   };
   for (let i = 0; i < argv.length; i++) {
@@ -50,10 +51,10 @@ function parseArgs(argv) {
 }
 
 const USAGE = [
-  'aiweb serve ' + pkg.version + ' | AI-First Web Format over HTTP',
+  'aihttp serve ' + pkg.version + ' | AI-First Web Format over HTTP',
   '',
   'Usage:',
-  '  aiweb-serve [--port 8787] [--host 127.0.0.1] [--browser] [--allow-private] [--token TOKEN]',
+  '  aihttp-serve [--port 8787] [--host 127.0.0.1] [--browser] [--allow-private] [--token TOKEN]',
   '',
   'Endpoints:',
   '  GET  /?url=<url>&maxActions=60&maxText=1000&includeText=true&lazy=false',
@@ -61,7 +62,7 @@ const USAGE = [
   '  POST /act     {"url":"...","id":"a3","value":"..."}',
   '  GET  /health',
   '',
-  'Environment: AIWEB_PORT, AIWEB_HOST, AIWEB_BROWSER=1, AIWEB_ALLOW_PRIVATE=1, AIWEB_TOKEN'
+  'Environment: AIHTTP_PORT, AIHTTP_HOST, AIHTTP_BROWSER=1, AIHTTP_ALLOW_PRIVATE=1, AIHTTP_TOKEN'
 ].join('\n');
 
 let active = 0;
@@ -97,16 +98,31 @@ function json(res, status, body, contentType) {
 
 function envelope(snapshot) {
   const out = Object.assign({}, snapshot);
-  out.protocol = 'aiweb/1';
-  out.format = 'aiweb';
+  out.protocol = 'aihttp/1';
+  out.format = 'aihttp';
   out.formatVersion = 1;
   return out;
 }
 
 function authorized(req, token) {
   if (!token) return true;
-  const header = String(req.headers.authorization || '');
-  return header === 'Bearer ' + token;
+  const expected = Buffer.from('Bearer ' + token);
+  const actual = Buffer.from(String(req.headers.authorization || ''));
+  if (actual.length !== expected.length) return false;
+  return crypto.timingSafeEqual(actual, expected);
+}
+
+function isLoopbackHost(host) {
+  const name = String(host || '').toLowerCase().replace(/^\[|\]$/g, '');
+  return name === '127.0.0.1' || name === 'localhost' || name === '::1';
+}
+
+// Binding a public interface without a token turns the server into an open
+// SSRF proxy for anyone who can reach it. A token is the only thing that
+// separates a local tool from a public one, so require it.
+function assertBindSafe(host, token) {
+  if (isLoopbackHost(host) || token) return;
+  throw new Error('refusing to bind ' + host + ' without a token; use --token or --host 127.0.0.1');
 }
 
 function readBody(req) {
@@ -196,8 +212,8 @@ function createServer(opts) {
       if (parsed.pathname === '/health') {
         return json(res, 200, {
           ok: true,
-          name: 'aiweb',
-          protocol: 'aiweb/1',
+          name: 'aihttp',
+          protocol: 'aihttp/1',
           version: pkg.version,
           browser: opts.browser === true
         });
@@ -214,6 +230,11 @@ function createServer(opts) {
       }
       const body = req.method === 'POST' ? await readBody(req) : {};
       const args = Object.assign({}, Object.fromEntries(parsed.searchParams.entries()), body || {});
+      // File paths are a local trust boundary. Over HTTP they would let a
+      // caller read any file the server process can read and upload it.
+      if (args.files !== undefined) {
+        throw new Error('files are not accepted over HTTP; use the MCP server');
+      }
       const url = targetUrl(args.url);
       const result = await withPage(url, opts, async (page) => {
         if (parsed.pathname === '/act') {
@@ -233,11 +254,11 @@ function createServer(opts) {
         return page.api.snapshot(snapshotOptions(args));
       });
       const status = result && result.ok === false && parsed.pathname === '/act' ? 422 : 200;
-      return json(res, status, envelope(result), 'application/aiweb+json; charset=utf-8');
+      return json(res, status, envelope(result), 'application/aihttp+json; charset=utf-8');
     } catch (err) {
       const message = err && err.message ? err.message : String(err);
-      const status = /required|invalid|exceeds|http or https|private|blocked/i.test(message) ? 400 : 502;
-      return json(res, status, { ok: false, protocol: 'aiweb/1', error: message });
+      const status = /required|invalid|exceeds|not accepted|http or https|private|blocked/i.test(message) ? 400 : 502;
+      return json(res, status, { ok: false, protocol: 'aihttp/1', error: message });
     }
   });
 }
@@ -248,10 +269,17 @@ async function main() {
     process.stdout.write(USAGE + '\n');
     return;
   }
+  try {
+    assertBindSafe(opts.host, opts.token);
+  } catch (err) {
+    process.stderr.write('aihttp serve: ' + err.message + '\n');
+    process.exitCode = 1;
+    return;
+  }
   const server = createServer(opts);
   server.listen(opts.port, opts.host, () => {
     const address = server.address();
-    process.stdout.write('aiweb serve ' + pkg.version + ' on http://' + address.address + ':' + address.port +
+    process.stdout.write('aihttp serve ' + pkg.version + ' on http://' + address.address + ':' + address.port +
       ' | browser=' + (opts.browser ? 'on' : 'off') + ' | private=' + (opts.allowPrivate ? 'on' : 'off') + '\n');
   });
   const shutdown = () => server.close(() => process.exit(0));
@@ -261,4 +289,4 @@ async function main() {
 
 if (require.main === module) main();
 
-module.exports = { createServer, parseArgs, snapshotOptions, targetUrl, USAGE };
+module.exports = { createServer, assertBindSafe, parseArgs, snapshotOptions, targetUrl, USAGE };
