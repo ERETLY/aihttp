@@ -1,0 +1,19 @@
+{
+  "id": "aria-tabs-widget",
+  "html": "fixtures/aria-tabs.html",
+  "url": "https://corpus.test/aria-tabs-widget",
+  "notes": "role=tab buttons keep the tab role; a hidden tabpanel is not scanned; tabindex on a panel is not a button",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectText": [
+        "General",
+        "Billing",
+        "Workspace name"
+      ],
+      "expectNotText": [
+        "Manage plan"
+      ]
+    }
+  ]
+}

@@ -187,7 +187,7 @@ On a five-step checkout ahttp uses 289 tokens against 3,983 for raw HTML. On 20 
 
 <!-- BENCH:START -->
 
-Token run: `2026-11-06T10:16:49.070Z`. ahttp 0.2.1 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
+Token run: `2026-11-07T10:09:16.552Z`. ahttp 0.2.1 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
 
 ### Tokens
 
@@ -197,9 +197,9 @@ Tokens an agent reads, lower is better. Checkout is five snapshots of one purcha
 |---|---|---|---|---|---|---|---|---|---|---|
 | Raw HTML | serialized DOM | no | 3,983 | 11,771 | 191,129 | 17,909 | 105,767 | 59,787 | 390,346 | 25,896 |
 | Markdown | Readability + Turndown | no | 68 | 5,136 | 26,579 | 6,542 | 1,387 | 3,008 | 42,720 | n/a |
-| Jina Reader | hosted Markdown | no | n/a | 5,323 | 27,711 | 7,872 | n/a | 3,106 | 44,012 | n/a |
+| Jina Reader | hosted Markdown | no | n/a | 5,288 | 27,977 | 7,410 | 1,342 | 3,180 | 45,197 | n/a |
 | Accessibility tree | roles and names | no | 346 | 10,099 | 73,404 | 5,918 | 5,404 | 7,381 | 102,552 | 5,360 |
-| ahttp | actions, text, ids | yes | 289 | 1,162 | 1,136 | 1,105 | 4,198 | 1,149 | 9,039 | 5,104 |
+| ahttp | actions, text, ids | yes | 289 | 1,162 | 1,136 | 1,105 | 1,282 | 1,149 | 6,123 | 5,104 |
 | ahttp self | actions, text, ids | yes | 289 | 1,170 | 1,148 | 1,116 | 4,208 | 1,242 | 9,173 | 5,104 |
 
 Only the two ahttp rows can click; the baselines score 0/20 on the task suite because they only read. `ahttp self` is the same engine loaded as `self/ahttp.user.js` in Chromium.
@@ -212,10 +212,10 @@ Wall-clock numbers from one machine, relative at best. Scan from `2026-11-05T07:
 
 | Method | Time per step |
 |---|---:|
-| Accessibility tree | 4.9 ms |
-| Raw HTML | 5.1 ms |
-| Markdown | 15.0 ms |
-| ahttp | 86.2 ms |
+| Accessibility tree | 4.5 ms |
+| Raw HTML | 4.8 ms |
+| Markdown | 12.3 ms |
+| ahttp | 85.9 ms |
 | ahttp self | 84.9 ms |
 
 **Live.** URL to content, one request per page, 2026-11-05:
@@ -255,6 +255,28 @@ Hosted readers have no separate scan step; their time is in Live time.
 
 Reproduce with Chromium: `npm run bench` (tokens, checkout, tasks), `npm run bench:self` (userscript), `npm run bench:time` (timings). `npm run bench:render` rewrites the block above.
 
+## Coverage matrix
+
+`npm run bench:web` measures the engine against an independent oracle of
+reachable controls on 278 public sites (`benchmark/web-sites.json`). It is not
+part of CI: it needs the public network and sites change without notice. The
+report is written to `benchmark/web-matrix-results.json`.
+
+```bash
+npm run bench:web
+node benchmark/web-matrix.js --category=forms
+node benchmark/web-matrix.js --ids=mdn-input,wikipedia-en
+```
+
+Each site is measured once after a scroll pass, so lazy sections exist. The
+matrix reports weighted recall (matched / oracle-visible controls), phantom
+actions, and separates blocked sites (bot wall, consent modal) from network
+errors. On the last full run: 278 sites, 190 loaded, 9 blocked, 78 network
+errors from the environment, 181 measured, **84.8% weighted recall** (86.7%
+mean). Docs, tables, forms, testing grounds and design systems sit above 90%.
+News and heavy SPAs are lower because they hide the page behind consent or
+hydrate late. The matrix is a finding tool, not a scoreboard.
+
 ## Known limitations
 
 ### Matching and rerenders
@@ -267,6 +289,13 @@ Reproduce with Chromium: `npm run bench` (tokens, checkout, tasks), `npm run ben
 
 - Open shadow roots and slots are scanned. Closed roots are unreachable.
 - Same-origin iframes are scanned two levels deep. Cross-origin frames are skipped; the userscript skips all iframes.
+- SVG shapes (`rect`, `path`, `circle`) are paint, not controls; the button or link around the icon is the action.
+
+### Modals and consent
+
+- A dialog becomes the scan root only when it is actually blocking: a native open dialog, a backdrop, or a centered box covering a quarter of the viewport. `aria-modal="true"` on a bottom cookie sheet is not enough.
+- A modal that exposes no controls falls back to the document (`meta.modalFallback`), so an empty consent shell cannot hide the page.
+- A consent dialog with Accept/Reject controls is returned as the page, because the page behind it is not reachable until a decision. Dismiss it, then snapshot again.
 
 ### Virtualized lists
 

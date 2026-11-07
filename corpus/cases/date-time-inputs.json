@@ -1,0 +1,22 @@
+{
+  "id": "date-time-inputs",
+  "html": "fixtures/date-time-inputs.html",
+  "url": "https://corpus.test/date-time-inputs",
+  "notes": "date, time, month, week, range, number and color are all fill controls",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectText": [
+        "Date",
+        "Time",
+        "Month",
+        "Week",
+        "Range",
+        "Number",
+        "Color",
+        "Apply"
+      ],
+      "expectNotText": []
+    }
+  ]
+}

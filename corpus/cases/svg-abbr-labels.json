@@ -1,0 +1,19 @@
+{
+  "id": "svg-abbr-labels",
+  "html": "fixtures/svg-abbr-labels.html",
+  "url": "https://corpus.test/svg-abbr-labels",
+  "notes": "icon-only controls take their name from aria-label, svg title or visible text; title is the last fallback",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectText": [
+        "Close dialog",
+        "Download",
+        "OK",
+        "Help center",
+        "R"
+      ],
+      "expectNotText": []
+    }
+  ]
+}

@@ -92,7 +92,27 @@ function oracle() {
     if (parseFloat(cs.fontSize) === 0) reasons.push('font-size:0');
     var ti = parseFloat(cs.textIndent);
     if (!isNaN(ti) && ti <= -999) reasons.push('text-indent');
+    if (cs.contentVisibility === 'hidden') reasons.push('content-visibility:hidden');
     return reasons;
+  }
+
+  // getComputedStyle is expensive and the same shell elements are checked for
+  // every candidate. display:none, opacity:0 and content-visibility:hidden are
+  // definitive for the whole subtree; visibility is not, because a descendant
+  // can override it.
+  var styleCache = new Map();
+  function ancestorStyle(node) {
+    var hit = styleCache.get(node);
+    if (hit) return hit;
+    var cs = null;
+    try { cs = getComputedStyle(node); } catch (e) { cs = null; }
+    var out = cs ? {
+      display: cs.display,
+      opacity: cs.opacity,
+      contentVisibility: cs.contentVisibility
+    } : { display: '', opacity: '', contentVisibility: '' };
+    styleCache.set(node, out);
+    return out;
   }
 
   function isClosedDetails(node) {
@@ -118,6 +138,11 @@ function oracle() {
       if (node.getAttribute && node.getAttribute('aria-hidden') === 'true') reasons.push('aria-hidden');
       if (node.hasAttribute && node.hasAttribute('inert')) reasons.push('inert');
       if (isClosedDetails(node) && !inFirstSummary(node, el)) reasons.push('closed-details');
+      var st = ancestorStyle(node);
+      if (st.display === 'none') reasons.push('ancestor-display:none');
+      var op = parseFloat(st.opacity);
+      if (!isNaN(op) && op <= 0.05) reasons.push('ancestor-opacity:' + op);
+      if (st.contentVisibility === 'hidden') reasons.push('ancestor-content-visibility:hidden');
       node = node.parentElement;
     }
     return reasons;
@@ -214,10 +239,13 @@ function oracle() {
 
 function normalizeName(value) {
   return String(value == null ? '' : value)
-    .replace(/\s+/g, ' ')
-    .trim()
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"')
     .toLowerCase()
-    .replace(/\s+([,.;:!?)\]])/g, '$1');
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .trim();
 }
 
 // nameOf() stores at most 160 characters, while the engine keeps the full
@@ -234,6 +262,39 @@ function namesMatch(left, right) {
   return a.slice(0, shorter) === b.slice(0, shorter);
 }
 
+// The engine labels an icon+text control with the icon title and the visible
+// text ("Edge - Full support Edge 12"), while the oracle only sees "12". A
+// short generic word ("Save") must not pair with "Save changes", so
+// containment is allowed only for numeric, multi-word or long specific names.
+function containmentAllowed(value) {
+  var n = normalizeName(value);
+  if (!n) return false;
+  if (/\d/.test(n)) return true;
+  if (n.split(' ').length >= 2) return true;
+  return n.length >= 12;
+}
+
+function namesContain(longer, shorter) {
+  var a = normalizeName(longer);
+  var b = normalizeName(shorter);
+  if (b.length < 2 || a === b) return false;
+  return (' ' + a + ' ').indexOf(' ' + b + ' ') >= 0;
+}
+
+function sameType(action, item) {
+  if (!item.type) return true;
+  return String(action.type || '').toLowerCase() === String(item.type || '').toLowerCase();
+}
+
+function compatible(action, item) {
+  if (action.tag === item.tag) return true;
+  if (action.role && action.role === item.role) return true;
+  // A custom element host and the implementation button inside its shadow
+  // root are the same control to a user.
+  if (item.tag.indexOf('-') >= 0 || String(action.tag || '').indexOf('-') >= 0) return true;
+  return false;
+}
+
 function normalizeHref(value) {
   return String(value || '').replace(/#.*$/, '').replace(/\/+$/, '').toLowerCase();
 }
@@ -243,35 +304,65 @@ function matchActions(actions, items) {
   const pairs = [];
   const visibleItems = items.filter(function (item) { return item.visible; });
 
-  function find(item, requireHref) {
+  function take(item, predicate) {
     for (let i = 0; i < actions.length; i++) {
       if (used.has(i)) continue;
       const action = actions[i];
-      if (action.tag !== item.tag && action.role !== item.role) continue;
-      if (!namesMatch(action.label, item.name)) continue;
-      if (requireHref && item.href && normalizeHref(action.href) !== normalizeHref(item.href)) continue;
-      return i;
+      if (!predicate(action, item)) continue;
+      used.add(i);
+      pairs.push({ item: item, action: action });
+      return true;
     }
-    return -1;
+    return false;
   }
 
   for (const item of visibleItems) {
-    let index = find(item, true);
-    if (index < 0) index = find(item, false);
-    if (index < 0 && !item.name) {
-      // Unnamed controls (the-internet checkboxes): pair by tag/type order.
-      for (let i = 0; i < actions.length; i++) {
-        const action = actions[i];
-        if (used.has(i)) continue;
-        if (action.tag !== item.tag) continue;
-        if (item.type && String(action.type || '').toLowerCase() !== item.type) continue;
-        index = i;
-        break;
-      }
+    // Exact name first, strongest identity (tag + type) before role-only.
+    if (take(item, function (action) {
+      return namesMatch(action.label, item.name) && action.tag === item.tag && sameType(action, item) &&
+        (!item.href || !action.href || normalizeHref(action.href) === normalizeHref(item.href));
+    })) continue;
+    if (take(item, function (action) {
+      return namesMatch(action.label, item.name) && action.tag === item.tag && sameType(action, item);
+    })) continue;
+    if (take(item, function (action) {
+      return namesMatch(action.label, item.name) && action.role === item.role;
+    })) continue;
+    if (take(item, function (action) {
+      return namesMatch(action.label, item.name);
+    })) continue;
+    // Inline markup can join or separate the same words: "SearchCtrlK" and
+    // "Search Ctrl K" are one control. Compare without spaces once exact
+    // equality has failed.
+    if (take(item, function (action) {
+      var a = normalizeName(action.label).replace(/ /g, '');
+      var b = normalizeName(item.name).replace(/ /g, '');
+      return a.length > 0 && a === b;
+    })) continue;
+    // Rich engine labels: the oracle name is a token subsequence of the label.
+    if (take(item, function (action) {
+      return compatible(action, item) && containmentAllowed(item.name) && namesContain(action.label, item.name);
+    })) continue;
+    if (take(item, function (action) {
+      return compatible(action, item) && containmentAllowed(action.label) && namesContain(item.name, action.label);
+    })) continue;
+    // A numeric-only oracle name is a version cell. The engine enriches the
+    // label with the browser name ("Edge - Full support Edge 12"), so digits
+    // are not comparable by value across cells; pair by tag/type order.
+    if (/^\d+$/.test(normalizeName(item.name))) {
+      if (take(item, function (action) {
+        return action.tag === item.tag && sameType(action, item) && /\d/.test(String(action.label || ''));
+      })) continue;
     }
-    if (index < 0 && (item.tag === 'select' || item.tag === 'input' || item.tag === 'textarea')) {
-      // The oracle cannot see heading-derived names. Pair a lone control of the
-      // same tag/type when exactly one remains.
+    // Unnamed controls (the-internet checkboxes): pair by tag/type order.
+    if (!item.name && take(item, function (action) {
+      if (action.tag !== item.tag) return false;
+      if (item.type && String(action.type || '').toLowerCase() !== item.type) return false;
+      return true;
+    })) continue;
+    // The oracle cannot see heading-derived names. Pair a lone control of the
+    // same tag/type when exactly one remains.
+    if (item.tag === 'select' || item.tag === 'input' || item.tag === 'textarea') {
       let only = -1;
       let count = 0;
       for (let i = 0; i < actions.length; i++) {
@@ -282,11 +373,10 @@ function matchActions(actions, items) {
         only = i;
         count++;
       }
-      if (count === 1) index = only;
-    }
-    if (index >= 0) {
-      used.add(index);
-      pairs.push({ item: item, action: actions[index] });
+      if (count === 1) {
+        used.add(only);
+        pairs.push({ item: item, action: actions[only] });
+      }
     }
   }
 

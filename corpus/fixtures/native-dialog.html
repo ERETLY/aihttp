@@ -1,0 +1,16 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Native dialog</title></head><body>
+<main>
+  <button id="open">Open settings</button>
+  <dialog open aria-labelledby="dlg-title">
+    <h2 id="dlg-title">Settings</h2>
+    <label>Theme <select name="theme"><option>Light</option><option>Dark</option></select></label>
+    <button>Save</button>
+    <button>Cancel</button>
+  </dialog>
+  <dialog aria-labelledby="closed-title">
+    <h2 id="closed-title">Closed dialog</h2>
+    <button>Hidden action</button>
+  </dialog>
+</main>
+</body></html>

@@ -1,0 +1,1672 @@
+{
+  "sites": [
+    {
+      "id": "example",
+      "url": "https://example.com/",
+      "category": "testing",
+      "note": "static baseline"
+    },
+    {
+      "id": "the-internet-home",
+      "url": "https://the-internet.herokuapp.com/",
+      "category": "testing",
+      "note": "link index"
+    },
+    {
+      "id": "the-internet-checkboxes",
+      "url": "https://the-internet.herokuapp.com/checkboxes",
+      "category": "forms",
+      "note": "unlabeled checkboxes"
+    },
+    {
+      "id": "the-internet-dropdown",
+      "url": "https://the-internet.herokuapp.com/dropdown",
+      "category": "forms",
+      "note": "select"
+    },
+    {
+      "id": "the-internet-add-remove",
+      "url": "https://the-internet.herokuapp.com/add_remove_elements/",
+      "category": "testing",
+      "note": "dynamic controls"
+    },
+    {
+      "id": "the-internet-dynamic-loading",
+      "url": "https://the-internet.herokuapp.com/dynamic_loading/2",
+      "category": "testing",
+      "note": "async render"
+    },
+    {
+      "id": "the-internet-login",
+      "url": "https://the-internet.herokuapp.com/login",
+      "category": "forms",
+      "note": "login form"
+    },
+    {
+      "id": "the-internet-hovers",
+      "url": "https://the-internet.herokuapp.com/hovers",
+      "category": "testing",
+      "note": "hover-only controls"
+    },
+    {
+      "id": "the-internet-shadowdom",
+      "url": "https://the-internet.herokuapp.com/shadowdom",
+      "category": "testing",
+      "note": "shadow DOM"
+    },
+    {
+      "id": "the-internet-iframe",
+      "url": "https://the-internet.herokuapp.com/iframe",
+      "category": "frames",
+      "note": "contenteditable in iframe"
+    },
+    {
+      "id": "the-internet-nested-frames",
+      "url": "https://the-internet.herokuapp.com/nested_frames",
+      "category": "frames",
+      "note": "frameset"
+    },
+    {
+      "id": "the-internet-alerts",
+      "url": "https://the-internet.herokuapp.com/javascript_alerts",
+      "category": "testing",
+      "note": "native dialogs"
+    },
+    {
+      "id": "the-internet-upload",
+      "url": "https://the-internet.herokuapp.com/upload",
+      "category": "forms",
+      "note": "file input"
+    },
+    {
+      "id": "the-internet-tables",
+      "url": "https://the-internet.herokuapp.com/tables",
+      "category": "tables",
+      "note": "data tables"
+    },
+    {
+      "id": "the-internet-wysiwyg",
+      "url": "https://the-internet.herokuapp.com/wysiwyg",
+      "category": "forms",
+      "note": "contenteditable editor"
+    },
+    {
+      "id": "the-internet-inputs",
+      "url": "https://the-internet.herokuapp.com/inputs",
+      "category": "forms",
+      "note": "number input"
+    },
+    {
+      "id": "the-internet-status",
+      "url": "https://the-internet.herokuapp.com/status_codes",
+      "category": "testing",
+      "note": "error pages"
+    },
+    {
+      "id": "playwright-todomvc",
+      "url": "https://demo.playwright.dev/todomvc/",
+      "category": "testing",
+      "note": "React todo"
+    },
+    {
+      "id": "saucedemo",
+      "url": "https://www.saucedemo.com/",
+      "category": "ecommerce",
+      "note": "login + inventory"
+    },
+    {
+      "id": "practice-login",
+      "url": "https://practicetestautomation.com/practice-test-login/",
+      "category": "forms",
+      "note": "login form"
+    },
+    {
+      "id": "selenium-form",
+      "url": "https://www.selenium.dev/selenium/web/web-form.html",
+      "category": "forms",
+      "note": "full form"
+    },
+    {
+      "id": "scrapethissite",
+      "url": "https://scrapethissite.com/",
+      "category": "testing",
+      "note": "scraping practice"
+    },
+    {
+      "id": "books-toscrape",
+      "url": "https://books.toscrape.com/",
+      "category": "ecommerce",
+      "note": "catalog grid"
+    },
+    {
+      "id": "quotes-toscrape",
+      "url": "https://quotes.toscrape.com/",
+      "category": "testing",
+      "note": "pagination"
+    },
+    {
+      "id": "webscraper-test",
+      "url": "https://webscraper.io/test-sites",
+      "category": "testing",
+      "note": "nested tables"
+    },
+    {
+      "id": "httpbin-form",
+      "url": "https://httpbin.org/forms/post",
+      "category": "forms",
+      "note": "POST form"
+    },
+    {
+      "id": "httpbin-anything",
+      "url": "https://httpbin.org/anything",
+      "category": "api",
+      "note": "JSON echo"
+    },
+    {
+      "id": "postman-echo",
+      "url": "https://postman-echo.com/get",
+      "category": "api",
+      "note": "JSON echo"
+    },
+    {
+      "id": "reqres",
+      "url": "https://reqres.in/",
+      "category": "api",
+      "note": "API docs"
+    },
+    {
+      "id": "mdn-input",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input",
+      "category": "docs",
+      "note": "input types"
+    },
+    {
+      "id": "mdn-table",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table",
+      "category": "tables",
+      "note": "table semantics"
+    },
+    {
+      "id": "mdn-form",
+      "url": "https://developer.mozilla.org/en-US/docs/Learn/Forms/Your_first_form",
+      "category": "forms",
+      "note": "form tutorial"
+    },
+    {
+      "id": "mdn-shadow",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM",
+      "category": "docs",
+      "note": "shadow DOM"
+    },
+    {
+      "id": "mdn-iframe",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe",
+      "category": "frames",
+      "note": "iframe"
+    },
+    {
+      "id": "mdn-contenteditable",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/contenteditable",
+      "category": "forms",
+      "note": "contenteditable"
+    },
+    {
+      "id": "mdn-date",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date",
+      "category": "forms",
+      "note": "date input"
+    },
+    {
+      "id": "mdn-file",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file",
+      "category": "forms",
+      "note": "file input"
+    },
+    {
+      "id": "w3schools-forms",
+      "url": "https://www.w3schools.com/html/html_forms.asp",
+      "category": "forms",
+      "note": "form basics"
+    },
+    {
+      "id": "w3schools-form-elements",
+      "url": "https://www.w3schools.com/html/html_form_elements.asp",
+      "category": "forms",
+      "note": "all controls"
+    },
+    {
+      "id": "w3schools-tables",
+      "url": "https://www.w3schools.com/html/html_tables.asp",
+      "category": "tables",
+      "note": "table basics"
+    },
+    {
+      "id": "html-spec-forms",
+      "url": "https://html.spec.whatwg.org/multipage/forms.html",
+      "category": "docs",
+      "note": "spec, very large"
+    },
+    {
+      "id": "html-spec-tables",
+      "url": "https://html.spec.whatwg.org/multipage/tables.html",
+      "category": "tables",
+      "note": "spec"
+    },
+    {
+      "id": "php-manual",
+      "url": "https://www.php.net/manual/en/index.php",
+      "category": "docs",
+      "note": "manual index"
+    },
+    {
+      "id": "python-docs",
+      "url": "https://docs.python.org/3/",
+      "category": "docs",
+      "note": "docs index"
+    },
+    {
+      "id": "nodejs",
+      "url": "https://nodejs.org/en",
+      "category": "docs",
+      "note": "marketing + docs"
+    },
+    {
+      "id": "go-docs",
+      "url": "https://go.dev/doc/",
+      "category": "docs",
+      "note": "docs index"
+    },
+    {
+      "id": "rust-book",
+      "url": "https://doc.rust-lang.org/book/",
+      "category": "docs",
+      "note": "book"
+    },
+    {
+      "id": "kotlin-docs",
+      "url": "https://kotlinlang.org/docs/home.html",
+      "category": "docs",
+      "note": "docs index"
+    },
+    {
+      "id": "typescript-docs",
+      "url": "https://www.typescriptlang.org/docs/",
+      "category": "docs",
+      "note": "docs index"
+    },
+    {
+      "id": "react",
+      "url": "https://react.dev/",
+      "category": "docs",
+      "note": "docs SPA"
+    },
+    {
+      "id": "vue",
+      "url": "https://vuejs.org/",
+      "category": "docs",
+      "note": "docs SPA"
+    },
+    {
+      "id": "angular",
+      "url": "https://angular.dev/",
+      "category": "docs",
+      "note": "docs SPA"
+    },
+    {
+      "id": "svelte",
+      "url": "https://svelte.dev/",
+      "category": "docs",
+      "note": "docs SPA"
+    },
+    {
+      "id": "nextjs-docs",
+      "url": "https://nextjs.org/docs",
+      "category": "docs",
+      "note": "docs SPA"
+    },
+    {
+      "id": "tailwind-docs",
+      "url": "https://tailwindcss.com/docs",
+      "category": "docs",
+      "note": "utility CSS docs"
+    },
+    {
+      "id": "bootstrap-docs",
+      "url": "https://getbootstrap.com/docs/5.3/getting-started/introduction/",
+      "category": "docs",
+      "note": "component docs"
+    },
+    {
+      "id": "bulma-docs",
+      "url": "https://bulma.io/documentation/",
+      "category": "docs",
+      "note": "component docs"
+    },
+    {
+      "id": "mui",
+      "url": "https://mui.com/material-ui/getting-started/",
+      "category": "docs",
+      "note": "component docs"
+    },
+    {
+      "id": "chakra",
+      "url": "https://chakra-ui.com/docs/components/button",
+      "category": "docs",
+      "note": "component docs"
+    },
+    {
+      "id": "antd",
+      "url": "https://ant.design/components/button",
+      "category": "docs",
+      "note": "component docs"
+    },
+    {
+      "id": "lit",
+      "url": "https://lit.dev/docs/",
+      "category": "docs",
+      "note": "web components docs"
+    },
+    {
+      "id": "stencil",
+      "url": "https://stenciljs.com/docs/introduction",
+      "category": "docs",
+      "note": "web components docs"
+    },
+    {
+      "id": "open-wc",
+      "url": "https://open-wc.org/",
+      "category": "docs",
+      "note": "web components docs"
+    },
+    {
+      "id": "vaadin-docs",
+      "url": "https://vaadin.com/docs",
+      "category": "docs",
+      "note": "component docs"
+    },
+    {
+      "id": "fast-docs",
+      "url": "https://www.fast.design/docs/",
+      "category": "docs",
+      "note": "component docs"
+    },
+    {
+      "id": "shoelace",
+      "url": "https://shoelace.style/",
+      "category": "docs",
+      "note": "component docs"
+    },
+    {
+      "id": "webcomponents",
+      "url": "https://www.webcomponents.org/",
+      "category": "docs",
+      "note": "component directory"
+    },
+    {
+      "id": "developer-chrome",
+      "url": "https://developer.chrome.com/",
+      "category": "docs",
+      "note": "platform docs"
+    },
+    {
+      "id": "web-dev",
+      "url": "https://web.dev/",
+      "category": "docs",
+      "note": "platform docs"
+    },
+    {
+      "id": "css-tricks",
+      "url": "https://css-tricks.com/",
+      "category": "docs",
+      "note": "articles"
+    },
+    {
+      "id": "smashing",
+      "url": "https://www.smashingmagazine.com/",
+      "category": "docs",
+      "note": "articles"
+    },
+    {
+      "id": "alistapart",
+      "url": "https://alistapart.com/",
+      "category": "docs",
+      "note": "articles"
+    },
+    {
+      "id": "npm-react",
+      "url": "https://www.npmjs.com/package/react",
+      "category": "dev",
+      "note": "registry page"
+    },
+    {
+      "id": "pypi-requests",
+      "url": "https://pypi.org/project/requests/",
+      "category": "dev",
+      "note": "registry page"
+    },
+    {
+      "id": "crates-serde",
+      "url": "https://crates.io/crates/serde",
+      "category": "dev",
+      "note": "registry page"
+    },
+    {
+      "id": "rubygems-rails",
+      "url": "https://rubygems.org/gems/rails",
+      "category": "dev",
+      "note": "registry page"
+    },
+    {
+      "id": "packagist-laravel",
+      "url": "https://packagist.org/packages/laravel/framework",
+      "category": "dev",
+      "note": "registry page"
+    },
+    {
+      "id": "nuget-newtonsoft",
+      "url": "https://www.nuget.org/packages/Newtonsoft.Json",
+      "category": "dev",
+      "note": "registry page"
+    },
+    {
+      "id": "docker-nginx",
+      "url": "https://hub.docker.com/_/nginx",
+      "category": "dev",
+      "note": "registry page"
+    },
+    {
+      "id": "w3c-aria-apg",
+      "url": "https://www.w3.org/WAI/ARIA/apg/patterns/",
+      "category": "aria",
+      "note": "pattern index"
+    },
+    {
+      "id": "w3c-tabs",
+      "url": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+      "category": "aria",
+      "note": "tabs"
+    },
+    {
+      "id": "w3c-dialog",
+      "url": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
+      "category": "aria",
+      "note": "modal dialog"
+    },
+    {
+      "id": "w3c-treeview",
+      "url": "https://www.w3.org/WAI/ARIA/apg/patterns/treeview/",
+      "category": "aria",
+      "note": "tree"
+    },
+    {
+      "id": "w3c-combobox",
+      "url": "https://www.w3.org/WAI/ARIA/apg/patterns/combobox/",
+      "category": "aria",
+      "note": "combobox"
+    },
+    {
+      "id": "w3c-menu-button",
+      "url": "https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/",
+      "category": "aria",
+      "note": "menu button"
+    },
+    {
+      "id": "w3c-accordion",
+      "url": "https://www.w3.org/WAI/ARIA/apg/patterns/accordion/",
+      "category": "aria",
+      "note": "accordion"
+    },
+    {
+      "id": "w3c-grid",
+      "url": "https://www.w3.org/WAI/ARIA/apg/patterns/grid/",
+      "category": "aria",
+      "note": "grid"
+    },
+    {
+      "id": "w3c-carousel",
+      "url": "https://www.w3.org/WAI/ARIA/apg/patterns/carousel/",
+      "category": "aria",
+      "note": "carousel"
+    },
+    {
+      "id": "w3c-wai",
+      "url": "https://www.w3.org/WAI/",
+      "category": "aria",
+      "note": "WAI index"
+    },
+    {
+      "id": "webaim-forms",
+      "url": "https://webaim.org/techniques/forms/",
+      "category": "aria",
+      "note": "accessible forms"
+    },
+    {
+      "id": "a11y-project",
+      "url": "https://www.a11yproject.com/checklist/",
+      "category": "aria",
+      "note": "checklist"
+    },
+    {
+      "id": "wai-bad-before",
+      "url": "https://www.w3.org/WAI/demos/bad/before/home.html",
+      "category": "aria",
+      "note": "inaccessible demo"
+    },
+    {
+      "id": "wai-bad-after",
+      "url": "https://www.w3.org/WAI/demos/bad/after/home.html",
+      "category": "aria",
+      "note": "accessible demo"
+    },
+    {
+      "id": "inclusive-components",
+      "url": "https://inclusive-components.design/",
+      "category": "aria",
+      "note": "patterns"
+    },
+    {
+      "id": "a11y-style-guide",
+      "url": "https://a11y-style-guide.com/",
+      "category": "aria",
+      "note": "style guide"
+    },
+    {
+      "id": "gov-uk",
+      "url": "https://www.gov.uk/",
+      "category": "gov",
+      "note": "portal"
+    },
+    {
+      "id": "gov-uk-visa",
+      "url": "https://www.gov.uk/apply-to-come-to-the-uk",
+      "category": "gov",
+      "note": "long form"
+    },
+    {
+      "id": "usa-gov",
+      "url": "https://www.usa.gov/",
+      "category": "gov",
+      "note": "portal"
+    },
+    {
+      "id": "canada",
+      "url": "https://www.canada.ca/en.html",
+      "category": "gov",
+      "note": "portal"
+    },
+    {
+      "id": "australia",
+      "url": "https://www.australia.gov.au/",
+      "category": "gov",
+      "note": "portal"
+    },
+    {
+      "id": "europa",
+      "url": "https://europa.eu/",
+      "category": "gov",
+      "note": "portal"
+    },
+    {
+      "id": "un",
+      "url": "https://www.un.org/en/",
+      "category": "gov",
+      "note": "portal"
+    },
+    {
+      "id": "who",
+      "url": "https://www.who.int/",
+      "category": "gov",
+      "note": "portal"
+    },
+    {
+      "id": "cdc",
+      "url": "https://www.cdc.gov/",
+      "category": "gov",
+      "note": "portal"
+    },
+    {
+      "id": "nih",
+      "url": "https://www.nih.gov/",
+      "category": "gov",
+      "note": "portal"
+    },
+    {
+      "id": "fda",
+      "url": "https://www.fda.gov/",
+      "category": "gov",
+      "note": "portal"
+    },
+    {
+      "id": "uscis",
+      "url": "https://www.uscis.gov/",
+      "category": "gov",
+      "note": "forms"
+    },
+    {
+      "id": "irs",
+      "url": "https://www.irs.gov/",
+      "category": "gov",
+      "note": "forms"
+    },
+    {
+      "id": "dmv-ca",
+      "url": "https://www.dmv.ca.gov/",
+      "category": "gov",
+      "note": "services"
+    },
+    {
+      "id": "service-public-fr",
+      "url": "https://www.service-public.fr/",
+      "category": "gov",
+      "note": "services"
+    },
+    {
+      "id": "gov-br",
+      "url": "https://www.gov.br/",
+      "category": "gov",
+      "note": "portal"
+    },
+    {
+      "id": "wikipedia-en",
+      "url": "https://en.wikipedia.org/wiki/Main_Page",
+      "category": "wiki",
+      "note": "portal"
+    },
+    {
+      "id": "wikipedia-ru",
+      "url": "https://ru.wikipedia.org/wiki/Заглавная_страница",
+      "category": "wiki",
+      "note": "Cyrillic"
+    },
+    {
+      "id": "wikipedia-de",
+      "url": "https://de.wikipedia.org/wiki/Wikipedia:Hauptseite",
+      "category": "wiki",
+      "note": "German"
+    },
+    {
+      "id": "wikipedia-ja",
+      "url": "https://ja.wikipedia.org/wiki/メインページ",
+      "category": "wiki",
+      "note": "Japanese"
+    },
+    {
+      "id": "wikipedia-ar",
+      "url": "https://ar.wikipedia.org/wiki/الصفحة_الرئيسية",
+      "category": "wiki",
+      "note": "RTL Arabic"
+    },
+    {
+      "id": "wiktionary",
+      "url": "https://en.wiktionary.org/wiki/Wiktionary:Main_Page",
+      "category": "wiki",
+      "note": "dictionary"
+    },
+    {
+      "id": "wikidata",
+      "url": "https://www.wikidata.org/wiki/Wikidata:Main_Page",
+      "category": "wiki",
+      "note": "structured data"
+    },
+    {
+      "id": "britannica",
+      "url": "https://www.britannica.com/",
+      "category": "wiki",
+      "note": "encyclopedia"
+    },
+    {
+      "id": "stanford-encyclopedia",
+      "url": "https://plato.stanford.edu/",
+      "category": "wiki",
+      "note": "encyclopedia"
+    },
+    {
+      "id": "gutenberg",
+      "url": "https://www.gutenberg.org/",
+      "category": "wiki",
+      "note": "library"
+    },
+    {
+      "id": "archive-org",
+      "url": "https://archive.org/",
+      "category": "wiki",
+      "note": "library"
+    },
+    {
+      "id": "openlibrary",
+      "url": "https://openlibrary.org/",
+      "category": "wiki",
+      "note": "library"
+    },
+    {
+      "id": "loc",
+      "url": "https://www.loc.gov/",
+      "category": "wiki",
+      "note": "library"
+    },
+    {
+      "id": "bbc-news",
+      "url": "https://www.bbc.com/news",
+      "category": "news",
+      "note": "portal"
+    },
+    {
+      "id": "guardian",
+      "url": "https://www.theguardian.com/",
+      "category": "news",
+      "note": "portal"
+    },
+    {
+      "id": "apnews",
+      "url": "https://apnews.com/",
+      "category": "news",
+      "note": "portal"
+    },
+    {
+      "id": "npr",
+      "url": "https://www.npr.org/",
+      "category": "news",
+      "note": "portal"
+    },
+    {
+      "id": "aljazeera",
+      "url": "https://www.aljazeera.com/",
+      "category": "news",
+      "note": "portal"
+    },
+    {
+      "id": "dw",
+      "url": "https://www.dw.com/en/",
+      "category": "news",
+      "note": "portal"
+    },
+    {
+      "id": "france24",
+      "url": "https://www.france24.com/en/",
+      "category": "news",
+      "note": "portal"
+    },
+    {
+      "id": "euronews",
+      "url": "https://www.euronews.com/",
+      "category": "news",
+      "note": "portal"
+    },
+    {
+      "id": "cnn",
+      "url": "https://www.cnn.com/",
+      "category": "news",
+      "note": "portal"
+    },
+    {
+      "id": "reuters",
+      "url": "https://www.reuters.com/",
+      "category": "news",
+      "note": "often blocked"
+    },
+    {
+      "id": "hn",
+      "url": "https://news.ycombinator.com/",
+      "category": "news",
+      "note": "link list"
+    },
+    {
+      "id": "lobsters",
+      "url": "https://lobste.rs/",
+      "category": "news",
+      "note": "link list"
+    },
+    {
+      "id": "dev-to",
+      "url": "https://dev.to/",
+      "category": "news",
+      "note": "feed"
+    },
+    {
+      "id": "hashnode",
+      "url": "https://hashnode.com/",
+      "category": "news",
+      "note": "feed"
+    },
+    {
+      "id": "amazon",
+      "url": "https://www.amazon.com/",
+      "category": "ecommerce",
+      "note": "often blocked"
+    },
+    {
+      "id": "ebay",
+      "url": "https://www.ebay.com/",
+      "category": "ecommerce",
+      "note": "often blocked"
+    },
+    {
+      "id": "etsy",
+      "url": "https://www.etsy.com/",
+      "category": "ecommerce",
+      "note": "often blocked"
+    },
+    {
+      "id": "shopify",
+      "url": "https://www.shopify.com/",
+      "category": "ecommerce",
+      "note": "marketing"
+    },
+    {
+      "id": "woocommerce",
+      "url": "https://woocommerce.com/",
+      "category": "ecommerce",
+      "note": "marketing"
+    },
+    {
+      "id": "bigcommerce",
+      "url": "https://www.bigcommerce.com/",
+      "category": "ecommerce",
+      "note": "marketing"
+    },
+    {
+      "id": "squarespace",
+      "url": "https://www.squarespace.com/",
+      "category": "ecommerce",
+      "note": "marketing"
+    },
+    {
+      "id": "wix",
+      "url": "https://www.wix.com/",
+      "category": "ecommerce",
+      "note": "marketing"
+    },
+    {
+      "id": "godaddy",
+      "url": "https://www.godaddy.com/",
+      "category": "ecommerce",
+      "note": "marketing"
+    },
+    {
+      "id": "ikea",
+      "url": "https://www.ikea.com/us/en/",
+      "category": "ecommerce",
+      "note": "catalog"
+    },
+    {
+      "id": "wayfair",
+      "url": "https://www.wayfair.com/",
+      "category": "ecommerce",
+      "note": "catalog"
+    },
+    {
+      "id": "target",
+      "url": "https://www.target.com/",
+      "category": "ecommerce",
+      "note": "often blocked"
+    },
+    {
+      "id": "walmart",
+      "url": "https://www.walmart.com/",
+      "category": "ecommerce",
+      "note": "often blocked"
+    },
+    {
+      "id": "bestbuy",
+      "url": "https://www.bestbuy.com/",
+      "category": "ecommerce",
+      "note": "often blocked"
+    },
+    {
+      "id": "homedepot",
+      "url": "https://www.homedepot.com/",
+      "category": "ecommerce",
+      "note": "often blocked"
+    },
+    {
+      "id": "costco",
+      "url": "https://www.costco.com/",
+      "category": "ecommerce",
+      "note": "often blocked"
+    },
+    {
+      "id": "aliexpress",
+      "url": "https://www.aliexpress.com/",
+      "category": "ecommerce",
+      "note": "catalog"
+    },
+    {
+      "id": "temu",
+      "url": "https://www.temu.com/",
+      "category": "ecommerce",
+      "note": "catalog"
+    },
+    {
+      "id": "mastodon",
+      "url": "https://mastodon.social/",
+      "category": "social",
+      "note": "fediverse SPA"
+    },
+    {
+      "id": "bsky",
+      "url": "https://bsky.app/",
+      "category": "social",
+      "note": "SPA"
+    },
+    {
+      "id": "reddit",
+      "url": "https://www.reddit.com/",
+      "category": "social",
+      "note": "often blocked"
+    },
+    {
+      "id": "youtube",
+      "url": "https://www.youtube.com/",
+      "category": "social",
+      "note": "SPA"
+    },
+    {
+      "id": "vimeo",
+      "url": "https://vimeo.com/",
+      "category": "social",
+      "note": "video"
+    },
+    {
+      "id": "twitch",
+      "url": "https://www.twitch.tv/",
+      "category": "social",
+      "note": "SPA"
+    },
+    {
+      "id": "stackoverflow",
+      "url": "https://stackoverflow.com/questions",
+      "category": "social",
+      "note": "Q&A"
+    },
+    {
+      "id": "quora",
+      "url": "https://www.quora.com/",
+      "category": "social",
+      "note": "often blocked"
+    },
+    {
+      "id": "goodreads",
+      "url": "https://www.goodreads.com/",
+      "category": "social",
+      "note": "books"
+    },
+    {
+      "id": "letterboxd",
+      "url": "https://letterboxd.com/",
+      "category": "social",
+      "note": "films"
+    },
+    {
+      "id": "imdb",
+      "url": "https://www.imdb.com/",
+      "category": "media",
+      "note": "catalog"
+    },
+    {
+      "id": "tmdb",
+      "url": "https://www.themoviedb.org/",
+      "category": "media",
+      "note": "catalog"
+    },
+    {
+      "id": "spotify",
+      "url": "https://www.spotify.com/",
+      "category": "media",
+      "note": "marketing"
+    },
+    {
+      "id": "soundcloud",
+      "url": "https://soundcloud.com/",
+      "category": "media",
+      "note": "SPA"
+    },
+    {
+      "id": "netflix",
+      "url": "https://www.netflix.com/",
+      "category": "media",
+      "note": "marketing"
+    },
+    {
+      "id": "pexels",
+      "url": "https://www.pexels.com/",
+      "category": "media",
+      "note": "gallery"
+    },
+    {
+      "id": "unsplash",
+      "url": "https://unsplash.com/",
+      "category": "media",
+      "note": "gallery"
+    },
+    {
+      "id": "flickr",
+      "url": "https://www.flickr.com/",
+      "category": "media",
+      "note": "gallery"
+    },
+    {
+      "id": "imgur",
+      "url": "https://imgur.com/",
+      "category": "media",
+      "note": "gallery"
+    },
+    {
+      "id": "deviantart",
+      "url": "https://www.deviantart.com/",
+      "category": "media",
+      "note": "gallery"
+    },
+    {
+      "id": "khan",
+      "url": "https://www.khanacademy.org/",
+      "category": "education",
+      "note": "portal"
+    },
+    {
+      "id": "coursera",
+      "url": "https://www.coursera.org/",
+      "category": "education",
+      "note": "catalog"
+    },
+    {
+      "id": "edx",
+      "url": "https://www.edx.org/",
+      "category": "education",
+      "note": "catalog"
+    },
+    {
+      "id": "udemy",
+      "url": "https://www.udemy.com/",
+      "category": "education",
+      "note": "catalog"
+    },
+    {
+      "id": "freecodecamp",
+      "url": "https://www.freecodecamp.org/",
+      "category": "education",
+      "note": "curriculum"
+    },
+    {
+      "id": "mit-ocw",
+      "url": "https://ocw.mit.edu/",
+      "category": "education",
+      "note": "courses"
+    },
+    {
+      "id": "cs50",
+      "url": "https://cs50.harvard.edu/x/",
+      "category": "education",
+      "note": "course"
+    },
+    {
+      "id": "openlearn",
+      "url": "https://www.open.edu/openlearn/",
+      "category": "education",
+      "note": "courses"
+    },
+    {
+      "id": "booking",
+      "url": "https://www.booking.com/",
+      "category": "travel",
+      "note": "search form"
+    },
+    {
+      "id": "airbnb",
+      "url": "https://www.airbnb.com/",
+      "category": "travel",
+      "note": "search form"
+    },
+    {
+      "id": "tripadvisor",
+      "url": "https://www.tripadvisor.com/",
+      "category": "travel",
+      "note": "often blocked"
+    },
+    {
+      "id": "lonelyplanet",
+      "url": "https://www.lonelyplanet.com/",
+      "category": "travel",
+      "note": "guide"
+    },
+    {
+      "id": "ricksteves",
+      "url": "https://www.ricksteves.com/",
+      "category": "travel",
+      "note": "guide"
+    },
+    {
+      "id": "skyscanner",
+      "url": "https://www.skyscanner.com/",
+      "category": "travel",
+      "note": "search form"
+    },
+    {
+      "id": "stripe-docs",
+      "url": "https://stripe.com/docs",
+      "category": "finance",
+      "note": "docs"
+    },
+    {
+      "id": "stripe-demo",
+      "url": "https://stripe-payments-demo.appspot.com/",
+      "category": "finance",
+      "note": "checkout demo"
+    },
+    {
+      "id": "wise",
+      "url": "https://wise.com/",
+      "category": "finance",
+      "note": "marketing"
+    },
+    {
+      "id": "revolut",
+      "url": "https://www.revolut.com/",
+      "category": "finance",
+      "note": "marketing"
+    },
+    {
+      "id": "coingecko",
+      "url": "https://www.coingecko.com/",
+      "category": "finance",
+      "note": "crypto table"
+    },
+    {
+      "id": "etherscan",
+      "url": "https://etherscan.io/",
+      "category": "finance",
+      "note": "explorer"
+    },
+    {
+      "id": "uswds",
+      "url": "https://designsystem.digital.gov/",
+      "category": "design",
+      "note": "components"
+    },
+    {
+      "id": "spectrum",
+      "url": "https://spectrum.adobe.com/",
+      "category": "design",
+      "note": "components"
+    },
+    {
+      "id": "primereact",
+      "url": "https://www.primefaces.org/primereact/",
+      "category": "design",
+      "note": "components"
+    },
+    {
+      "id": "shadcn",
+      "url": "https://ui.shadcn.com/",
+      "category": "design",
+      "note": "components"
+    },
+    {
+      "id": "material",
+      "url": "https://m3.material.io/",
+      "category": "design",
+      "note": "guidelines"
+    },
+    {
+      "id": "carbon",
+      "url": "https://carbondesignsystem.com/",
+      "category": "design",
+      "note": "components"
+    },
+    {
+      "id": "polaris",
+      "url": "https://polaris.shopify.com/",
+      "category": "design",
+      "note": "components"
+    },
+    {
+      "id": "atlassian-design",
+      "url": "https://atlassian.design/",
+      "category": "design",
+      "note": "components"
+    },
+    {
+      "id": "craigslist",
+      "url": "https://www.craigslist.org/about/sites",
+      "category": "legacy",
+      "note": "link index"
+    },
+    {
+      "id": "spacejam",
+      "url": "https://www.spacejam.com/1996/",
+      "category": "legacy",
+      "note": "frameset-era"
+    },
+    {
+      "id": "cern",
+      "url": "https://info.cern.ch/",
+      "category": "legacy",
+      "note": "first website"
+    },
+    {
+      "id": "motherfuckingwebsite",
+      "url": "http://motherfuckingwebsite.com/",
+      "category": "legacy",
+      "note": "minimal HTML"
+    },
+    {
+      "id": "berkshire",
+      "url": "https://www.berkshirehathaway.com/",
+      "category": "legacy",
+      "note": "minimal HTML"
+    },
+    {
+      "id": "arngren",
+      "url": "https://www.arngren.net/",
+      "category": "legacy",
+      "note": "chaotic layout"
+    },
+    {
+      "id": "bbc-arabic",
+      "url": "https://www.bbc.com/arabic",
+      "category": "i18n",
+      "note": "RTL"
+    },
+    {
+      "id": "bbc-zhongwen",
+      "url": "https://www.bbc.com/zhongwen/simp",
+      "category": "i18n",
+      "note": "Chinese"
+    },
+    {
+      "id": "nhk",
+      "url": "https://www3.nhk.or.jp/news/",
+      "category": "i18n",
+      "note": "Japanese"
+    },
+    {
+      "id": "lemonde",
+      "url": "https://www.lemonde.fr/",
+      "category": "i18n",
+      "note": "French"
+    },
+    {
+      "id": "spiegel",
+      "url": "https://www.spiegel.de/",
+      "category": "i18n",
+      "note": "German"
+    },
+    {
+      "id": "elpais",
+      "url": "https://elpais.com/",
+      "category": "i18n",
+      "note": "Spanish"
+    },
+    {
+      "id": "corriere",
+      "url": "https://www.corriere.it/",
+      "category": "i18n",
+      "note": "Italian"
+    },
+    {
+      "id": "globo",
+      "url": "https://www.globo.com/",
+      "category": "i18n",
+      "note": "Portuguese"
+    },
+    {
+      "id": "naver",
+      "url": "https://www.naver.com/",
+      "category": "i18n",
+      "note": "Korean portal"
+    },
+    {
+      "id": "baidu",
+      "url": "https://www.baidu.com/",
+      "category": "i18n",
+      "note": "Chinese search"
+    },
+    {
+      "id": "yandex",
+      "url": "https://yandex.ru/",
+      "category": "i18n",
+      "note": "Russian search"
+    },
+    {
+      "id": "remoteok",
+      "url": "https://remoteok.com/",
+      "category": "jobs",
+      "note": "board"
+    },
+    {
+      "id": "weworkremotely",
+      "url": "https://weworkremotely.com/",
+      "category": "jobs",
+      "note": "board"
+    },
+    {
+      "id": "freelancer",
+      "url": "https://www.freelancer.com/",
+      "category": "jobs",
+      "note": "marketplace"
+    },
+    {
+      "id": "upwork",
+      "url": "https://www.upwork.com/",
+      "category": "jobs",
+      "note": "marketplace"
+    },
+    {
+      "id": "glassdoor",
+      "url": "https://www.glassdoor.com/",
+      "category": "jobs",
+      "note": "often blocked"
+    },
+    {
+      "id": "github-linux",
+      "url": "https://github.com/torvalds/linux",
+      "category": "dev",
+      "note": "repository"
+    },
+    {
+      "id": "github-vscode-issues",
+      "url": "https://github.com/microsoft/vscode/issues",
+      "category": "dev",
+      "note": "issue list"
+    },
+    {
+      "id": "gitlab",
+      "url": "https://gitlab.com/gitlab-org/gitlab",
+      "category": "dev",
+      "note": "repository"
+    },
+    {
+      "id": "vercel",
+      "url": "https://vercel.com/",
+      "category": "dev",
+      "note": "marketing"
+    },
+    {
+      "id": "netlify",
+      "url": "https://www.netlify.com/",
+      "category": "dev",
+      "note": "marketing"
+    },
+    {
+      "id": "cloudflare",
+      "url": "https://www.cloudflare.com/",
+      "category": "dev",
+      "note": "marketing"
+    },
+    {
+      "id": "aws",
+      "url": "https://aws.amazon.com/",
+      "category": "dev",
+      "note": "portal"
+    },
+    {
+      "id": "azure",
+      "url": "https://azure.microsoft.com/",
+      "category": "dev",
+      "note": "portal"
+    },
+    {
+      "id": "gcp",
+      "url": "https://cloud.google.com/",
+      "category": "dev",
+      "note": "portal"
+    },
+    {
+      "id": "digitalocean",
+      "url": "https://www.digitalocean.com/",
+      "category": "dev",
+      "note": "portal"
+    },
+    {
+      "id": "playwright",
+      "url": "https://playwright.dev/",
+      "category": "dev",
+      "note": "docs"
+    },
+    {
+      "id": "cypress",
+      "url": "https://www.cypress.io/",
+      "category": "dev",
+      "note": "marketing"
+    },
+    {
+      "id": "selenium",
+      "url": "https://www.selenium.dev/",
+      "category": "dev",
+      "note": "docs"
+    },
+    {
+      "id": "pptr",
+      "url": "https://pptr.dev/",
+      "category": "dev",
+      "note": "docs"
+    },
+    {
+      "id": "webdriverio",
+      "url": "https://webdriver.io/",
+      "category": "dev",
+      "note": "docs"
+    },
+    {
+      "id": "openai",
+      "url": "https://openai.com/",
+      "category": "ai",
+      "note": "marketing"
+    },
+    {
+      "id": "anthropic",
+      "url": "https://www.anthropic.com/",
+      "category": "ai",
+      "note": "marketing"
+    },
+    {
+      "id": "huggingface",
+      "url": "https://huggingface.co/",
+      "category": "ai",
+      "note": "hub"
+    },
+    {
+      "id": "mistral",
+      "url": "https://mistral.ai/",
+      "category": "ai",
+      "note": "marketing"
+    },
+    {
+      "id": "deepmind",
+      "url": "https://deepmind.google/",
+      "category": "ai",
+      "note": "marketing"
+    },
+    {
+      "id": "meta-ai",
+      "url": "https://ai.meta.com/",
+      "category": "ai",
+      "note": "marketing"
+    },
+    {
+      "id": "nasa",
+      "url": "https://www.nasa.gov/",
+      "category": "science",
+      "note": "portal"
+    },
+    {
+      "id": "esa",
+      "url": "https://www.esa.int/",
+      "category": "science",
+      "note": "portal"
+    },
+    {
+      "id": "noaa",
+      "url": "https://www.noaa.gov/",
+      "category": "science",
+      "note": "portal"
+    },
+    {
+      "id": "usgs",
+      "url": "https://www.usgs.gov/",
+      "category": "science",
+      "note": "portal"
+    },
+    {
+      "id": "nps",
+      "url": "https://www.nps.gov/",
+      "category": "science",
+      "note": "portal"
+    },
+    {
+      "id": "arxiv",
+      "url": "https://arxiv.org/",
+      "category": "science",
+      "note": "paper list"
+    },
+    {
+      "id": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/",
+      "category": "science",
+      "note": "search"
+    },
+    {
+      "id": "clinicaltrials",
+      "url": "https://clinicaltrials.gov/",
+      "category": "science",
+      "note": "search"
+    },
+    {
+      "id": "nature",
+      "url": "https://www.nature.com/",
+      "category": "science",
+      "note": "journal"
+    },
+    {
+      "id": "met",
+      "url": "https://www.metmuseum.org/",
+      "category": "museum",
+      "note": "collection"
+    },
+    {
+      "id": "louvre",
+      "url": "https://www.louvre.fr/en",
+      "category": "museum",
+      "note": "collection"
+    },
+    {
+      "id": "british-museum",
+      "url": "https://www.britishmuseum.org/",
+      "category": "museum",
+      "note": "collection"
+    },
+    {
+      "id": "moma",
+      "url": "https://www.moma.org/",
+      "category": "museum",
+      "note": "collection"
+    },
+    {
+      "id": "tate",
+      "url": "https://www.tate.org.uk/",
+      "category": "museum",
+      "note": "collection"
+    },
+    {
+      "id": "rijksmuseum",
+      "url": "https://www.rijksmuseum.nl/en",
+      "category": "museum",
+      "note": "collection"
+    },
+    {
+      "id": "weather-gov",
+      "url": "https://www.weather.gov/",
+      "category": "misc",
+      "note": "search"
+    },
+    {
+      "id": "timeanddate",
+      "url": "https://www.timeanddate.com/",
+      "category": "misc",
+      "note": "tables"
+    },
+    {
+      "id": "speedtest",
+      "url": "https://www.speedtest.net/",
+      "category": "misc",
+      "note": "app"
+    },
+    {
+      "id": "ipinfo",
+      "url": "https://ipinfo.io/",
+      "category": "misc",
+      "note": "lookup"
+    },
+    {
+      "id": "chess",
+      "url": "https://www.chess.com/",
+      "category": "misc",
+      "note": "app"
+    },
+    {
+      "id": "lichess",
+      "url": "https://lichess.org/",
+      "category": "misc",
+      "note": "app"
+    },
+    {
+      "id": "producthunt",
+      "url": "https://www.producthunt.com/",
+      "category": "misc",
+      "note": "feed"
+    },
+    {
+      "id": "figma",
+      "url": "https://www.figma.com/",
+      "category": "misc",
+      "note": "SPA"
+    },
+    {
+      "id": "canva",
+      "url": "https://www.canva.com/",
+      "category": "misc",
+      "note": "SPA"
+    },
+    {
+      "id": "blender",
+      "url": "https://www.blender.org/",
+      "category": "misc",
+      "note": "marketing"
+    },
+    {
+      "id": "unreal",
+      "url": "https://www.unrealengine.com/",
+      "category": "misc",
+      "note": "marketing"
+    },
+    {
+      "id": "rfc-editor",
+      "url": "https://www.rfc-editor.org/",
+      "category": "misc",
+      "note": "index"
+    },
+    {
+      "id": "ietf",
+      "url": "https://www.ietf.org/",
+      "category": "misc",
+      "note": "portal"
+    },
+    {
+      "id": "w3c",
+      "url": "https://www.w3.org/",
+      "category": "misc",
+      "note": "portal"
+    },
+    {
+      "id": "iso",
+      "url": "https://www.iso.org/",
+      "category": "misc",
+      "note": "portal"
+    },
+    {
+      "id": "ieee",
+      "url": "https://www.ieee.org/",
+      "category": "misc",
+      "note": "portal"
+    }
+  ]
+}

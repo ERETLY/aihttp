@@ -1,0 +1,23 @@
+{
+  "id": "select-multiple",
+  "html": "fixtures/select-multiple.html",
+  "url": "https://corpus.test/select-multiple",
+  "notes": "a multiple select is one control and keeps its options",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectText": [
+        "Tags",
+        "Alpha",
+        "Beta",
+        "Gamma",
+        "Delta",
+        "Country",
+        "Choose one",
+        "UK",
+        "Save"
+      ],
+      "expectNotText": []
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "file-input-metadata",
+  "html": "fixtures/file-input.html",
+  "url": "https://corpus.test/file-input-metadata",
+  "notes": "file inputs are exposed as file actions, not as text fields",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectText": [
+        "Avatar",
+        "Documents",
+        "Upload"
+      ],
+      "expectNotText": []
+    }
+  ]
+}

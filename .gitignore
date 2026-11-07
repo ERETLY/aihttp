@@ -10,3 +10,7 @@ benchmark/.cache/
 benchmark/last-run.log
 *.cpuprofile
 scratch-*
+benchmark/web-matrix-results.json
+benchmark/wm-*.json
+benchmark/web-matrix-smoke.json
+benchmark/realworld/results-all-sites.json

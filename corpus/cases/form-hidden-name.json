@@ -1,0 +1,18 @@
+{
+  "id": "form-hidden-name",
+  "html": "fixtures/form-hidden-name.html",
+  "url": "https://corpus.test/form-hidden-name",
+  "notes": "a control named hidden does not make the form itself hidden",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectText": [
+        "Query",
+        "Search",
+        "visible text field",
+        "Filter"
+      ],
+      "expectNotText": []
+    }
+  ]
+}

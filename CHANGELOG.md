@@ -24,6 +24,10 @@
 - The static backend binds a guarded `fetch` into the page window, so server
   auth, `fetch`-based forms and page scripts work without a browser. Requests
   still pass through the same private-address guard as the document loader.
+- `benchmark/web-matrix.js` and `benchmark/web-sites.json` measure coverage on
+  278 public sites against an independent oracle of reachable controls.
+  `npm run bench:web` reports weighted recall, phantom actions, blocked sites
+  and network errors separately. It is a finding tool, not a CI gate.
 
 ### Security
 
@@ -75,6 +79,22 @@
 - `role="dialog"` is only a scan root when it is actually modal:
   `aria-modal="true"`, an open `<dialog>`, a backdrop, or a large overlay.
   A small cookie banner with `aria-modal="false"` no longer replaces the page.
+  A bottom sheet with `aria-modal="true"` is not enough either: without a
+  backdrop it must be centered and cover a quarter of the viewport. A modal
+  that exposes no controls falls back to the document (`meta.modalFallback`),
+  so an empty consent shell cannot hide the page.
+- `<slot>` is a placeholder, not a control, and SVG shapes (`rect`, `path`,
+  `circle`) inherit `cursor:pointer` from the icon around them but are not
+  buttons. `tabindex="0"` on an element with an explicit role (`tabpanel`,
+  `region`) no longer turns it into a click target.
+- A custom element with a click role (`button`, `link`, `tab`, `menuitem`,
+  `option`, `treeitem`, `gridcell`) is the control; its unlabeled shadow
+  button is not registered instead. Native `<button>` and `<a>` keep an
+  explicit ARIA role, so `role="tab"` stays a tab.
+- `aria-labelledby` resolves ids through every shadow-host level, and text
+  assigned to a `<slot>` is read for labels. Icon buttons inside web
+  components get their real name instead of a URL or a tag name. Visible text
+  is preferred over `name` / `id` / `href` as the label.
 - Custom comboboxes wait for options rendered after the click, search the
   popup referenced by `aria-controls` / `aria-owns` before the whole page, and
   `act(id, {})` opens the popup instead of returning `option_not_found`.

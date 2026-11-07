@@ -1,0 +1,20 @@
+{
+  "id": "aria-tree-widget",
+  "html": "fixtures/aria-tree.html",
+  "url": "https://corpus.test/aria-tree-widget",
+  "notes": "role=treeitem controls are clickable and named by their text",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectText": [
+        "Project files",
+        "src",
+        "app.js",
+        "styles.css",
+        "tests",
+        "Expand all"
+      ],
+      "expectNotText": []
+    }
+  ]
+}

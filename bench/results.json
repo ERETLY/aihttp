@@ -2,13 +2,13 @@
   "engine": "0.2.1",
   "engine_file": "ahttp.js",
   "totals": {
-    "cases": 71,
-    "passed": 71,
+    "cases": 79,
+    "passed": 79,
     "failed": 0,
     "pending": 0,
-    "match_ok": 71,
-    "diff_ok": 71,
-    "tokens": 2904
+    "match_ok": 79,
+    "diff_ok": 79,
+    "tokens": 3458
   },
   "cases": [
     {
@@ -318,6 +318,68 @@
               "name": "text",
               "pass": true,
               "detail": "button \"Focus target\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aria-tabs-widget",
+      "html": "fixtures/aria-tabs.html",
+      "notes": "role=tab buttons keep the tab role; a hidden tabpanel is not scanned; tabindex on a panel is not a button",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 43,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "General | Billing | Workspace name"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aria-tree-widget",
+      "html": "fixtures/aria-tree.html",
+      "notes": "role=treeitem controls are clickable and named by their text",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 83,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Project files | src | app.js | styles.css | tests | Expand all"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
             }
           ]
         }
@@ -709,6 +771,37 @@
               "name": "pageText #out",
               "pass": true,
               "detail": "checked"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "date-time-inputs",
+      "html": "fixtures/date-time-inputs.html",
+      "notes": "date, time, month, week, range, number and color are all fill controls",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 145,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Date | Time | Month | Week | Range | Number | Color | Apply"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
             }
           ]
         }
@@ -1217,6 +1310,68 @@
               "name": "pageText #out",
               "pass": true,
               "detail": "legend"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "file-input-metadata",
+      "html": "fixtures/file-input.html",
+      "notes": "file inputs are exposed as file actions, not as text fields",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 46,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Avatar | Documents | Upload"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "form-hidden-name",
+      "html": "fixtures/form-hidden-name.html",
+      "notes": "a control named hidden does not make the form itself hidden",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 52,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Query | Search | visible text field | Filter"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
             }
           ]
         }
@@ -1937,6 +2092,37 @@
               "name": "text",
               "pass": true,
               "detail": "button \"Q02\" | button \"Q03\" | button \"Q05\" | button \"Q12\" | button \"Q14\" | button \"Q16\" | button \"Q18\" | button \"Q20\" | button \"Q23\" | button \"Q24\" | button \"Q27\" | button \"Q30\" | button \"Q31\" | button \"Q35\" | button \"Q36\""
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "native-dialog-open",
+      "html": "fixtures/native-dialog.html",
+      "notes": "an open native dialog is the modal scan root; a closed dialog is not scanned",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 58,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Settings | Theme | Save | Cancel"
             },
             {
               "name": "notText",
@@ -2770,6 +2956,37 @@
       ]
     },
     {
+      "id": "select-multiple",
+      "html": "fixtures/select-multiple.html",
+      "notes": "a multiple select is one control and keeps its options",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 74,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Tags | Alpha | Beta | Gamma | Delta | Country | Choose one | UK | Save"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "shadow-closed-not-reachable",
       "html": "fixtures/shadow-closed.html",
       "notes": "pinned limit: a closed shadow root cannot be read, so its controls are not in the snapshot",
@@ -2979,6 +3196,37 @@
               "name": "ids",
               "pass": true,
               "detail": "[\"a1\",\"a2\"]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "svg-abbr-labels",
+      "html": "fixtures/svg-abbr-labels.html",
+      "notes": "icon-only controls take their name from aria-label, svg title or visible text; title is the last fallback",
+      "pending": false,
+      "pending_reason": null,
+      "status": "PASS",
+      "match_ok": true,
+      "diff_ok": true,
+      "tokens": 53,
+      "failures": [],
+      "steps": [
+        {
+          "step": "1:snapshot",
+          "match_ok": true,
+          "diff_ok": true,
+          "checks": [
+            {
+              "name": "text",
+              "pass": true,
+              "detail": "Close dialog | Download | OK | Help center | R"
+            },
+            {
+              "name": "notText",
+              "pass": true,
+              "detail": ""
             }
           ]
         }

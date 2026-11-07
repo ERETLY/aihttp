@@ -758,22 +758,28 @@
 
   function byId(el, id) {
     if (!id) return null;
-    var root = null;
-    try { root = el.getRootNode ? el.getRootNode() : el.ownerDocument; } catch (e) { root = el.ownerDocument; }
-    if (root && root.getElementById) {
-      var found = root.getElementById(id);
-      if (found) return found;
+    // An id reference can point into any root between the element and the
+    // document: its own shadow root, the light DOM of an ancestor host, or the
+    // document. Walk the host chain instead of checking only the first root.
+    var seen = [];
+    var node = el;
+    var guard = 0;
+    while (node && guard++ < 24) {
+      var root = null;
+      try { root = node.getRootNode ? node.getRootNode() : null; } catch (e) { root = null; }
+      if (root && seen.indexOf(root) < 0) {
+        seen.push(root);
+        var found = root.getElementById ? root.getElementById(id) : null;
+        if (!found && root.querySelector) {
+          try { found = root.querySelector('[id="' + cssString(id) + '"]'); } catch (e) { found = null; }
+        }
+        if (found) return found;
+      }
+      if (root && root.host) { node = root.host; continue; }
+      break;
     }
-    if (root && root.querySelector) {
-      try {
-        var local = root.querySelector('[id="' + cssString(id) + '"]');
-        if (local) return local;
-      } catch (e) {}
-    }
-    // A shadow root can reference an id in the light DOM (aria-controls,
-    // aria-labelledby, aria-owns). Fall back to the document once.
     var doc = el.ownerDocument;
-    if (doc && doc !== root && doc.getElementById) {
+    if (doc && doc.getElementById) {
       var inDoc = doc.getElementById(id);
       if (inDoc) return inDoc;
     }
@@ -815,11 +821,44 @@
     try { return fn.call(el, sel); } catch (e) { return false; }
   }
 
+  // Text that follows slot assignments. textContent stops at <slot>; a
+  // component that renders its label through a slot keeps the real text in the
+  // host's light DOM, so an aria-labelledby target looks empty.
+  function slotText(node, depth) {
+    if (!node || depth > 12) return '';
+    if (node.nodeType === 3) return node.nodeValue || '';
+    if (node.nodeType !== 1 && node.nodeType !== 11) return '';
+    var tag = node.nodeType === 1 ? tagOf(node) : '';
+    if (tag === 'script' || tag === 'style' || tag === 'template') return '';
+    if (tag === 'br') return ' ';
+    if (tag === 'slot' && typeof node.assignedNodes === 'function') {
+      var assigned = [];
+      try { assigned = node.assignedNodes({ flatten: true }) || []; } catch (e) { assigned = []; }
+      if (assigned.length) {
+        var buf = '';
+        for (var a = 0; a < assigned.length; a++) buf += ' ' + slotText(assigned[a], depth + 1) + ' ';
+        return buf;
+      }
+    }
+    var out = '';
+    var kids = node.childNodes || [];
+    for (var i = 0; i < kids.length; i++) out += ' ' + slotText(kids[i], depth + 1) + ' ';
+    return out;
+  }
+
   function textOf(el) {
     if (!el) return '';
     var it = el.innerText;
     if (typeof it === 'string' && it.replace(/\s+/g, ' ').trim()) return it;
-    return el.textContent || '';
+    var own = el.textContent || '';
+    if (own.replace(/\s+/g, ' ').trim()) return own;
+    var slotted = slotText(el, 0);
+    if (slotted.replace(/\s+/g, ' ').trim()) return slotted;
+    if (el.shadowRoot) {
+      var shadow = slotText(el.shadowRoot, 0);
+      if (shadow.replace(/\s+/g, ' ').trim()) return shadow;
+    }
+    return own;
   }
 
   function joinedText(el) {
@@ -2362,24 +2401,42 @@
   }
 
   // A cookie banner is often role=dialog aria-modal=false and only 100x40 px.
-  // Scanning it as a modal hides the real page. A dialog becomes the scan root
-  // only when it is actually modal: aria-modal=true, an open <dialog>, a
-  // backdrop, or (with layout) a box covering a meaningful part of the viewport.
+  // Scanning it as a modal hides the real page. aria-modal="true" is a claim,
+  // not proof: OneTrust and friends put it on a bottom sheet that leaves the
+  // page clickable. A dialog becomes the scan root only when it has a backdrop,
+  // is a native open dialog, or is a centered box covering a real part of the
+  // viewport.
   function isModalCandidate(el, ctx) {
     if (!el || isIgnored(el)) return false;
     if (deepHiddenReason(el, ctx)) return false;
     var ariaModal = String(attr(el, 'aria-modal') || '').toLowerCase();
     if (ariaModal === 'false') return false;
-    if (ariaModal === 'true') return true;
-    if (tagOf(el) === 'dialog' && hasAttr(el, 'open')) return true;
-    if (hasBackdrop(el)) return true;
-    if (ctx.layout) {
+    var nativeOpen = tagOf(el) === 'dialog' && hasAttr(el, 'open');
+    if (ariaModal === 'true') {
+      if (!ctx.layout) return true;
+      if (nativeOpen || hasBackdrop(el)) return true;
       try {
         var rect = el.getBoundingClientRect();
         var win = el.ownerDocument.defaultView || ctx.win;
         var vw = win && win.innerWidth ? win.innerWidth : 0;
         var vh = win && win.innerHeight ? win.innerHeight : 0;
-        if (vw && vh && rect.width * rect.height >= vw * vh * 0.25) return true;
+        if (!vw || !vh) return true;
+        if (rect.width >= vw * 0.9 && rect.height >= vh * 0.9) return true;
+        var centered = rect.top <= vh * 0.5 && rect.bottom >= vh * 0.5;
+        return centered && rect.width * rect.height >= vw * vh * 0.25;
+      } catch (e) {
+        return true;
+      }
+    }
+    if (nativeOpen) return true;
+    if (hasBackdrop(el)) return true;
+    if (ctx.layout) {
+      try {
+        var box = el.getBoundingClientRect();
+        var view = el.ownerDocument.defaultView || ctx.win;
+        var width = view && view.innerWidth ? view.innerWidth : 0;
+        var height = view && view.innerHeight ? view.innerHeight : 0;
+        if (width && height && box.width * box.height >= width * height * 0.25) return true;
       } catch (e) {}
       return false;
     }
@@ -2593,6 +2650,23 @@
     var tag = tagOf(el);
     var role = roleOf(el);
     var type = String(el.type || attr(el, 'type') || '').toLowerCase();
+    // <slot> is a rendering placeholder, never a control. It inherits the
+    // cursor of the component around it, which used to make every slotted
+    // button appear twice: once as the real button and once as the slot.
+    if (tag === 'slot') return null;
+    // SVG shapes inherit cursor:pointer from the icon's button or link. They
+    // are paint, not controls; only an explicit interactive role or a handler
+    // makes an SVG element actionable.
+    var ns = el.namespaceURI;
+    if (ns && ns !== 'http://www.w3.org/1999/xhtml') {
+      if (tag === 'svg' && role && ROLE_KINDS[role]) {
+        return { kind: ROLE_KINDS[role], role: role, native: false, custom: true };
+      }
+      if (hasAttr(el, 'onclick') || hasAttr(el, 'onmousedown') || hasAttr(el, 'onkeydown') || hasAttr(el, 'onkeyup')) {
+        return { kind: 'click', role: 'button', native: false, custom: true };
+      }
+      return null;
+    }
     if (tag === 'input') {
       if (type === 'hidden') return null;
       if (type === 'checkbox' || type === 'radio') return { kind: 'toggle', role: type, native: true };
@@ -2602,23 +2676,40 @@
     }
     if (tag === 'textarea') return { kind: 'fill', role: role || 'textbox', native: true };
     if (tag === 'select') return { kind: 'select', role: 'combobox', native: true };
-    if (tag === 'button') return { kind: 'click', role: 'button', native: true };
+    if (tag === 'button') return { kind: 'click', role: (role && ROLE_KINDS[role]) ? role : 'button', native: true };
     if (tag === 'summary') return { kind: 'click', role: 'button', native: true };
-    if (tag === 'a' && hasAttr(el, 'href')) return { kind: 'click', role: 'link', native: true };
+    if (tag === 'a' && hasAttr(el, 'href')) return { kind: 'click', role: (role && ROLE_KINDS[role]) ? role : 'link', native: true };
     if (isEditable(el)) return { kind: 'fill', role: 'textbox', native: true, editable: true };
     if (role && ROLE_KINDS[role]) return { kind: ROLE_KINDS[role], role: role, native: false, custom: true };
     var pointer = st.cursor === 'pointer' || (!ctx.layout && cssState(el, ctx).pointer);
     var handler = hasAttr(el, 'onclick') || hasAttr(el, 'onmousedown') || hasAttr(el, 'onkeydown') || hasAttr(el, 'onkeyup');
     if (tag === 'label' && !handler && labelProxyControl(el, ctx)) return null;
     if (pointer || handler) {
+      // display:contents has no box of its own, so a pointer cursor inherited
+      // from the component is not evidence that this element is clickable.
+      if (pointer && !handler && st.display === 'contents') return null;
       return { kind: 'click', role: 'button', native: false, custom: true, pointerOnly: !!pointer && !handler };
     }
     if (hoverReveal(el, ctx)) {
       return { kind: 'hover', role: 'hover', native: false, custom: true };
     }
     var ti = attr(el, 'tabindex');
-    if (ti != null && parseInt(ti, 10) >= 0) return { kind: 'click', role: 'button', native: false, custom: true };
+    // A focusable region or tab panel is not a control. Only an element with
+    // no explicit role can fall back to tabindex as evidence of clickability.
+    if (ti != null && parseInt(ti, 10) >= 0 && !role) {
+      return { kind: 'click', role: 'button', native: false, custom: true };
+    }
     return null;
+  }
+
+  // A custom element that declares a click role is the control the page
+  // exposes to assistive technology. Its shadow root usually contains an
+  // unlabeled implementation <button>; registering that button instead loses
+  // the role (tab, menuitem) and the selected/expanded state on the host.
+  var CLICK_HOST_ROLES = { button: 1, link: 1, tab: 1, menuitem: 1, option: 1, treeitem: 1, gridcell: 1 };
+  function customClickHost(el, role) {
+    if (!CLICK_HOST_ROLES[role]) return false;
+    return tagOf(el).indexOf('-') >= 0;
   }
 
   function closestAttr(el, name) {
@@ -2715,7 +2806,12 @@
     }
     if (!isField && !info.editable) {
       var content = el.firstElementChild ? normText(joinedText(el)) : normText(el.textContent);
-      if (content) return content;
+      if (!content) {
+        // Slotted text is rendered but is not a DOM child of the anchor; only
+        // innerText sees the assigned nodes.
+        content = visibleInnerText(el);
+      }
+      if (content) return content.length > 200 ? content.slice(0, 200) : content;
     }
     var generated = generatedText(el);
     if (generated) return generated;
@@ -2765,7 +2861,6 @@
     if (hrefRaw) return hrefRaw;
     return tag;
   }
-
   // Hover-only actions must not take their name from hidden text: a hover card
   // usually contains the very content it reveals. Use only the visible name
   // sources and the alt of a visible image.
@@ -3125,6 +3220,11 @@
         walkOwned(el, region, depth, ctx, childTextOff, ownForm, ownConfirm, ownReadonly);
         return 1;
       }
+      if (info.custom && customClickHost(el, info.role)) {
+        register(el, info, region, ctx, ownForm, ownConfirm, ownReadonly);
+        walkOwned(el, region, depth, ctx, childTextOff, ownForm, ownConfirm, ownReadonly);
+        return 1;
+      }
       var below = walkChildren(el, region, depth, ctx, childTextOff, ownForm, ownConfirm, ownReadonly);
       below += walkOwned(el, region, depth, ctx, childTextOff, ownForm, ownConfirm, ownReadonly);
       if (below > 0) return below;
@@ -3143,7 +3243,7 @@
     return { actions: [], text: [], modal: null, at: now(), ms: 0, doc: doc, meta: { nodes: 0, sanitized: 0, ignored: 0, forms: 0, truncated: false } };
   }
 
-  function scanDOM(limits) {
+  function scanDOM(limits, skipModal) {
     var wanted = limits || {};
     var nodeLimit = wanted.nodeLimit ? Math.max(100, Math.min(500000, parseInt(wanted.nodeLimit, 10) || 0)) : 25000;
     var maxDepth = wanted.maxDepth ? Math.max(5, Math.min(500, parseInt(wanted.maxDepth, 10) || 0)) : 60;
@@ -3179,12 +3279,22 @@
       indexMap: new Map(),
       visited: new Set()
     };
-    var modal = S.modalCache && S.modalCache.doc === doc && !S.dirty
+    var modal = skipModal ? null : (S.modalCache && S.modalCache.doc === doc && !S.dirty
       ? S.modalCache.value
-      : findModal(doc, ctx);
-    S.modalCache = { doc: doc, value: modal };
+      : findModal(doc, ctx));
+    if (!skipModal) S.modalCache = { doc: doc, value: modal };
     var root = modal || doc.body || doc.documentElement;
     if (root) walk(root, modal ? 'modal' : 'main', 0, ctx, false, null, null, false);
+    // A modal that exposes no reachable control is a dead overlay: a consent
+    // shell whose buttons live in a cross-origin iframe, a skeleton, or an
+    // empty dialog. Scanning it alone returns zero actions while the page
+    // behind it is still there, so fall back to the document.
+    if (modal && ctx.actions.length === 0) {
+      var fallback = scanDOM(limits, true);
+      fallback.meta.modalFallback = true;
+      fallback.meta.modalSkipped = tagOf(modal) || 'dialog';
+      return fallback;
+    }
     var ms = now() - t0;
     var formControls = 0;
     for (var ai = 0; ai < ctx.actions.length; ai++) {
@@ -3493,6 +3603,8 @@
       layout: scan.meta.layout,
       ms: scan.ms,
       scanMs: scan.ms,
+      modalFallback: scan.meta.modalFallback === true,
+      modalSkipped: scan.meta.modalSkipped || null,
       query: opts.query || null,
       scope: typeof opts.scope === 'string' ? opts.scope : (opts.scope ? 'element' : null),
       textTrust: 'untrusted',

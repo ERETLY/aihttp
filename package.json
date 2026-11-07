@@ -65,7 +65,8 @@
     "lint": "eslint .",
     "pack:check": "npm pack --dry-run",
     "smoke": "node scripts/smoke-runtime.js",
-    "start": "node bin/ahttp-cli.js"
+    "start": "node bin/ahttp-cli.js",
+    "bench:web": "node benchmark/web-matrix.js"
   },
   "keywords": [
     "ai-agents",

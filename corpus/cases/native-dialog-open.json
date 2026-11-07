@@ -1,0 +1,22 @@
+{
+  "id": "native-dialog-open",
+  "html": "fixtures/native-dialog.html",
+  "url": "https://corpus.test/native-dialog-open",
+  "notes": "an open native dialog is the modal scan root; a closed dialog is not scanned",
+  "steps": [
+    {
+      "action": "snapshot",
+      "expectText": [
+        "Settings",
+        "Theme",
+        "Save",
+        "Cancel"
+      ],
+      "expectNotText": [
+        "Hidden action",
+        "Closed dialog",
+        "Open settings"
+      ]
+    }
+  ]
+}
