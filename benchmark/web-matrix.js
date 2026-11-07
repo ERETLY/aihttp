@@ -149,6 +149,10 @@ async function runSite(browser, site) {
     const loadStarted = nowMs();
     try {
       response = await page.goto(site.url, { waitUntil: 'domcontentloaded', timeout: TIMEOUT });
+      // Ad-heavy pages finish their own hydration after DOMContentLoaded.
+      // Waiting for load (bounded) keeps a slow ad from blocking the matrix
+      // while giving the page a real chance to render its controls.
+      try { await page.waitForLoadState('load', { timeout: 8000 }); } catch (e) {}
     } catch (e) {
       const message = String((e && e.message) || e);
       result.status = networkError(message) ? 'network' : 'error';
@@ -156,7 +160,7 @@ async function runSite(browser, site) {
       return result;
     }
     result.httpStatus = response ? response.status() : null;
-    await page.waitForTimeout(PAUSE || 1200);
+    await page.waitForTimeout(PAUSE || 2200);
     result.title = await page.title().catch(function () { return ''; });
     result.loadMs = nowMs() - loadStarted;
 

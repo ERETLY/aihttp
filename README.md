@@ -285,7 +285,7 @@ Reproduce with Chromium: `npm run bench` (tokens, checkout, tasks), `npm run ben
 ## Coverage matrix
 
 `npm run bench:web` measures the engine against an independent oracle of
-reachable controls on 278 public sites (`benchmark/web-sites.json`). It is not
+reachable controls on 345 public sites (`benchmark/web-sites.json`). It is not
 part of CI: it needs the public network and sites change without notice. The
 report is written to `benchmark/web-matrix-results.json`.
 
