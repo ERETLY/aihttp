@@ -11,6 +11,7 @@ benchmark/last-run.log
 *.cpuprofile
 scratch-*
 benchmark/web-matrix-results.json
+benchmark/*.log
 benchmark/wm-*.json
 benchmark/web-matrix-smoke.json
 benchmark/realworld/results-all-sites.json
