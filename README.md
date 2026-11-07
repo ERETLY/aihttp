@@ -204,7 +204,7 @@ On a five-step checkout ahttp uses 289 tokens against 3,983 for raw HTML. On 20 
 
 <!-- BENCH:START -->
 
-Token run: `2026-11-07T10:09:16.552Z`. ahttp 0.2.1 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
+Token run: `2026-11-07T10:47:08.708Z`. ahttp 0.2.1 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
 
 ### Tokens
 
@@ -229,10 +229,10 @@ Wall-clock numbers from one machine, relative at best. Scan from `2026-11-05T07:
 
 | Method | Time per step |
 |---|---:|
-| Accessibility tree | 4.5 ms |
-| Raw HTML | 4.8 ms |
-| Markdown | 12.3 ms |
-| ahttp | 85.9 ms |
+| Raw HTML | 4.3 ms |
+| Accessibility tree | 4.6 ms |
+| Markdown | 12.2 ms |
+| ahttp | 86.1 ms |
 | ahttp self | 84.9 ms |
 
 **Live.** URL to content, one request per page, 2026-11-05:
