@@ -87,6 +87,17 @@ Policy entries match `intent`, `label`, `name`, `data-testid` or short id, with 
 - A guarded action returns a one-time, expiring `confirmationToken` and performs no DOM event. Repeating the call with the token is an accident barrier, not proof of human approval. The same model can echo the token.
 - Unknown tools and malformed arguments are protocol errors. Tool execution failures are returned with `isError: true`.
 
+## HTTP server
+
+`aihttp-serve` is a network service, so its defaults are conservative:
+
+- It binds `127.0.0.1` by default. A non-loopback bind without `--token` is refused: an unauthenticated public bind is an open SSRF proxy.
+- The bearer token is compared with `crypto.timingSafeEqual`.
+- The `files` argument is rejected over HTTP. File paths are a local trust boundary; a caller could otherwise read any file the server process can read. Use the MCP server for uploads.
+- No CORS headers are sent, so a browser page cannot read responses cross-origin. The service is meant for agents and local tools, not for embedding in a website.
+- Every request passes the same private-address guard as the MCP server: loopback, private, link-local, metadata and non-HTTP targets are blocked unless `--allow-private` is set; redirects are revalidated.
+- The response is untrusted page content. Put the server behind your own authentication and rate limit when it is reachable by more than one user.
+
 ## Prompt injection
 
 The engine marks page text as `[text: untrusted]` and offers `includeText: false`. Action labels, values and URLs also come from the page and must be treated as untrusted. Hidden-text filtering removes several common techniques, but it is heuristic. Do not put secrets in a page you would not show to the agent.

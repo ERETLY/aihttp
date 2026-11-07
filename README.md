@@ -171,6 +171,16 @@ You do not have to change your markup. These attributes declare intent and limit
 
 Client-side JavaScript cannot enforce authorization. The server that performs the mutation must check agent, tenant, object, and intent. See [docs/OWNER_MODE.md](docs/OWNER_MODE.md), [docs/SECURITY.md](docs/SECURITY.md), and [`examples/auth-server/`](examples/auth-server/).
 
+## Adopt it
+
+Three levels, each useful on its own:
+
+1. **Proxy.** Run `aihttp-serve` in front of any site. The agent gets the graph; the site stays untouched.
+2. **Declare.** Add `data-ahttp-*` attributes to name actions, require confirmation, mark read-only controls and set a policy. This is the smallest change that makes an agent's actions auditable.
+3. **Emit.** Return `application/aihttp+json` from your own app. The envelope is `{ protocol: "aihttp/1", format: "aihttp", formatVersion: 1, ... }`; the action schema and statuses are in [docs/AIHTTP.md](docs/AIHTTP.md). You can also embed the engine: it is one dependency-free file and `window.aihttp.snapshot()` returns the same graph.
+
+A site that emits the format natively does not need a browser or a proxy: it is the data the agent would have scraped, shaped for the context window.
+
 ## Security
 
 - Locks, hidden actions, and `data-ahttp-confirm` are not authorization; `gate` is a hint and the hash is in the page source.
