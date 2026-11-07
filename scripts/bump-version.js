@@ -14,7 +14,8 @@ const FILES = {
   pkg: 'package.json',
   lock: 'package-lock.json',
   engine: 'ahttp.js',
-  changelog: 'CHANGELOG.md'
+  changelog: 'CHANGELOG.md',
+  spec: 'docs/AIHTTP.md'
 };
 
 function fail(message) {
@@ -135,6 +136,20 @@ function updateEngine(text, next) {
   return out;
 }
 
+function updateSpec(text, next) {
+  let seen = 0;
+  let out = text.replace(/(Current implementation version: `)[^`]+(`)/, function (all, before, after) {
+    seen++;
+    return before + next + after;
+  });
+  out = out.replace(/("version": ")[^"]+(")/, function (all, before, after) {
+    seen++;
+    return before + next + after;
+  });
+  if (seen !== 2) fail('docs/AIHTTP.md must contain the implementation version and the envelope version');
+  return out;
+}
+
 function runStep(label, command, args, shell) {
   process.stdout.write('bump-version: ' + label + '\n');
   const result = spawnSync(command, args, { cwd: ROOT, stdio: 'inherit', env: process.env, shell: !!shell });
@@ -166,17 +181,20 @@ function main() {
   const lockText = read(FILES.lock);
   const engineText = read(FILES.engine);
   const changelogText = read(FILES.changelog);
+  const specText = read(FILES.spec);
 
   // Compute every file before writing, so a refused bump changes nothing.
   const nextPkg = updatePackageJson(pkgText, next);
   const nextLock = updatePackageLock(lockText, next);
   const nextEngine = updateEngine(engineText, next);
   const nextChangelog = updateChangelog(changelogText, next);
+  const nextSpec = updateSpec(specText, next);
 
   fs.writeFileSync(path.join(ROOT, FILES.pkg), nextPkg, 'utf8');
   fs.writeFileSync(path.join(ROOT, FILES.lock), nextLock, 'utf8');
   fs.writeFileSync(path.join(ROOT, FILES.engine), nextEngine, 'utf8');
   fs.writeFileSync(path.join(ROOT, FILES.changelog), nextChangelog, 'utf8');
+  fs.writeFileSync(path.join(ROOT, FILES.spec), nextSpec, 'utf8');
   process.stdout.write('bump-version: ' + currentText + ' -> ' + next + '\n');
 
   if (process.env.AHTTP_BUMP_SKIP_BUILD !== '1') {
