@@ -300,17 +300,19 @@ matrix reports weighted recall (matched / oracle-visible controls), phantom
 actions, and separates blocked sites (bot wall, consent modal) from network
 errors. Snapshot and oracle run in the same synchronous frame: a virtualized
 feed (Mastodon) keeps off-screen items mounted at `opacity:0` and re-renders
-between two evaluates, which used to count them as visible. The last two runs merged by
-site: 345 configured, 282 loaded, 35 blocked, 28 network errors from the
-environment, 0 engine errors, 272 measured, **96.7% weighted recall** (97.2%
-mean), 21 sites below 90% and 3,928 phantom actions. The base run used the
-278-site list; the expansion run used the final timing (wait for `load`, then
-2.2 s) on the 67 new sites. Docs, tables, forms, testing grounds and
-design systems sit above 90%. News and heavy SPAs are lower because they hide
-the page behind consent or hydrate late. After these fixes the five lowest sites were re-measured:
-Ant Design 100%, Open Library 100%, Plaid 100%, Reddit 99.7% and Wayfair
-100% (Wayfair answered 429 on a repeat run). The matrix is a finding tool, not
-a scoreboard.
+between two evaluates, which used to count them as visible. One clean run on
+the final engine: 345 configured, 293 loaded, 42 blocked, 7 network errors from
+the environment, 3 navigation errors, 283 measured, **98.0% weighted recall**
+(98.7% mean), 12 sites below 90% and 2,999 phantom actions. The five sites that
+were below 90% before the last fixes now measure 100% (Ant Design, Open
+Library, Plaid, Wayfair) and 99.7% (Reddit). The remaining sub-90 sites are
+dominated by hidden mega-menus and marketing carousels that the oracle still
+counts as visible, cross-origin iframe content (MDN), and bot-variant pages
+(Temu): `mdn-iframe` 81.6%, `w3schools-forms` 78.7%,
+`w3schools-form-elements` 79.9%, `w3schools-tables` 82.1%, `archive-org`
+72.7%, `squarespace` 71.8%, `temu` 60%, `imgur` 82.9%, `spiegel` 86.3%,
+`checkout-com` 88.1%, `klarna` 89.2%, `lemonsqueezy` 89.5%. The matrix is a
+finding tool, not a scoreboard.
 
 A blocked site is not a coverage failure. A consent dialog with Accept/Reject
 controls is the page until a decision is made, so the matrix reports it

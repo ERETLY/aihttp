@@ -6,7 +6,7 @@ Install: `npm i aihttp` (package), `npx aihttp-serve --port 8787` (HTTP), `npx a
 
 Status: beta, single maintainer, no independent adoption and no third-party security audit. The repository's own suites pass; that is not external validation. The format is versioned; breaking changes require a new wire version.
 
-Coverage: 345 public sites across forms, docs, design systems, forums, payments, social networks, news, commerce, government and small personal sites, measured against an independent oracle of reachable controls. Last two runs merged by site: 272 measured, 96.7% weighted recall, 97.2% mean, 0 engine errors, 35 blocked and 28 network errors separated. After the last fixes, Ant Design, Open Library, Plaid and Wayfair measure 100% and Reddit 99.7% (Reddit serves a security interstitial to some runs). Coverage is a finding tool, not a guarantee.
+Coverage: 345 public sites across forms, docs, design systems, forums, payments, social networks, news, commerce, government and small personal sites, measured against an independent oracle of reachable controls. One clean run on the final engine: 283 measured, 98.0% weighted recall, 98.7% mean, 42 blocked and 7 network errors separated, 12 sites below 90%. The five sites that were below 90% before the last fixes now measure 100% (Ant Design, Open Library, Plaid, Wayfair) and 99.7% (Reddit). The rest are hidden menus, marketing carousels, cross-origin iframes and bot variants. Coverage is a finding tool, not a guarantee.
 
 Repository: https://github.com/ERETLY/ahttp
 Engine: https://github.com/ERETLY/ahttp/blob/main/ahttp.js
