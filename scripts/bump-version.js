@@ -181,20 +181,20 @@ function main() {
   const lockText = read(FILES.lock);
   const engineText = read(FILES.engine);
   const changelogText = read(FILES.changelog);
-  const specText = read(FILES.spec);
+  const specText = fs.existsSync(path.join(ROOT, FILES.spec)) ? read(FILES.spec) : null;
 
   // Compute every file before writing, so a refused bump changes nothing.
   const nextPkg = updatePackageJson(pkgText, next);
   const nextLock = updatePackageLock(lockText, next);
   const nextEngine = updateEngine(engineText, next);
   const nextChangelog = updateChangelog(changelogText, next);
-  const nextSpec = updateSpec(specText, next);
+  const nextSpec = specText ? updateSpec(specText, next) : null;
 
   fs.writeFileSync(path.join(ROOT, FILES.pkg), nextPkg, 'utf8');
   fs.writeFileSync(path.join(ROOT, FILES.lock), nextLock, 'utf8');
   fs.writeFileSync(path.join(ROOT, FILES.engine), nextEngine, 'utf8');
   fs.writeFileSync(path.join(ROOT, FILES.changelog), nextChangelog, 'utf8');
-  fs.writeFileSync(path.join(ROOT, FILES.spec), nextSpec, 'utf8');
+  if (nextSpec) fs.writeFileSync(path.join(ROOT, FILES.spec), nextSpec, 'utf8');
   process.stdout.write('bump-version: ' + currentText + ' -> ' + next + '\n');
 
   if (process.env.AHTTP_BUMP_SKIP_BUILD !== '1') {

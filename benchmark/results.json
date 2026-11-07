@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-07T10:47:08.708Z",
-  "version": "0.2.1",
+  "generatedAt": "2026-11-07T11:18:07.814Z",
+  "version": "0.3.0",
   "node": "v26.13.0",
   "platform": "win32",
   "arch": "x64",
@@ -14,7 +14,7 @@
       "pass": true,
       "passed": 12,
       "total": 12,
-      "ms": 723,
+      "ms": 732,
       "checks": [
         {
           "name": "initial controls discovered",
@@ -79,7 +79,7 @@
       "pass": true,
       "passed": 7,
       "total": 7,
-      "ms": 458,
+      "ms": 469,
       "checks": [
         {
           "name": "five controls, nested spans deduplicated",
@@ -120,7 +120,7 @@
       "pass": true,
       "passed": 6,
       "total": 6,
-      "ms": 187,
+      "ms": 188,
       "checks": [
         {
           "name": "two nested open shadow roots traversed",
@@ -158,7 +158,7 @@
       "pass": true,
       "passed": 7,
       "total": 7,
-      "ms": 562,
+      "ms": 577,
       "checks": [
         {
           "name": "delayed modal detected in diff",
@@ -177,12 +177,12 @@
         {
           "name": "settle waited for the delayed UI",
           "pass": true,
-          "actual": "462ms"
+          "actual": "474ms"
         },
         {
           "name": "settle completed within the timeout",
           "pass": true,
-          "actual": "462ms"
+          "actual": "474ms"
         },
         {
           "name": "fetch call intercepted",
@@ -202,7 +202,7 @@
       "pass": true,
       "passed": 23,
       "total": 23,
-      "ms": 27,
+      "ms": 31,
       "checks": [
         {
           "name": "engine dormant before first call",
@@ -311,7 +311,7 @@
       "pass": true,
       "passed": 8,
       "total": 8,
-      "ms": 301,
+      "ms": 296,
       "checks": [
         {
           "name": "initial page summary",
@@ -358,7 +358,7 @@
       "pass": true,
       "passed": 7,
       "total": 7,
-      "ms": 187,
+      "ms": 188,
       "checks": [
         {
           "name": "svg title used as label",
@@ -399,7 +399,7 @@
       "pass": true,
       "passed": 7,
       "total": 7,
-      "ms": 264,
+      "ms": 277,
       "checks": [
         {
           "name": "contenteditable registered",
@@ -440,7 +440,7 @@
       "pass": true,
       "passed": 10,
       "total": 10,
-      "ms": 477,
+      "ms": 467,
       "checks": [
         {
           "name": "3500+ element nodes traversed",
@@ -450,7 +450,7 @@
         {
           "name": "median native DOM scan (advisory)",
           "pass": true,
-          "actual": "16ms; advisory budget 150ms; reference machine 25ms"
+          "actual": "17ms; advisory budget 150ms; reference machine 25ms"
         },
         {
           "name": "default snapshot stays compact",
@@ -487,7 +487,7 @@
         {
           "name": "scan samples",
           "pass": true,
-          "actual": "15,15,16,18,46"
+          "actual": "16,16,17,18,36"
         }
       ]
     }
@@ -508,7 +508,7 @@
       "ratio": 10.1,
       "markdownTokens": 5136,
       "markdownRatio": 4.4,
-      "jinaTokens": 5288,
+      "jinaTokens": 5400,
       "jinaStatus": "ok",
       "firecrawlTokens": null,
       "firecrawlStatus": "no key",
@@ -523,13 +523,13 @@
       "nodes": 745,
       "sanitized": 0,
       "shadowRoots": 0,
-      "scanMs": 10,
+      "scanMs": 14,
       "fetchMs": 0,
       "parseMs": 0,
-      "totalMs": 5,
+      "totalMs": 6,
       "liveMs": {
-        "ahttp": 1203,
-        "jina": 955,
+        "ahttp": 1224,
+        "jina": 885,
         "firecrawl": null
       },
       "layout": "css"
@@ -549,7 +549,7 @@
       "ratio": 168.2,
       "markdownTokens": 26579,
       "markdownRatio": 23.4,
-      "jinaTokens": 27977,
+      "jinaTokens": 27711,
       "jinaStatus": "ok",
       "firecrawlTokens": null,
       "firecrawlStatus": "no key",
@@ -564,13 +564,13 @@
       "nodes": 4944,
       "sanitized": 0,
       "shadowRoots": 0,
-      "scanMs": 126,
+      "scanMs": 104,
       "fetchMs": 0,
       "parseMs": 0,
-      "totalMs": 56,
+      "totalMs": 48,
       "liveMs": {
-        "ahttp": 1658,
-        "jina": 681,
+        "ahttp": 1126,
+        "jina": 1293,
         "firecrawl": null
       },
       "layout": "css"
@@ -590,7 +590,7 @@
       "ratio": 16.2,
       "markdownTokens": 6542,
       "markdownRatio": 5.9,
-      "jinaTokens": 7410,
+      "jinaTokens": 7604,
       "jinaStatus": "ok",
       "firecrawlTokens": null,
       "firecrawlStatus": "no key",
@@ -605,13 +605,13 @@
       "nodes": 638,
       "sanitized": 0,
       "shadowRoots": 0,
-      "scanMs": 6,
+      "scanMs": 5,
       "fetchMs": 0,
       "parseMs": 0,
-      "totalMs": 5,
+      "totalMs": 3,
       "liveMs": {
-        "ahttp": 2012,
-        "jina": 590,
+        "ahttp": 2115,
+        "jina": 479,
         "firecrawl": null
       },
       "layout": "css"
@@ -646,13 +646,13 @@
       "nodes": 1412,
       "sanitized": 0,
       "shadowRoots": 0,
-      "scanMs": 16,
+      "scanMs": 17,
       "fetchMs": 0,
-      "parseMs": 0,
-      "totalMs": 16,
+      "parseMs": 3,
+      "totalMs": 20,
       "liveMs": {
-        "ahttp": 2412,
-        "jina": 432,
+        "ahttp": 2396,
+        "jina": 470,
         "firecrawl": null
       },
       "layout": "css"
@@ -672,7 +672,7 @@
       "ratio": 52,
       "markdownTokens": 3008,
       "markdownRatio": 2.6,
-      "jinaTokens": 3180,
+      "jinaTokens": 3106,
       "jinaStatus": "ok",
       "firecrawlTokens": null,
       "firecrawlStatus": "no key",
@@ -687,13 +687,13 @@
       "nodes": 760,
       "sanitized": 0,
       "shadowRoots": 0,
-      "scanMs": 18,
+      "scanMs": 19,
       "fetchMs": 0,
       "parseMs": 1,
-      "totalMs": 19,
+      "totalMs": 20,
       "liveMs": {
-        "ahttp": 1407,
-        "jina": 514,
+        "ahttp": 1399,
+        "jina": 439,
         "firecrawl": null
       },
       "layout": "css"
@@ -722,7 +722,7 @@
         ],
         "totalTokens": 3983,
         "avgStepTokens": 797,
-        "avgLatencyMs": 4.34,
+        "avgLatencyMs": 4.8,
         "actionable": false,
         "guardrails": false,
         "spa": false
@@ -740,7 +740,7 @@
         ],
         "totalTokens": 68,
         "avgStepTokens": 14,
-        "avgLatencyMs": 12.16,
+        "avgLatencyMs": 11.87,
         "actionable": false,
         "guardrails": false,
         "spa": false
@@ -758,7 +758,7 @@
         ],
         "totalTokens": 346,
         "avgStepTokens": 69,
-        "avgLatencyMs": 4.59,
+        "avgLatencyMs": 4.24,
         "actionable": false,
         "guardrails": false,
         "spa": true
@@ -776,7 +776,7 @@
         ],
         "totalTokens": 289,
         "avgStepTokens": 58,
-        "avgLatencyMs": 86.09,
+        "avgLatencyMs": 86.24,
         "actionable": true,
         "guardrails": true,
         "spa": true
@@ -814,7 +814,7 @@
         "axStepTokens": [
           94
         ],
-        "avgLatencyMs": 7.15
+        "avgLatencyMs": 6.79
       },
       {
         "id": 2,
@@ -838,7 +838,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 4.48
+        "avgLatencyMs": 4.61
       },
       {
         "id": 3,
@@ -865,7 +865,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 3.86
+        "avgLatencyMs": 4.1
       },
       {
         "id": 4,
@@ -895,7 +895,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 3.85
+        "avgLatencyMs": 3.83
       },
       {
         "id": 5,
@@ -919,7 +919,7 @@
           98,
           98
         ],
-        "avgLatencyMs": 5.67
+        "avgLatencyMs": 5.61
       },
       {
         "id": 6,
@@ -943,7 +943,7 @@
           98,
           98
         ],
-        "avgLatencyMs": 4.86
+        "avgLatencyMs": 5.83
       },
       {
         "id": 7,
@@ -967,7 +967,7 @@
           98,
           98
         ],
-        "avgLatencyMs": 4.44
+        "avgLatencyMs": 4.63
       },
       {
         "id": 8,
@@ -991,7 +991,7 @@
           98,
           98
         ],
-        "avgLatencyMs": 4.54
+        "avgLatencyMs": 4.89
       },
       {
         "id": 9,
@@ -1015,7 +1015,7 @@
           106,
           106
         ],
-        "avgLatencyMs": 5.05
+        "avgLatencyMs": 5.11
       },
       {
         "id": 10,
@@ -1042,7 +1042,7 @@
           106,
           106
         ],
-        "avgLatencyMs": 4.4
+        "avgLatencyMs": 4.62
       },
       {
         "id": 11,
@@ -1072,7 +1072,7 @@
           106,
           106
         ],
-        "avgLatencyMs": 4.08
+        "avgLatencyMs": 4.55
       },
       {
         "id": 12,
@@ -1105,7 +1105,7 @@
           106,
           106
         ],
-        "avgLatencyMs": 3.92
+        "avgLatencyMs": 3.9
       },
       {
         "id": 13,
@@ -1129,7 +1129,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 4.31
+        "avgLatencyMs": 4.43
       },
       {
         "id": 14,
@@ -1153,7 +1153,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 4.47
+        "avgLatencyMs": 4.52
       },
       {
         "id": 15,
@@ -1177,7 +1177,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 4.19
+        "avgLatencyMs": 4.34
       },
       {
         "id": 16,
@@ -1201,7 +1201,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 4.29
+        "avgLatencyMs": 4.67
       },
       {
         "id": 17,
@@ -1225,7 +1225,7 @@
           100,
           100
         ],
-        "avgLatencyMs": 4.43
+        "avgLatencyMs": 4.8
       },
       {
         "id": 18,
@@ -1252,7 +1252,7 @@
           100,
           100
         ],
-        "avgLatencyMs": 4.03
+        "avgLatencyMs": 3.91
       },
       {
         "id": 19,
@@ -1282,7 +1282,7 @@
           100,
           100
         ],
-        "avgLatencyMs": 3.99
+        "avgLatencyMs": 3.77
       },
       {
         "id": 20,
@@ -1315,7 +1315,7 @@
           100,
           100
         ],
-        "avgLatencyMs": 3.78
+        "avgLatencyMs": 4.48
       }
     ]
   },
@@ -1370,7 +1370,7 @@
     {
       "name": "locked snapshot exposes no actions or content",
       "pass": true,
-      "actual": "ahttp 0.2.1 | gate-locked | owner=acme\n[LOCKED] gate_key_required\nThis page expo"
+      "actual": "ahttp 0.3.0 | gate-locked | owner=acme\n[LOCKED] gate_key_required\nThis page expo"
     },
     {
       "name": "locked JSON has no actions",
@@ -1838,9 +1838,9 @@
     ],
     "passed": 43,
     "total": 43,
-    "ms": 577,
+    "ms": 652,
     "stderr": [
-      "ahttp-mcp 0.2.1 ready (stdio, http backend, private targets allowed)"
+      "ahttp-mcp 0.3.0 ready (stdio, http backend, private targets allowed)"
     ]
   },
   "summary": {

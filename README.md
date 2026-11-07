@@ -214,7 +214,7 @@ On a five-step checkout ahttp uses 289 tokens against 3,983 for raw HTML. On 20 
 
 <!-- BENCH:START -->
 
-Token run: `2026-11-07T10:47:08.708Z`. ahttp 0.2.1 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
+Token run: `2026-11-07T11:18:07.814Z`. ahttp 0.3.0 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
 
 ### Tokens
 
@@ -224,7 +224,7 @@ Tokens an agent reads, lower is better. Checkout is five snapshots of one purcha
 |---|---|---|---|---|---|---|---|---|---|---|
 | Raw HTML | serialized DOM | no | 3,983 | 11,771 | 191,129 | 17,909 | 105,767 | 59,787 | 390,346 | 25,896 |
 | Markdown | Readability + Turndown | no | 68 | 5,136 | 26,579 | 6,542 | 1,387 | 3,008 | 42,720 | n/a |
-| Jina Reader | hosted Markdown | no | n/a | 5,288 | 27,977 | 7,410 | 1,342 | 3,180 | 45,197 | n/a |
+| Jina Reader | hosted Markdown | no | n/a | 5,400 | 27,711 | 7,604 | 1,342 | 3,106 | 45,163 | n/a |
 | Accessibility tree | roles and names | no | 346 | 10,099 | 73,404 | 5,918 | 5,404 | 7,381 | 102,552 | 5,360 |
 | ahttp | actions, text, ids | yes | 289 | 1,162 | 1,136 | 1,105 | 1,282 | 1,149 | 6,123 | 5,104 |
 | ahttp self | actions, text, ids | yes | 289 | 1,170 | 1,148 | 1,116 | 4,208 | 1,242 | 9,173 | 5,104 |
@@ -239,10 +239,10 @@ Wall-clock numbers from one machine, relative at best. Scan from `2026-11-05T07:
 
 | Method | Time per step |
 |---|---:|
-| Raw HTML | 4.3 ms |
-| Accessibility tree | 4.6 ms |
-| Markdown | 12.2 ms |
-| ahttp | 86.1 ms |
+| Accessibility tree | 4.2 ms |
+| Raw HTML | 4.8 ms |
+| Markdown | 11.9 ms |
+| ahttp | 86.2 ms |
 | ahttp self | 84.9 ms |
 
 **Live.** URL to content, one request per page, 2026-11-05:
