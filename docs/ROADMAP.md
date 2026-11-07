@@ -20,6 +20,7 @@ What is not done yet.
 - Closed shadow roots and cross-origin iframes are not traversed.
 - Accessible-name computation is a subset: `aria-owns`, hidden referenced nodes, some SVG rules and references across shadow boundaries are missing.
 - Visibility filtering is heuristic. Canvas, background images, overlapping elements and other visual hiding can be missed.
+- Controls that appear only when an ancestor is hovered (product-card action buttons) are not enumerated as click actions. The engine reports a hover action only when the CSS rule targets the control itself.
 - Browser mode validates every HTTP request at the Playwright route layer, but Chromium does its own DNS resolution, so DNS rebinding is not fully solved there. The static backend uses a pinned lookup.
 - Browser-mode cancellation is checked before and after navigation; an in-flight Chromium navigation is not aborted by the MCP cancellation notification. The static fetch path does abort.
 - The MCP confirmation token is not proof of human approval. MCP elicitation is not implemented.

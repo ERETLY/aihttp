@@ -300,10 +300,12 @@ matrix reports weighted recall (matched / oracle-visible controls), phantom
 actions, and separates blocked sites (bot wall, consent modal) from network
 errors. Snapshot and oracle run in the same synchronous frame: a virtualized
 feed (Mastodon) keeps off-screen items mounted at `opacity:0` and re-renders
-between two evaluates, which used to count them as visible. On the last full
-run: 278 sites, 185 loaded, 20 blocked, 71 network errors from the environment,
-2 engine errors, 177 measured, **97.4% weighted recall** (97.1% mean), 12 sites
-below 90% and 2,757 phantom actions. Docs, tables, forms, testing grounds and
+between two evaluates, which used to count them as visible. The last two runs merged by
+site: 345 configured, 282 loaded, 35 blocked, 28 network errors from the
+environment, 0 engine errors, 272 measured, **96.7% weighted recall** (97.2%
+mean), 21 sites below 90% and 3,928 phantom actions. The base run used the
+278-site list; the expansion run used the final timing (wait for `load`, then
+2.2 s) on the 67 new sites. Docs, tables, forms, testing grounds and
 design systems sit above 90%. News and heavy SPAs are lower because they hide
 the page behind consent or hydrate late. The matrix is a finding tool, not a
 scoreboard.
