@@ -256,7 +256,7 @@ Hosted readers have no separate scan step; their time is in Live time.
 - No LLM in the loop. The task runner is a script.
 - One win32 x64 machine. Scan time is the least portable number.
 - Accessibility token counts depend on the Chromium build.
-- Jina Reader (`r.jina.ai`) and Firecrawl (v2 scrape) fetch the live page, not the pinned HTML. Without `JINA_API_KEY`, Jina can return 403 on GitHub.
+- Jina Reader (`r.jina.ai`) and Firecrawl (v2 scrape) fetch the live page, not the pinned HTML. 
 
 <!-- BENCH:END -->
 
