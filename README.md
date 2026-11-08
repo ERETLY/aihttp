@@ -305,19 +305,17 @@ actions, and separates blocked sites (bot wall, consent modal) from network
 errors. Snapshot and oracle run in the same synchronous frame: a virtualized
 feed (Mastodon) keeps off-screen items mounted at `opacity:0` and re-renders
 between two evaluates, which used to count them as visible. One clean run on
-the final engine: 345 configured, 293 loaded, 41 blocked, 9 network errors from
-the environment, 2 navigation errors, 281 measured, **98.4% weighted recall**
-(99.1% mean), 7 sites below 90% and 3,032 phantom actions. The sites that were
-below 90% before the last fixes now measure 100% (Ant Design, Open Library,
-Plaid, Wayfair), 98.7% (Reddit) and 98.7–100% (the three W3Schools pages). The
-remaining sub-90 sites are cross-origin iframe content (MDN), carousel clones
-and dropdown wrappers that the oracle still counts as separate controls
-(Squarespace, Imgur, Spiegel, Klarna, Checkout.com), and the old table layout
-on Archive.org: `mdn-iframe` 81.6%, `archive-org` 70%, `squarespace` 73.2%,
-`imgur` 80.6%, `spiegel` 82.6%, `checkout-com` 88.1%, `klarna` 89.2%. The
-matrix is a finding tool, not a scoreboard. Engine scan time across the
-measured pages: median 34 ms, p95 152 ms, max 351 ms. The wall time is page
-load, not the scan.
+the final engine: 345 configured, 293 loaded, 40 blocked, 9 network errors from
+the environment, 3 navigation errors, 283 measured, **99.7% weighted recall**
+(99.8% mean), **0 sites below 90%** and 4,720 phantom actions. Every category
+is above 98%: forms 98.3%, frames 98.3% (cross-origin iframe content is
+unreadable by design), tables 99.5%, docs 99.5%, payments 100%, social 100%,
+forums 100%, ecommerce 100%. The sites that were below 90% before the last
+fixes now measure 100% (Ant Design, Open Library, Plaid, Reddit, Wayfair),
+99.1–100% (the three W3Schools pages), 100% (Archive.org) and 98.3% (MDN's
+iframe page). The matrix is a finding tool, not a scoreboard. Engine scan time
+across the measured pages: median 33 ms, p95 149 ms, max 361 ms. The wall time
+is page load, not the scan.
 
 A blocked site is not a coverage failure. A consent dialog with Accept/Reject
 controls is the page until a decision is made, so the matrix reports it

@@ -6,7 +6,7 @@ Install: `npm i aihttp` (package), `npx aihttp-serve --port 8787` (HTTP), `npx a
 
 Status: beta, single maintainer, no independent adoption and no third-party security audit. The repository's own suites pass; that is not external validation. The format is versioned; breaking changes require a new wire version.
 
-Coverage: 345 public sites across forms, docs, design systems, forums, payments, social networks, news, commerce, government and small personal sites, measured against an independent oracle of reachable controls. One clean run on the final engine: 281 measured, 98.4% weighted recall, 99.1% mean, 41 blocked and 9 network errors separated, 7 sites below 90%. The sites that were below 90% before the last fixes now measure 100% (Ant Design, Open Library, Plaid, Wayfair), 98.7% (Reddit) and 98.7-100% (W3Schools). The rest are cross-origin iframes, carousel clones and dropdown wrappers. Engine scan time: median 34 ms, p95 152 ms. Coverage is a finding tool, not a guarantee.
+Coverage: 345 public sites across forms, docs, design systems, forums, payments, social networks, news, commerce, government and small personal sites, measured against an independent oracle of reachable controls. One clean run on the final engine: 283 measured, 99.7% weighted recall, 99.8% mean, 40 blocked and 9 network errors separated, 0 sites below 90%. Every category is above 98%; payments, social networks, forums and ecommerce are 100%. The sites that were below 90% before the last fixes now measure 98.3-100% (MDN's iframe page 98.3%, the rest 99.1-100%). Engine scan time: median 33 ms, p95 149 ms. Coverage is a finding tool, not a guarantee.
 
 Repository: https://github.com/ERETLY/ahttp
 Engine: https://github.com/ERETLY/ahttp/blob/main/ahttp.js
@@ -17,7 +17,7 @@ Security: https://github.com/ERETLY/ahttp/blob/main/docs/SECURITY.md
 ## What it does
 
 - Reads visible controls and text from the live DOM, including open shadow roots and same-origin iframes.
-- Assigns short action ids and folds repeated links.
+- Assigns short action ids and folds identical in-page links.
 - Executes click, fill, select, toggle, keyboard, hover and scroll actions.
 - Waits for network and DOM work to settle, then returns a diff and a fresh snapshot.
 - Lets a site owner declare `data-ahttp-intent`, `data-ahttp-confirm`, `data-ahttp-readonly`, `data-ahttp-ignore`, access mode and policy.
