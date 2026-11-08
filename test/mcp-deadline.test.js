@@ -60,7 +60,7 @@ test('a stuck tool call cannot block the MCP queue', { timeout: 30000 }, async (
   const local = await listen(() => {
     // Never respond: the page load stays pending until the deadline fires.
   });
-  const proc = spawn(process.execPath, [path.join(__dirname, '..', 'bin', 'ahttp-mcp.js'), '--allow-private'], {
+  const proc = spawn(process.execPath, [path.join(__dirname, '..', 'bin', 'aihttp-mcp.js'), '--allow-private'], {
     stdio: ['pipe', 'pipe', 'pipe'],
     env: Object.assign({}, process.env, { AHTTP_CALL_TIMEOUT_MS: '1500' })
   });

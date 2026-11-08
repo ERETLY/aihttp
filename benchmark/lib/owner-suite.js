@@ -110,13 +110,13 @@ async function runOwnerTest() {
   c.ok(prodPlain.ahttp.unlock('plain-key').error === 'insecure_key_rejected', 'plaintext keys are rejected outside localhost');
 
   const publicHtml = '<!doctype html><body><main><button data-ahttp-intent="ping">Ping</button></main>' +
-    '<script src="ahttp.js" data-ahttp-access="public"></script></body>';
+    '<script src="aihttp.js" data-ahttp-access="public"></script></body>';
   const publicMode = loadHtml(publicHtml, 'https://public.test/');
   c.ok(publicMode.ahttp.status().mode === 'public' && publicMode.ahttp.status().locked === false, 'public access mode is open');
   c.ok(/ping/i.test(publicMode.ahttp.snapshot()), 'public access serves actions');
 
   const devHtml = '<!doctype html><body><main><button data-ahttp-intent="ping">Ping</button></main>' +
-    '<script src="ahttp.js" data-ahttp-access="dev"></script></body>';
+    '<script src="aihttp.js" data-ahttp-access="dev"></script></body>';
   const devProd = loadHtml(devHtml, 'https://dev-prod.test/');
   c.ok(devProd.ahttp.status().mode === 'dev' && devProd.ahttp.status().locked === true, 'dev access is locked outside localhost');
   c.ok(devProd.ahttp.snapshot({ format: 'json' }).error === 'dev_only', 'dev-only lock reports the reason');
@@ -219,7 +219,7 @@ async function runOwnerTest() {
   c.ok(expiryPage.ahttp.snapshot({ format: 'json' }).error === 'server_auth_required', 'expired session reports server_auth_required');
 
   const insecureHtml = '<!doctype html><body><main><button>Ping</button></main>' +
-    '<script src="ahttp.js" data-ahttp-access="owner" data-ahttp-auth-endpoint="http://evil.test/authorize"></script></body>';
+    '<script src="aihttp.js" data-ahttp-access="owner" data-ahttp-auth-endpoint="http://evil.test/authorize"></script></body>';
   const insecure = loadHtml(insecureHtml, 'https://insecure.test/');
   const insecureResult = await insecure.ahttp.authorize({ token: 'x' });
   c.ok(insecureResult.error === 'insecure_auth_endpoint', 'non-TLS auth endpoints are rejected', JSON.stringify(insecureResult));

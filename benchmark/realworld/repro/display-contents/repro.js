@@ -13,7 +13,7 @@ const path = require('node:path');
 const { chromium } = require('playwright');
 
 const ROOT = path.join(__dirname, '..', '..', '..', '..');
-const ENGINE = fs.readFileSync(path.join(ROOT, 'ahttp.js'), 'utf8');
+const ENGINE = fs.readFileSync(path.join(ROOT, 'aihttp.js'), 'utf8');
 
 (async () => {
   const browser = await chromium.launch({ headless: true });

@@ -10,7 +10,7 @@ const { markdownFromHtml } = require('./lib/real');
 const pkg = require('../package.json');
 
 const ROOT = path.join(__dirname, '..');
-const SELF = path.join(ROOT, 'self', 'ahttp.user.js');
+const SELF = path.join(ROOT, 'self', 'aihttp.user.js');
 const PINNED = path.join(__dirname, 'pinned');
 const INDEX = JSON.parse(fs.readFileSync(path.join(PINNED, 'index.json'), 'utf8'));
 const OPTIONS = { format: 'text', maxActions: 60, maxText: 1200 };

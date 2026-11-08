@@ -279,7 +279,7 @@ Tools get `readOnlyHint` for snapshots, `untrustedContentHint` for page content,
 
 ## `ahttp.hashKey(value)`
 
-Returns the SHA-256 hex for `data-ahttp-key-hash`. Also available through `node bin/ahttp-cli.js --hash-key <value>`.
+Returns the SHA-256 hex for `data-ahttp-key-hash`. Also available through `node bin/aihttp-cli.js --hash-key <value>`.
 
 ## `ahttp.sleep()`
 

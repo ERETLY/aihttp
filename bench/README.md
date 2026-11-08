@@ -1,7 +1,7 @@
 # Corpus results
 
 `results.json` is the current engine on the 27-case corpus. `results.before.json`
-is the same corpus run against `main:ahttp.js` before the matching changes, used
+is the same corpus run against `main:aihttp.js` before the matching changes, used
 for the PR before/after table.
 
 Regenerate the current summary:
@@ -13,7 +13,7 @@ npm run test:corpus
 Regenerate the baseline (any engine file works):
 
 ```bash
-git show main:ahttp.js > /tmp/ahttp.before.js
+git show main:aihttp.js > /tmp/ahttp.before.js
 AHTTP_ENGINE=/tmp/ahttp.before.js node corpus/runner.js --out=bench/results.before.json
 ```
 

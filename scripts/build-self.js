@@ -5,9 +5,9 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
-const ENGINE = path.join(ROOT, 'ahttp.min.js');
+const ENGINE = path.join(ROOT, 'aihttp.min.js');
 const PANEL = path.join(ROOT, 'self', 'panel.js');
-const OUTPUT = path.join(ROOT, 'self', 'ahttp.user.js');
+const OUTPUT = path.join(ROOT, 'self', 'aihttp.user.js');
 const pkg = require(path.join(ROOT, 'package.json'));
 
 function header() {
@@ -25,7 +25,7 @@ function header() {
     '// @grant        none',
     '// @noframes',
     '// ==/UserScript==',
-    '/*! ahttp self-use | MIT | generated from ahttp.min.js and self/panel.js */',
+    '/*! ahttp self-use | MIT | generated from aihttp.min.js and self/panel.js */',
     ''
   ].join('\n');
 }
@@ -41,10 +41,10 @@ function main() {
   if (process.argv.includes('--check')) {
     const current = fs.existsSync(OUTPUT) ? fs.readFileSync(OUTPUT, 'utf8') : '';
     if (current !== output) {
-      process.stderr.write('self/ahttp.user.js is stale; run npm run build:self\n');
+      process.stderr.write('self/aihttp.user.js is stale; run npm run build:self\n');
       process.exit(1);
     }
-    process.stdout.write('self/ahttp.user.js is current\n');
+    process.stdout.write('self/aihttp.user.js is current\n');
     return;
   }
   fs.writeFileSync(OUTPUT, output, 'utf8');

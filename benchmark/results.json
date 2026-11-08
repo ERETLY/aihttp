@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-07T11:18:07.814Z",
-  "version": "0.3.0",
+  "generatedAt": "2026-11-08T12:14:24.626Z",
+  "version": "1.0.0",
   "node": "v26.13.0",
   "platform": "win32",
   "arch": "x64",
@@ -14,7 +14,7 @@
       "pass": true,
       "passed": 12,
       "total": 12,
-      "ms": 732,
+      "ms": 718,
       "checks": [
         {
           "name": "initial controls discovered",
@@ -79,7 +79,7 @@
       "pass": true,
       "passed": 7,
       "total": 7,
-      "ms": 469,
+      "ms": 460,
       "checks": [
         {
           "name": "five controls, nested spans deduplicated",
@@ -120,7 +120,7 @@
       "pass": true,
       "passed": 6,
       "total": 6,
-      "ms": 188,
+      "ms": 201,
       "checks": [
         {
           "name": "two nested open shadow roots traversed",
@@ -158,7 +158,7 @@
       "pass": true,
       "passed": 7,
       "total": 7,
-      "ms": 577,
+      "ms": 560,
       "checks": [
         {
           "name": "delayed modal detected in diff",
@@ -177,12 +177,12 @@
         {
           "name": "settle waited for the delayed UI",
           "pass": true,
-          "actual": "474ms"
+          "actual": "475ms"
         },
         {
           "name": "settle completed within the timeout",
           "pass": true,
-          "actual": "474ms"
+          "actual": "475ms"
         },
         {
           "name": "fetch call intercepted",
@@ -202,7 +202,7 @@
       "pass": true,
       "passed": 23,
       "total": 23,
-      "ms": 31,
+      "ms": 27,
       "checks": [
         {
           "name": "engine dormant before first call",
@@ -311,7 +311,7 @@
       "pass": true,
       "passed": 8,
       "total": 8,
-      "ms": 296,
+      "ms": 270,
       "checks": [
         {
           "name": "initial page summary",
@@ -358,7 +358,7 @@
       "pass": true,
       "passed": 7,
       "total": 7,
-      "ms": 188,
+      "ms": 203,
       "checks": [
         {
           "name": "svg title used as label",
@@ -399,7 +399,7 @@
       "pass": true,
       "passed": 7,
       "total": 7,
-      "ms": 277,
+      "ms": 278,
       "checks": [
         {
           "name": "contenteditable registered",
@@ -440,7 +440,7 @@
       "pass": true,
       "passed": 10,
       "total": 10,
-      "ms": 467,
+      "ms": 435,
       "checks": [
         {
           "name": "3500+ element nodes traversed",
@@ -450,7 +450,7 @@
         {
           "name": "median native DOM scan (advisory)",
           "pass": true,
-          "actual": "17ms; advisory budget 150ms; reference machine 25ms"
+          "actual": "15ms; advisory budget 150ms; reference machine 25ms"
         },
         {
           "name": "default snapshot stays compact",
@@ -482,12 +482,12 @@
         {
           "name": "jsdom reference traversal completed",
           "pass": true,
-          "actual": "3759 nodes in 168ms"
+          "actual": "3759 nodes in 147ms"
         },
         {
           "name": "scan samples",
           "pass": true,
-          "actual": "16,16,17,18,36"
+          "actual": "14,15,15,18,38"
         }
       ]
     }
@@ -508,7 +508,7 @@
       "ratio": 10.1,
       "markdownTokens": 5136,
       "markdownRatio": 4.4,
-      "jinaTokens": 5400,
+      "jinaTokens": 5408,
       "jinaStatus": "ok",
       "firecrawlTokens": null,
       "firecrawlStatus": "no key",
@@ -523,13 +523,13 @@
       "nodes": 745,
       "sanitized": 0,
       "shadowRoots": 0,
-      "scanMs": 14,
+      "scanMs": 10,
       "fetchMs": 0,
       "parseMs": 0,
-      "totalMs": 6,
+      "totalMs": 4,
       "liveMs": {
-        "ahttp": 1224,
-        "jina": 885,
+        "ahttp": 2239,
+        "jina": 932,
         "firecrawl": null
       },
       "layout": "css"
@@ -544,33 +544,33 @@
       "httpStatus": 200,
       "rawBytes": 604882,
       "rawTokens": 191129,
-      "snapshotBytes": 4138,
-      "snapshotTokens": 1136,
-      "ratio": 168.2,
+      "snapshotBytes": 4110,
+      "snapshotTokens": 1130,
+      "ratio": 169.1,
       "markdownTokens": 26579,
-      "markdownRatio": 23.4,
+      "markdownRatio": 23.5,
       "jinaTokens": 27711,
       "jinaStatus": "ok",
       "firecrawlTokens": null,
       "firecrawlStatus": "no key",
       "axTokens": 73404,
       "axStatus": "ok",
-      "axRatio": 64.6,
-      "actions": 1617,
+      "axRatio": 65,
+      "actions": 1586,
       "shown": 60,
-      "omitted": 1557,
+      "omitted": 1526,
       "groups": 0,
       "controls": 10,
       "nodes": 4944,
       "sanitized": 0,
       "shadowRoots": 0,
-      "scanMs": 104,
+      "scanMs": 88,
       "fetchMs": 0,
       "parseMs": 0,
-      "totalMs": 48,
+      "totalMs": 51,
       "liveMs": {
-        "ahttp": 1126,
-        "jina": 1293,
+        "ahttp": 1117,
+        "jina": 2538,
         "firecrawl": null
       },
       "layout": "css"
@@ -590,7 +590,7 @@
       "ratio": 16.2,
       "markdownTokens": 6542,
       "markdownRatio": 5.9,
-      "jinaTokens": 7604,
+      "jinaTokens": 7906,
       "jinaStatus": "ok",
       "firecrawlTokens": null,
       "firecrawlStatus": "no key",
@@ -605,13 +605,13 @@
       "nodes": 638,
       "sanitized": 0,
       "shadowRoots": 0,
-      "scanMs": 5,
+      "scanMs": 6,
       "fetchMs": 0,
       "parseMs": 0,
       "totalMs": 3,
       "liveMs": {
-        "ahttp": 2115,
-        "jina": 479,
+        "ahttp": 2665,
+        "jina": 3048,
         "firecrawl": null
       },
       "layout": "css"
@@ -626,9 +626,9 @@
       "httpStatus": 200,
       "rawBytes": 293132,
       "rawTokens": 105767,
-      "snapshotBytes": 4777,
-      "snapshotTokens": 1282,
-      "ratio": 82.5,
+      "snapshotBytes": 4774,
+      "snapshotTokens": 1286,
+      "ratio": 82.2,
       "markdownTokens": 1387,
       "markdownRatio": 1.1,
       "jinaTokens": 1342,
@@ -638,21 +638,21 @@
       "axTokens": 5404,
       "axStatus": "ok",
       "axRatio": 4.2,
-      "actions": 199,
+      "actions": 197,
       "shown": 60,
-      "omitted": 139,
+      "omitted": 137,
       "groups": 0,
       "controls": 1,
       "nodes": 1412,
       "sanitized": 0,
       "shadowRoots": 0,
-      "scanMs": 17,
+      "scanMs": 15,
       "fetchMs": 0,
       "parseMs": 3,
-      "totalMs": 20,
+      "totalMs": 18,
       "liveMs": {
-        "ahttp": 2396,
-        "jina": 470,
+        "ahttp": 2415,
+        "jina": 459,
         "firecrawl": null
       },
       "layout": "css"
@@ -667,33 +667,33 @@
       "httpStatus": 200,
       "rawBytes": 222231,
       "rawTokens": 59787,
-      "snapshotBytes": 4208,
-      "snapshotTokens": 1149,
-      "ratio": 52,
+      "snapshotBytes": 4231,
+      "snapshotTokens": 1156,
+      "ratio": 51.7,
       "markdownTokens": 3008,
       "markdownRatio": 2.6,
-      "jinaTokens": 3106,
+      "jinaTokens": 3087,
       "jinaStatus": "ok",
       "firecrawlTokens": null,
       "firecrawlStatus": "no key",
       "axTokens": 7381,
       "axStatus": "ok",
       "axRatio": 6.4,
-      "actions": 234,
+      "actions": 231,
       "shown": 60,
-      "omitted": 174,
+      "omitted": 171,
       "groups": 0,
       "controls": 0,
       "nodes": 760,
       "sanitized": 0,
       "shadowRoots": 0,
-      "scanMs": 19,
+      "scanMs": 17,
       "fetchMs": 0,
-      "parseMs": 1,
-      "totalMs": 20,
+      "parseMs": 2,
+      "totalMs": 19,
       "liveMs": {
-        "ahttp": 1399,
-        "jina": 439,
+        "ahttp": 2604,
+        "jina": 3143,
         "firecrawl": null
       },
       "layout": "css"
@@ -701,7 +701,7 @@
   ],
   "comparison": {
     "scenario": "ecommerce-checkout-5-steps",
-    "methodology": "Chromium drives benchmark/fixtures/ecommerce.html. ahttp.js is injected into the live page and executes the five steps. Raw HTML, Readability+Turndown Markdown, and Playwright ariaSnapshot are sampled after each step from the same live DOM state. Token counts use gpt-tokenizer 4.1.0 countTokens (o200k_base). Static methods cannot execute actions; their success rate is zero by construction.",
+    "methodology": "Chromium drives benchmark/fixtures/ecommerce.html. aihttp.js is injected into the live page and executes the five steps. Raw HTML, Readability+Turndown Markdown, and Playwright ariaSnapshot are sampled after each step from the same live DOM state. Token counts use gpt-tokenizer 4.1.0 countTokens (o200k_base). Static methods cannot execute actions; their success rate is zero by construction.",
     "browser": "Playwright Chromium",
     "browserVersion": "156.0.8078.4",
     "steps": 5,
@@ -722,7 +722,7 @@
         ],
         "totalTokens": 3983,
         "avgStepTokens": 797,
-        "avgLatencyMs": 4.8,
+        "avgLatencyMs": 4.22,
         "actionable": false,
         "guardrails": false,
         "spa": false
@@ -740,7 +740,7 @@
         ],
         "totalTokens": 68,
         "avgStepTokens": 14,
-        "avgLatencyMs": 11.87,
+        "avgLatencyMs": 13.39,
         "actionable": false,
         "guardrails": false,
         "spa": false
@@ -758,14 +758,14 @@
         ],
         "totalTokens": 346,
         "avgStepTokens": 69,
-        "avgLatencyMs": 4.24,
+        "avgLatencyMs": 5.71,
         "actionable": false,
         "guardrails": false,
         "spa": true
       },
       {
         "key": "ahttp",
-        "name": "ahttp.js in Chromium",
+        "name": "aihttp.js in Chromium",
         "steps": 5,
         "stepTokens": [
           39,
@@ -776,7 +776,7 @@
         ],
         "totalTokens": 289,
         "avgStepTokens": 58,
-        "avgLatencyMs": 86.24,
+        "avgLatencyMs": 86.17,
         "actionable": true,
         "guardrails": true,
         "spa": true
@@ -814,7 +814,7 @@
         "axStepTokens": [
           94
         ],
-        "avgLatencyMs": 6.79
+        "avgLatencyMs": 6.5
       },
       {
         "id": 2,
@@ -838,7 +838,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 4.61
+        "avgLatencyMs": 4.71
       },
       {
         "id": 3,
@@ -865,7 +865,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 4.1
+        "avgLatencyMs": 4.25
       },
       {
         "id": 4,
@@ -895,7 +895,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 3.83
+        "avgLatencyMs": 4.41
       },
       {
         "id": 5,
@@ -919,7 +919,7 @@
           98,
           98
         ],
-        "avgLatencyMs": 5.61
+        "avgLatencyMs": 7.04
       },
       {
         "id": 6,
@@ -943,7 +943,7 @@
           98,
           98
         ],
-        "avgLatencyMs": 5.83
+        "avgLatencyMs": 5.08
       },
       {
         "id": 7,
@@ -967,7 +967,7 @@
           98,
           98
         ],
-        "avgLatencyMs": 4.63
+        "avgLatencyMs": 5.35
       },
       {
         "id": 8,
@@ -991,7 +991,7 @@
           98,
           98
         ],
-        "avgLatencyMs": 4.89
+        "avgLatencyMs": 6.16
       },
       {
         "id": 9,
@@ -1015,7 +1015,7 @@
           106,
           106
         ],
-        "avgLatencyMs": 5.11
+        "avgLatencyMs": 6.91
       },
       {
         "id": 10,
@@ -1042,7 +1042,7 @@
           106,
           106
         ],
-        "avgLatencyMs": 4.62
+        "avgLatencyMs": 4.81
       },
       {
         "id": 11,
@@ -1072,7 +1072,7 @@
           106,
           106
         ],
-        "avgLatencyMs": 4.55
+        "avgLatencyMs": 4.41
       },
       {
         "id": 12,
@@ -1105,7 +1105,7 @@
           106,
           106
         ],
-        "avgLatencyMs": 3.9
+        "avgLatencyMs": 4.12
       },
       {
         "id": 13,
@@ -1129,7 +1129,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 4.43
+        "avgLatencyMs": 4.81
       },
       {
         "id": 14,
@@ -1153,7 +1153,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 4.52
+        "avgLatencyMs": 4.35
       },
       {
         "id": 15,
@@ -1177,7 +1177,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 4.34
+        "avgLatencyMs": 5.63
       },
       {
         "id": 16,
@@ -1201,7 +1201,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 4.67
+        "avgLatencyMs": 5.82
       },
       {
         "id": 17,
@@ -1225,7 +1225,7 @@
           100,
           100
         ],
-        "avgLatencyMs": 4.8
+        "avgLatencyMs": 5.91
       },
       {
         "id": 18,
@@ -1252,7 +1252,7 @@
           100,
           100
         ],
-        "avgLatencyMs": 3.91
+        "avgLatencyMs": 4.4
       },
       {
         "id": 19,
@@ -1282,7 +1282,7 @@
           100,
           100
         ],
-        "avgLatencyMs": 3.77
+        "avgLatencyMs": 4.62
       },
       {
         "id": 20,
@@ -1315,7 +1315,7 @@
           100,
           100
         ],
-        "avgLatencyMs": 4.48
+        "avgLatencyMs": 3.94
       }
     ]
   },
@@ -1370,7 +1370,7 @@
     {
       "name": "locked snapshot exposes no actions or content",
       "pass": true,
-      "actual": "ahttp 0.3.0 | gate-locked | owner=acme\n[LOCKED] gate_key_required\nThis page expo"
+      "actual": "ahttp 1.0.0 | gate-locked | owner=acme\n[LOCKED] gate_key_required\nThis page expo"
     },
     {
       "name": "locked JSON has no actions",
@@ -1838,9 +1838,9 @@
     ],
     "passed": 43,
     "total": 43,
-    "ms": 652,
+    "ms": 632,
     "stderr": [
-      "ahttp-mcp 0.3.0 ready (stdio, http backend, private targets allowed)"
+      "ahttp-mcp 1.0.0 ready (stdio, http backend, private targets allowed)"
     ]
   },
   "summary": {

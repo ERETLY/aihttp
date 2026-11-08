@@ -7,7 +7,7 @@ const path = require('node:path');
 
 const { playwright, chromiumAvailable, browserGate } = require('../tools/browser-env');
 
-const ENGINE = fs.readFileSync(path.join(__dirname, '..', 'ahttp.js'), 'utf8');
+const ENGINE = fs.readFileSync(path.join(__dirname, '..', 'aihttp.js'), 'utf8');
 const FIXTURES = path.join(__dirname, '..', 'corpus', 'fixtures');
 const REPRO = path.join(__dirname, '..', 'benchmark', 'realworld', 'repro', 'display-contents', 'fixture.html');
 const REPRO_SELECT = path.join(__dirname, '..', 'benchmark', 'realworld', 'repro', 'select-opacity', 'fixture.html');

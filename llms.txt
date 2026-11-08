@@ -6,11 +6,11 @@ Install: `npm i aihttp` (package), `npx aihttp-serve --port 8787` (HTTP), `npx a
 
 Status: beta, single maintainer, no independent adoption and no third-party security audit. The repository's own suites pass; that is not external validation. The format is versioned; breaking changes require a new wire version.
 
-Coverage: 345 public sites across forms, docs, design systems, forums, payments, social networks, news, commerce, government and small personal sites, measured against an independent oracle of reachable controls. One clean run on the final engine: 283 measured, 99.7% weighted recall, 99.8% mean, 40 blocked and 9 network errors separated, 0 sites below 90%. Every category is above 98%; payments, social networks, forums and ecommerce are 100%. The sites that were below 90% before the last fixes now measure 98.3-100% (MDN's iframe page 98.3%, the rest 99.1-100%). Engine scan time: median 33 ms, p95 149 ms. Coverage is a finding tool, not a guarantee.
+Coverage: 385 public sites across forms, docs, design systems, forums, payments, social networks, news, commerce, government and small personal sites, measured against an independent oracle of reachable controls. One clean run on the final engine: 312 measured, 99.7% weighted recall, 99.8% mean, 46 blocked and 14 network errors separated, 1 site below 90% (Upwork 89.7%). Every category is above 98%; payments, social networks, forums and ecommerce are 100%. The sites that were below 90% before the last fixes now measure 98.3-100% (MDN's iframe page 98.3%, the rest 99.1-100%). Engine scan time: median 37 ms, p95 188 ms. Coverage is a finding tool, not a guarantee.
 
 Repository: https://github.com/ERETLY/ahttp
-Engine: https://github.com/ERETLY/ahttp/blob/main/ahttp.js
-Types: https://github.com/ERETLY/ahttp/blob/main/ahttp.d.ts
+Engine: https://github.com/ERETLY/ahttp/blob/main/aihttp.js
+Types: https://github.com/ERETLY/ahttp/blob/main/aihttp.d.ts
 Benchmark data: https://github.com/ERETLY/ahttp/blob/main/benchmark/results.json
 Security: https://github.com/ERETLY/ahttp/blob/main/docs/SECURITY.md
 
@@ -48,11 +48,11 @@ Run `ahttp-mcp --allow-private` only for trusted targets. The default guard reje
 ## CLI
 
 ```bash
-node bin/ahttp-cli.js <url> [--json] [--query text] [--scope main] [--max-actions 60] [--max-text 1400]
-node bin/ahttp-cli.js <url> --allow-private
-node bin/ahttp-cli.js <url> --auth-token <short-lived-token>
-node bin/ahttp-cli.js <url> --unlock <soft-gate-key>
-node bin/ahttp-cli.js --hash-key <key>
+node bin/aihttp-cli.js <url> [--json] [--query text] [--scope main] [--max-actions 60] [--max-text 1400]
+node bin/aihttp-cli.js <url> --allow-private
+node bin/aihttp-cli.js <url> --auth-token <short-lived-token>
+node bin/aihttp-cli.js <url> --unlock <soft-gate-key>
+node bin/aihttp-cli.js --hash-key <key>
 ```
 
 The CLI's token counts use `ceil(UTF-8 bytes / 4)` as a quick estimate. The benchmark uses a real tokenizer.
@@ -83,7 +83,7 @@ Result: `{ ok, status, action, method, url, latencyMs, diff, snapshot, snapshotM
 ## Declarative contract
 
 ```html
-<script src="ahttp.min.js"></script>
+<script src="aihttp.min.js"></script>
 
 <button data-ahttp-intent="checkout_submit">Pay now</button>
 <button data-ahttp-confirm="Charges $49.00">Pay</button>

@@ -20,7 +20,7 @@ const { chromium } = require('playwright');
 const { measurePage } = require('./lib/coverage');
 
 const ROOT = path.join(__dirname, '..');
-const ENGINE = fs.readFileSync(path.join(ROOT, 'ahttp.js'), 'utf8');
+const ENGINE = fs.readFileSync(path.join(ROOT, 'aihttp.js'), 'utf8');
 const SITES_JSON = require('./web-sites.json');
 const SITES = Array.isArray(SITES_JSON) ? SITES_JSON : (SITES_JSON.sites || []);
 const pkg = require(path.join(ROOT, 'package.json'));

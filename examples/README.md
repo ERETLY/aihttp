@@ -1,6 +1,6 @@
 # Examples
 
-These examples use the local `ahttp.js` in this repository. They are not published packages.
+These examples use the local `aihttp.js` in this repository. They are not published packages.
 
 ## Browser
 
@@ -59,8 +59,8 @@ The action endpoint rejects `delete_account` and unknown intents. The Next.js ro
 
 ## Site-owner page
 
-Open `site-owner/index.html` from a local server or directly as a file. It loads `../../ahttp.js`, declares `data-ahttp-*` attributes, and prints the snapshot.
+Open `site-owner/index.html` from a local server or directly as a file. It loads `../../aihttp.js`, declares `data-ahttp-*` attributes, and prints the snapshot.
 
 ## Static preview
 
-`docs/demo/index.html` is a GitHub Pages-friendly page. It renders pasted HTML in an iframe, injects `ahttp.js`, and compares an estimated raw token count with the snapshot. It does not fetch remote URLs. The token estimate is UTF-8 bytes / 4, not a model tokenizer.
+`docs/demo/index.html` is a GitHub Pages-friendly page. It renders pasted HTML in an iframe, injects `aihttp.js`, and compares an estimated raw token count with the snapshot. It does not fetch remote URLs. The token estimate is UTF-8 bytes / 4, not a model tokenizer.

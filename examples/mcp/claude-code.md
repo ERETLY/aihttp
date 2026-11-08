@@ -3,13 +3,13 @@
 From the repository clone:
 
 ```bash
-claude mcp add ahttp -- node /absolute/path/to/ahttp/bin/ahttp-mcp.js --browser
+claude mcp add ahttp -- node /absolute/path/to/ahttp/bin/aihttp-mcp.js --browser
 ```
 
 Static backend:
 
 ```bash
-claude mcp add ahttp -- node /absolute/path/to/ahttp/bin/ahttp-mcp.js
+claude mcp add ahttp -- node /absolute/path/to/ahttp/bin/aihttp-mcp.js
 ```
 
 The browser backend needs Playwright and Chromium:

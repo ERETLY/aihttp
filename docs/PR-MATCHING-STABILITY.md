@@ -18,12 +18,12 @@ without reading code.
 
 | Area | File | Role |
 |---|---|---|
-| Engine | `ahttp.js` | scan, ids, snapshot, act, diff, policy, auth |
-| Builds | `ahttp.min.js`, `self/ahttp.user.js` | generated engine / userscript |
-| Matching | `MATCH`, `scoreMatch()`, `relocate()` in `ahttp.js` | anchors, score, thresholds, ambiguity |
-| Post-check | `evaluateExpectation()` in `ahttp.js` | `expect` rules and `no_effect` |
-| CLI | `bin/ahttp-cli.js` | fetch, parse, print a snapshot |
-| MCP | `bin/ahttp-mcp.js` | `ahttp_open`, `ahttp_snapshot`, `ahttp_act` |
+| Engine | `aihttp.js` | scan, ids, snapshot, act, diff, policy, auth |
+| Builds | `aihttp.min.js`, `self/aihttp.user.js` | generated engine / userscript |
+| Matching | `MATCH`, `scoreMatch()`, `relocate()` in `aihttp.js` | anchors, score, thresholds, ambiguity |
+| Post-check | `evaluateExpectation()` in `aihttp.js` | `expect` rules and `no_effect` |
+| CLI | `bin/aihttp-cli.js` | fetch, parse, print a snapshot |
+| MCP | `bin/aihttp-mcp.js` | `ahttp_open`, `ahttp_snapshot`, `ahttp_act` |
 | Backends | `lib/page.js`, `lib/mini-dom.js`, `lib/browser.js` | static fetch/DOM and Playwright |
 | Corpus | `corpus/` | 27 local jsdom scenarios and the runner |
 | Docs | `README.md`, `docs/API.md`, `docs/MATCHING.md`, `docs/ARCHITECTURE.md` | user and maintainer docs |
@@ -45,7 +45,7 @@ The full map, snapshot shape and diff shape are in
 
 ## Metrics: before/after
 
-Both columns run the current 27-case corpus. `before` is `main:ahttp.js` via
+Both columns run the current 27-case corpus. `before` is `main:aihttp.js` via
 `AHTTP_ENGINE`; `after` is this branch. Tokens are `gpt-tokenizer` counts over
 the snapshot text.
 

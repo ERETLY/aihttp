@@ -196,7 +196,7 @@ function render(results, selfResults, timeResults) {
     lines.push('');
     lines.push(tokenTable(web, byKey, tasks, self));
     lines.push('');
-    lines.push('Only the two ahttp rows can click; the baselines score 0/' + (tasks ? tasks.tasks : 20) + ' on the task suite because they only read. `ahttp self` is the same engine loaded as `self/ahttp.user.js` in Chromium.');
+    lines.push('Only the two ahttp rows can click; the baselines score 0/' + (tasks ? tasks.tasks : 20) + ' on the task suite because they only read. `ahttp self` is the same engine loaded as `self/aihttp.user.js` in Chromium.');
     lines.push('');
 
     lines.push('### Time');

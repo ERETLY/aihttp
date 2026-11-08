@@ -51,7 +51,7 @@ async function main() {
   });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
   const origin = 'http://127.0.0.1:' + server.address().port;
-  const cli = path.join(__dirname, '..', 'bin', 'ahttp-cli.js');
+  const cli = path.join(__dirname, '..', 'bin', 'aihttp-cli.js');
   try {
     const full = await run(process.execPath, [cli, origin + '/', '--allow-private', '--no-stats']);
     const filtered = await run(process.execPath, [cli, origin + '/', '--allow-private', '--no-stats', '--query', 'Buy']);
@@ -64,10 +64,10 @@ async function main() {
       'Runs against a local page; no network access is required. Regenerate with `node scripts/demo.js`.',
       '',
       '```console',
-      '$ node bin/ahttp-cli.js ' + DISPLAY_ORIGIN + '/ --allow-private --no-stats',
+      '$ node bin/aihttp-cli.js ' + DISPLAY_ORIGIN + '/ --allow-private --no-stats',
       stable(full.stdout).split(origin).join(DISPLAY_ORIGIN),
       '',
-      '$ node bin/ahttp-cli.js ' + DISPLAY_ORIGIN + '/ --allow-private --no-stats --query "Buy"',
+      '$ node bin/aihttp-cli.js ' + DISPLAY_ORIGIN + '/ --allow-private --no-stats --query "Buy"',
       stable(filtered.stdout).split(origin).join(DISPLAY_ORIGIN),
       '```',
       ''

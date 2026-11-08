@@ -6,7 +6,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { JSDOM } = require('jsdom');
 
-const ENGINE = fs.readFileSync(path.join(__dirname, '..', 'ahttp.js'), 'utf8');
+const ENGINE = fs.readFileSync(path.join(__dirname, '..', 'aihttp.js'), 'utf8');
 const OPTIONS = { quiet: 0, minWait: 0, timeout: 250 };
 
 function load(html, url) {

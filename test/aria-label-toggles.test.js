@@ -7,7 +7,7 @@ const path = require('node:path');
 
 const { playwright, chromiumAvailable, browserGate } = require('../tools/browser-env');
 
-const ENGINE = fs.readFileSync(path.join(__dirname, '..', 'ahttp.js'), 'utf8');
+const ENGINE = fs.readFileSync(path.join(__dirname, '..', 'aihttp.js'), 'utf8');
 const SECURITY = fs.readFileSync(path.join(__dirname, '..', 'benchmark', 'fixtures', '05-security.html'), 'utf8');
 const gate = browserGate(chromiumAvailable(), process.env.AHTTP_REQUIRE_BROWSER === '1');
 

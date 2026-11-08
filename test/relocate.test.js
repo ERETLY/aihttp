@@ -6,7 +6,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { JSDOM } = require('jsdom');
 
-const ENGINE = fs.readFileSync(path.join(__dirname, '..', 'ahttp.js'), 'utf8');
+const ENGINE = fs.readFileSync(path.join(__dirname, '..', 'aihttp.js'), 'utf8');
 
 test('relocation prefers a matching DOM id over an ambiguous label', async () => {
   const dom = new JSDOM('<!doctype html><html><head><title>Relocate</title></head><body>' +

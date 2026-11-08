@@ -59,7 +59,7 @@ function firstId(text, regex) {
 }
 
 async function main() {
-  const proc = spawn(process.execPath, [path.join(ROOT, 'bin', 'ahttp-mcp.js'), '--browser'], {
+  const proc = spawn(process.execPath, [path.join(ROOT, 'bin', 'aihttp-mcp.js'), '--browser'], {
     cwd: ROOT,
     stdio: ['pipe', 'pipe', 'pipe']
   });

@@ -9,7 +9,7 @@ const ROOT = path.join(__dirname, '..');
 const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8');
 
 test('README keeps the required badges', () => {
-  assert.match(readme, /status: beta/);
+  assert.match(readme, /status: stable/);
   assert.match(readme, /img\.shields\.io\/github\/package-json\/v\/ERETLY\/ahttp/);
   assert.match(readme, /actions\/workflows\/ci\.yml\/badge\.svg/);
 });
@@ -17,12 +17,12 @@ test('README keeps the required badges', () => {
 test('README keeps the 30-second userscript path', () => {
   assert.match(readme, /## Quick start/);
   assert.match(readme, /Alt\+Shift\+A/);
-  assert.match(readme, /ahttp\.user\.js/);
+  assert.match(readme, /aihttp\.user\.js/);
 });
 
 test('README keeps a copy-paste MCP block', () => {
   assert.match(readme, /"mcpServers"/);
-  assert.match(readme, /bin\/ahttp-mcp\.js/);
+  assert.match(readme, /bin\/aihttp-mcp\.js/);
   assert.match(readme, /Claude Desktop or Cursor/);
 });
 

@@ -5,7 +5,7 @@ const path = require('path');
 const { chromium } = require('playwright');
 const { tokenCount } = require('./lib/real');
 
-const ENGINE = path.join(__dirname, '..', 'ahttp.js');
+const ENGINE = path.join(__dirname, '..', 'aihttp.js');
 
 function taskPlans() {
   const plans = [];

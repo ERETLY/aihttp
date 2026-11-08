@@ -1,7 +1,7 @@
 'use strict';
 
 // Real-world harness. It is intentionally outside `npm test` and CI: it needs
-// the public network and sites change without notice. Engine: ahttp.js is
+// the public network and sites change without notice. Engine: aihttp.js is
 // injected unmodified into every page.
 
 const fs = require('node:fs');
@@ -12,7 +12,7 @@ const tokenizer = require('gpt-tokenizer');
 const { oracle, matchActions } = require('./oracle');
 
 const ROOT = path.join(__dirname, '..', '..');
-const ENGINE = fs.readFileSync(path.join(ROOT, 'ahttp.js'), 'utf8');
+const ENGINE = fs.readFileSync(path.join(ROOT, 'aihttp.js'), 'utf8');
 const CONFIG = require('./sites.json');
 const pkg = require(path.join(ROOT, 'package.json'));
 const OUT = path.join(__dirname, arg('out', 'results.json'));

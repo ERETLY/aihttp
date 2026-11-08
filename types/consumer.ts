@@ -1,4 +1,4 @@
-import ahttp = require('../ahttp');
+import ahttp = require('../aihttp');
 
 const text: string = ahttp.snapshot({ maxActions: 10, maxText: 200 });
 const json = ahttp.snapshot({ format: 'json' });

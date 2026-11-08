@@ -20,7 +20,7 @@ const ROOT = path.join(__dirname, '..');
 // before/after report. It is not used by npm test.
 const ENGINE_PATH = process.env.AHTTP_ENGINE
   ? path.resolve(process.env.AHTTP_ENGINE)
-  : path.join(ROOT, 'ahttp.js');
+  : path.join(ROOT, 'aihttp.js');
 const ENGINE = fs.readFileSync(ENGINE_PATH, 'utf8');
 const CASES_DIR = path.join(__dirname, 'cases');
 const DEFAULT_RESULTS = path.join(ROOT, 'bench', 'results.json');
@@ -299,7 +299,7 @@ async function runCorpus(options) {
   };
   const result = {
     engine: require(path.join(ROOT, 'package.json')).version,
-    engine_file: ENGINE_PATH === path.join(ROOT, 'ahttp.js') ? 'ahttp.js' : 'override',
+    engine_file: ENGINE_PATH === path.join(ROOT, 'aihttp.js') ? 'aihttp.js' : 'override',
     totals: totals,
     cases: results
   };

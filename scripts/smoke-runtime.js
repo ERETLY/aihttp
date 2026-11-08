@@ -6,7 +6,7 @@ const http = require('node:http');
 const path = require('node:path');
 const { spawn } = require('node:child_process');
 const pkg = require('../package.json');
-const engine = require('../ahttp.js');
+const engine = require('../aihttp.js');
 const { openHtml } = require('../lib/page');
 
 function run(command, args) {
@@ -23,7 +23,7 @@ function run(command, args) {
 }
 
 async function main() {
-  assert.equal(engine.__ahttp, true, 'ahttp.js loads without dev dependencies');
+  assert.equal(engine.__ahttp, true, 'aihttp.js loads without dev dependencies');
   assert.equal(engine.version, pkg.version, 'engine version matches package.json');
 
   const page = openHtml('<!doctype html><html><body><main><h1>Smoke</h1><button>Smoke action</button></main></body></html>', 'https://smoke.test/');
@@ -37,7 +37,7 @@ async function main() {
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
   try {
     const url = 'http://127.0.0.1:' + server.address().port + '/';
-    const cli = await run(process.execPath, [path.join(__dirname, '..', 'bin', 'ahttp-cli.js'), url, '--allow-private', '--no-stats']);
+    const cli = await run(process.execPath, [path.join(__dirname, '..', 'bin', 'aihttp-cli.js'), url, '--allow-private', '--no-stats']);
     assert.equal(cli.code, 0, 'CLI exit code is zero: ' + (cli.stderr || ''));
     assert.match(cli.stdout, /Smoke action/, 'CLI prints the action');
   } finally {

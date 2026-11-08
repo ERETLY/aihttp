@@ -6,7 +6,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { JSDOM } = require('jsdom');
 
-const USERSCRIPT = fs.readFileSync(path.join(__dirname, '..', 'self', 'ahttp.user.js'), 'utf8');
+const USERSCRIPT = fs.readFileSync(path.join(__dirname, '..', 'self', 'aihttp.user.js'), 'utf8');
 
 function mount(html) {
   const dom = new JSDOM(html, { url: 'https://self-flow.test/', runScripts: 'outside-only' });

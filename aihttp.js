@@ -1,4 +1,4 @@
-/*! ahttp.js v0.3.0 | MIT | DOM-to-action bridge for LLM agents */
+/*! aihttp.js v1.0.0 | MIT | DOM-to-action bridge for LLM agents */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) {
     var shared = factory(root);
@@ -19,7 +19,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : this), function (GLOBAL) {
   'use strict';
 
-  var VERSION = '0.3.0';
+  var VERSION = '1.0.0';
   if (GLOBAL.ahttp && GLOBAL.ahttp.__ahttp === true) {
     try { GLOBAL.aihttp = GLOBAL.ahttp; } catch (e) {}
     try { GLOBAL.aiweb = GLOBAL.ahttp; } catch (e) {}

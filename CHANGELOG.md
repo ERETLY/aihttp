@@ -1,13 +1,14 @@
 # Changelog
 
-## Unreleased
+## 1.0.0 — 2026-11-08
 
 ### Added
 
 - The public product and wire format are **aihttp** (AI HTTP). The package
   name is `aihttp`, the npm binaries are `aihttp`, `aihttp-mcp` and
-  `aihttp-serve`, and `window.aihttp` is the browser global. The engine file,
-  MCP tool names and `ahttp` globals stay as compatibility names. `aiweb` was
+  `aihttp-serve`, and `window.aihttp` is the browser global. The engine file is
+  `aihttp.js`; MCP tool names and `ahttp` globals stay as compatibility names.
+  `aiweb` was
   the working name during development and remains an alias.
 - `aihttp-serve` exposes the format over HTTP: `GET /?url=...` returns
   `application/aihttp+json`, `POST /act` runs one action, `GET /health` reports
@@ -26,7 +27,7 @@
   auth, `fetch`-based forms and page scripts work without a browser. Requests
   still pass through the same private-address guard as the document loader.
 - `benchmark/web-matrix.js` and `benchmark/web-sites.json` measure coverage on
-  345 public sites against an independent oracle of reachable controls.
+  385 public sites against an independent oracle of reachable controls.
   `npm run bench:web` reports weighted recall, phantom actions, blocked sites
   and network errors separately. `npm run bench:web:summary` prints the same
   weighted/mean/below-90/scan-time numbers from the last JSON. It is a finding
@@ -370,7 +371,7 @@ First public snapshot.
 
 ### Self-use
 
-- `self/ahttp.user.js`: the engine and a panel in one file for Tampermonkey or Violentmonkey.
+- `self/aihttp.user.js`: the engine and a panel in one file for Tampermonkey or Violentmonkey.
 - Scan, act, confirm and copy from the panel. `Alt+Shift+A` opens it.
 - No server and no upload.
 

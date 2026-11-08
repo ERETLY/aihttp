@@ -9,7 +9,7 @@ const { spawnSync } = require('node:child_process');
 
 const ROOT = path.join(__dirname, '..');
 const SCRIPT = path.join(ROOT, 'scripts', 'bump-version.js');
-const FILES = ['package.json', 'package-lock.json', 'ahttp.js', 'CHANGELOG.md'];
+const FILES = ['package.json', 'package-lock.json', 'aihttp.js', 'CHANGELOG.md'];
 
 function currentVersion() {
   return JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8')).version;
@@ -46,13 +46,13 @@ function read(dir, file) {
 function versions(dir) {
   const pkg = JSON.parse(read(dir, 'package.json'));
   const lock = JSON.parse(read(dir, 'package-lock.json'));
-  const engine = read(dir, 'ahttp.js');
+  const engine = read(dir, 'aihttp.js');
   return {
     package: pkg.version,
     lock: lock.version,
     lockPackage: lock.packages[''].version,
     engine: (engine.match(/var VERSION = '([^']+)'/) || [])[1],
-    banner: (engine.match(/\/\*! ahttp\.js v([^\s|]+)/) || [])[1]
+    banner: (engine.match(/\/\*! aihttp\.js v([^\s|]+)/) || [])[1]
   };
 }
 

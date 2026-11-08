@@ -3,7 +3,7 @@
 ahttp prints ids (`a1`, `a2`, ...). An id stays valid while its node is connected.
 When a framework replaces the node, `act(id)` rescans and tries to find the
 replacement. This document defines that search. The implementation is the
-`MATCH` object at the top of `ahttp.js` and `scoreMatch()` / `relocate()`.
+`MATCH` object at the top of `aihttp.js` and `scoreMatch()` / `relocate()`.
 
 ## Hard gates
 

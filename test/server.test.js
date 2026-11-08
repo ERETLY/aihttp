@@ -78,7 +78,7 @@ test('the static backend follows a redirect, accepts gzip and fills a field', as
 test('the CLI reads a page from a local server', { timeout: 30000 }, async () => {
   const local = await listen(handler);
   try {
-    const cli = path.join(__dirname, '..', 'bin', 'ahttp-cli.js');
+    const cli = path.join(__dirname, '..', 'bin', 'aihttp-cli.js');
     const result = await run(process.execPath, [cli, local.url + '/', '--allow-private', '--json', '--no-stats']);
     assert.equal(result.code, 0, result.stderr || result.stdout);
     const data = JSON.parse(result.stdout);

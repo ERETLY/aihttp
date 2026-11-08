@@ -28,7 +28,7 @@
 <body>
   <header>
     <h1>ahttp preview</h1>
-    <p>Paste HTML. The iframe renders it, injects ahttp.js, and shows the raw token estimate next to the action snapshot.</p>
+    <p>Paste HTML. The iframe renders it, injects aihttp.js, and shows the raw token estimate next to the action snapshot.</p>
   </header>
   <main>
     <textarea id="html">&lt;!doctype html&gt;
@@ -83,7 +83,7 @@
           return;
         }
         const script = doc.createElement('script');
-        script.src = new URL('../../ahttp.js', window.location.href).href;
+        script.src = new URL('../../aihttp.js', window.location.href).href;
         script.onload = function () {
           if (token !== runToken) return;
           try {
@@ -101,7 +101,7 @@
             status.textContent = 'ahttp error: ' + error.message;
           }
         };
-        script.onerror = function () { status.textContent = 'could not load ../../ahttp.js'; };
+        script.onerror = function () { status.textContent = 'could not load ../../aihttp.js'; };
         doc.head.appendChild(script);
       };
     }

@@ -33,7 +33,7 @@ const PAGES = {
       <button data-ahttp-intent="delete_account" onclick="document.getElementById('out').textContent='deleted'">Delete account</button>
       <p id="out">idle</p>
     </main>
-    <script src="ahttp.js" data-ahttp-owner="acme" data-ahttp-private="true"
+    <script src="aihttp.js" data-ahttp-owner="acme" data-ahttp-private="true"
       data-ahttp-key-hash="${OWNER_HASH}"
       data-ahttp-allow="checkout_submit,delete_account"
       data-ahttp-deny="delete_account"
@@ -73,7 +73,7 @@ function createServer() {
             <button data-ahttp-intent="delete_account" onclick="document.getElementById('out').textContent='deleted'">Delete account</button>
             <p id="out">idle</p>
           </main>
-          <script src="ahttp.js" data-ahttp-owner="acme" data-ahttp-access="owner"
+          <script src="aihttp.js" data-ahttp-owner="acme" data-ahttp-access="owner"
             data-ahttp-auth-endpoint="${origin}/authorize"></script>
         </body></html>`);
         return;
@@ -132,7 +132,7 @@ function createClient(proc) {
 async function runMcpTest(options) {
   const startedAt = Date.now();
   const server = await createServer();
-  const proc = spawn(process.execPath, [path.join(__dirname, '..', '..', 'bin', 'ahttp-mcp.js'), '--allow-private'], {
+  const proc = spawn(process.execPath, [path.join(__dirname, '..', '..', 'bin', 'aihttp-mcp.js'), '--allow-private'], {
     stdio: ['pipe', 'pipe', 'pipe']
   });
   let stderr = '';
@@ -206,7 +206,7 @@ async function runMcpTest(options) {
     ok(privateNoKey.isError === true, 'private page requires an owner key over MCP');
     ok(/AUTHORIZATION REQUIRED/.test(privateNoKey.content[0].text), 'missing owner key error explains the gate');
 
-    ownerProc = spawn(process.execPath, [path.join(__dirname, '..', '..', 'bin', 'ahttp-mcp.js'), '--allow-private'], {
+    ownerProc = spawn(process.execPath, [path.join(__dirname, '..', '..', 'bin', 'aihttp-mcp.js'), '--allow-private'], {
       stdio: ['pipe', 'pipe', 'pipe'],
       env: Object.assign({}, process.env, { AHTTP_OWNER_KEY: OWNER_KEY })
     });
@@ -237,7 +237,7 @@ async function runMcpTest(options) {
     ok(serverNoAuth.isError === true, 'server-auth page requires a token over MCP');
     ok(/AUTHORIZATION REQUIRED/.test(serverNoAuth.content[0].text), 'missing server token error explains the gate');
 
-    authProc = spawn(process.execPath, [path.join(__dirname, '..', '..', 'bin', 'ahttp-mcp.js'), '--allow-private'], {
+    authProc = spawn(process.execPath, [path.join(__dirname, '..', '..', 'bin', 'aihttp-mcp.js'), '--allow-private'], {
       stdio: ['pipe', 'pipe', 'pipe'],
       env: Object.assign({}, process.env, { AHTTP_AUTH_TOKEN: 'owner-token' })
     });

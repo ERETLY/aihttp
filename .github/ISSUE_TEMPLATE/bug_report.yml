@@ -12,7 +12,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: Output of `node bin/ahttp-cli.js --version`, or the commit.
+      description: Output of `node bin/aihttp-cli.js --version`, or the commit.
     validations:
       required: true
   - type: input

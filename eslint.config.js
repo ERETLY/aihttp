@@ -8,7 +8,7 @@ module.exports = [
     ignores: [
       'node_modules/**',
       'examples/auth-server/node_modules/**',
-      'ahttp.min.js',
+      'aihttp.min.js',
       'benchmark/pinned/**',
       'scratch-*',
       'coverage/**',

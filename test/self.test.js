@@ -8,7 +8,7 @@ const { JSDOM } = require('jsdom');
 const { render } = require('../scripts/build-self');
 
 const ROOT = path.join(__dirname, '..');
-const FILE = path.join(ROOT, 'self', 'ahttp.user.js');
+const FILE = path.join(ROOT, 'self', 'aihttp.user.js');
 
 test('the self-use userscript is generated and current', () => {
   const current = fs.readFileSync(FILE, 'utf8');

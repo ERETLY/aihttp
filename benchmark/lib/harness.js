@@ -5,7 +5,7 @@ const path = require('path');
 const { JSDOM } = require('jsdom');
 
 const ROOT = path.join(__dirname, '..', '..');
-const ENGINE_SRC = fs.readFileSync(path.join(ROOT, 'ahttp.js'), 'utf8');
+const ENGINE_SRC = fs.readFileSync(path.join(ROOT, 'aihttp.js'), 'utf8');
 const FIXTURES = path.join(__dirname, '..', 'fixtures');
 
 function loadFixture(name) {

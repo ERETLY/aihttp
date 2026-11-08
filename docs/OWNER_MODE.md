@@ -9,11 +9,11 @@ A client-side gate cannot stop a determined visitor. The browser already has the
 ## Access modes
 
 ```html
-<script src="ahttp.min.js" data-ahttp-access="public"></script>
-<script src="ahttp.min.js" data-ahttp-access="dev"></script>
-<script src="ahttp.min.js" data-ahttp-access="gate"
+<script src="aihttp.min.js" data-ahttp-access="public"></script>
+<script src="aihttp.min.js" data-ahttp-access="dev"></script>
+<script src="aihttp.min.js" data-ahttp-access="gate"
         data-ahttp-key-hash="<sha256>"></script>
-<script src="ahttp.min.js" data-ahttp-access="owner"
+<script src="aihttp.min.js" data-ahttp-access="owner"
         data-ahttp-auth-endpoint="/api/ahttp/authorize"></script>
 ```
 
@@ -31,7 +31,7 @@ A client-side gate cannot stop a determined visitor. The browser already has the
 This is the production flow. The page contains no secret, only the endpoint.
 
 ```html
-<script src="ahttp.min.js"
+<script src="aihttp.min.js"
         data-ahttp-access="owner"
         data-ahttp-auth-endpoint="https://example.com/api/ahttp/authorize"></script>
 ```
@@ -42,8 +42,8 @@ await page.evaluate(() => window.ahttp.authorize({ token: process.env.AHTTP_AUTH
 ```
 
 ```bash
-AHTTP_AUTH_TOKEN='short-lived-token' node bin/ahttp-mcp.js
-node bin/ahttp-cli.js https://example.com --auth-token 'short-lived-token'
+AHTTP_AUTH_TOKEN='short-lived-token' node bin/aihttp-mcp.js
+node bin/aihttp-cli.js https://example.com --auth-token 'short-lived-token'
 ```
 
 The endpoint receives a POST with `credentials: 'include'` and an optional bearer token. It must authenticate the agent and return a short-lived policy. The engine accepts only HTTPS, or HTTP on localhost, rejects URL credentials, caps the response at 65,536 characters, applies the policy, and relocks at `expiresAt`.
@@ -55,7 +55,7 @@ The endpoint contract and server checklist are in `docs/SECURITY.md`.
 This flow is for local tooling, internal documentation, or cases where the goal is to keep casual agents away. It is not a security boundary.
 
 ```html
-<script src="ahttp.min.js"
+<script src="aihttp.min.js"
         data-ahttp-access="gate"
         data-ahttp-key-hash="03f99ad2bb8f470ab4a6b65dd51dca8f63c4a36d52a66b22d706c14dbfec5983"
         data-ahttp-allow="checkout_submit,support_lookup"
@@ -68,7 +68,7 @@ The page loads locked. No observer is installed, no DOM is walked, and no action
 Generate the hash instead of writing it by hand:
 
 ```bash
-node bin/ahttp-cli.js --hash-key 'owner-secret'
+node bin/aihttp-cli.js --hash-key 'owner-secret'
 # 03f99ad2bb8f470ab4a6b65dd51dca8f63c4a36d52a66b22d706c14dbfec5983
 ```
 
@@ -79,15 +79,15 @@ node bin/ahttp-cli.js --hash-key 'owner-secret'
 MCP server:
 
 ```bash
-AHTTP_OWNER_KEY='owner-secret' node bin/ahttp-mcp.js
+AHTTP_OWNER_KEY='owner-secret' node bin/aihttp-mcp.js
 ```
 
 CLI:
 
 ```bash
-node bin/ahttp-cli.js https://example.com --unlock 'owner-secret'
+node bin/aihttp-cli.js https://example.com --unlock 'owner-secret'
 # or
-AHTTP_OWNER_KEY='owner-secret' node bin/ahttp-cli.js https://example.com
+AHTTP_OWNER_KEY='owner-secret' node bin/aihttp-cli.js https://example.com
 ```
 
 Playwright or Puppeteer:

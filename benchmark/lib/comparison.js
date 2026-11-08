@@ -6,7 +6,7 @@ const { chromium } = require('playwright');
 const { tokenCount, markdownFromHtml } = require('./real');
 
 const FIXTURE = path.join(__dirname, '..', 'fixtures', 'ecommerce.html');
-const ENGINE = path.join(__dirname, '..', '..', 'ahttp.js');
+const ENGINE = path.join(__dirname, '..', '..', 'aihttp.js');
 
 function findAction(snapshot, predicate) {
   return (snapshot.actions || []).find(predicate) || null;
@@ -15,7 +15,7 @@ function findAction(snapshot, predicate) {
 async function runComparison(options) {
   const opts = options || {};
   const enginePath = opts.enginePath || ENGINE;
-  const engineName = opts.engineName || 'ahttp.js in Chromium';
+  const engineName = opts.engineName || 'aihttp.js in Chromium';
   const browser = await chromium.launch({ headless: true });
   const browserVersion = typeof browser.version === 'function' ? browser.version() : 'unknown';
   const context = await browser.newContext({ serviceWorkers: 'block' });
@@ -121,7 +121,7 @@ async function runComparison(options) {
   const ax = result.find((method) => method.key === 'axtree');
   return {
     scenario: 'ecommerce-checkout-5-steps',
-    methodology: 'Chromium drives benchmark/fixtures/ecommerce.html. ahttp.js is injected into the live page and executes the five steps. Raw HTML, Readability+Turndown Markdown, and Playwright ariaSnapshot are sampled after each step from the same live DOM state. Token counts use gpt-tokenizer 4.1.0 countTokens (o200k_base). Static methods cannot execute actions; their success rate is zero by construction.',
+    methodology: 'Chromium drives benchmark/fixtures/ecommerce.html. aihttp.js is injected into the live page and executes the five steps. Raw HTML, Readability+Turndown Markdown, and Playwright ariaSnapshot are sampled after each step from the same live DOM state. Token counts use gpt-tokenizer 4.1.0 countTokens (o200k_base). Static methods cannot execute actions; their success rate is zero by construction.',
     browser: 'Playwright Chromium',
     browserVersion: browserVersion,
     steps: 5,

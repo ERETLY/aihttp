@@ -11,7 +11,7 @@ const { runTaskBenchmark } = require('./tasks');
 const pkg = require('../package.json');
 
 const ROOT = path.join(__dirname, '..');
-const SELF = path.join(ROOT, 'self', 'ahttp.user.js');
+const SELF = path.join(ROOT, 'self', 'aihttp.user.js');
 const PINNED = path.join(__dirname, 'pinned');
 const INDEX = JSON.parse(fs.readFileSync(path.join(PINNED, 'index.json'), 'utf8'));
 
@@ -80,14 +80,14 @@ async function pages() {
 
 (async () => {
   const pageRows = await pages();
-  const checkout = await runComparison({ enginePath: SELF, engineName: 'self/ahttp.user.js in Chromium' });
+  const checkout = await runComparison({ enginePath: SELF, engineName: 'self/aihttp.user.js in Chromium' });
   const methods = checkout.methods || [];
   const ahttp = methods.find((method) => method.key === 'ahttp') || {};
   const tasks = await runTaskBenchmark({ enginePath: SELF });
   const out = {
     generatedAt: new Date().toISOString(),
     version: pkg.version,
-    engine: 'self/ahttp.user.js in Chromium',
+    engine: 'self/aihttp.user.js in Chromium',
     pages: pageRows,
     checkout: {
       tokens: ahttp.totalTokens || 0,

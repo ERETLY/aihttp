@@ -4,7 +4,7 @@ Status: **final** (all planned sites have run; the engine is unchanged).
 
 - Date: 2026-11-03
 - Branch: `test/realworld` from `main` (`ec1f988`, after PR #3)
-- Engine under test: `ahttp.js` at `ec1f988`, unmodified
+- Engine under test: `aihttp.js` at `ec1f988`, unmodified
 - Runtime: Node v26.13.0, Playwright 1.64.1, Chromium 156.0.8078.4
 - Harness: `benchmark/realworld/` (`sites.json`, `oracle.js`, `run.js`, `mcp.js`)
 - Command: `npm run test:realworld`; raw data in
@@ -244,7 +244,7 @@ The six failed scenarios:
 
 ## MCP smoke
 
-`node benchmark/realworld/mcp.js` runs the real `bin/ahttp-mcp.js --browser`
+`node benchmark/realworld/mcp.js` runs the real `bin/aihttp-mcp.js --browser`
 over stdio and passes 11/11 checks:
 
 - `ahttp_open` returns a `pageId`; `ahttp_snapshot` reads the same page;

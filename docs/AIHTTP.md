@@ -6,7 +6,7 @@ without parsing the DOM or looking at pixels.
 
 - Media type: `application/aihttp+json`
 - Protocol id: `aihttp/1`
-- Current implementation version: `0.3.0`
+- Current implementation version: `1.0.0`
 - Compatibility: the engine file and MCP tools still use the `ahttp` prefix.
 
 ## Envelope
@@ -18,7 +18,7 @@ A response is the engine snapshot with three format fields:
   "protocol": "aihttp/1",
   "format": "aihttp",
   "formatVersion": 1,
-  "version": "0.3.0",
+  "version": "1.0.0",
   "url": "https://shop.test/cart",
   "title": "Widget shop",
   "locked": false,

@@ -27,9 +27,9 @@ const USAGE = [
   '  -v, --version          Show the version',
   '',
   'Examples:',
-  '  node bin/ahttp-cli.js https://news.ycombinator.com',
-  '  node bin/ahttp-cli.js https://en.wikipedia.org/wiki/HTTP --max-actions 40',
-  '  node bin/ahttp-cli.js https://github.com/torvalds/linux --query "issues"'
+  '  node bin/aihttp-cli.js https://news.ycombinator.com',
+  '  node bin/aihttp-cli.js https://en.wikipedia.org/wiki/HTTP --max-actions 40',
+  '  node bin/aihttp-cli.js https://github.com/torvalds/linux --query "issues"'
 ].join('\n');
 
 function parseArgs(argv) {
@@ -95,7 +95,7 @@ async function main() {
   if (args.help) { process.stdout.write(USAGE + '\n'); return; }
   if (args.version) { process.stdout.write(pkg.version + '\n'); return; }
   if (args.hashKey != null) {
-    process.stdout.write(require('../ahttp.js').hashKey(args.hashKey) + '\n');
+    process.stdout.write(require('../aihttp.js').hashKey(args.hashKey) + '\n');
     return;
   }
   if (!args.url) {

@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const path = require('node:path');
 const { spawn } = require('node:child_process');
 
-const MCP = path.join(__dirname, '..', 'bin', 'ahttp-mcp.js');
+const MCP = path.join(__dirname, '..', 'bin', 'aihttp-mcp.js');
 
 function start(args) {
   const proc = spawn(process.execPath, [MCP].concat(args), { stdio: ['pipe', 'pipe', 'pipe'] });

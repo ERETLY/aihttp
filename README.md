@@ -1,12 +1,12 @@
 # aihttp
 
-[![status: beta](https://img.shields.io/badge/status-beta-yellow)](#)
+[![status: stable](https://img.shields.io/badge/status-stable-brightgreen)](#)
 [![version](https://img.shields.io/github/package-json/v/ERETLY/ahttp)](https://github.com/ERETLY/ahttp/blob/main/package.json)
 [![CI](https://github.com/ERETLY/ahttp/actions/workflows/ci.yml/badge.svg)](https://github.com/ERETLY/ahttp/actions/workflows/ci.yml)
 
 **aihttp is the AI-First Web Format.** It turns a page into a compact, executable graph: the controls an agent can use, the text it can read, and the effect of each action. No screenshots, no raw DOM, no token bonfire.
 
-One engine with no runtime dependencies. It ships as a browser file, a CLI, an HTTP server (`aihttp-serve`) and an MCP server. `ahttp` remains the compatibility name for the engine file and the existing MCP tools; the format and the product are `aihttp`.
+One engine with no runtime dependencies. It ships as a browser file, a CLI, an HTTP server (`aihttp-serve`) and an MCP server. The engine file is `aihttp.js`; `ahttp` remains the compatibility name for the MCP tools and globals, while the format and the product are `aihttp`.
 
 **Pre-2.0, one maintainer.** The format is stable enough to build on: additive changes are documented before any breaking one, and every release keeps the previous wire version readable. The spec is in [docs/AIHTTP.md](docs/AIHTTP.md).
 
@@ -23,7 +23,7 @@ Jina, Firecrawl, and Readability turn a page into text. ahttp turns it into thin
 ### Userscript: 30 seconds
 
 1. Install [Tampermonkey](https://www.tampermonkey.net/) or Violentmonkey.
-2. Open [`self/ahttp.user.js`](https://raw.githubusercontent.com/ERETLY/ahttp/main/self/ahttp.user.js) and confirm the install.
+2. Open [`self/aihttp.user.js`](https://raw.githubusercontent.com/ERETLY/ahttp/main/self/aihttp.user.js) and confirm the install.
 3. Open any `http(s)` page, press **Alt+Shift+A**, type an id in the panel, press **Act**. No clone, no server, no upload.
 
 ### MCP: 5 minutes
@@ -42,7 +42,7 @@ Paste this into Claude Desktop or Cursor, replacing `/absolute/path/to/ahttp`:
   "mcpServers": {
     "ahttp": {
       "command": "node",
-      "args": ["/absolute/path/to/ahttp/bin/ahttp-mcp.js", "--browser"]
+      "args": ["/absolute/path/to/ahttp/bin/aihttp-mcp.js", "--browser"]
     }
   }
 }
@@ -53,7 +53,7 @@ Restart the client, call `ahttp_open` with a URL, then `ahttp_snapshot` or `ahtt
 ### CLI and local loop
 
 ```bash
-node bin/ahttp-cli.js https://example.com --query "Buy"
+node bin/aihttp-cli.js https://example.com --query "Buy"
 node examples/agent-loop.js
 ```
 
@@ -214,7 +214,7 @@ On a five-step checkout ahttp uses 289 tokens against 3,983 for raw HTML. On 20 
 
 <!-- BENCH:START -->
 
-Token run: `2026-11-07T11:18:07.814Z`. ahttp 0.3.0 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
+Token run: `2026-11-08T12:14:24.626Z`. ahttp 1.0.0 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
 
 ### Tokens
 
@@ -224,12 +224,12 @@ Tokens an agent reads, lower is better. Checkout is five snapshots of one purcha
 |---|---|---|---|---|---|---|---|---|---|---|
 | Raw HTML | serialized DOM | no | 3,983 | 11,771 | 191,129 | 17,909 | 105,767 | 59,787 | 390,346 | 25,896 |
 | Markdown | Readability + Turndown | no | 68 | 5,136 | 26,579 | 6,542 | 1,387 | 3,008 | 42,720 | n/a |
-| Jina Reader | hosted Markdown | no | n/a | 5,400 | 27,711 | 7,604 | 1,342 | 3,106 | 45,163 | n/a |
+| Jina Reader | hosted Markdown | no | n/a | 5,408 | 27,711 | 7,906 | 1,342 | 3,087 | 45,454 | n/a |
 | Accessibility tree | roles and names | no | 346 | 10,099 | 73,404 | 5,918 | 5,404 | 7,381 | 102,552 | 5,360 |
-| ahttp | actions, text, ids | yes | 289 | 1,162 | 1,136 | 1,105 | 1,282 | 1,149 | 6,123 | 5,104 |
+| ahttp | actions, text, ids | yes | 289 | 1,162 | 1,130 | 1,105 | 1,286 | 1,156 | 6,128 | 5,104 |
 | ahttp self | actions, text, ids | yes | 289 | 1,170 | 1,148 | 1,116 | 4,208 | 1,242 | 9,173 | 5,104 |
 
-Only the two ahttp rows can click; the baselines score 0/20 on the task suite because they only read. `ahttp self` is the same engine loaded as `self/ahttp.user.js` in Chromium.
+Only the two ahttp rows can click; the baselines score 0/20 on the task suite because they only read. `ahttp self` is the same engine loaded as `self/aihttp.user.js` in Chromium.
 
 ### Time
 
@@ -239,9 +239,9 @@ Wall-clock numbers from one machine, relative at best. Scan from `2026-11-05T07:
 
 | Method | Time per step |
 |---|---:|
-| Accessibility tree | 4.2 ms |
-| Raw HTML | 4.8 ms |
-| Markdown | 11.9 ms |
+| Raw HTML | 4.2 ms |
+| Accessibility tree | 5.7 ms |
+| Markdown | 13.4 ms |
 | ahttp | 86.2 ms |
 | ahttp self | 84.9 ms |
 
@@ -285,7 +285,7 @@ Reproduce with Chromium: `npm run bench` (tokens, checkout, tasks), `npm run ben
 ## Coverage matrix
 
 `npm run bench:web` measures the engine against an independent oracle of
-reachable controls on 345 public sites (`benchmark/web-sites.json`). It is not
+reachable controls on 385 public sites (`benchmark/web-sites.json`). It is not
 part of CI: it needs the public network and sites change without notice. The
 report is written to `benchmark/web-matrix-results.json`.
 
@@ -305,17 +305,17 @@ actions, and separates blocked sites (bot wall, consent modal) from network
 errors. Snapshot and oracle run in the same synchronous frame: a virtualized
 feed (Mastodon) keeps off-screen items mounted at `opacity:0` and re-renders
 between two evaluates, which used to count them as visible. One clean run on
-the final engine: 345 configured, 293 loaded, 40 blocked, 9 network errors from
-the environment, 3 navigation errors, 283 measured, **99.7% weighted recall**
-(99.8% mean), **0 sites below 90%** and 4,720 phantom actions. Every category
-is above 98%: forms 98.3%, frames 98.3% (cross-origin iframe content is
-unreadable by design), tables 99.5%, docs 99.5%, payments 100%, social 100%,
-forums 100%, ecommerce 100%. The sites that were below 90% before the last
-fixes now measure 100% (Ant Design, Open Library, Plaid, Reddit, Wayfair),
-99.1–100% (the three W3Schools pages), 100% (Archive.org) and 98.3% (MDN's
-iframe page). The matrix is a finding tool, not a scoreboard. Engine scan time
-across the measured pages: median 33 ms, p95 149 ms, max 361 ms. The wall time
-is page load, not the scan.
+the final engine: 385 configured, 324 loaded, 46 blocked, 14 network errors from
+the environment, 1 navigation error, 312 measured, **99.7% weighted recall**
+(99.8% mean), **1 site below 90%** (Upwork at 89.7%, a job board that virtualizes
+most of its listing chrome) and 5,269 phantom actions. Every category is above
+98%: forms 98.3%, frames 98.3% (cross-origin iframe content is unreadable by
+design), tables 99.5%, docs 99.5%, payments 100%, social 100%, forums 100%,
+ecommerce 100%. The sites that were below 90% before the last fixes now measure
+100% (Ant Design, Open Library, Plaid, Reddit, Wayfair), 99.1–100% (the three
+W3Schools pages), 100% (Archive.org) and 98.3% (MDN's iframe page). The matrix
+is a finding tool, not a scoreboard. Engine scan time across the measured pages:
+median 37 ms, p95 188 ms, max 722 ms. The wall time is page load, not the scan.
 
 A blocked site is not a coverage failure. A consent dialog with Accept/Reject
 controls is the page until a decision is made, so the matrix reports it
@@ -357,7 +357,7 @@ separately instead of counting the page behind it as missed.
 
 `0.2.0` made ambiguity explicit. `act` no longer clicks a near-tie: it returns `status: 'ambiguous'`. Results also carry `status`, and `expect` can return `status: 'no_effect'`. Existing fields and error codes are unchanged.
 
-Every PR that changes `ahttp.js`, `ahttp.d.ts`, `bin/`, or `lib/` must include `npm run bump -- patch` (or `minor`/`major`). The maintainer tags after merge. See [CONTRIBUTING.md](CONTRIBUTING.md).
+Every PR that changes `aihttp.js`, `aihttp.d.ts`, `bin/`, or `lib/` must include `npm run bump -- patch` (or `minor`/`major`). The maintainer tags after merge. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Development
 

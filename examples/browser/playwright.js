@@ -6,7 +6,7 @@ const { chromium } = require('playwright');
 
 (async () => {
   const url = process.argv[2] || 'https://example.com';
-  const engine = fs.readFileSync(path.join(__dirname, '..', '..', 'ahttp.js'), 'utf8');
+  const engine = fs.readFileSync(path.join(__dirname, '..', '..', 'aihttp.js'), 'utf8');
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
   try {

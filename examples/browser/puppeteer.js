@@ -12,7 +12,7 @@ async function main() {
     process.exit(1);
   }
   const url = process.argv[2] || 'https://example.com';
-  const engine = fs.readFileSync(path.join(__dirname, '..', '..', 'ahttp.js'), 'utf8');
+  const engine = fs.readFileSync(path.join(__dirname, '..', '..', 'aihttp.js'), 'utf8');
   const browser = await puppeteer.launch({ headless: true });
   try {
     const page = await browser.newPage();

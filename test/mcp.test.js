@@ -84,7 +84,7 @@ test('MCP supports modern discovery, page handles, confirmation tokens and cance
       '<main><h1>Modern</h1><button data-ahttp-confirm="Delete everything">Delete account</button></main>' +
       '</body></html>');
   });
-  const proc = spawn(process.execPath, [path.join(__dirname, '..', 'bin', 'ahttp-mcp.js'), '--allow-private'], {
+  const proc = spawn(process.execPath, [path.join(__dirname, '..', 'bin', 'aihttp-mcp.js'), '--allow-private'], {
     stdio: ['pipe', 'pipe', 'pipe']
   });
   const client = createClient(proc);
@@ -212,7 +212,7 @@ test('MCP browser mode executes page JavaScript', { skip: gate.skip, timeout: 60
       '<div id="app"></div><script>document.getElementById("app").innerHTML=' +
       '"<main><h1>Rendered</h1><button>JS Button</button></main>";</script></body></html>');
   });
-  const proc = spawn(process.execPath, [path.join(__dirname, '..', 'bin', 'ahttp-mcp.js'), '--browser', '--allow-private'], {
+  const proc = spawn(process.execPath, [path.join(__dirname, '..', 'bin', 'aihttp-mcp.js'), '--browser', '--allow-private'], {
     stdio: ['pipe', 'pipe', 'pipe']
   });
   const client = createClient(proc);
@@ -238,7 +238,7 @@ test('MCP reports ambiguous when a label matches several actions', { timeout: 30
     res.end('<!doctype html><html><head><title>MCP label</title></head><body>' +
       '<main><button>OK</button><button>OK</button><p id="out">idle</p></main></body></html>');
   });
-  const proc = spawn(process.execPath, [path.join(__dirname, '..', 'bin', 'ahttp-mcp.js'), '--allow-private'], {
+  const proc = spawn(process.execPath, [path.join(__dirname, '..', 'bin', 'aihttp-mcp.js'), '--allow-private'], {
     stdio: ['pipe', 'pipe', 'pipe']
   });
   const client = createClient(proc);
@@ -278,7 +278,7 @@ test('two MCP pages keep independent snapshots and actions', { timeout: 30000 },
     }
     res.end('<!doctype html><body><main><h1>Home</h1><a href="/one">One</a><a href="/two">Two</a></main></body>');
   });
-  const proc = spawn(process.execPath, [path.join(__dirname, '..', 'bin', 'ahttp-mcp.js'), '--allow-private'], {
+  const proc = spawn(process.execPath, [path.join(__dirname, '..', 'bin', 'aihttp-mcp.js'), '--allow-private'], {
     stdio: ['pipe', 'pipe', 'pipe']
   });
   const client = createClient(proc);

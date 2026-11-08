@@ -1,6 +1,6 @@
 {
-  "engine": "0.3.0",
-  "engine_file": "ahttp.js",
+  "engine": "1.0.0",
+  "engine_file": "aihttp.js",
   "totals": {
     "cases": 79,
     "passed": 79,

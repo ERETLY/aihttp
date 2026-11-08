@@ -33,7 +33,7 @@ jobs:
           base_version=$(git show "origin/$BASE_REF:package.json" | node -e "process.stdout.write(JSON.parse(require('fs').readFileSync(0,'utf8').replace(/^\uFEFF/,'')).version)")
           version=$(node -p "require('./package.json').version")
           changed=$(git diff --name-only "origin/$BASE_REF...HEAD")
-          if echo "$changed" | grep -Eq '^(ahttp\.js|ahttp\.d\.ts|bin/|lib/)' && [ "$version" = "$base_version" ]; then
+          if echo "$changed" | grep -Eq '^(aihttp\.js|aihttp\.d\.ts|bin/|lib/)' && [ "$version" = "$base_version" ]; then
             echo "::error title=Version bump required::engine files changed but version is still $version. run: npm run bump -- patch"
             exit 1
           fi
@@ -58,14 +58,14 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: npm
       # Playwright 1.64 requires Node >=20. The 18.x leg installs runtime files only
-      # and proves that ahttp.js, lib/ and the CLI work without dev dependencies.
+      # and proves that aihttp.js, lib/ and the CLI work without dev dependencies.
       - run: npm ci
         if: matrix.node != '18.x'
       - run: npm ci --omit=dev
         if: matrix.node == '18.x'
       - run: npm run build
         if: matrix.node != '18.x'
-      - run: git diff --exit-code -- ahttp.min.js
+      - run: git diff --exit-code -- aihttp.min.js
         if: matrix.node != '18.x'
       - run: npm test
         if: matrix.node != '18.x'

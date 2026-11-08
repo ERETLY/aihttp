@@ -8,7 +8,7 @@ const { JSDOM } = require('jsdom');
 const pkg = require('../package.json');
 
 test('minified build exposes the same public version and a working snapshot', () => {
-  const source = fs.readFileSync(path.join(__dirname, '..', 'ahttp.min.js'), 'utf8');
+  const source = fs.readFileSync(path.join(__dirname, '..', 'aihttp.min.js'), 'utf8');
   const dom = new JSDOM('<!doctype html><body><main><button>Place order</button></main></body>', {
     url: 'https://min.test/',
     runScripts: 'outside-only'

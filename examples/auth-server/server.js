@@ -86,8 +86,8 @@ app.post('/api/ahttp/action', rateLimit, authorized, (req, res) => {
   res.json({ ok: true, intent: intent });
 });
 
-app.get('/ahttp.js', (req, res) => {
-  res.type('application/javascript').sendFile(path.join(__dirname, '..', '..', 'ahttp.js'));
+app.get('/aihttp.js', (req, res) => {
+  res.type('application/javascript').sendFile(path.join(__dirname, '..', '..', 'aihttp.js'));
 });
 
 app.get('/', (req, res) => {
@@ -97,7 +97,7 @@ app.get('/', (req, res) => {
     '<button data-ahttp-intent="support_lookup">Lookup order</button>' +
     '<button data-ahttp-intent="delete_account">Delete account</button>' +
     '<p id="out">idle</p></main>' +
-    '<script src="/ahttp.js" data-ahttp-owner="demo" data-ahttp-access="owner" ' +
+    '<script src="/aihttp.js" data-ahttp-owner="demo" data-ahttp-access="owner" ' +
     'data-ahttp-auth-endpoint="/api/ahttp/authorize"></script></body></html>');
 });
 

@@ -7,7 +7,7 @@ const path = require('node:path');
 const { JSDOM } = require('jsdom');
 const { openHtml } = require('../lib/page');
 
-const ENGINE = fs.readFileSync(path.join(__dirname, '..', 'ahttp.js'), 'utf8');
+const ENGINE = fs.readFileSync(path.join(__dirname, '..', 'aihttp.js'), 'utf8');
 
 function load(html) {
   const dom = new JSDOM(html, { url: 'https://universal.test/', runScripts: 'outside-only' });

@@ -1,10 +1,10 @@
 {
   "name": "aihttp",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "AI HTTP: a compact, executable page graph for agents. Zero-dependency browser file, CLI, HTTP server and MCP server.",
-  "main": "ahttp.js",
-  "browser": "ahttp.js",
-  "types": "ahttp.d.ts",
+  "main": "aihttp.js",
+  "browser": "aihttp.js",
+  "types": "aihttp.d.ts",
   "type": "commonjs",
   "author": "ERETLY",
   "homepage": "https://github.com/ERETLY/ahttp",
@@ -17,28 +17,28 @@
   },
   "exports": {
     ".": {
-      "types": "./ahttp.d.ts",
-      "import": "./ahttp.js",
-      "require": "./ahttp.js",
-      "default": "./ahttp.js"
+      "types": "./aihttp.d.ts",
+      "import": "./aihttp.js",
+      "require": "./aihttp.js",
+      "default": "./aihttp.js"
     },
     "./min": {
-      "types": "./ahttp.d.ts",
-      "default": "./ahttp.min.js"
+      "types": "./aihttp.d.ts",
+      "default": "./aihttp.min.js"
     },
     "./package.json": "./package.json"
   },
   "bin": {
-    "aihttp": "./bin/ahttp-cli.js",
-    "aihttp-mcp": "./bin/ahttp-mcp.js",
+    "aihttp": "./bin/aihttp-cli.js",
+    "aihttp-mcp": "./bin/aihttp-mcp.js",
     "aihttp-serve": "./bin/aihttp-serve.js",
-    "ahttp": "./bin/ahttp-cli.js",
-    "ahttp-mcp": "./bin/ahttp-mcp.js"
+    "ahttp": "./bin/aihttp-cli.js",
+    "ahttp-mcp": "./bin/aihttp-mcp.js"
   },
   "files": [
-    "ahttp.js",
-    "ahttp.min.js",
-    "ahttp.d.ts",
+    "aihttp.js",
+    "aihttp.min.js",
+    "aihttp.d.ts",
     "bin/",
     "lib/",
     "self/",
@@ -65,7 +65,7 @@
     "lint": "eslint .",
     "pack:check": "npm pack --dry-run",
     "smoke": "node scripts/smoke-runtime.js",
-    "start": "node bin/ahttp-cli.js",
+    "start": "node bin/aihttp-cli.js",
     "bench:web": "node benchmark/web-matrix.js",
     "bench:web:summary": "node benchmark/coverage-summary.js"
   },

@@ -2,7 +2,7 @@
 
 // Independent oracle for the real-world harness. It runs inside Chromium and
 // answers one question: which interactive elements can a user actually reach?
-// It deliberately does not import anything from ahttp.js.
+// It deliberately does not import anything from aihttp.js.
 
 function oracle() {
   var SELECTOR = 'a[href], button, input, select, textarea, summary, [role], [contenteditable]';

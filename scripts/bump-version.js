@@ -13,7 +13,7 @@ const USAGE = 'usage: npm run bump -- patch|minor|major|X.Y.Z';
 const FILES = {
   pkg: 'package.json',
   lock: 'package-lock.json',
-  engine: 'ahttp.js',
+  engine: 'aihttp.js',
   changelog: 'CHANGELOG.md',
   spec: 'docs/AIHTTP.md'
 };
@@ -128,11 +128,11 @@ function updateEngine(text, next) {
     seen++;
     return before + next + after;
   });
-  out = out.replace(/(^\/\*! ahttp\.js v)[^\s|]+/m, function (all, before) {
+  out = out.replace(/(^\/\*! aihttp\.js v)[^\s|]+/m, function (all, before) {
     seen++;
     return before + next;
   });
-  if (seen !== 2) fail('ahttp.js must contain the version banner and var VERSION');
+  if (seen !== 2) fail('aihttp.js must contain the version banner and var VERSION');
   return out;
 }
 

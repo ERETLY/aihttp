@@ -6,17 +6,17 @@ This file is the map used for the matching-stability work (branch
 ## Runtime shape
 
 `ahttp` is a UMD file with no runtime dependencies. Node `require('ahttp')` and
-`<script src="ahttp.min.js">` load the same engine. The engine scans the current
+`<script src="aihttp.min.js">` load the same engine. The engine scans the current
 document, assigns short ids, renders a compact snapshot, and executes an action
 by id.
 
 ```text
-ahttp.js                    engine: scan, snapshot, act, diff, policy, auth
-ahttp.min.js                terser build of ahttp.js (generated)
+aihttp.js                    engine: scan, snapshot, act, diff, policy, auth
+aihttp.min.js                terser build of aihttp.js (generated)
 self/panel.js               userscript panel UI
-self/ahttp.user.js          generated: userscript header + ahttp.min.js + panel
-bin/ahttp-cli.js            fetch a page, parse it, print a snapshot
-bin/ahttp-mcp.js            JSON-RPC 2.0 stdio server, 3 tools
+self/aihttp.user.js          generated: userscript header + aihttp.min.js + panel
+bin/aihttp-cli.js            fetch a page, parse it, print a snapshot
+bin/aihttp-mcp.js            JSON-RPC 2.0 stdio server, 3 tools
 lib/page.js                 fetch + stylesheet inlining + mini-dom attach
 lib/mini-dom.js             small DOM implementation for the static backend
 lib/browser.js              Playwright/CDP page wrapper (async mirror of API)
@@ -93,7 +93,7 @@ When the stored node is disconnected (React and similar re-renders),
 - disabled candidates and candidates with a different `kind` are rejected;
 - a near-tie returns a structured `ambiguous` reply instead of guessing.
 
-Weights and thresholds are in `MATCH` at the top of `ahttp.js` and explained in
+Weights and thresholds are in `MATCH` at the top of `aihttp.js` and explained in
 [docs/MATCHING.md](MATCHING.md).
 
 ## Snapshot format
@@ -150,7 +150,7 @@ Browser/Node engine: `snapshot(options)`, `act(id, payload, options)`,
 
 `snapshot` is synchronous in the browser engine; `act` and `authorize` return
 promises. `lib/browser.js` wraps every call as async because it crosses the
-Playwright boundary. `bin/ahttp-mcp.js` exposes `ahttp_open`, `ahttp_snapshot`
+Playwright boundary. `bin/aihttp-mcp.js` exposes `ahttp_open`, `ahttp_snapshot`
 and `ahttp_act`.
 
 ## Test contour
