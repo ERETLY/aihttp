@@ -295,6 +295,10 @@ node benchmark/web-matrix.js --category=forms
 node benchmark/web-matrix.js --ids=mdn-input,wikipedia-en
 ```
 
+`npm run bench:web:summary` prints the weighted recall, mean, phantom count,
+below-90 list and scan-time distribution from the last JSON, so the numbers
+below can be reproduced from one run.
+
 Each site is measured once after a scroll pass, so lazy sections exist. The
 matrix reports weighted recall (matched / oracle-visible controls), phantom
 actions, and separates blocked sites (bot wall, consent modal) from network

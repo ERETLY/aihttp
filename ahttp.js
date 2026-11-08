@@ -2700,6 +2700,11 @@
     return false;
   }
 
+  // A page can set cursor:pointer on a term to highlight it (WHATWG
+  // algorithms do this on <var>). A text-level element with no handler, role
+  // or tabindex is not a control.
+  var TEXT_ONLY_TAGS = { var: 1, dfn: 1, code: 1, samp: 1, kbd: 1, abbr: 1, cite: 1, q: 1, time: 1, mark: 1, sub: 1, sup: 1, small: 1 };
+
   function classify(el, st, ctx) {
     var tag = tagOf(el);
     var role = roleOf(el);
@@ -2738,6 +2743,7 @@
     var pointer = st.cursor === 'pointer' || (!ctx.layout && cssState(el, ctx).pointer);
     var handler = hasAttr(el, 'onclick') || hasAttr(el, 'onmousedown') || hasAttr(el, 'onkeydown') || hasAttr(el, 'onkeyup');
     if (tag === 'label' && !handler && labelProxyControl(el, ctx)) return null;
+    if (pointer && !handler && !role && attr(el, 'tabindex') == null && TEXT_ONLY_TAGS[tag]) return null;
     if (pointer || handler) {
       // display:contents has no box of its own, so a pointer cursor inherited
       // from the component is not evidence that this element is clickable.
@@ -3103,6 +3109,15 @@
     entry.qa = attr(el, 'data-qa') || '';
     entry.type = type;
     entry.href = href;
+    // A spec table repeats the same term link in every cell. An in-page anchor
+    // with the same role, label and fragment is one action; keeping every copy
+    // bloats the graph, the diff and the context window. Server destinations
+    // are not folded: the same href can hide a row-specific click handler.
+    if (info.native && info.kind === 'click' && entry.tag === 'a' && href && href.indexOf('#') >= 0) {
+      var linkKey = entry.role + '|' + label + '|' + href;
+      if (ctx.linkKeys.has(linkKey)) return null;
+      ctx.linkKeys.add(linkKey);
+    }
     entry.placeholder = attr(el, 'placeholder') || '';
     entry.title = normText(attr(el, 'title'));
     entry.alt = normText(attr(el, 'alt'));
@@ -3196,6 +3211,7 @@
           layout: subLayout,
           css: subLayout ? { buckets: new Map(), rules: 0 } : buildCssIndex(subDoc),
           styleCache: new Map(),
+          linkKeys: ctx.linkKeys,
           actions: ctx.actions,
           text: ctx.text,
           forms: ctx.forms,
@@ -3333,6 +3349,7 @@
       layout: S.layout,
       css: S.layout ? { buckets: new Map(), rules: 0 } : buildCssIndex(doc),
       styleCache: new Map(),
+      linkKeys: new Set(),
       actions: [],
       text: [],
       forms: [],

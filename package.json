@@ -66,7 +66,8 @@
     "pack:check": "npm pack --dry-run",
     "smoke": "node scripts/smoke-runtime.js",
     "start": "node bin/ahttp-cli.js",
-    "bench:web": "node benchmark/web-matrix.js"
+    "bench:web": "node benchmark/web-matrix.js",
+    "bench:web:summary": "node benchmark/coverage-summary.js"
   },
   "keywords": [
     "aihttp",

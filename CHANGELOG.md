@@ -28,7 +28,9 @@
 - `benchmark/web-matrix.js` and `benchmark/web-sites.json` measure coverage on
   345 public sites against an independent oracle of reachable controls.
   `npm run bench:web` reports weighted recall, phantom actions, blocked sites
-  and network errors separately. It is a finding tool, not a CI gate. Snapshot
+  and network errors separately. `npm run bench:web:summary` prints the same
+  weighted/mean/below-90/scan-time numbers from the last JSON. It is a finding
+  tool, not a CI gate. Snapshot
   and oracle run in one synchronous evaluate, so a virtualized feed cannot
   re-render between them: Mastodon's off-screen items are mounted with inline
   `opacity:0`, and measuring a second later counted them as visible.
@@ -39,6 +41,14 @@
 
 ### Fixed
 
+- Identical links (same role, label and destination) are one action. A spec
+  table repeats the same term link in every cell; html.spec.whatwg.org tables
+  went from 1,046 to 213 actions and 845 to 16 phantom actions, with recall
+  unchanged at 100%. Links to different destinations stay separate even when
+  the label is the same.
+- A text-level element (`<var>`, `<dfn>`, `<code>`) with `cursor:pointer` is
+  not a control unless it has a role, tabindex or handler. WHATWG algorithms
+  set `cursor:pointer` on `<var>` terms, which registered ~500 fake buttons.
 - A control's label is the rendered text, so a visually hidden mobile
   duplicate no longer doubles it ("Products Products"). A label that starts
   with `<` (a CMS storing markup in `alt`, or a broken image rendering its alt)
