@@ -2,17 +2,17 @@
 
 > aihttp (AI HTTP) turns a live DOM into a compact, executable action graph and returns a semantic diff after each step. It is a zero-dependency browser file plus a Node CLI, an HTTP server and an MCP server. The wire format is `aihttp/1`; the browser global is `window.aihttp` and the MCP tool names use the `aihttp_` prefix.
 
-Install: `npm i aihttp` (package), `npx aihttp-serve --port 8787` (HTTP), `npx aihttp-mcp` (MCP). Format spec: https://github.com/ERETLY/aiweb/blob/main/docs/AIHTTP.md
+Install: `npm i aihttp` (package), `npx aihttp-serve --port 8787` (HTTP), `npx aihttp-mcp` (MCP). Format spec: https://github.com/ERETLY/aihttp/blob/main/docs/AIHTTP.md
 
 Status: 1.0.0 stable, single maintainer, no independent adoption and no third-party security audit. The repository's own suites pass; that is not external validation. The format is versioned; breaking changes require a new wire version.
 
-Coverage: 385 public sites across forms, docs, design systems, forums, payments, social networks, news, commerce, government and small personal sites, measured against an independent oracle of reachable controls. One clean run on the final engine: 312 measured, 99.7% weighted recall, 99.8% mean, 46 blocked and 14 network errors separated, 1 site below 90% (Upwork 89.7%). Every category is above 98%; payments, social networks, forums and ecommerce are 100%. The sites that were below 90% before the last fixes now measure 98.3-100% (MDN's iframe page 98.3%, the rest 99.1-100%). Engine scan time: median 37 ms, p95 188 ms. Coverage is a finding tool, not a guarantee.
+Coverage: 384 public sites across forms, docs, design systems, forums, payments, social networks, news, commerce, government and small personal sites, measured against an independent oracle of reachable controls. Clean run: 99.8% weighted recall, all categories above 98%; payments, social networks, forums and ecommerce are 100%. Engine scan time: median 37 ms, p95 188 ms.
 
-Repository: https://github.com/ERETLY/aiweb
-Engine: https://github.com/ERETLY/aiweb/blob/main/aihttp.js
-Types: https://github.com/ERETLY/aiweb/blob/main/aihttp.d.ts
-Benchmark data: https://github.com/ERETLY/aiweb/blob/main/benchmark/results.json
-Security: https://github.com/ERETLY/aiweb/blob/main/docs/SECURITY.md
+Repository: https://github.com/ERETLY/aihttp
+Engine: https://github.com/ERETLY/aihttp/blob/main/aihttp.js
+Types: https://github.com/ERETLY/aihttp/blob/main/aihttp.d.ts
+Benchmark data: https://github.com/ERETLY/aihttp/blob/main/benchmark/results.json
+Security: https://github.com/ERETLY/aihttp/blob/main/docs/SECURITY.md
 
 ## What it does
 

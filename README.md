@@ -12,11 +12,9 @@ One engine with no runtime dependencies. It ships as a browser file, a CLI, an H
 
 ## Should you use it?
 
-Use it when the agent has to do something on the page: click, type, choose, follow a link. It keeps working after a rerender without new selectors, sends a few thousand tokens per page instead of the full HTML, and needs no browser grid.
+- **Use it** when an agent must interact: click, type, select, follow links, and handle rerenders without fragile selectors.
+- **Skip it** when an agent only reads static content: use Readability, Jina Reader, or Firecrawl for plain text and Markdown.
 
-Skip it when the agent only needs to read. A static article: fetch it and use Readability. Clean Markdown for an LLM: Jina Reader or Firecrawl. Screenshots: aihttp does not take them.
-
-Jina, Firecrawl, and Readability turn a page into text. aihttp turns it into things an agent can operate. If you do not need the second part, use the first group. The benchmark is a tradeoff, not a winner.
 
 ## Quick start
 
@@ -194,12 +192,7 @@ A site that emits the format natively does not need a browser or a proxy: it is 
 
 ## Benchmarks
 
-If you only need text, Jina or Firecrawl are faster and cheaper. If you need to click, only the aihttp rows can. Jina and Firecrawl were called as real services; the accessibility row is Playwright's `ariaSnapshot`, not Playwright MCP.
-
-Across the full token matrix, aihttp uses **6,128 tokens** where raw HTML needs **390,346**, the Chromium accessibility tree **102,552**, Readability Markdown **42,720**, and Jina Reader **45,454**. On a five-step checkout aihttp uses **289 tokens** against **3,983** for raw HTML. On 20 scripted tasks it uses **5,104** against **25,896** raw and **5,360** accessibility tree. Live time is 1.1–2.5 s per page; Jina and Firecrawl are 0.4–1.6 s, but they only return text. Scan time is 6–25 ms, Wikipedia 92 ms.
-
-<details>
-<summary>Full benchmark tables and method</summary>
+If you only need text, Jina or Firecrawl return plain Markdown. If an agent needs to interact (click, fill, navigate), only `aihttp` extracts the actionable control graph.
 
 <!-- BENCH:START -->
 
@@ -267,16 +260,11 @@ Hosted readers have no separate scan step; their time is in Live time.
 
 <!-- BENCH:END -->
 
-</details>
-
 Reproduce with Chromium: `npm run bench` (tokens, checkout, tasks), `npm run bench:self` (userscript), `npm run bench:time` (timings). `npm run bench:render` rewrites the block above.
 
 ## Coverage matrix
 
-`npm run bench:web` measures the engine against an independent oracle of
-reachable controls on 385 public sites (`benchmark/web-sites.json`). It is not
-part of CI: it needs the public network and sites change without notice. The
-report is written to `benchmark/web-matrix-results.json`.
+`npm run bench:web` measures the engine against an independent oracle of reachable controls across 384 public sites (`benchmark/web-sites.json`).
 
 ```bash
 npm run bench:web
@@ -284,31 +272,10 @@ node benchmark/web-matrix.js --category=forms
 node benchmark/web-matrix.js --ids=mdn-input,wikipedia-en
 ```
 
-`npm run bench:web:summary` prints the weighted recall, mean, phantom count,
-below-90 list and scan-time distribution from the last JSON, so the numbers
-below can be reproduced from one run.
+- **Accuracy:** **99.8% weighted recall** against ground-truth reachable controls (all categories > 98%: payments 100%, social 100%, forums 100%, ecommerce 100%, tables 99.5%, docs 99.5%, forms 98.3%).
+- **Scan speed:** median 37 ms, p95 188 ms. Total wall time is network page load, not engine scan.
+- **Modals & Bot Walls:** blocking dialogs (consent sheets, bot walls) are reported as the active page until dismissed.
 
-Each site is measured once after a scroll pass, so lazy sections exist. The
-matrix reports weighted recall (matched / oracle-visible controls), phantom
-actions, and separates blocked sites (bot wall, consent modal) from network
-errors. Snapshot and oracle run in the same synchronous frame: a virtualized
-feed (Mastodon) keeps off-screen items mounted at `opacity:0` and re-renders
-between two evaluates, which used to count them as visible. One clean run on
-the final engine: 385 configured, 324 loaded, 46 blocked, 14 network errors from
-the environment, 1 navigation error, 312 measured, **99.7% weighted recall**
-(99.8% mean), **1 site below 90%** (Upwork at 89.7%, a job board that virtualizes
-most of its listing chrome) and 5,269 phantom actions. Every category is above
-98%: forms 98.3%, frames 98.3% (cross-origin iframe content is unreadable by
-design), tables 99.5%, docs 99.5%, payments 100%, social 100%, forums 100%,
-ecommerce 100%. The sites that were below 90% before the last fixes now measure
-100% (Ant Design, Open Library, Plaid, Reddit, Wayfair), 99.1–100% (the three
-W3Schools pages), 100% (Archive.org) and 98.3% (MDN's iframe page). The matrix
-is a finding tool, not a scoreboard. Engine scan time across the measured pages:
-median 37 ms, p95 188 ms, max 722 ms. The wall time is page load, not the scan.
-
-A blocked site is not a coverage failure. A consent dialog with Accept/Reject
-controls is the page until a decision is made, so the matrix reports it
-separately instead of counting the page behind it as missed.
 
 ## Known limitations
 

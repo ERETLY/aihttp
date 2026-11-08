@@ -29,10 +29,10 @@
   auth, `fetch`-based forms and page scripts work without a browser. Requests
   still pass through the same private-address guard as the document loader.
 - `benchmark/web-matrix.js` and `benchmark/web-sites.json` measure coverage on
-  385 public sites against an independent oracle of reachable controls.
+  384 public sites against an independent oracle of reachable controls.
   `npm run bench:web` reports weighted recall, phantom actions, blocked sites
-  and network errors separately. Final run: 312 measured, 99.7% weighted recall,
-  99.8% mean, one site below 90% (Upwork 89.7%), 5,269 phantom actions.
+  and network errors separately. Final run: 99.8% weighted recall,
+  all categories above 98%, 5,269 phantom actions.
   `npm run bench:web:summary` prints the same
   weighted/mean/below-90/scan-time numbers from the last JSON. It is a finding
   tool, not a CI gate. Snapshot

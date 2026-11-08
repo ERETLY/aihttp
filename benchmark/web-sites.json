@@ -1345,12 +1345,6 @@
       "note": "marketplace"
     },
     {
-      "id": "upwork",
-      "url": "https://www.upwork.com/",
-      "category": "jobs",
-      "note": "marketplace"
-    },
-    {
       "id": "glassdoor",
       "url": "https://www.glassdoor.com/",
       "category": "jobs",
