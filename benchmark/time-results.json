@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-11-05T07:40:42.457Z",
-  "scanGeneratedAt": "2026-11-05T07:40:42.457Z",
-  "liveGeneratedAt": "2026-11-05T07:40:42.457Z",
-  "hostedGeneratedAt": "2026-11-01T05:58:12.040Z",
-  "version": "0.2.1",
+  "generatedAt": "2026-11-08T13:12:53.661Z",
+  "scanGeneratedAt": "2026-11-08T13:12:53.661Z",
+  "liveGeneratedAt": "2026-11-08T13:12:53.661Z",
+  "hostedGeneratedAt": "2026-11-08T13:12:53.661Z",
+  "version": "1.0.0",
   "node": "v26.13.0",
   "platform": "win32",
   "arch": "x64",
@@ -11,99 +11,99 @@
     {
       "name": "Hacker News",
       "url": "https://news.ycombinator.com",
-      "raw": 28.7,
-      "markdown": 331.1,
+      "raw": 25.9,
+      "markdown": 253.5,
       "jina": null,
       "firecrawl": null,
-      "axtree": 95.4,
+      "axtree": 80.6,
       "aihttp": 16,
-      "self": 33.5
+      "self": 31.4
     },
     {
       "name": "Wikipedia (HTTP)",
       "url": "https://en.wikipedia.org/wiki/HTTP",
-      "raw": 249.4,
-      "markdown": 1031.7,
+      "raw": 219.4,
+      "markdown": 860.4,
       "jina": null,
       "firecrawl": null,
-      "axtree": 310.2,
-      "aihttp": 92,
-      "self": 163.4
+      "axtree": 279.9,
+      "aihttp": 97,
+      "self": 154.6
     },
     {
       "name": "Lobsters",
       "url": "https://lobste.rs",
-      "raw": 47.8,
-      "markdown": 484,
+      "raw": 10.7,
+      "markdown": 387.9,
       "jina": null,
       "firecrawl": null,
-      "axtree": 77,
-      "aihttp": 6,
-      "self": 31.5
+      "axtree": 57,
+      "aihttp": 5,
+      "self": 28.3
     },
     {
       "name": "GitHub (torvalds/linux)",
       "url": "https://github.com/torvalds/linux",
-      "raw": 45.2,
-      "markdown": 261.7,
+      "raw": 31.2,
+      "markdown": 211.7,
       "jina": null,
       "firecrawl": null,
-      "axtree": 85.4,
-      "aihttp": 20,
-      "self": 52.5
+      "axtree": 89.7,
+      "aihttp": 21,
+      "self": 44.3
     },
     {
       "name": "MDN (HTTP)",
       "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
-      "raw": 16.1,
-      "markdown": 308.7,
+      "raw": 38.2,
+      "markdown": 252.5,
       "jina": null,
       "firecrawl": null,
-      "axtree": 97.2,
-      "aihttp": 25,
-      "self": 30.2
+      "axtree": 59.1,
+      "aihttp": 23,
+      "self": 43.6
     }
   ],
   "live": [
     {
       "name": "Hacker News",
       "url": "https://news.ycombinator.com",
-      "aihttp": 1870.6,
-      "self": 1462.2,
-      "jina": 1178.5,
-      "firecrawl": 1319.9
+      "aihttp": 1221.6,
+      "self": 1430.4,
+      "jina": 698.6,
+      "firecrawl": 978.3
     },
     {
       "name": "Wikipedia (HTTP)",
       "url": "https://en.wikipedia.org/wiki/HTTP",
-      "aihttp": 1137,
-      "self": 1464.5,
-      "jina": 1505.6,
-      "firecrawl": 1576.1
+      "aihttp": 1200.7,
+      "self": 1682.1,
+      "jina": 853.4,
+      "firecrawl": 986.5
     },
     {
       "name": "Lobsters",
       "url": "https://lobste.rs",
-      "aihttp": 2130.4,
-      "self": 1408.7,
-      "jina": 748,
-      "firecrawl": 1168.7
+      "aihttp": 1972.6,
+      "self": 1680.1,
+      "jina": 877,
+      "firecrawl": 1109.5
     },
     {
       "name": "GitHub (torvalds/linux)",
       "url": "https://github.com/torvalds/linux",
-      "aihttp": 2512.8,
-      "self": 2686.5,
-      "jina": 756.4,
-      "firecrawl": 1589.2
+      "aihttp": 2422.9,
+      "self": 3456.3,
+      "jina": 846.6,
+      "firecrawl": 987.8
     },
     {
       "name": "MDN (HTTP)",
       "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
-      "aihttp": 1375.8,
-      "self": 1050.7,
-      "jina": 426.6,
-      "firecrawl": 467.6
+      "aihttp": 1367.8,
+      "self": 1188.6,
+      "jina": 369.2,
+      "firecrawl": 492.4
     }
   ]
 }

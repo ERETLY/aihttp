@@ -203,7 +203,7 @@ Across the full token matrix, aihttp uses **6,128 tokens** where raw HTML needs 
 
 <!-- BENCH:START -->
 
-Token run: `2026-11-08T12:51:18.108Z`. aihttp 1.0.0 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
+Token run: `2026-11-08T13:11:24.625Z`. aihttp 1.0.0 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
 
 ### Tokens
 
@@ -214,6 +214,7 @@ Tokens an agent reads, lower is better. Checkout is five snapshots of one purcha
 | Raw HTML | serialized DOM | no | 3,983 | 11,771 | 191,129 | 17,909 | 105,767 | 59,787 | 390,346 | 25,896 |
 | Markdown | Readability + Turndown | no | 68 | 5,136 | 26,579 | 6,542 | 1,387 | 3,008 | 42,720 | n/a |
 | Jina Reader | hosted Markdown | no | n/a | 5,274 | 27,977 | 7,700 | 1,342 | 3,106 | 45,399 | n/a |
+| Firecrawl | hosted Markdown | no | n/a | 5,188 | 39,364 | 7,329 | 4,008 | 3,850 | 59,739 | n/a |
 | Accessibility tree | roles and names | no | 346 | 10,099 | 73,404 | 5,918 | 5,404 | 7,381 | 102,552 | 5,360 |
 | aihttp | actions, text, ids | yes | 289 | 1,162 | 1,130 | 1,105 | 1,286 | 1,156 | 6,128 | 5,104 |
 | aihttp self | actions, text, ids | yes | 289 | 1,170 | 1,138 | 1,116 | 1,288 | 882 | 5,883 | 5,104 |
@@ -222,26 +223,26 @@ Only the two aihttp rows can click; the baselines score 0/20 on the task suite b
 
 ### Time
 
-Wall-clock numbers from one machine, relative at best. Scan from `2026-11-05T07:40:42.457Z`, live from `2026-11-05T07:40:42.457Z`; Jina and Firecrawl from `2026-11-01T05:58:12.040Z`.
+Wall-clock numbers from one machine, relative at best. Scan from `2026-11-08T13:12:53.661Z`, live from `2026-11-08T13:12:53.661Z`.
 
 **Checkout.** Average per step over five local snapshots. The hosted readers cannot run it.
 
 | Method | Time per step |
 |---|---:|
-| Accessibility tree | 4.6 ms |
-| Raw HTML | 4.6 ms |
-| Markdown | 13.6 ms |
-| aihttp | 86.8 ms |
-| aihttp self | 85.7 ms |
+| Raw HTML | 4.5 ms |
+| Accessibility tree | 4.8 ms |
+| Markdown | 12.2 ms |
+| aihttp | 86.5 ms |
+| aihttp self | 86.4 ms |
 
-**Live.** URL to content, one request per page, 2026-11-05:
+**Live.** URL to content, one request per page, 2026-11-08:
 
 | Method | Hacker News | Wikipedia | Lobsters | GitHub | MDN |
 |---|---:|---:|---:|---:|---:|
-| aihttp | 1,871 ms | 1,137 ms | 2,130 ms | 2,513 ms | 1,376 ms |
-| aihttp self | 1,462 ms | 1,465 ms | 1,409 ms | 2,687 ms | 1,051 ms |
-| Jina Reader | 1,179 ms | 1,506 ms | 748 ms | 756 ms | 427 ms |
-| Firecrawl | 1,320 ms | 1,576 ms | 1,169 ms | 1,589 ms | 468 ms |
+| aihttp | 1,222 ms | 1,201 ms | 1,973 ms | 2,423 ms | 1,368 ms |
+| aihttp self | 1,430 ms | 1,682 ms | 1,680 ms | 3,456 ms | 1,189 ms |
+| Jina Reader | 699 ms | 853 ms | 877 ms | 847 ms | 369 ms |
+| Firecrawl | 978 ms | 987 ms | 1,110 ms | 988 ms | 492 ms |
 
 Single runs, not medians. `aihttp` fetches the page and its linked stylesheets in Node and scans it. `aihttp self` loads the page in Chromium with the userscript injected and takes a snapshot. The hosted readers return Markdown only.
 
@@ -249,11 +250,11 @@ Single runs, not medians. `aihttp` fetches the page and its linked stylesheets i
 
 | Method | Hacker News | Wikipedia | Lobsters | GitHub | MDN |
 |---|---:|---:|---:|---:|---:|
-| Raw HTML | 29 ms | 249 ms | 48 ms | 45 ms | 16 ms |
-| Markdown | 331 ms | 1,032 ms | 484 ms | 262 ms | 309 ms |
-| Accessibility tree | 95 ms | 310 ms | 77 ms | 85 ms | 97 ms |
-| aihttp | 16 ms | 92 ms | 6 ms | 20 ms | 25 ms |
-| aihttp self | 34 ms | 163 ms | 32 ms | 53 ms | 30 ms |
+| Raw HTML | 26 ms | 219 ms | 11 ms | 31 ms | 38 ms |
+| Markdown | 254 ms | 860 ms | 388 ms | 212 ms | 253 ms |
+| Accessibility tree | 81 ms | 280 ms | 57 ms | 90 ms | 59 ms |
+| aihttp | 16 ms | 97 ms | 5 ms | 21 ms | 23 ms |
+| aihttp self | 31 ms | 155 ms | 28 ms | 44 ms | 44 ms |
 
 Hosted readers have no separate scan step; their time is in Live time.
 
@@ -263,7 +264,6 @@ Hosted readers have no separate scan step; their time is in Live time.
 - One win32 x64 machine. Scan time is the least portable number.
 - Accessibility token counts depend on the Chromium build.
 - Jina Reader (`r.jina.ai`) and Firecrawl (v2 scrape) fetch the live page, not the pinned HTML. Without `JINA_API_KEY`, Jina can return 403 on GitHub.
-- Jina and Firecrawl live timings are from `2026-11-01T05:58:12.040Z`; local methods were re-measured.
 
 <!-- BENCH:END -->
 

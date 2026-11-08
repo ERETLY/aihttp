@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-08T13:06:15.099Z",
+  "generatedAt": "2026-11-08T13:12:21.301Z",
   "version": "1.0.0",
   "engine": "self/aihttp.user.js in Chromium",
   "pages": [
@@ -8,8 +8,8 @@
       "url": "https://news.ycombinator.com",
       "tokens": 1170,
       "actions": 230,
-      "scanMs": 30,
-      "loadMs": 32,
+      "scanMs": 33,
+      "loadMs": 31,
       "status": 200
     },
     {
@@ -17,8 +17,8 @@
       "url": "https://en.wikipedia.org/wiki/HTTP",
       "tokens": 1138,
       "actions": 1586,
-      "scanMs": 184,
-      "loadMs": 44,
+      "scanMs": 159,
+      "loadMs": 276,
       "status": 200
     },
     {
@@ -26,8 +26,8 @@
       "url": "https://lobste.rs",
       "tokens": 1116,
       "actions": 193,
-      "scanMs": 38,
-      "loadMs": 89,
+      "scanMs": 28,
+      "loadMs": 79,
       "status": 200
     },
     {
@@ -35,8 +35,8 @@
       "url": "https://github.com/torvalds/linux",
       "tokens": 1288,
       "actions": 197,
-      "scanMs": 45,
-      "loadMs": 131,
+      "scanMs": 48,
+      "loadMs": 130,
       "status": 200
     },
     {
@@ -44,8 +44,8 @@
       "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
       "tokens": 882,
       "actions": 254,
-      "scanMs": 41,
-      "loadMs": 52,
+      "scanMs": 45,
+      "loadMs": 54,
       "status": 200
     }
   ],
@@ -58,7 +58,7 @@
       75,
       49
     ],
-    "avgLatencyMs": 85.74,
+    "avgLatencyMs": 86.44,
     "success": true
   },
   "tasks": {
