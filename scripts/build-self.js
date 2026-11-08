@@ -14,7 +14,7 @@ function header() {
   return [
     '// ==UserScript==',
     '// @name         ahttp self-use',
-    '// @namespace    https://github.com/ERETLY/ahttp',
+    '// @namespace    https://github.com/ERETLY/aiweb',
     '// @version      ' + pkg.version,
     '// @description  Snapshot and act on any page without a server.',
     '// @author       ERETLY',

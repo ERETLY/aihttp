@@ -15,7 +15,7 @@ Status: **final** (all planned sites have run; the engine is unchanged).
 ## Method
 
 Each page is opened in a fresh Chromium context with User-Agent
-`ahttp-realworld-test (+https://github.com/ERETLY/ahttp)`, one site at a time,
+`ahttp-realworld-test (+https://github.com/ERETLY/aiweb)`, one site at a time,
 with a 1.2 s pause between sites. The engine is injected with
 `page.addInitScript`, so it survives navigation. The harness does not log in to
 real accounts, submit payments or posts, or vote. It stops at any

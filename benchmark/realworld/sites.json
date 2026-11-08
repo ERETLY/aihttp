@@ -2,7 +2,7 @@
   "defaults": {
     "pauseMs": 1200,
     "timeoutMs": 20000,
-    "userAgent": "ahttp-realworld-test (+https://github.com/ERETLY/ahttp)"
+    "userAgent": "ahttp-realworld-test (+https://github.com/ERETLY/aiweb)"
   },
   "sites": [
     {
@@ -333,7 +333,7 @@
     },
     {
       "id": "github-ahttp",
-      "url": "https://github.com/ERETLY/ahttp",
+      "url": "https://github.com/ERETLY/aiweb",
       "scenarios": [
         {
           "name": "snapshot repo and Issues tab",

@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         Do not include secrets, tokens, private URLs, or third-party data.
-        Security problems belong in a private advisory: https://github.com/ERETLY/ahttp/security/advisories/new
+        Security problems belong in a private advisory: https://github.com/ERETLY/aiweb/security/advisories/new
   - type: input
     id: version
     attributes:

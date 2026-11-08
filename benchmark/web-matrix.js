@@ -142,7 +142,7 @@ async function runSite(browser, site) {
   };
   const context = await browser.newContext({
     viewport: site.viewport || { width: 1280, height: 800 },
-    userAgent: 'aihttp-coverage-matrix (+https://github.com/ERETLY/ahttp)',
+    userAgent: 'aihttp-coverage-matrix (+https://github.com/ERETLY/aiweb)',
     locale: site.locale || 'en-US'
   });
   const page = await context.newPage();

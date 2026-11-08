@@ -10,7 +10,7 @@ const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8');
 
 test('README keeps the required badges', () => {
   assert.match(readme, /status: stable/);
-  assert.match(readme, /img\.shields\.io\/github\/package-json\/v\/ERETLY\/ahttp/);
+  assert.match(readme, /img\.shields\.io\/github\/package-json\/v\/ERETLY\/aiweb/);
   assert.match(readme, /actions\/workflows\/ci\.yml\/badge\.svg/);
 });
 

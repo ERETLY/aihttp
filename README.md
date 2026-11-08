@@ -1,8 +1,8 @@
 # aihttp
 
 [![status: stable](https://img.shields.io/badge/status-stable-brightgreen)](#)
-[![version](https://img.shields.io/github/package-json/v/ERETLY/ahttp)](https://github.com/ERETLY/ahttp/blob/main/package.json)
-[![CI](https://github.com/ERETLY/ahttp/actions/workflows/ci.yml/badge.svg)](https://github.com/ERETLY/ahttp/actions/workflows/ci.yml)
+[![version](https://img.shields.io/github/package-json/v/ERETLY/aiweb)](https://github.com/ERETLY/aiweb/blob/main/package.json)
+[![CI](https://github.com/ERETLY/aiweb/actions/workflows/ci.yml/badge.svg)](https://github.com/ERETLY/aiweb/actions/workflows/ci.yml)
 
 **aihttp is the AI-First Web Format.** It turns a page into a compact, executable graph: the controls an agent can use, the text it can read, and the effect of each action. No screenshots, no raw DOM, no token bonfire.
 
@@ -23,13 +23,13 @@ Jina, Firecrawl, and Readability turn a page into text. ahttp turns it into thin
 ### Userscript: 30 seconds
 
 1. Install [Tampermonkey](https://www.tampermonkey.net/) or Violentmonkey.
-2. Open [`self/aihttp.user.js`](https://raw.githubusercontent.com/ERETLY/ahttp/main/self/aihttp.user.js) and confirm the install.
+2. Open [`self/aihttp.user.js`](https://raw.githubusercontent.com/ERETLY/aiweb/main/self/aihttp.user.js) and confirm the install.
 3. Open any `http(s)` page, press **Alt+Shift+A**, type an id in the panel, press **Act**. No clone, no server, no upload.
 
 ### MCP: 5 minutes
 
 ```bash
-git clone https://github.com/ERETLY/ahttp.git
+git clone https://github.com/ERETLY/aiweb.git
 cd ahttp
 npm ci
 npx playwright install chromium

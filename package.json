@@ -7,13 +7,13 @@
   "types": "aihttp.d.ts",
   "type": "commonjs",
   "author": "ERETLY",
-  "homepage": "https://github.com/ERETLY/ahttp",
+  "homepage": "https://github.com/ERETLY/aiweb",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ERETLY/ahttp.git"
+    "url": "git+https://github.com/ERETLY/aiweb.git"
   },
   "bugs": {
-    "url": "https://github.com/ERETLY/ahttp/issues"
+    "url": "https://github.com/ERETLY/aiweb/issues"
   },
   "exports": {
     ".": {

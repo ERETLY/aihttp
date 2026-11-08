@@ -51,5 +51,5 @@ After the first publish, a release is `npm version patch|minor` followed by `git
 ## Install without npm
 
 ```bash
-npx github:ERETLY/ahttp
+npx github:ERETLY/aiweb
 ```

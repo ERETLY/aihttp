@@ -4,7 +4,7 @@
 
 Open a private security advisory:
 
-https://github.com/ERETLY/ahttp/security/advisories/new
+https://github.com/ERETLY/aiweb/security/advisories/new
 
 If the advisory form is unavailable, use the contact method on the maintainer's GitHub profile. Do not file a public issue with a working exploit, a token, or a private URL.
 
