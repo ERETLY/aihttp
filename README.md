@@ -1,8 +1,8 @@
 # aihttp
 
 [![status: stable](https://img.shields.io/badge/status-stable-brightgreen)](#)
-[![version](https://img.shields.io/github/package-json/v/ERETLY/aiweb)](https://github.com/ERETLY/aiweb/blob/main/package.json)
-[![CI](https://github.com/ERETLY/aiweb/actions/workflows/ci.yml/badge.svg)](https://github.com/ERETLY/aiweb/actions/workflows/ci.yml)
+[![version](https://img.shields.io/github/package-json/v/ERETLY/aihttp)](https://github.com/ERETLY/aihttp/blob/main/package.json)
+[![CI](https://github.com/ERETLY/aihttp/actions/workflows/ci.yml/badge.svg)](https://github.com/ERETLY/aihttp/actions/workflows/ci.yml)
 
 **aihttp is the AI-First Web Format.** It turns a page into a compact, executable graph: the controls an agent can use, the text it can read, and the effect of each action. No screenshots, no raw DOM, no token bonfire.
 
@@ -23,26 +23,26 @@ Jina, Firecrawl, and Readability turn a page into text. aihttp turns it into thi
 ### Userscript: 30 seconds
 
 1. Install [Tampermonkey](https://www.tampermonkey.net/) or Violentmonkey.
-2. Open [`self/aihttp.user.js`](https://raw.githubusercontent.com/ERETLY/aiweb/main/self/aihttp.user.js) and confirm the install.
+2. Open [`self/aihttp.user.js`](https://raw.githubusercontent.com/ERETLY/aihttp/main/self/aihttp.user.js) and confirm the install.
 3. Open any `http(s)` page, press **Alt+Shift+A**, type an id in the panel, press **Act**. No clone, no server, no upload.
 
 ### MCP: 5 minutes
 
 ```bash
-git clone https://github.com/ERETLY/aiweb.git
-cd aiweb
+git clone https://github.com/ERETLY/aihttp.git
+cd aihttp
 npm ci
 npx playwright install chromium
 ```
 
-Paste this into Claude Desktop or Cursor, replacing `/absolute/path/to/aiweb`:
+Paste this into Claude Desktop or Cursor, replacing `/absolute/path/to/aihttp`:
 
 ```json
 {
   "mcpServers": {
     "aihttp": {
       "command": "node",
-      "args": ["/absolute/path/to/aiweb/bin/aihttp-mcp.js", "--browser"]
+      "args": ["/absolute/path/to/aihttp/bin/aihttp-mcp.js", "--browser"]
     }
   }
 }
@@ -322,6 +322,7 @@ separately instead of counting the page behind it as missed.
 
 - Open shadow roots and slots are scanned. Closed roots are unreachable.
 - Same-origin iframes are scanned two levels deep. Cross-origin frames are skipped; the userscript skips all iframes.
+- Legacy `<frameset>` documents are not scanned (only standard `<iframe>` tags).
 - SVG shapes (`rect`, `path`, `circle`) are paint, not controls; the button or link around the icon is the action.
 
 ### Modals and consent
