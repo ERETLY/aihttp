@@ -11,7 +11,7 @@ const ROOT = path.join(__dirname, '..', '..');
 const OUT = path.join(__dirname, 'mcp-results.json');
 const META = {
   'io.modelcontextprotocol/protocolVersion': '2026-07-28',
-  'io.modelcontextprotocol/clientInfo': { name: 'ahttp-realworld', version: '0.1.0' },
+  'io.modelcontextprotocol/clientInfo': { name: 'aihttp-realworld', version: '0.1.0' },
   'io.modelcontextprotocol/clientCapabilities': {}
 };
 
@@ -71,60 +71,60 @@ async function main() {
   }
   try {
     const opened = await client.call('tools/call', {
-      name: 'ahttp_open',
+      name: 'aihttp_open',
       arguments: { url: 'https://the-internet.herokuapp.com/checkboxes' },
       _meta: META
     });
     const pageId = opened.structuredContent && opened.structuredContent.pageId;
-    record('the-internet/checkboxes', 'ahttp_open returns a page handle', !opened.isError && !!pageId, pageId);
+    record('the-internet/checkboxes', 'aihttp_open returns a page handle', !opened.isError && !!pageId, pageId);
     const snapText = textOf(opened);
     record('the-internet/checkboxes', 'snapshot text has the checkbox', /input\[checkbox\]/.test(snapText));
     const checkboxId = firstId(snapText, /^(a\d+) input\[checkbox\]/m);
     const acted = checkboxId ? await client.call('tools/call', {
-      name: 'ahttp_act', arguments: { pageId: pageId, id: checkboxId, value: 'true' }, _meta: META
+      name: 'aihttp_act', arguments: { pageId: pageId, id: checkboxId, value: 'true' }, _meta: META
     }) : { isError: true };
-    record('the-internet/checkboxes', 'ahttp_act toggles the checkbox', !acted.isError, acted.structuredContent && acted.structuredContent.status);
-    const after = await client.call('tools/call', { name: 'ahttp_snapshot', arguments: { pageId: pageId }, _meta: META });
-    record('the-internet/checkboxes', 'ahttp_snapshot reads the same page', !after.isError && /checked/.test(textOf(after)));
+    record('the-internet/checkboxes', 'aihttp_act toggles the checkbox', !acted.isError, acted.structuredContent && acted.structuredContent.status);
+    const after = await client.call('tools/call', { name: 'aihttp_snapshot', arguments: { pageId: pageId }, _meta: META });
+    record('the-internet/checkboxes', 'aihttp_snapshot reads the same page', !after.isError && /checked/.test(textOf(after)));
 
     const mcpTodo = await client.call('tools/call', {
-      name: 'ahttp_open', arguments: { url: 'https://todomvc.com/examples/react/dist/' }, _meta: META
+      name: 'aihttp_open', arguments: { url: 'https://todomvc.com/examples/react/dist/' }, _meta: META
     });
     const todoPage = mcpTodo.structuredContent && mcpTodo.structuredContent.pageId;
     const todoText = textOf(mcpTodo);
-    record('todomvc', 'ahttp_open works', !mcpTodo.isError, todoPage);
+    record('todomvc', 'aihttp_open works', !mcpTodo.isError, todoPage);
     const inputId = firstId(todoText, /^(a\d+) input(?:\[[^\]]*\])? "What needs to be done\?"/m) ||
       firstId(todoText, /^(a\d+) input(?:\[[^\]]*\])?/m);
     let filled = { isError: true };
     if (inputId) {
       filled = await client.call('tools/call', {
-        name: 'ahttp_act', arguments: { pageId: todoPage, id: inputId, value: 'MCP task' }, _meta: META
+        name: 'aihttp_act', arguments: { pageId: todoPage, id: inputId, value: 'MCP task' }, _meta: META
       });
     }
-    record('todomvc', 'ahttp_act fill', !filled.isError, filled.structuredContent && filled.structuredContent.status);
+    record('todomvc', 'aihttp_act fill', !filled.isError, filled.structuredContent && filled.structuredContent.status);
     const typed = inputId ? await client.call('tools/call', {
-      name: 'ahttp_act', arguments: { pageId: todoPage, id: inputId, key: 'Enter' }, _meta: META
+      name: 'aihttp_act', arguments: { pageId: todoPage, id: inputId, key: 'Enter' }, _meta: META
     }) : { isError: true };
-    record('todomvc', 'ahttp_act Enter adds the todo', !typed.isError && /MCP task/.test(textOf(typed)));
+    record('todomvc', 'aihttp_act Enter adds the todo', !typed.isError && /MCP task/.test(textOf(typed)));
 
     const books = await client.call('tools/call', {
-      name: 'ahttp_open', arguments: { url: 'https://books.toscrape.com/', maxActions: 500 }, _meta: META
+      name: 'aihttp_open', arguments: { url: 'https://books.toscrape.com/', maxActions: 500 }, _meta: META
     });
     const booksText = textOf(books);
     const booksPage = books.structuredContent && books.structuredContent.pageId;
-    record('books.toscrape', 'ahttp_open works', !books.isError, booksPage);
+    record('books.toscrape', 'aihttp_open works', !books.isError, booksPage);
     const nextId = firstId(booksText, /^(a\d+) a "next"/m);
     const nexted = nextId ? await client.call('tools/call', {
-      name: 'ahttp_act', arguments: { pageId: booksPage, id: nextId }, _meta: META
+      name: 'aihttp_act', arguments: { pageId: booksPage, id: nextId }, _meta: META
     }) : { isError: true };
     const booksAfter = nextId ? await client.call('tools/call', {
-      name: 'ahttp_snapshot', arguments: { pageId: booksPage }, _meta: META
+      name: 'aihttp_snapshot', arguments: { pageId: booksPage }, _meta: META
     }) : { isError: true };
-    record('books.toscrape', 'ahttp_act navigates to page 2',
+    record('books.toscrape', 'aihttp_act navigates to page 2',
       !nexted.isError && /Page 2 of/.test(textOf(booksAfter) + JSON.stringify(nexted.structuredContent || {})));
 
     const addRemove = await client.call('tools/call', {
-      name: 'ahttp_open', arguments: { url: 'https://the-internet.herokuapp.com/add_remove_elements/' }, _meta: META
+      name: 'aihttp_open', arguments: { url: 'https://the-internet.herokuapp.com/add_remove_elements/' }, _meta: META
     });
     const arPage = addRemove.structuredContent && addRemove.structuredContent.pageId;
     let arText = textOf(addRemove);
@@ -132,17 +132,17 @@ async function main() {
       const addId = firstId(arText, /^(a\d+) button "Add Element"/m);
       if (!addId) break;
       const added = await client.call('tools/call', {
-        name: 'ahttp_act', arguments: { pageId: arPage, id: addId }, _meta: META
+        name: 'aihttp_act', arguments: { pageId: arPage, id: addId }, _meta: META
       });
       arText = textOf(added);
     }
     const arSnap = await client.call('tools/call', {
-      name: 'ahttp_snapshot', arguments: { pageId: arPage }, _meta: META
+      name: 'aihttp_snapshot', arguments: { pageId: arPage }, _meta: META
     });
     const arSnapText = textOf(arSnap);
     record('the-internet/add_remove_elements', 'two Delete buttons exist', (arSnapText.match(/button "Delete"/g) || []).length === 2);
     const ambiguous = await client.call('tools/call', {
-      name: 'ahttp_act', arguments: { pageId: arPage, id: 'Delete' }, _meta: META
+      name: 'aihttp_act', arguments: { pageId: arPage, id: 'Delete' }, _meta: META
     });
     record('the-internet/add_remove_elements', 'ambiguous Delete label is refused with candidates',
       ambiguous.isError === true && ambiguous.structuredContent &&

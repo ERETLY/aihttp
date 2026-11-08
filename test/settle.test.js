@@ -11,7 +11,7 @@ const ENGINE = fs.readFileSync(path.join(__dirname, '..', 'aihttp.js'), 'utf8');
 function load(html) {
   const dom = new JSDOM(html, { url: 'https://settle.test/', runScripts: 'outside-only' });
   dom.window.eval(ENGINE);
-  return { ahttp: dom.window.ahttp, window: dom.window };
+  return { aihttp: dom.window.aihttp, window: dom.window };
 }
 
 const PAGE = '<!doctype html><html><head><title>Counter</title></head><body><main>' +
@@ -19,12 +19,12 @@ const PAGE = '<!doctype html><html><head><title>Counter</title></head><body><mai
   '</main></body></html>';
 
 test('a DOM-only action settles without waiting for the old fixed floor', async () => {
-  const { ahttp, window } = load(PAGE);
+  const { aihttp, window } = load(PAGE);
   window.document.getElementById('go').addEventListener('click', function () {
     window.document.getElementById('out').textContent = 'finished';
   });
   const started = Date.now();
-  const result = await ahttp.act('a1');
+  const result = await aihttp.act('a1');
   const elapsed = Date.now() - started;
   assert.equal(result.ok, true);
   assert.match(result.snapshot, /finished/);
@@ -32,9 +32,9 @@ test('a DOM-only action settles without waiting for the old fixed floor', async 
 });
 
 test('settle options can shorten the wait explicitly', async () => {
-  const { ahttp } = load(PAGE);
+  const { aihttp } = load(PAGE);
   const started = Date.now();
-  const result = await ahttp.act('a1', null, { quiet: 0, minWait: 0 });
+  const result = await aihttp.act('a1', null, { quiet: 0, minWait: 0 });
   const elapsed = Date.now() - started;
   assert.equal(result.ok, true);
   assert.ok(elapsed < 120, 'explicit settle took ' + elapsed + 'ms');

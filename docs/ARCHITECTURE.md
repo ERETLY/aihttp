@@ -5,7 +5,7 @@ This file is the map used for the matching-stability work (branch
 
 ## Runtime shape
 
-`ahttp` is a UMD file with no runtime dependencies. Node `require('ahttp')` and
+`aihttp` is a UMD file with no runtime dependencies. Node `require('aihttp')` and
 `<script src="aihttp.min.js">` load the same engine. The engine scans the current
 document, assigns short ids, renders a compact snapshot, and executes an action
 by id.
@@ -98,7 +98,7 @@ Weights and thresholds are in `MATCH` at the top of `aihttp.js` and explained in
 
 ## Snapshot format
 
-Text: first line `ahttp | title | url`, then one action per line
+Text: first line `aihttp | title | url`, then one action per line
 (`a2 button "Add to cart"`), then `[text: untrusted]` and text lines. Optional
 suffixes: `val=`, `ph=`, `opts=`, `checked`/`unchecked`, `disabled`, `readonly`,
 `required`, `-> href`, `confirm=`. Region headers appear only when actions span
@@ -150,13 +150,13 @@ Browser/Node engine: `snapshot(options)`, `act(id, payload, options)`,
 
 `snapshot` is synchronous in the browser engine; `act` and `authorize` return
 promises. `lib/browser.js` wraps every call as async because it crosses the
-Playwright boundary. `bin/aihttp-mcp.js` exposes `ahttp_open`, `ahttp_snapshot`
-and `ahttp_act`.
+Playwright boundary. `bin/aihttp-mcp.js` exposes `aihttp_open`, `aihttp_snapshot`
+and `aihttp_act`.
 
 ## Test contour
 
 `npm test` runs `node --test` over `test/*.test.js`. The browser suite skips when
-Chromium is missing (`AHTTP_REQUIRE_BROWSER=1` makes that a failure).
+Chromium is missing (`AIHTTP_REQUIRE_BROWSER=1` makes that a failure).
 
 The regression corpus lives in `corpus/`: one JSON scenario per file, local HTML
 fixtures, no network. `corpus/runner.js` loads a fresh jsdom per case, runs

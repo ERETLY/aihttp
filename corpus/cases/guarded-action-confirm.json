@@ -2,7 +2,7 @@
   "id": "guarded-action-confirm",
   "html": "fixtures/confirm.html",
   "url": "https://corpus.test/account",
-  "notes": "data-ahttp-confirm blocks the first call; confirm runs it",
+  "notes": "data-aihttp-confirm blocks the first call; confirm runs it",
   "steps": [
     {
       "action": "snapshot",

@@ -5,10 +5,10 @@ const { openPage, bytesOf, tokensOf, compression } = require('../lib/page');
 const pkg = require('../package.json');
 
 const USAGE = [
-  'ahttp ' + pkg.version + ' - compact DOM-to-action snapshots for LLM agents',
+  'aihttp ' + pkg.version + ' - compact DOM-to-action snapshots for LLM agents',
   '',
   'Usage:',
-  '  ahttp <url> [options]',
+  '  aihttp <url> [options]',
   '',
   'Options:',
   '  --json                 Print the JSON snapshot plus metrics',
@@ -19,9 +19,9 @@ const USAGE = [
   '  --verbose              Add scan diagnostics to the snapshot meta line',
   '  --timeout <ms>         HTTP timeout (default 25000)',
   '  --allow-private        Allow loopback, private and link-local targets',
-  '  --unlock <key>         Owner key for pages configured with data-ahttp-private',
-  '  --auth-token <token>   Server auth token for data-ahttp-auth-endpoint pages',
-  '  --hash-key <key>       Print the SHA-256 hash used by data-ahttp-key-hash',
+  '  --unlock <key>         Owner key for pages configured with data-aihttp-private',
+  '  --auth-token <token>   Server auth token for data-aihttp-auth-endpoint pages',
+  '  --hash-key <key>       Print the SHA-256 hash used by data-aihttp-key-hash',
   '  --no-stats             Do not print the compression summary',
   '  -h, --help             Show this help',
   '  -v, --version          Show the version',
@@ -89,7 +89,7 @@ async function main() {
   try {
     args = parseArgs(process.argv.slice(2));
   } catch (e) {
-    process.stderr.write('ahttp: ' + e.message + '\n\n' + USAGE + '\n');
+    process.stderr.write('aihttp: ' + e.message + '\n\n' + USAGE + '\n');
     process.exit(2);
   }
   if (args.help) { process.stdout.write(USAGE + '\n'); return; }
@@ -99,27 +99,27 @@ async function main() {
     return;
   }
   if (!args.url) {
-    process.stderr.write('ahttp: missing url\n\n' + USAGE + '\n');
+    process.stderr.write('aihttp: missing url\n\n' + USAGE + '\n');
     process.exit(2);
   }
   const started = Date.now();
   const page = await openPage(args.url, { timeout: args.options.timeout, allowPrivate: args.allowPrivate === true });
   const pageStatus = page.api.status();
   if (pageStatus.policy && pageStatus.policy.serverAuth) {
-    const token = args.authToken != null ? args.authToken : (process.env.AHTTP_AUTH_TOKEN || '');
+    const token = args.authToken != null ? args.authToken : (process.env.AIHTTP_AUTH_TOKEN || '');
     if (token) {
       const authorized = await page.api.authorize({ token: token });
       if (!authorized.ok) throw new Error('server authorization failed: ' + (authorized.error || 'unknown_error'));
     }
   } else {
-    const ownerKey = args.unlock != null ? args.unlock : (process.env.AHTTP_OWNER_KEY || '');
+    const ownerKey = args.unlock != null ? args.unlock : (process.env.AIHTTP_OWNER_KEY || '');
     if (ownerKey) {
       const unlocked = page.api.unlock(ownerKey);
       if (!unlocked.ok) throw new Error('owner unlock failed: ' + (unlocked.error || 'invalid_key'));
     }
   }
   if (page.api.status().locked) {
-    throw new Error('authorization required: pass --auth-token <token> for server auth, or --unlock <key> / AHTTP_OWNER_KEY for key auth');
+    throw new Error('authorization required: pass --auth-token <token> for server auth, or --unlock <key> / AIHTTP_OWNER_KEY for key auth');
   }
   const snapshotOptions = {
     query: args.options.query,
@@ -158,7 +158,7 @@ async function main() {
 
 if (require.main === module) {
   main().catch((err) => {
-    process.stderr.write('ahttp: ' + (err && err.message ? err.message : String(err)) + '\n');
+    process.stderr.write('aihttp: ' + (err && err.message ? err.message : String(err)) + '\n');
     process.exit(1);
   });
 }

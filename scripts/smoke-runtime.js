@@ -23,7 +23,7 @@ function run(command, args) {
 }
 
 async function main() {
-  assert.equal(engine.__ahttp, true, 'aihttp.js loads without dev dependencies');
+  assert.equal(engine.__aihttp, true, 'aihttp.js loads without dev dependencies');
   assert.equal(engine.version, pkg.version, 'engine version matches package.json');
 
   const page = openHtml('<!doctype html><html><body><main><h1>Smoke</h1><button>Smoke action</button></main></body></html>', 'https://smoke.test/');
@@ -44,7 +44,7 @@ async function main() {
     await new Promise((resolve) => server.close(resolve));
   }
 
-  process.stdout.write('smoke ok: ahttp ' + pkg.version + ' on node ' + process.version + '\n');
+  process.stdout.write('smoke ok: aihttp ' + pkg.version + ' on node ' + process.version + '\n');
 }
 
 main().catch((err) => {

@@ -13,7 +13,7 @@ const FILE = path.join(ROOT, 'self', 'aihttp.user.js');
 test('the self-use userscript is generated and current', () => {
   const current = fs.readFileSync(FILE, 'utf8');
   assert.equal(current, render(), 'run npm run build:self');
-  assert.match(current, /@name\s+ahttp self-use/);
+  assert.match(current, /@name\s+aihttp self-use/);
   assert.match(current, /@match\s+https:\/\/\*\/\*/);
   assert.match(current, /@grant\s+none/);
   assert.match(current, /@noframes/);
@@ -25,11 +25,11 @@ test('the userscript exposes a panel on a normal page', () => {
   { url: 'https://self.test/', runScripts: 'outside-only' });
   const window = dom.window;
   window.eval(fs.readFileSync(FILE, 'utf8'));
-  assert.equal(typeof window.ahttp.snapshot, 'function');
-  const host = window.document.querySelector('[data-ahttp-self]');
+  assert.equal(typeof window.aihttp.snapshot, 'function');
+  const host = window.document.querySelector('[data-aihttp-self]');
   assert.ok(host, 'panel host is attached');
   const toggle = host.shadowRoot.querySelector('button.toggle');
-  assert.equal(toggle.textContent, 'ahttp');
+  assert.equal(toggle.textContent, 'aihttp');
   toggle.click();
   assert.match(host.shadowRoot.querySelector('textarea').value, /a1 button "Run"/);
   assert.doesNotMatch(host.shadowRoot.querySelector('textarea').value, /button "Scan"/, 'the panel does not scan itself');

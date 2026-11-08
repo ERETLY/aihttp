@@ -15,7 +15,7 @@ Status: **final** (all planned sites have run; the engine is unchanged).
 ## Method
 
 Each page is opened in a fresh Chromium context with User-Agent
-`ahttp-realworld-test (+https://github.com/ERETLY/aiweb)`, one site at a time,
+`aihttp-realworld-test (+https://github.com/ERETLY/aiweb)`, one site at a time,
 with a 1.2 s pause between sites. The engine is injected with
 `page.addInitScript`, so it survives navigation. The harness does not log in to
 real accounts, submit payments or posts, or vote. It stops at any
@@ -71,7 +71,7 @@ separately.
 | httpbin-form | 13 | 13 | 1 | 198 | 432 | 248 | 100% | 1/1 |
 | wikipedia-http | 60 (935 omitted) | 995 | 224 | 1026 | 271558 | 45721 | 95.5% | 0/1 |
 | hacker-news | 60 (166 omitted) | 226 | 30 | 1225 | 11556 | 9963 | 100% | 2/2 |
-| github-ahttp | 60 (18 omitted) | 78 | 151 | 13282 | 192313 | 19336 | 41.1% | 1/1 |
+| github-aihttp | 60 (18 omitted) | 78 | 151 | 13282 | 192313 | 19336 | 41.1% | 1/1 |
 | mdn-http | 17 | 17 | 5 | 437 | 39029 | 8247 | 3.3% | 0/1 |
 | bbc-news | blocked | - | - | - | - | - | - | 0/0 |
 
@@ -247,8 +247,8 @@ The six failed scenarios:
 `node benchmark/realworld/mcp.js` runs the real `bin/aihttp-mcp.js --browser`
 over stdio and passes 11/11 checks:
 
-- `ahttp_open` returns a `pageId`; `ahttp_snapshot` reads the same page;
-- `ahttp_act` toggles a checkbox with `value: "true"` and the follow-up
+- `aihttp_open` returns a `pageId`; `aihttp_snapshot` reads the same page;
+- `aihttp_act` toggles a checkbox with `value: "true"` and the follow-up
   snapshot shows the checked state;
 - TodoMVC fill + `Enter` adds a todo;
 - books.toscrape `next` navigates to page 2;
@@ -290,7 +290,7 @@ Before is the pre-fix engine at `6ee22e7`; after is the current engine
 | Site | Recall before | Recall after | Scanned actions |
 |---|---:|---:|---:|
 | wikipedia-http | 95.4% | 97.6% | 60 |
-| github-ahttp | 41.1% | 98.9% | 60 |
+| github-aihttp | 41.1% | 98.9% | 60 |
 | mdn-http | 10.4% | 96.3% | 60 |
 | bbc-news | 84.2% | 99.2% | 60 |
 | all scanned pages (mean) | 93.5% (26) | 99.7% (26) | |

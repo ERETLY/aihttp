@@ -12,7 +12,7 @@ const FIXTURES = path.join(__dirname, '..', 'corpus', 'fixtures');
 const REPRO = path.join(__dirname, '..', 'benchmark', 'realworld', 'repro', 'display-contents', 'fixture.html');
 const REPRO_SELECT = path.join(__dirname, '..', 'benchmark', 'realworld', 'repro', 'select-opacity', 'fixture.html');
 const SECURITY = fs.readFileSync(path.join(__dirname, '..', 'benchmark', 'fixtures', '05-security.html'), 'utf8');
-const gate = browserGate(chromiumAvailable(), process.env.AHTTP_REQUIRE_BROWSER === '1');
+const gate = browserGate(chromiumAvailable(), process.env.AIHTTP_REQUIRE_BROWSER === '1');
 
 function fixture(name) {
   return fs.readFileSync(path.join(FIXTURES, name), 'utf8');
@@ -23,8 +23,8 @@ async function snapshotOf(page, html) {
   await page.addScriptTag({ content: ENGINE });
   return page.evaluate(function () {
     return {
-      json: window.ahttp.snapshot({ format: 'json', force: true }),
-      text: window.ahttp.snapshot({ format: 'text', force: true })
+      json: window.aihttp.snapshot({ format: 'json', force: true }),
+      text: window.aihttp.snapshot({ format: 'text', force: true })
     };
   });
 }
@@ -42,12 +42,12 @@ test('layout mode follows computed style instead of the CSS index', { skip: gate
 
     await page.setViewportSize({ width: 600, height: 800 });
     const narrow = await page.evaluate(function () {
-      return window.ahttp.snapshot({ format: 'text', force: true });
+      return window.aihttp.snapshot({ format: 'text', force: true });
     });
     assert.doesNotMatch(narrow, /button "Nav"/);
     await page.setViewportSize({ width: 1280, height: 800 });
     const wide = await page.evaluate(function () {
-      return window.ahttp.snapshot({ format: 'text', force: true });
+      return window.aihttp.snapshot({ format: 'text', force: true });
     });
     assert.match(wide, /button "Nav"/);
 
@@ -79,12 +79,12 @@ test('anchors without href stay actions when role, handler or tabindex says so',
     assert.doesNotMatch(snap.text, /button "Plain text only"/);
 
     const cart = await page.evaluate(function () {
-      return window.ahttp.act('Cart, empty', null, { quiet: 0, minWait: 0, timeout: 250, snapshot: false });
+      return window.aihttp.act('Cart, empty', null, { quiet: 0, minWait: 0, timeout: 250, snapshot: false });
     });
     assert.equal(cart.status, 'ok');
 
     const run = await page.evaluate(function () {
-      return window.ahttp.act('Run task', null, { quiet: 0, minWait: 0, timeout: 250, snapshot: false });
+      return window.aihttp.act('Run task', null, { quiet: 0, minWait: 0, timeout: 250, snapshot: false });
     });
     assert.equal(run.status, 'ok');
     assert.equal(await page.evaluate(function () { return document.getElementById('out').textContent; }), 'ran');
@@ -113,7 +113,7 @@ test('a label is an action only when its control is not in the snapshot', { skip
     assert.match(check.text, /label role=button "Dark mode"/);
 
     const clicked = await page.evaluate(function () {
-      return window.ahttp.act('Dark mode', null, { quiet: 0, minWait: 0, timeout: 250, snapshot: false });
+      return window.aihttp.act('Dark mode', null, { quiet: 0, minWait: 0, timeout: 250, snapshot: false });
     });
     assert.equal(clicked.status, 'ok');
     assert.equal(await page.evaluate(function () { return document.getElementById('dark').checked; }), true);
@@ -136,7 +136,7 @@ test('a partially transparent native field is real, a fully transparent one is n
     assert.equal(repro.json.actions.filter(function (action) { return action.tag === 'span'; }).length, 0);
 
     const picked = await page.evaluate(function () {
-      return window.ahttp.act('Sort products', { value: 'za' }, { quiet: 0, minWait: 0, timeout: 250, snapshot: false });
+      return window.aihttp.act('Sort products', { value: 'za' }, { quiet: 0, minWait: 0, timeout: 250, snapshot: false });
     });
     assert.equal(picked.status, 'ok');
     assert.equal(await page.evaluate(function () { return document.getElementById('out').textContent; }), 'za');
@@ -218,13 +218,13 @@ test('a CSS hover card is a hover action and its hidden text stays out until hov
     assert.doesNotMatch(JSON.stringify(before.json), /name: user1/);
 
     const acted = await page.evaluate(function (id) {
-      return window.ahttp.act(id, { hover: true }, { quiet: 0, minWait: 0, timeout: 250, snapshot: false });
+      return window.aihttp.act(id, { hover: true }, { quiet: 0, minWait: 0, timeout: 250, snapshot: false });
     }, hover[0].id);
     assert.equal(acted.status, 'ok');
     assert.equal(acted.action.kind, 'hover');
 
     const after = await page.evaluate(function () {
-      return window.ahttp.snapshot({ format: 'text', force: true });
+      return window.aihttp.snapshot({ format: 'text', force: true });
     });
     assert.match(after, /name: user1/);
   } finally {
@@ -284,7 +284,7 @@ test('font-size:0 does not hide links inside a shadow root', { skip: gate.skip, 
         '<a href="/texts" style="font-size:16px;display:inline-block;padding:8px">TEXTS</a>';
     });
     const json = await page.evaluate(function () {
-      return window.ahttp.snapshot({ format: 'json', force: true });
+      return window.aihttp.snapshot({ format: 'json', force: true });
     });
     const labels = Array.from(json.actions, function (action) { return action.label; });
     assert.ok(labels.indexOf('TEXTS') >= 0, 'the shadow link survives font-size:0: ' + JSON.stringify(labels));

@@ -21,7 +21,7 @@ test('relocation prefers a matching DOM id over an ambiguous label', async () =>
   listen(document.getElementById('a'));
   listen(document.getElementById('b'));
 
-  const snapshot = window.ahttp.snapshot({ format: 'json' });
+  const snapshot = window.aihttp.snapshot({ format: 'json' });
   const old = snapshot.actions.find((action) => action.name === 'a') ||
     snapshot.actions.find((action) => action.id === 'a1');
   assert.ok(old, 'first Go button is in the snapshot');
@@ -34,7 +34,7 @@ test('relocation prefers a matching DOM id over an ambiguous label', async () =>
   main.appendChild(replacement);
   listen(replacement);
 
-  const result = await window.ahttp.act(old.id, null, { quiet: 0, minWait: 0 });
+  const result = await window.aihttp.act(old.id, null, { quiet: 0, minWait: 0 });
   assert.equal(result.ok, true);
   assert.equal(document.getElementById('out').textContent, 'a');
 });

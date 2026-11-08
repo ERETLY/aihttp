@@ -14,7 +14,7 @@
     {
       "id": "act-by-duplicate-intent-ambiguous",
       "html": "fixtures/duplicate-intent.html",
-      "notes": "two actions share data-ahttp-intent=remove; act(\"remove\") must refuse",
+      "notes": "two actions share data-aihttp-intent=remove; act(\"remove\") must refuse",
       "pending": false,
       "pending_reason": null,
       "status": "PASS",
@@ -1380,7 +1380,7 @@
     {
       "id": "guarded-action-confirm",
       "html": "fixtures/confirm.html",
-      "notes": "data-ahttp-confirm blocks the first call; confirm runs it",
+      "notes": "data-aihttp-confirm blocks the first call; confirm runs it",
       "pending": false,
       "pending_reason": null,
       "status": "PASS",

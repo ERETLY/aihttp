@@ -72,7 +72,7 @@ function tokenTable(web, byKey, tasks, self) {
     ['Jina Reader', 'jina', 'hosted Markdown', false],
     ['Firecrawl', 'firecrawl', 'hosted Markdown', false],
     ['Accessibility tree', 'axtree', 'roles and names', false],
-    ['ahttp', 'ahttp', 'actions, text, ids', true]
+    ['aihttp', 'aihttp', 'actions, text, ids', true]
   ];
   const rows = [];
   for (const def of defs) {
@@ -98,7 +98,7 @@ function tokenTable(web, byKey, tasks, self) {
     if (tasks) {
       const value = def[1] === 'raw' ? tasks.rawTokens
         : def[1] === 'axtree' ? tasks.axTokens
-        : def[1] === 'ahttp' ? tasks.ahttpTokens
+        : def[1] === 'aihttp' ? tasks.aihttpTokens
         : null;
       row.push(value == null ? 'n/a' : num(value));
     }
@@ -106,7 +106,7 @@ function tokenTable(web, byKey, tasks, self) {
   }
   if (self && self.pages && self.checkout) {
     const checkoutTokens = self.checkout.tokens || 0;
-    const row = ['ahttp self', 'actions, text, ids', 'yes', num(checkoutTokens)];
+    const row = ['aihttp self', 'actions, text, ids', 'yes', num(checkoutTokens)];
     let total = checkoutTokens;
     for (const site of web) {
       const match = selfPage(self, site);
@@ -127,9 +127,9 @@ function checkoutTimeTable(comparison, self) {
     .filter((method) => labels[method.key] && method.avgLatencyMs != null)
     .sort((a, b) => a.avgLatencyMs - b.avgLatencyMs);
   for (const method of baselines) rows.push([labels[method.key], ms1(method.avgLatencyMs)]);
-  const ahttp = comparison.methods.find((method) => method.key === 'ahttp');
-  if (ahttp && ahttp.avgLatencyMs != null) rows.push(['ahttp', ms1(ahttp.avgLatencyMs)]);
-  if (self && self.checkout && self.checkout.avgLatencyMs != null) rows.push(['ahttp self', ms1(self.checkout.avgLatencyMs)]);
+  const aihttp = comparison.methods.find((method) => method.key === 'aihttp');
+  if (aihttp && aihttp.avgLatencyMs != null) rows.push(['aihttp', ms1(aihttp.avgLatencyMs)]);
+  if (self && self.checkout && self.checkout.avgLatencyMs != null) rows.push(['aihttp self', ms1(self.checkout.avgLatencyMs)]);
   if (!rows.length) return null;
   return table(['Method', ':Time per step'], rows);
 }
@@ -153,8 +153,8 @@ function timingTable(web, entries, defs) {
 
 function liveTimeTable(web, time) {
   return timingTable(web, time.live || [], [
-    ['ahttp', 'ahttp'],
-    ['ahttp self', 'self'],
+    ['aihttp', 'aihttp'],
+    ['aihttp self', 'self'],
     ['Jina Reader', 'jina'],
     ['Firecrawl', 'firecrawl']
   ]);
@@ -167,8 +167,8 @@ function scanTimeTable(web, time) {
     ['Jina Reader', 'jina'],
     ['Firecrawl', 'firecrawl'],
     ['Accessibility tree', 'axtree'],
-    ['ahttp', 'ahttp'],
-    ['ahttp self', 'self']
+    ['aihttp', 'aihttp'],
+    ['aihttp self', 'self']
   ]);
 }
 
@@ -186,7 +186,7 @@ function render(results, selfResults, timeResults) {
   const liveAt = time ? (time.liveGeneratedAt || time.generatedAt) : null;
   const hostedAt = time ? time.hostedGeneratedAt : null;
 
-  lines.push('Token run: `' + results.generatedAt + '`. ahttp ' + results.version + ' on ' + results.platform + ' ' + results.arch + ', Node ' + results.node + (chromium ? ', Chromium ' + chromium : '') + ', gpt-tokenizer 4.1.0/o200k_base.');
+  lines.push('Token run: `' + results.generatedAt + '`. aihttp ' + results.version + ' on ' + results.platform + ' ' + results.arch + ', Node ' + results.node + (chromium ? ', Chromium ' + chromium : '') + ', gpt-tokenizer 4.1.0/o200k_base.');
   lines.push('');
 
   if (comparison && web.length) {
@@ -196,7 +196,7 @@ function render(results, selfResults, timeResults) {
     lines.push('');
     lines.push(tokenTable(web, byKey, tasks, self));
     lines.push('');
-    lines.push('Only the two ahttp rows can click; the baselines score 0/' + (tasks ? tasks.tasks : 20) + ' on the task suite because they only read. `ahttp self` is the same engine loaded as `self/aihttp.user.js` in Chromium.');
+    lines.push('Only the two aihttp rows can click; the baselines score 0/' + (tasks ? tasks.tasks : 20) + ' on the task suite because they only read. `aihttp self` is the same engine loaded as `self/aihttp.user.js` in Chromium.');
     lines.push('');
 
     lines.push('### Time');
@@ -218,13 +218,13 @@ function render(results, selfResults, timeResults) {
       lines.push('');
       lines.push(live);
       lines.push('');
-      lines.push('Single runs, not medians. `ahttp` fetches the page and its linked stylesheets in Node and scans it. `ahttp self` loads the page in Chromium with the userscript injected and takes a snapshot. The hosted readers return Markdown only.');
+      lines.push('Single runs, not medians. `aihttp` fetches the page and its linked stylesheets in Node and scans it. `aihttp self` loads the page in Chromium with the userscript injected and takes a snapshot. The hosted readers return Markdown only.');
       lines.push('');
     }
 
     const scan = time ? scanTimeTable(web, time) : null;
     if (scan) {
-      lines.push('**Scan.** One snapshot per pinned page. Raw HTML, the accessibility tree and `ahttp self` run in Chromium on the page served from localhost; Markdown and `ahttp` run in Node.');
+      lines.push('**Scan.** One snapshot per pinned page. Raw HTML, the accessibility tree and `aihttp self` run in Chromium on the page served from localhost; Markdown and `aihttp` run in Node.');
       lines.push('');
       lines.push(scan);
       lines.push('');

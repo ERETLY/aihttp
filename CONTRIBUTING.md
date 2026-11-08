@@ -1,6 +1,6 @@
 # Contributing
 
-ahttp is a small project. Keep changes focused and include a test or a reproducible command.
+aihttp is a small project. Keep changes focused and include a test or a reproducible command.
 
 ## Before opening a pull request
 

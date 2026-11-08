@@ -9,7 +9,7 @@ const { playwright, chromiumAvailable, browserGate } = require('../tools/browser
 
 const ENGINE = fs.readFileSync(path.join(__dirname, '..', 'aihttp.js'), 'utf8');
 const SECURITY = fs.readFileSync(path.join(__dirname, '..', 'benchmark', 'fixtures', '05-security.html'), 'utf8');
-const gate = browserGate(chromiumAvailable(), process.env.AHTTP_REQUIRE_BROWSER === '1');
+const gate = browserGate(chromiumAvailable(), process.env.AIHTTP_REQUIRE_BROWSER === '1');
 
 const MUI = '<!doctype html><html><head><title>MUI</title></head><body><main>' +
   '<span style="position:relative;display:inline-block;width:24px;height:24px;border:1px solid #333">' +
@@ -28,8 +28,8 @@ async function snapshotOf(page, html) {
   await page.addScriptTag({ content: ENGINE });
   return page.evaluate(function () {
     return {
-      json: window.ahttp.snapshot({ format: 'json' }),
-      text: window.ahttp.snapshot({ format: 'text' })
+      json: window.aihttp.snapshot({ format: 'json' }),
+      text: window.aihttp.snapshot({ format: 'text' })
     };
   });
 }

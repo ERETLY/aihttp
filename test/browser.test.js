@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const http = require('node:http');
 const { chromiumAvailable, browserGate } = require('../tools/browser-env');
 
-const gate = browserGate(chromiumAvailable(), process.env.AHTTP_REQUIRE_BROWSER === '1');
+const gate = browserGate(chromiumAvailable(), process.env.AIHTTP_REQUIRE_BROWSER === '1');
 
 const { openBrowserPage, closeBrowser } = require('../lib/browser');
 
@@ -79,7 +79,7 @@ test('evicting the oldest of more than MAX_PAGES pages keeps the newest pages al
     assert.equal((await middle.api.status()).locked, false, 'middle page still responds');
     assert.equal(await newest.page.evaluate(() => document.querySelector('h1').textContent), 'Eviction');
     const contexts = new Set(opened.map((page) => page.context));
-    assert.equal(contexts.size, 1, 'ahttp-owned pages share one context');
+    assert.equal(contexts.size, 1, 'aihttp-owned pages share one context');
   } finally {
     for (const page of opened) await page.close();
     await closeBrowser();

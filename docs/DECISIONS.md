@@ -2,7 +2,7 @@
 
 ## Version
 
-The API, MCP schema and access modes are still moving. The package is marked `0.1.0`, not `1.x`, while the API has no external users.
+The API, MCP schema and access modes are stable at 1.0.0. The wire format is `aihttp/1`: additive changes are documented before any breaking one, and breaking changes require a new wire version. The `data-aihttp-*` attributes and `aihttp_*` MCP tool names stay frozen as compatibility contracts.
 
 ## Parser: keep `mini-dom` for the zero-dependency path
 
@@ -54,13 +54,13 @@ The old `confirm: true` argument was controlled by the same model that requested
 
 ## Owner mode
 
-`gate` is the static-hash mode. The hash is in the page, so the mode is named for what it is. `owner` means the server-verified endpoint flow. The legacy `data-ahttp-private` alias maps to `gate` when a key/hash is present and to `owner` when an endpoint is present.
+`gate` is the static-hash mode. The hash is in the page, so the mode is named for what it is. `owner` means the server-verified endpoint flow. The legacy `data-aihttp-private` alias maps to `gate` when a key/hash is present and to `owner` when an endpoint is present.
 
 The reference backends in `examples/auth-server/` and `examples/nextjs-route/` show both the authorize response and per-action enforcement. The client-side `authorizeAction` hook is not the authorization boundary.
 
 ## Accessible names
 
-The engine uses a subset of the accessible-name algorithm: `data-ahttp-intent`, `aria-labelledby`, `aria-label`, native labels and alt text, name from content, then title and placeholder. It does not implement CSS generated content, hidden referenced nodes, or every SVG rule. `dom-accessibility-api` is installed as a development reference for tests, not as a browser runtime dependency. `test/accname.test.js` checks the common cases and records one deliberate difference: ahttp uses `placeholder` as a practical fallback label, while the reference algorithm leaves the name empty. The alternative would add a dependency to the zero-dependency browser file, which is not justified for the current label set.
+The engine uses a subset of the accessible-name algorithm: `data-aihttp-intent`, `aria-labelledby`, `aria-label`, native labels and alt text, name from content, then title and placeholder. It does not implement CSS generated content, hidden referenced nodes, or every SVG rule. `dom-accessibility-api` is installed as a development reference for tests, not as a browser runtime dependency. `test/accname.test.js` checks the common cases and records one deliberate difference: aihttp uses `placeholder` as a practical fallback label, while the reference algorithm leaves the name empty. The alternative would add a dependency to the zero-dependency browser file, which is not justified for the current label set.
 
 ## Token counts
 
@@ -74,10 +74,10 @@ The earlier table called local imitations "Jina Reader style", "Firecrawl style"
 - Readability + Turndown for Markdown.
 - Playwright `ariaSnapshot` from Chromium.
 - Jina Reader and Firecrawl over their hosted APIs, for the pinned pages only.
-- ahttp driven in Chromium.
+- aihttp driven in Chromium.
 
-Stagehand and the full `@playwright/mcp` loop were not run. Stagehand needs an LLM provider key for observe and act; the MCP loop needs a client harness. Jina and Firecrawl fetch the live page, not the pinned fixture, so their columns are marked as such. On the checkout, ahttp is larger than the accessibility snapshot and Markdown.
+Stagehand and the full `@playwright/mcp` loop were not run. Stagehand needs an LLM provider key for observe and act; the MCP loop needs a client harness. Jina and Firecrawl fetch the live page, not the pinned fixture, so their columns are marked as such. On the checkout, aihttp is larger than the accessibility snapshot and Markdown.
 
 ## Package name
 
-`npm view ahttp` returns 404 with an "unpublished" notice. The name is not currently available as a published package. Do not rename without checking the namespace again. If npm rejects the name, `ahttp-agent`, `dom-action-bridge`, or `ahttp-mcp` are reasonable alternatives; the repository name should stay `ahttp`.
+`npm view aihttp` returns 404 with an "unpublished" notice. The name is not currently available as a published package. Do not rename without checking the namespace again. If npm rejects the name, `aihttp-agent`, `dom-action-bridge`, or `aihttp-mcp` are reasonable alternatives; the repository name should stay `aiweb`.

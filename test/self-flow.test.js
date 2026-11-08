@@ -11,7 +11,7 @@ const USERSCRIPT = fs.readFileSync(path.join(__dirname, '..', 'self', 'aihttp.us
 function mount(html) {
   const dom = new JSDOM(html, { url: 'https://self-flow.test/', runScripts: 'outside-only' });
   dom.window.eval(USERSCRIPT);
-  const host = dom.window.document.querySelector('[data-ahttp-self]');
+  const host = dom.window.document.querySelector('[data-aihttp-self]');
   assert.ok(host, 'panel host is attached');
   host.shadowRoot.querySelector('button.toggle').click();
   return { window: dom.window, document: dom.window.document, shadow: host.shadowRoot };
@@ -50,7 +50,7 @@ test('the self-use panel runs an action and shows the result', async () => {
 
 test('the self-use panel asks for confirmation before a guarded action', async () => {
   const page = mount('<!doctype html><html><head><title>Self guard</title></head><body>' +
-    '<main><button id="del" data-ahttp-confirm="delete">Delete account</button>' +
+    '<main><button id="del" data-aihttp-confirm="delete">Delete account</button>' +
     '<p id="out">idle</p></main></body></html>');
   const id = actionId(page.shadow, 'Delete account');
   page.document.getElementById('del').addEventListener('click', function () {

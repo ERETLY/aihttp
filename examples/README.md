@@ -20,7 +20,7 @@ part of the default test run.
 
 ## MCP
 
-Copy the relevant JSON into your client's MCP configuration and replace `/absolute/path/to/ahttp`.
+Copy the relevant JSON into your client's MCP configuration and replace `/absolute/path/to/aiweb`.
 
 - `mcp/claude-desktop-browser.json`: Claude Desktop, browser backend.
 - `mcp/cursor-static.json`: Cursor, static HTML backend.
@@ -33,7 +33,7 @@ Static mode does not execute page JavaScript. Use `--browser` for SPAs.
 - `openai/tool-loop.js`: needs `openai`, `playwright`, and `OPENAI_API_KEY`.
 - `anthropic/tool-loop.js`: needs `@anthropic-ai/sdk`, `playwright`, and `ANTHROPIC_API_KEY`.
 
-Both loops treat page text as untrusted and call `ahttp.act`. A guarded action still requires `confirm: true` in the direct browser API; the MCP server's one-time token is the stronger flow. A production backend must authorize every mutation.
+Both loops treat page text as untrusted and call `aihttp.act`. A guarded action still requires `confirm: true` in the direct browser API; the MCP server's one-time token is the stronger flow. A production backend must authorize every mutation.
 
 ## Server-verified owner access
 
@@ -46,11 +46,11 @@ AGENT_TOKEN=dev-token node server.js
 In another terminal:
 
 ```bash
-curl -s http://127.0.0.1:8787/api/ahttp/authorize \
+curl -s http://127.0.0.1:8787/api/aihttp/authorize \
   -H 'Authorization: Bearer dev-token' -H 'content-type: application/json' \
   -d '{"action":"authorize","owner":"demo"}'
 
-curl -s http://127.0.0.1:8787/api/ahttp/action \
+curl -s http://127.0.0.1:8787/api/aihttp/action \
   -H 'Authorization: Bearer dev-token' -H 'content-type: application/json' \
   -d '{"id":"a1","intent":"checkout_submit"}'
 ```
@@ -59,7 +59,7 @@ The action endpoint rejects `delete_account` and unknown intents. The Next.js ro
 
 ## Site-owner page
 
-Open `site-owner/index.html` from a local server or directly as a file. It loads `../../aihttp.js`, declares `data-ahttp-*` attributes, and prints the snapshot.
+Open `site-owner/index.html` from a local server or directly as a file. It loads `../../aihttp.js`, declares `data-aihttp-*` attributes, and prints the snapshot.
 
 ## Static preview
 

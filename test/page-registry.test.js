@@ -23,7 +23,7 @@ test('replacing a handle closes the previous page exactly once', () => {
   assert.equal(first.closeCalls, 1, 'old page is closed after the new page is stored');
   assert.equal(registry.get(handle), second, 'handle points at the new page');
   assert.equal(registry.legacyPage, second, 'legacy pointer follows its navigated page');
-  assert.equal(second.__ahttpHandle, handle, 'new page inherits the handle');
+  assert.equal(second.__aihttpHandle, handle, 'new page inherits the handle');
 });
 
 test('navigating a non-legacy page does not hijack the legacy pointer', () => {
@@ -49,10 +49,10 @@ test('trim evicts the oldest evictable page and closes it', () => {
   registry.setLegacy(a);
   registry.store(b);
   registry.store(c);
-  assert.equal(registry.get(a.__ahttpHandle), a, 'legacy page is retained');
-  assert.equal(registry.get(b.__ahttpHandle), null, 'oldest non-legacy page is evicted');
+  assert.equal(registry.get(a.__aihttpHandle), a, 'legacy page is retained');
+  assert.equal(registry.get(b.__aihttpHandle), null, 'oldest non-legacy page is evicted');
   assert.equal(b.closeCalls, 1);
-  assert.equal(registry.get(c.__ahttpHandle), c);
+  assert.equal(registry.get(c.__aihttpHandle), c);
 });
 
 test('closeAll closes every stored page and clears the legacy pointer', () => {

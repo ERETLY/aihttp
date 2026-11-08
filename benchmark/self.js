@@ -55,8 +55,8 @@ async function pages() {
       const loadMs = Number(process.hrtime.bigint() - started) / 1e6;
       const engineScript = await page.addScriptTag({ path: SELF });
       await engineScript.evaluate((element) => element.remove());
-      const data = await page.evaluate(() => window.ahttp.snapshot({ format: 'json', maxActions: 60, maxText: 1200 }));
-      const text = await page.evaluate(() => window.ahttp.snapshot({ format: 'text', maxActions: 60, maxText: 1200 }));
+      const data = await page.evaluate(() => window.aihttp.snapshot({ format: 'json', maxActions: 60, maxText: 1200 }));
+      const text = await page.evaluate(() => window.aihttp.snapshot({ format: 'text', maxActions: 60, maxText: 1200 }));
       out.push({
         name: site.name,
         url: site.url,
@@ -82,7 +82,7 @@ async function pages() {
   const pageRows = await pages();
   const checkout = await runComparison({ enginePath: SELF, engineName: 'self/aihttp.user.js in Chromium' });
   const methods = checkout.methods || [];
-  const ahttp = methods.find((method) => method.key === 'ahttp') || {};
+  const aihttp = methods.find((method) => method.key === 'aihttp') || {};
   const tasks = await runTaskBenchmark({ enginePath: SELF });
   const out = {
     generatedAt: new Date().toISOString(),
@@ -90,14 +90,14 @@ async function pages() {
     engine: 'self/aihttp.user.js in Chromium',
     pages: pageRows,
     checkout: {
-      tokens: ahttp.totalTokens || 0,
-      stepTokens: ahttp.stepTokens || [],
-      avgLatencyMs: ahttp.avgLatencyMs || 0,
+      tokens: aihttp.totalTokens || 0,
+      stepTokens: aihttp.stepTokens || [],
+      avgLatencyMs: aihttp.avgLatencyMs || 0,
       success: !!checkout.success
     },
     tasks: {
-      tokens: tasks.ahttpTokens || 0,
-      success: tasks.ahttpSuccess || 0,
+      tokens: tasks.aihttpTokens || 0,
+      success: tasks.aihttpSuccess || 0,
       tasks: tasks.tasks || 0
     }
   };

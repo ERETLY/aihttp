@@ -2,7 +2,7 @@
   "defaults": {
     "pauseMs": 1200,
     "timeoutMs": 20000,
-    "userAgent": "ahttp-realworld-test (+https://github.com/ERETLY/aiweb)"
+    "userAgent": "aihttp-realworld-test (+https://github.com/ERETLY/aiweb)"
   },
   "sites": [
     {
@@ -287,12 +287,12 @@
         {
           "name": "fill and submit form",
           "steps": [
-            { "op": "act", "target": { "tag": "input", "nameContains": "Customer name" }, "payload": { "value": "ahttp" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "tag": "input", "nameContains": "Customer name" }, "payload": { "value": "aihttp" }, "expect": { "status": "ok" } },
             { "op": "act", "target": { "tag": "input", "nameContains": "Telephone" }, "payload": { "value": "12345" }, "expect": { "status": "ok" } },
-            { "op": "act", "target": { "tag": "input", "nameContains": "E-mail address" }, "payload": { "value": "ahttp@example.com" }, "expect": { "status": "ok" } },
+            { "op": "act", "target": { "tag": "input", "nameContains": "E-mail address" }, "payload": { "value": "aihttp@example.com" }, "expect": { "status": "ok" } },
             { "op": "act", "target": { "tag": "input", "type": "radio", "index": 1 }, "payload": { "checked": true }, "expect": { "status": "ok" } },
             { "op": "act", "target": { "tag": "input", "type": "checkbox", "index": 0 }, "payload": { "checked": true }, "expect": { "status": "ok" } },
-            { "op": "act", "target": { "role": "button", "name": "Submit order" }, "payload": { "timeout": 15000 }, "expect": { "status": "ok", "text": ["ahttp@example.com"] } }
+            { "op": "act", "target": { "role": "button", "name": "Submit order" }, "payload": { "timeout": 15000 }, "expect": { "status": "ok", "text": ["aihttp@example.com"] } }
           ]
         }
       ]
@@ -332,13 +332,13 @@
       ]
     },
     {
-      "id": "github-ahttp",
+      "id": "github-aihttp",
       "url": "https://github.com/ERETLY/aiweb",
       "scenarios": [
         {
           "name": "snapshot repo and Issues tab",
           "steps": [
-            { "op": "snapshot", "expect": { "text": ["ahttp"] } },
+            { "op": "snapshot", "expect": { "text": ["aihttp"] } },
             { "op": "act", "target": { "role": "link", "name": "Issues" }, "expect": { "status": "ok", "urlContains": "/issues" } }
           ]
         }

@@ -20,7 +20,7 @@ function parts(version) {
 }
 
 function tempCopy() {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'ahttp-bump-'));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'aihttp-bump-'));
   for (const file of FILES) fs.copyFileSync(path.join(ROOT, file), path.join(dir, file));
   return dir;
 }
@@ -35,7 +35,7 @@ function run(dir, input) {
   return spawnSync(process.execPath, [SCRIPT, input], {
     cwd: dir,
     encoding: 'utf8',
-    env: Object.assign({}, process.env, { AHTTP_BUMP_SKIP_BUILD: '1' })
+    env: Object.assign({}, process.env, { AIHTTP_BUMP_SKIP_BUILD: '1' })
   });
 }
 

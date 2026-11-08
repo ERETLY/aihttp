@@ -39,11 +39,11 @@ function browserGate(available, required) {
     return {
       skip: false,
       fail: true,
-      reason: 'AHTTP_REQUIRE_BROWSER=1 but Chromium is not installed; run `npx playwright install chromium`'
+      reason: 'AIHTTP_REQUIRE_BROWSER=1 but Chromium is not installed; run `npx playwright install chromium`'
     };
   }
   return {
-    skip: 'Chromium is not installed; set AHTTP_REQUIRE_BROWSER=1 to fail instead of skip',
+    skip: 'Chromium is not installed; set AIHTTP_REQUIRE_BROWSER=1 to fail instead of skip',
     fail: false
   };
 }

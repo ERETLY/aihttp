@@ -10,10 +10,10 @@ Run it:
 npm run test:corpus
 node corpus/runner.js --filter=login
 node corpus/runner.js --no-write
-AHTTP_ENGINE=C:/tmp/ahttp.before.js node corpus/runner.js --out=bench/results.before.json
+AIHTTP_ENGINE=C:/tmp/aihttp.before.js node corpus/runner.js --out=bench/results.before.json
 ```
 
-`AHTTP_ENGINE` points the runner at an older engine file for a before/after
+`AIHTTP_ENGINE` points the runner at an older engine file for a before/after
 report. `npm test` never sets it.
 
 `npm test` also runs the corpus and fails on a non-pending mismatch. No test may

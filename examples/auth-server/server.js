@@ -59,7 +59,7 @@ function authorized(req, res, next) {
   next();
 }
 
-app.post('/api/ahttp/authorize', rateLimit, authorized, (req, res) => {
+app.post('/api/aihttp/authorize', rateLimit, authorized, (req, res) => {
   res.json({
     ok: true,
     owner: 'demo',
@@ -68,7 +68,7 @@ app.post('/api/ahttp/authorize', rateLimit, authorized, (req, res) => {
   });
 });
 
-app.post('/api/ahttp/action', rateLimit, authorized, (req, res) => {
+app.post('/api/aihttp/action', rateLimit, authorized, (req, res) => {
   const intent = String((req.body && req.body.intent) || '');
   const id = String((req.body && req.body.id) || '');
   if (!intent && !id) {
@@ -91,14 +91,14 @@ app.get('/aihttp.js', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.type('html').send('<!doctype html><html><head><title>ahttp auth example</title></head><body>' +
+  res.type('html').send('<!doctype html><html><head><title>aihttp auth example</title></head><body>' +
     '<main><h1>Server-verified example</h1>' +
-    '<button data-ahttp-intent="checkout_submit">Charge card</button>' +
-    '<button data-ahttp-intent="support_lookup">Lookup order</button>' +
-    '<button data-ahttp-intent="delete_account">Delete account</button>' +
+    '<button data-aihttp-intent="checkout_submit">Charge card</button>' +
+    '<button data-aihttp-intent="support_lookup">Lookup order</button>' +
+    '<button data-aihttp-intent="delete_account">Delete account</button>' +
     '<p id="out">idle</p></main>' +
-    '<script src="/aihttp.js" data-ahttp-owner="demo" data-ahttp-access="owner" ' +
-    'data-ahttp-auth-endpoint="/api/ahttp/authorize"></script></body></html>');
+    '<script src="/aihttp.js" data-aihttp-owner="demo" data-aihttp-access="owner" ' +
+    'data-aihttp-auth-endpoint="/api/aihttp/authorize"></script></body></html>');
 });
 
 if (require.main === module) {

@@ -8,11 +8,11 @@ test('giant DOM latency uses a generous default and a configurable warning budge
   assert.equal(DEFAULT_GIANT_MS, 150);
   assert.equal(REFERENCE_GIANT_MS, 25);
   assert.equal(giantBudget({}), 150);
-  assert.equal(giantBudget({ AHTTP_GIANT_MS: '25' }), 25);
-  assert.equal(giantBudget({ AHTTP_GIANT_MS: '400.5' }), 400.5);
-  assert.equal(giantBudget({ AHTTP_GIANT_MS: '0' }), 150, 'zero falls back to the default');
-  assert.equal(giantBudget({ AHTTP_GIANT_MS: '-5' }), 150, 'negative values fall back to the default');
-  assert.equal(giantBudget({ AHTTP_GIANT_MS: 'nope' }), 150, 'invalid values fall back to the default');
+  assert.equal(giantBudget({ AIHTTP_GIANT_MS: '25' }), 25);
+  assert.equal(giantBudget({ AIHTTP_GIANT_MS: '400.5' }), 400.5);
+  assert.equal(giantBudget({ AIHTTP_GIANT_MS: '0' }), 150, 'zero falls back to the default');
+  assert.equal(giantBudget({ AIHTTP_GIANT_MS: '-5' }), 150, 'negative values fall back to the default');
+  assert.equal(giantBudget({ AIHTTP_GIANT_MS: 'nope' }), 150, 'invalid values fall back to the default');
 });
 
 test('a slow scan warns but never fails the correctness run', () => {

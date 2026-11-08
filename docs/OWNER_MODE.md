@@ -1,6 +1,6 @@
 # Owner mode
 
-ahttp has four access modes. `public` exposes the action graph to any agent. `dev` exposes it only on localhost. `gate` hides it behind a static hash. `owner` keeps it closed until the site owner's agent receives a server-verified session.
+aihttp has four access modes. `public` exposes the action graph to any agent. `dev` exposes it only on localhost. `gate` hides it behind a static hash. `owner` keeps it closed until the site owner's agent receives a server-verified session.
 
 The static hash is a soft gate, not authentication. The server-verified flow is the only one intended for sensitive production actions.
 
@@ -9,12 +9,12 @@ A client-side gate cannot stop a determined visitor. The browser already has the
 ## Access modes
 
 ```html
-<script src="aihttp.min.js" data-ahttp-access="public"></script>
-<script src="aihttp.min.js" data-ahttp-access="dev"></script>
-<script src="aihttp.min.js" data-ahttp-access="gate"
-        data-ahttp-key-hash="<sha256>"></script>
-<script src="aihttp.min.js" data-ahttp-access="owner"
-        data-ahttp-auth-endpoint="/api/ahttp/authorize"></script>
+<script src="aihttp.min.js" data-aihttp-access="public"></script>
+<script src="aihttp.min.js" data-aihttp-access="dev"></script>
+<script src="aihttp.min.js" data-aihttp-access="gate"
+        data-aihttp-key-hash="<sha256>"></script>
+<script src="aihttp.min.js" data-aihttp-access="owner"
+        data-aihttp-auth-endpoint="/api/aihttp/authorize"></script>
 ```
 
 | Mode | Behavior |
@@ -24,7 +24,7 @@ A client-side gate cannot stop a determined visitor. The browser already has the
 | `gate` | Locked until the static key hash is accepted; not authentication |
 | `owner` | Locked until the server-verified session is accepted |
 
-`data-ahttp-private="true"` is the legacy alias. With a key or key hash it maps to `gate`; with an auth endpoint it maps to `owner`.
+`data-aihttp-private="true"` is the legacy alias. With a key or key hash it maps to `gate`; with an auth endpoint it maps to `owner`.
 
 ## Server-verified access
 
@@ -32,17 +32,17 @@ This is the production flow. The page contains no secret, only the endpoint.
 
 ```html
 <script src="aihttp.min.js"
-        data-ahttp-access="owner"
-        data-ahttp-auth-endpoint="https://example.com/api/ahttp/authorize"></script>
+        data-aihttp-access="owner"
+        data-aihttp-auth-endpoint="https://example.com/api/aihttp/authorize"></script>
 ```
 
 ```js
-await page.evaluate(() => window.ahttp.authorize({ token: process.env.AHTTP_AUTH_TOKEN }));
+await page.evaluate(() => window.aihttp.authorize({ token: process.env.AIHTTP_AUTH_TOKEN }));
 // { ok: true, locked: false, mode: 'server', owner: 'acme', expiresAt: 1760000000000 }
 ```
 
 ```bash
-AHTTP_AUTH_TOKEN='short-lived-token' node bin/aihttp-mcp.js
+AIHTTP_AUTH_TOKEN='short-lived-token' node bin/aihttp-mcp.js
 node bin/aihttp-cli.js https://example.com --auth-token 'short-lived-token'
 ```
 
@@ -56,14 +56,14 @@ This flow is for local tooling, internal documentation, or cases where the goal 
 
 ```html
 <script src="aihttp.min.js"
-        data-ahttp-access="gate"
-        data-ahttp-key-hash="03f99ad2bb8f470ab4a6b65dd51dca8f63c4a36d52a66b22d706c14dbfec5983"
-        data-ahttp-allow="checkout_submit,support_lookup"
-        data-ahttp-deny="delete_account"
-        data-ahttp-confirm="checkout_submit"></script>
+        data-aihttp-access="gate"
+        data-aihttp-key-hash="03f99ad2bb8f470ab4a6b65dd51dca8f63c4a36d52a66b22d706c14dbfec5983"
+        data-aihttp-allow="checkout_submit,support_lookup"
+        data-aihttp-deny="delete_account"
+        data-aihttp-confirm="checkout_submit"></script>
 ```
 
-The page loads locked. No observer is installed, no DOM is walked, and no actions or page text are returned by `ahttp.snapshot()` or `ahttp.tools()` until the key is verified.
+The page loads locked. No observer is installed, no DOM is walked, and no actions or page text are returned by `aihttp.snapshot()` or `aihttp.tools()` until the key is verified.
 
 Generate the hash instead of writing it by hand:
 
@@ -72,14 +72,14 @@ node bin/aihttp-cli.js --hash-key 'owner-secret'
 # 03f99ad2bb8f470ab4a6b65dd51dca8f63c4a36d52a66b22d706c14dbfec5983
 ```
 
-`ahttp.hashKey('owner-secret')` returns the same value in the browser.
+`aihttp.hashKey('owner-secret')` returns the same value in the browser.
 
 ## Unlock from the agent
 
 MCP server:
 
 ```bash
-AHTTP_OWNER_KEY='owner-secret' node bin/aihttp-mcp.js
+AIHTTP_OWNER_KEY='owner-secret' node bin/aihttp-mcp.js
 ```
 
 CLI:
@@ -87,68 +87,68 @@ CLI:
 ```bash
 node bin/aihttp-cli.js https://example.com --unlock 'owner-secret'
 # or
-AHTTP_OWNER_KEY='owner-secret' node bin/aihttp-cli.js https://example.com
+AIHTTP_OWNER_KEY='owner-secret' node bin/aihttp-cli.js https://example.com
 ```
 
 Playwright or Puppeteer:
 
 ```js
 await page.addScriptTag({ content: engine });
-await page.evaluate((key) => window.ahttp.unlock(key), process.env.AHTTP_OWNER_KEY);
-const snapshot = await page.evaluate(() => window.ahttp.snapshot({ maxActions: 60 }));
+await page.evaluate((key) => window.aihttp.unlock(key), process.env.AIHTTP_OWNER_KEY);
+const snapshot = await page.evaluate(() => window.aihttp.snapshot({ maxActions: 60 }));
 ```
 
 Programmatic:
 
 ```js
-ahttp.unlock('owner-secret');
+aihttp.unlock('owner-secret');
 // { ok: true, locked: false, mode: 'key', owner: 'acme' }
 ```
 
 Wrong key:
 
 ```js
-ahttp.unlock('nope');
+aihttp.unlock('nope');
 // { ok: false, locked: true, error: 'invalid_key', owner: 'acme' }
 ```
 
-The page can be locked again with `ahttp.lock()`. `ahttp.sleep()` also drops the runtime and forgets the configuration; the next call re-reads the page configuration and locks again.
+The page can be locked again with `aihttp.lock()`. `aihttp.sleep()` also drops the runtime and forgets the configuration; the next call re-reads the page configuration and locks again.
 
 ## Configuration sources
 
 Owner mode can be configured in three ways, in priority order:
 
-1. `ahttp.configure(options)` at runtime.
-2. `window.__AHTTP_CONFIG__` set before the ahttp script loads.
-3. `data-ahttp-*` attributes on the ahttp `<script>` element.
+1. `aihttp.configure(options)` at runtime.
+2. `window.__AIHTTP_CONFIG__` set before the aihttp script loads.
+3. `data-aihttp-*` attributes on the aihttp `<script>` element.
 
-`ensureConfig()` reads the script attributes once, on the first ahttp API call, if `document.currentScript` was not available at load. It does not run during page load.
+`ensureConfig()` reads the script attributes once, on the first aihttp API call, if `document.currentScript` was not available at load. It does not run during page load.
 
 ### Script attributes
 
 | Attribute | Meaning |
 |---|---|
-| `data-ahttp-owner` | Owner identifier shown in snapshots and status |
-| `data-ahttp-access` | `public`, `dev`, `gate`, or `owner` |
-| `data-ahttp-private` | Legacy alias; with a key it maps to `gate`, with an endpoint to `owner` |
-| `data-ahttp-key-hash` | SHA-256 hex of the static gate key |
-| `data-ahttp-key` | Plaintext key for localhost only; rejected elsewhere |
-| `data-ahttp-auth-endpoint` | Server authorization endpoint; preferred |
-| `data-ahttp-auth-origins` | Comma-separated origins allowed for a cross-origin auth endpoint; same-origin is always allowed. Cross-origin requests omit cookies |
-| `data-ahttp-auth-timeout` | Authorization request timeout, 1000 to 60000 ms |
-| `data-ahttp-allow` | Comma-separated allow list |
-| `data-ahttp-deny` | Comma-separated deny list; wins over allow |
-| `data-ahttp-confirm` | Comma-separated actions that require `{ confirm: true }` |
-| `data-ahttp-readonly` | Presence enables read-only policy |
-| `data-ahttp-max-actions` | Hard cap on snapshot actions |
+| `data-aihttp-owner` | Owner identifier shown in snapshots and status |
+| `data-aihttp-access` | `public`, `dev`, `gate`, or `owner` |
+| `data-aihttp-private` | Legacy alias; with a key it maps to `gate`, with an endpoint to `owner` |
+| `data-aihttp-key-hash` | SHA-256 hex of the static gate key |
+| `data-aihttp-key` | Plaintext key for localhost only; rejected elsewhere |
+| `data-aihttp-auth-endpoint` | Server authorization endpoint; preferred |
+| `data-aihttp-auth-origins` | Comma-separated origins allowed for a cross-origin auth endpoint; same-origin is always allowed. Cross-origin requests omit cookies |
+| `data-aihttp-auth-timeout` | Authorization request timeout, 1000 to 60000 ms |
+| `data-aihttp-allow` | Comma-separated allow list |
+| `data-aihttp-deny` | Comma-separated deny list; wins over allow |
+| `data-aihttp-confirm` | Comma-separated actions that require `{ confirm: true }` |
+| `data-aihttp-readonly` | Presence enables read-only policy |
+| `data-aihttp-max-actions` | Hard cap on snapshot actions |
 
 ### Options object
 
 ```js
-ahttp.configure({
+aihttp.configure({
   access: 'owner',
   owner: 'acme',
-  authEndpoint: '/api/ahttp/authorize',
+  authEndpoint: '/api/aihttp/authorize',
   authOrigins: ['https://auth.example.com'],
   authTimeoutMs: 10000,
   allow: ['checkout_submit', 'support_lookup'],
@@ -167,8 +167,8 @@ ahttp.configure({
 Policy entries are matched against an action's `intent`, `label`, `name`, `data-testid`, and short id. Matching is case-insensitive. `*` is a wildcard.
 
 ```html
-<button data-ahttp-intent="checkout_submit">Pay</button>
-<button data-ahttp-intent="delete_account">Delete</button>
+<button data-aihttp-intent="checkout_submit">Pay</button>
+<button data-aihttp-intent="delete_account">Delete</button>
 ```
 
 - `allow` non-empty: only matching actions appear in snapshots, tools, and `act`.
@@ -177,12 +177,12 @@ Policy entries are matched against an action's `intent`, `label`, `name`, `data-
 - `readOnly`: reads, hover, scroll, and link navigation are allowed; every other action returns `policy_readonly`.
 - `maxActions`: the policy cap is applied even when a caller asks for more actions.
 
-Use `data-ahttp-intent` for the policy. Labels and names are convenient, but visible text changes more often.
+Use `data-aihttp-intent` for the policy. Labels and names are convenient, but visible text changes more often.
 
 `policy_denied` example:
 
 ```js
-await ahttp.act('delete_account');
+await aihttp.act('delete_account');
 // { ok: false, blocked: true, error: 'policy_denied', ... }
 ```
 
@@ -191,7 +191,7 @@ await ahttp.act('delete_account');
 Text snapshot:
 
 ```
-ahttp 0.1.0 | gate-locked | owner=acme
+aihttp 1.0.0 | gate-locked | owner=acme
 [LOCKED] gate_key_required
 This page exposes no actions until authorization succeeds.
 ```
@@ -200,7 +200,7 @@ JSON snapshot:
 
 ```json
 {
-  "version": "0.1.0",
+  "version": "1.0.0",
   "locked": true,
   "access": "owner",
   "owner": "acme",
@@ -211,7 +211,7 @@ JSON snapshot:
 }
 ```
 
-`ahttp.status()` while locked:
+`aihttp.status()` while locked:
 
 ```json
 {
@@ -238,14 +238,14 @@ The key, the token, the hash, and derived values are never included in snapshots
 
 `readOnly` is intended for inspection agents. It allows:
 
-- `ahttp.act(id, { read: true })`
+- `aihttp.act(id, { read: true })`
 - `hover` and `scroll`
 - clicks on `role="link"` actions
 
 It blocks fills, selects, toggles, keyboard events, and button clicks:
 
 ```js
-await ahttp.act(noteId, 'new value');
+await aihttp.act(noteId, 'new value');
 // { ok: false, blocked: true, error: 'policy_readonly' }
 ```
 
@@ -255,15 +255,15 @@ A client-side gate coordinates agents. It does not authorize data changes. The s
 
 For production:
 
-1. Use `data-ahttp-auth-endpoint` and authenticate the agent on the server.
+1. Use `data-aihttp-auth-endpoint` and authenticate the agent on the server.
 2. Keep signing keys and session secrets on the server. The page contains only the endpoint URL.
 3. Issue short-lived tokens bound to the agent, tenant, and origin. Revoke on logout.
 4. Build the policy server-side per user or per tenant. Deny dangerous intents by default.
-5. Authorize every mutation again in the endpoint that performs it. `ahttp.act` is a client request, not proof of permission.
-6. Treat `data-ahttp-confirm`, `readOnly`, and `authorizeAction` as coordination with the agent, not as a server authorization check.
+5. Authorize every mutation again in the endpoint that performs it. `aihttp.act` is a client request, not proof of permission.
+6. Treat `data-aihttp-confirm`, `readOnly`, and `authorizeAction` as coordination with the agent, not as a server authorization check.
 7. Apply your existing web security program to the page and APIs.
 8. Read `docs/SECURITY.md` for the deployment requirements.
 
 ## Rotation
 
-For the static gate, change `data-ahttp-key-hash` and redeploy. For server auth, rotate the signing key and revoke sessions. Already unlocked tabs keep their in-memory state until reload, expiry, or `ahttp.lock()`. Call `ahttp.lock()` from your app after logout if the same page is reused.
+For the static gate, change `data-aihttp-key-hash` and redeploy. For server auth, rotate the signing key and revoke sessions. Already unlocked tabs keep their in-memory state until reload, expiry, or `aihttp.lock()`. Call `aihttp.lock()` from your app after logout if the same page is reused.

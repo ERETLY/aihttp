@@ -14,8 +14,8 @@ async function main() {
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'domcontentloaded' });
     await page.addScriptTag({ content: engine });
-    const initial = await page.evaluate(() => window.ahttp.snapshot({ maxActions: 60, maxText: 800 }));
-    const rawTool = await page.evaluate(() => window.ahttp.tools());
+    const initial = await page.evaluate(() => window.aihttp.snapshot({ maxActions: 60, maxText: 800 }));
+    const rawTool = await page.evaluate(() => window.aihttp.tools());
     const tool = {
       name: rawTool.tools[0].name,
       description: rawTool.tools[0].description,
@@ -38,7 +38,7 @@ async function main() {
         process.stdout.write(text + '\n');
         break;
       }
-      const result = await page.evaluate((input) => window.ahttp.act(input.id, input), use.input);
+      const result = await page.evaluate((input) => window.aihttp.act(input.id, input), use.input);
       messages.push({
         role: 'user',
         content: [{ type: 'tool_result', tool_use_id: use.id, content: JSON.stringify(result) }]

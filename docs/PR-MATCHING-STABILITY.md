@@ -1,10 +1,12 @@
 # PR: matching stability, regression corpus and onboarding
 
+> Historical record from the 0.1.0 development cycle. The current release is 1.0.0; the matching rules described here still apply.
+
 Branch: `feat/matching-stability`
 
 Base: `main` (`4d397c8`)
 
-Scope: ahttp `0.1.0`, additive API only.
+Scope: engine `0.1.0` at the time, additive API only.
 
 ## Problem
 
@@ -23,7 +25,7 @@ without reading code.
 | Matching | `MATCH`, `scoreMatch()`, `relocate()` in `aihttp.js` | anchors, score, thresholds, ambiguity |
 | Post-check | `evaluateExpectation()` in `aihttp.js` | `expect` rules and `no_effect` |
 | CLI | `bin/aihttp-cli.js` | fetch, parse, print a snapshot |
-| MCP | `bin/aihttp-mcp.js` | `ahttp_open`, `ahttp_snapshot`, `ahttp_act` |
+| MCP | `bin/aihttp-mcp.js` | `aihttp_open`, `aihttp_snapshot`, `aihttp_act` |
 | Backends | `lib/page.js`, `lib/mini-dom.js`, `lib/browser.js` | static fetch/DOM and Playwright |
 | Corpus | `corpus/` | 27 local jsdom scenarios and the runner |
 | Docs | `README.md`, `docs/API.md`, `docs/MATCHING.md`, `docs/ARCHITECTURE.md` | user and maintainer docs |
@@ -46,7 +48,7 @@ The full map, snapshot shape and diff shape are in
 ## Metrics: before/after
 
 Both columns run the current 27-case corpus. `before` is `main:aihttp.js` via
-`AHTTP_ENGINE`; `after` is this branch. Tokens are `gpt-tokenizer` counts over
+`AIHTTP_ENGINE`; `after` is this branch. Tokens are `gpt-tokenizer` counts over
 the snapshot text.
 
 | Metric | Before | After |

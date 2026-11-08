@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const http = require('node:http');
 const { chromiumAvailable, browserGate } = require('../tools/browser-env');
 
-const gate = browserGate(chromiumAvailable(), process.env.AHTTP_REQUIRE_BROWSER === '1');
+const gate = browserGate(chromiumAvailable(), process.env.AIHTTP_REQUIRE_BROWSER === '1');
 const { openBrowserPage, closeBrowser } = require('../lib/browser');
 
 function listen(handler) {
@@ -23,13 +23,13 @@ function close(server) {
 
 const START = '<!doctype html><body><main><h1>Start</h1>' +
   '<label for="email">Email</label>' +
-  '<input id="email" name="email" data-ahttp-intent="email">' +
-  '<a href="/review" data-ahttp-intent="continue">Continue</a></main></body>';
+  '<input id="email" name="email" data-aihttp-intent="email">' +
+  '<a href="/review" data-aihttp-intent="continue">Continue</a></main></body>';
 
 const REVIEW = '<!doctype html><body><main><h1>Review</h1>' +
   '<label for="note">Note</label>' +
-  '<input id="note" name="note" data-ahttp-intent="note">' +
-  '<button data-ahttp-intent="submit" onclick="document.getElementById(\'out\').textContent=\'submitted\'">Submit</button>' +
+  '<input id="note" name="note" data-aihttp-intent="note">' +
+  '<button data-aihttp-intent="submit" onclick="document.getElementById(\'out\').textContent=\'submitted\'">Submit</button>' +
   '<p id="out">idle</p></main></body>';
 
 test('a trace replays across a navigation and a reload', { skip: gate.skip, timeout: 90000 }, async (t) => {

@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>ahttp site-owner example</title>
+  <title>aihttp site-owner example</title>
   <style>
     body { font: 16px/1.5 system-ui, sans-serif; max-width: 760px; margin: 40px auto; padding: 0 20px; }
     button, input { font: inherit; margin: 4px 4px 4px 0; padding: 6px 10px; }
@@ -12,15 +12,15 @@
 </head>
 <body>
   <h1>Site-owner example</h1>
-  <p class="hint">The page declares intent, confirmation and read-only rules. Open the console and call <code>ahttp.snapshot()</code>.</p>
+  <p class="hint">The page declares intent, confirmation and read-only rules. Open the console and call <code>aihttp.snapshot()</code>.</p>
   <main>
     <label for="email">Email</label>
     <input id="email" name="email" placeholder="agent@example.com">
-    <button data-ahttp-intent="checkout_submit">Pay now</button>
-    <button data-ahttp-confirm="Charges $49.00 and starts a subscription">Confirm purchase</button>
-    <input id="account" value="ACC-777" data-ahttp-readonly>
-    <button data-ahttp-intent="refresh" onclick="render()">Refresh snapshot</button>
-    <div data-ahttp-ignore><button>Internal admin tool</button></div>
+    <button data-aihttp-intent="checkout_submit">Pay now</button>
+    <button data-aihttp-confirm="Charges $49.00 and starts a subscription">Confirm purchase</button>
+    <input id="account" value="ACC-777" data-aihttp-readonly>
+    <button data-aihttp-intent="refresh" onclick="render()">Refresh snapshot</button>
+    <div data-aihttp-ignore><button>Internal admin tool</button></div>
     <div style="color:#fff;background:#fff">HIDDEN_CANARY_DEMO</div>
     <p id="out">idle</p>
   </main>
@@ -28,9 +28,9 @@
   <script src="../../aihttp.js"></script>
   <script>
     function render() {
-      document.getElementById('snapshot').textContent = window.ahttp.snapshot({ maxActions: 20, maxText: 300 });
+      document.getElementById('snapshot').textContent = window.aihttp.snapshot({ maxActions: 20, maxText: 300 });
     }
-    window.ahttp.configure({ confirm: ['checkout_submit'] });
+    window.aihttp.configure({ confirm: ['checkout_submit'] });
     render();
   </script>
 </body>

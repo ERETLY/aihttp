@@ -21,5 +21,5 @@ function run(command, args) {
 test('runtime smoke script works without dev dependencies', { timeout: 60000 }, async () => {
   const result = await run(process.execPath, [path.join(__dirname, '..', 'scripts', 'smoke-runtime.js')]);
   assert.equal(result.code, 0, result.stderr || result.stdout);
-  assert.match(result.stdout, /smoke ok: ahttp \d+\.\d+\.\d+ on node /);
+  assert.match(result.stdout, /smoke ok: aihttp \d+\.\d+\.\d+ on node /);
 });

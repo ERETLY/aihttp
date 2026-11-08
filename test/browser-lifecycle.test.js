@@ -22,7 +22,7 @@ function fakePage(context) {
     url() { return 'http://127.0.0.1/'; },
     async addScriptTag() {},
     async evaluate(fn) {
-      if (typeof fn === 'function' && String(fn).indexOf('__ahttp') >= 0) return true;
+      if (typeof fn === 'function' && String(fn).indexOf('__aihttp') >= 0) return true;
       return { locked: false };
     },
     async content() { return '<html><body><button>ok</button></body></html>'; },
@@ -81,7 +81,7 @@ test('closing the first page keeps sibling pages and the shared context alive', 
   const browser = fakeBrowser();
   const a = await openBrowserPage(URL, { allowPrivate: true, browser });
   const b = await openBrowserPage(URL, { allowPrivate: true, browser });
-  assert.equal(a.context, b.context, 'pages share ahttp-owned context');
+  assert.equal(a.context, b.context, 'pages share aihttp-owned context');
   assert.equal(browser.allContexts().length, 1, 'one context for the launched browser');
 
   await a.close();
@@ -91,7 +91,7 @@ test('closing the first page keeps sibling pages and the shared context alive', 
   assert.equal(status.locked, false, 'sibling page still responds');
 
   await b.close();
-  assert.equal(a.context.closeCalls, 1, 'last page closes the context ahttp created');
+  assert.equal(a.context.closeCalls, 1, 'last page closes the context aihttp created');
 });
 
 test('page close is idempotent and closes the context only once', async () => {
@@ -110,7 +110,7 @@ test('browser context uses the shared package User-Agent', async () => {
   await page.close();
 });
 
-test('ahttp does not close a context it did not create', async () => {  const existing = fakeContext();
+test('aihttp does not close a context it did not create', async () => {  const existing = fakeContext();
   const browser = fakeBrowser({ contexts: [existing] });
   const page = await openBrowserPage(URL, { allowPrivate: true, browser, reuseExistingContext: true });
   assert.equal(page.context, existing);

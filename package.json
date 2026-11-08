@@ -31,9 +31,7 @@
   "bin": {
     "aihttp": "./bin/aihttp-cli.js",
     "aihttp-mcp": "./bin/aihttp-mcp.js",
-    "aihttp-serve": "./bin/aihttp-serve.js",
-    "ahttp": "./bin/aihttp-cli.js",
-    "ahttp-mcp": "./bin/aihttp-mcp.js"
+    "aihttp-serve": "./bin/aihttp-serve.js"
   },
   "files": [
     "aihttp.js",

@@ -1,10 +1,10 @@
 # aihttp
 
-> aihttp (AI HTTP) turns a live DOM into a compact, executable action graph and returns a semantic diff after each step. It is a zero-dependency browser file plus a Node CLI, an HTTP server and an MCP server. The wire format is `aihttp/1`; the engine file and MCP tool names stay `ahttp` for compatibility.
+> aihttp (AI HTTP) turns a live DOM into a compact, executable action graph and returns a semantic diff after each step. It is a zero-dependency browser file plus a Node CLI, an HTTP server and an MCP server. The wire format is `aihttp/1`; the browser global is `window.aihttp` and the MCP tool names use the `aihttp_` prefix.
 
 Install: `npm i aihttp` (package), `npx aihttp-serve --port 8787` (HTTP), `npx aihttp-mcp` (MCP). Format spec: https://github.com/ERETLY/aiweb/blob/main/docs/AIHTTP.md
 
-Status: beta, single maintainer, no independent adoption and no third-party security audit. The repository's own suites pass; that is not external validation. The format is versioned; breaking changes require a new wire version.
+Status: 1.0.0 stable, single maintainer, no independent adoption and no third-party security audit. The repository's own suites pass; that is not external validation. The format is versioned; breaking changes require a new wire version.
 
 Coverage: 385 public sites across forms, docs, design systems, forums, payments, social networks, news, commerce, government and small personal sites, measured against an independent oracle of reachable controls. One clean run on the final engine: 312 measured, 99.7% weighted recall, 99.8% mean, 46 blocked and 14 network errors separated, 1 site below 90% (Upwork 89.7%). Every category is above 98%; payments, social networks, forums and ecommerce are 100%. The sites that were below 90% before the last fixes now measure 98.3-100% (MDN's iframe page 98.3%, the rest 99.1-100%). Engine scan time: median 37 ms, p95 188 ms. Coverage is a finding tool, not a guarantee.
 
@@ -20,7 +20,7 @@ Security: https://github.com/ERETLY/aiweb/blob/main/docs/SECURITY.md
 - Assigns short action ids and folds identical in-page links.
 - Executes click, fill, select, toggle, keyboard, hover and scroll actions.
 - Waits for network and DOM work to settle, then returns a diff and a fresh snapshot.
-- Lets a site owner declare `data-ahttp-intent`, `data-ahttp-confirm`, `data-ahttp-readonly`, `data-ahttp-ignore`, access mode and policy.
+- Lets a site owner declare `data-aihttp-intent`, `data-aihttp-confirm`, `data-aihttp-readonly`, `data-aihttp-ignore`, access mode and policy.
 - Stays dormant until the first API call.
 
 It is not a general browser agent, a screenshot system, or a security boundary.
@@ -37,13 +37,13 @@ JSON-RPC 2.0 over stdio. Legacy handshake through `2025-11-25`; modern `2026-07-
 
 Tools:
 
-- `ahttp_open({ url, maxActions? })`
-- `ahttp_snapshot({ pageId?, scope?, query?, maxActions?, maxText?, includeText?, verbose?, format? })`
-- `ahttp_act({ pageId?, id, value?, key?, confirmationToken? })`
+- `aihttp_open({ url, maxActions? })`
+- `aihttp_snapshot({ pageId?, scope?, query?, maxActions?, maxText?, includeText?, verbose?, format? })`
+- `aihttp_act({ pageId?, id, value?, key?, confirmationToken? })`
 
 Guarded actions return a one-time, expiring `confirmationToken` and perform no DOM event. The caller must repeat the same call with the token. This is an accident barrier, not a human-approval proof.
 
-Run `ahttp-mcp --allow-private` only for trusted targets. The default guard rejects loopback, private, link-local, metadata and non-HTTP targets, revalidates redirects, caps size and enforces timeouts.
+Run `aihttp-mcp --allow-private` only for trusted targets. The default guard rejects loopback, private, link-local, metadata and non-HTTP targets, revalidates redirects, caps size and enforces timeouts.
 
 ## CLI
 
@@ -60,18 +60,18 @@ The CLI's token counts use `ceil(UTF-8 bytes / 4)` as a quick estimate. The benc
 ## API
 
 ```js
-ahttp.snapshot(options)          // text or JSON action graph
-ahttp.act(id, payload, options)  // execute, settle, diff, snapshot
-ahttp.tools()                    // JSON Schema for function calling
-ahttp.status()                   // dormant or active state
-ahttp.sleep()                    // disconnect observers, restore globals
-ahttp.wake()                     // explicit wake
-ahttp.configure(options)         // access and policy
-ahttp.authorize(options)         // server-verified session
-ahttp.unlock(key)                // static soft gate
-ahttp.lock()                     // drop runtime and relock
-ahttp.hashKey(value)             // SHA-256 for data-ahttp-key-hash
-ahttp.installWebMCP(options)     // opt-in draft document.modelContext adapter
+aihttp.snapshot(options)          // text or JSON action graph
+aihttp.act(id, payload, options)  // execute, settle, diff, snapshot
+aihttp.tools()                    // JSON Schema for function calling
+aihttp.status()                   // dormant or active state
+aihttp.sleep()                    // disconnect observers, restore globals
+aihttp.wake()                     // explicit wake
+aihttp.configure(options)         // access and policy
+aihttp.authorize(options)         // server-verified session
+aihttp.unlock(key)                // static soft gate
+aihttp.lock()                     // drop runtime and relock
+aihttp.hashKey(value)             // SHA-256 for data-aihttp-key-hash
+aihttp.installWebMCP(options)     // opt-in draft document.modelContext adapter
 ```
 
 Snapshot options: `format`, `scope`, `query`, `maxActions` (default 60), `maxText` (default 1,400), `includeText`, `interactiveOnly`, `force`, `group`, `compact`, `verbose`.
@@ -85,13 +85,13 @@ Result: `{ ok, status, action, method, url, latencyMs, diff, snapshot, snapshotM
 ```html
 <script src="aihttp.min.js"></script>
 
-<button data-ahttp-intent="checkout_submit">Pay now</button>
-<button data-ahttp-confirm="Charges $49.00">Pay</button>
-<input value="ACC-777" data-ahttp-readonly>
-<div data-ahttp-ignore>Internal tools</div>
+<button data-aihttp-intent="checkout_submit">Pay now</button>
+<button data-aihttp-confirm="Charges $49.00">Pay</button>
+<input value="ACC-777" data-aihttp-readonly>
+<div data-aihttp-ignore>Internal tools</div>
 ```
 
-`data-ahttp-confirm` is enforced by `ahttp.act`; it is not a sandbox against direct DOM code.
+`data-aihttp-confirm` is enforced by `aihttp.act`; it is not a sandbox against direct DOM code.
 
 ## Access modes
 
@@ -115,19 +115,19 @@ The server that performs a mutation must authorize the agent, tenant, object and
 
 Pinned pages, real tokenizer `gpt-tokenizer@4.1.0/o200k_base`, Chromium 156 accessibility snapshots:
 
-| Page | Raw HTML | ahttp | Chromium AX | Readability Markdown |
+| Page | Raw HTML | aihttp | Chromium AX | Readability Markdown |
 |---|---:|---:|---:|---:|
 | Hacker News | 11,771 | 1,162 | 10,099 | 5,136 |
-| Wikipedia HTTP | 191,129 | 1,136 | 73,404 | 26,579 |
+| Wikipedia HTTP | 191,129 | 1,130 | 73,404 | 26,579 |
 | Lobsters | 17,909 | 1,105 | 5,918 | 6,542 |
-| GitHub torvalds/linux | 105,767 | 4,198 | 5,404 | 1,387 |
-| MDN HTTP | 59,787 | 1,149 | 7,381 | 3,008 |
+| GitHub torvalds/linux | 105,767 | 1,286 | 5,404 | 1,387 |
+| MDN HTTP | 59,787 | 1,156 | 7,381 | 3,008 |
 
-Five-step checkout in Chromium: raw 3,983 tokens, Readability Markdown 68, Chromium AX 346, ahttp 289. ahttp completes the task and stays below the accessibility snapshot; Markdown is smaller still but drops every control.
+Five-step checkout in Chromium: raw 3,983 tokens, Readability Markdown 68, Chromium AX 346, aihttp 289. aihttp completes the task and stays below the accessibility snapshot; Markdown is smaller still but drops every control.
 
-Twenty-task scripted suite: ahttp 20/20 tasks, 5,104 tokens; raw HTML 25,896; Chromium AX 5,360. ahttp uses 4.8% fewer tokens than the accessibility snapshot, which cannot execute the tasks. This is a scripted agent, not an LLM benchmark.
+Twenty-task scripted suite: aihttp 20/20 tasks, 5,104 tokens; raw HTML 25,896; Chromium AX 5,360. aihttp uses 4.8% fewer tokens than the accessibility snapshot, which cannot execute the tasks. This is a scripted agent, not an LLM benchmark.
 
-Torture suite: 9/9 stands. Owner/gate suite: 76/76. MCP: 38/38. Pinned web: 5/5. These are repository checks, not independent validation.
+Torture suite: 9/9 stands. Owner/gate suite: 78/78. MCP: 43/43. Pinned web: 5/5. These are repository checks, not independent validation.
 
 ## Limitations
 

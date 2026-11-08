@@ -6,7 +6,7 @@ const assert = require('node:assert/strict');
 const { playwright, chromiumAvailable, browserGate } = require('../tools/browser-env');
 const { oracle, matchActions } = require('../benchmark/realworld/oracle');
 
-const gate = browserGate(chromiumAvailable(), process.env.AHTTP_REQUIRE_BROWSER === '1');
+const gate = browserGate(chromiumAvailable(), process.env.AIHTTP_REQUIRE_BROWSER === '1');
 
 function item(name, href) {
   return { tag: 'a', type: '', role: 'link', name: name, href: href || '', reasons: [], visible: true };

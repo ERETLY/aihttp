@@ -18,7 +18,7 @@ async function main() {
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'domcontentloaded' });
     await page.evaluate(engine);
-    const snapshot = await page.evaluate(() => window.ahttp.snapshot({ maxActions: 60 }));
+    const snapshot = await page.evaluate(() => window.aihttp.snapshot({ maxActions: 60 }));
     process.stdout.write(snapshot + '\n');
   } finally {
     await browser.close();

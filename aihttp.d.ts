@@ -1,4 +1,4 @@
-declare namespace Ahttp {
+declare namespace Aihttp {
   type AccessMode = 'public' | 'dev' | 'gate' | 'owner';
   type Region = 'modal' | 'main' | 'chrome';
   type Format = 'text' | 'json';
@@ -311,8 +311,8 @@ declare namespace Ahttp {
     message?: string;
   }
 
-  interface AhttpApi {
-    __ahttp: true;
+  interface AihttpApi {
+    __aihttp: true;
     version: string;
     wake(): Status;
     snapshot(options?: SnapshotOptions & { format?: 'text' }): string;
@@ -331,5 +331,5 @@ declare namespace Ahttp {
   }
 }
 
-declare const ahttp: Ahttp.AhttpApi;
-export = ahttp;
+declare const aihttp: Aihttp.AihttpApi;
+export = aihttp;

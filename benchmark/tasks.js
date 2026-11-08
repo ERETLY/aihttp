@@ -36,15 +36,15 @@ const TASKS = taskPlans();
 function pageHtml(taskId, plan) {
   return '<!doctype html><html><head><title>Task ' + taskId + '</title></head><body>' +
     '<main><h1>Task ' + taskId + '</h1>' +
-    '<button data-ahttp-intent="next">Next</button>' +
+    '<button data-aihttp-intent="next">Next</button>' +
     '<label for="q">Search</label><input id="q" name="q">' +
-    '<button data-ahttp-intent="search">Search</button>' +
-    '<button data-ahttp-intent="open_modal">Open modal</button>' +
-    '<div id="modal" hidden><p>Confirm?</p><button data-ahttp-intent="confirm">Confirm</button></div>' +
+    '<button data-aihttp-intent="search">Search</button>' +
+    '<button data-aihttp-intent="open_modal">Open modal</button>' +
+    '<div id="modal" hidden><p>Confirm?</p><button data-aihttp-intent="confirm">Confirm</button></div>' +
     '<label for="plan">Plan</label><select id="plan" name="plan"><option value="basic">Basic</option><option value="pro">Pro</option></select>' +
-    '<button data-ahttp-intent="buy">Buy</button>' +
-    '<button data-ahttp-intent="page2">Page 2</button>' +
-    '<div id="page2" hidden><button data-ahttp-intent="item">Item</button></div>' +
+    '<button data-aihttp-intent="buy">Buy</button>' +
+    '<button data-aihttp-intent="page2">Page 2</button>' +
+    '<div id="page2" hidden><button data-aihttp-intent="item">Item</button></div>' +
     '<p id="status">idle</p>' +
     '</main><script>window.__taskPlan=' + JSON.stringify(plan.steps) + ';' +
     'window.__taskIndex=0;window.__taskDone=false;' +
@@ -52,8 +52,8 @@ function pageHtml(taskId, plan) {
     'if(!s||s.action!==action||(s.value!=null&&String(value)!==String(s.value)))return;' +
     'window.__taskIndex++;if(window.__taskIndex>=window.__taskPlan.length){window.__taskDone=true;' +
     'document.getElementById("status").textContent="done";}}' +
-    'document.addEventListener("click",function(e){var el=e.target.closest("[data-ahttp-intent]");if(!el)return;' +
-    'var i=el.getAttribute("data-ahttp-intent");if(i==="open_modal")document.getElementById("modal").hidden=false;' +
+    'document.addEventListener("click",function(e){var el=e.target.closest("[data-aihttp-intent]");if(!el)return;' +
+    'var i=el.getAttribute("data-aihttp-intent");if(i==="open_modal")document.getElementById("modal").hidden=false;' +
     'if(i==="page2")document.getElementById("page2").hidden=false;advance(i);});' +
     'document.addEventListener("input",function(e){if(e.target.name==="q")advance("fill",e.target.value);});' +
     'document.addEventListener("change",function(e){if(e.target.name==="plan")advance("select",e.target.value);});' +
@@ -91,14 +91,14 @@ async function runTaskBenchmark(options) {
       await page.goto(local.url + '?task=' + (taskIndex + 1), { waitUntil: 'domcontentloaded' });
       const engineScript = await page.addScriptTag({ path: enginePath });
       await engineScript.evaluate((element) => element.remove());
-      const ahttpSteps = [];
+      const aihttpSteps = [];
       const rawSteps = [];
       const axSteps = [];
       const latencies = [];
       let failed = null;
       for (let stepIndex = 0; stepIndex < task.steps.length; stepIndex++) {
         const step = task.steps[stepIndex];
-        const snapshot = await page.evaluate(() => window.ahttp.snapshot({ format: 'json', maxActions: 60, maxText: 900 }));
+        const snapshot = await page.evaluate(() => window.aihttp.snapshot({ format: 'json', maxActions: 60, maxText: 900 }));
         let action = null;
         if (step.action === 'fill') action = snapshot.actions.find((entry) => entry.name === 'q');
         else if (step.action === 'select') action = snapshot.actions.find((entry) => entry.name === 'plan');
@@ -108,7 +108,7 @@ async function runTaskBenchmark(options) {
           break;
         }
         const started = process.hrtime.bigint();
-        const outcome = await page.evaluate((args) => window.ahttp.act(args[0], args[1], { settle: false, snapshot: false }), [
+        const outcome = await page.evaluate((args) => window.aihttp.act(args[0], args[1], { settle: false, snapshot: false }), [
           action.id,
           step.action === 'fill' || step.action === 'select' ? { value: step.value } : null
         ]);
@@ -117,8 +117,8 @@ async function runTaskBenchmark(options) {
           failed = 'action failed: ' + step.action + ' (' + (outcome && outcome.error ? outcome.error : 'unknown') + ')';
           break;
         }
-        const text = await page.evaluate(() => window.ahttp.snapshot({ format: 'text', maxActions: 60, maxText: 900 }));
-        ahttpSteps.push(tokenCount(text));
+        const text = await page.evaluate(() => window.aihttp.snapshot({ format: 'text', maxActions: 60, maxText: 900 }));
+        aihttpSteps.push(tokenCount(text));
         rawSteps.push(tokenCount(await page.content()));
         axSteps.push(tokenCount(await page.ariaSnapshot()));
       }
@@ -128,13 +128,13 @@ async function runTaskBenchmark(options) {
         id: taskIndex + 1,
         name: task.name,
         steps: task.steps.length,
-        completedSteps: ahttpSteps.length,
+        completedSteps: aihttpSteps.length,
         success: success,
         error: failed,
-        ahttpTokens: ahttpSteps.reduce((sum, value) => sum + value, 0),
+        aihttpTokens: aihttpSteps.reduce((sum, value) => sum + value, 0),
         rawTokens: rawSteps.reduce((sum, value) => sum + value, 0),
         axTokens: axSteps.reduce((sum, value) => sum + value, 0),
-        ahttpStepTokens: ahttpSteps,
+        aihttpStepTokens: aihttpSteps,
         rawStepTokens: rawSteps,
         axStepTokens: axSteps,
         avgLatencyMs: latencies.length ? Math.round((latencies.reduce((sum, value) => sum + value, 0) / latencies.length) * 100) / 100 : 0
@@ -146,20 +146,20 @@ async function runTaskBenchmark(options) {
     await close(local.server);
   }
   const passed = results.filter((task) => task.success).length;
-  const ahttpTokens = results.reduce((sum, task) => sum + task.ahttpTokens, 0);
+  const aihttpTokens = results.reduce((sum, task) => sum + task.aihttpTokens, 0);
   const rawTokens = results.reduce((sum, task) => sum + task.rawTokens, 0);
   const axTokens = results.reduce((sum, task) => sum + task.axTokens, 0);
   return {
-    methodology: 'Scripted agent, not an LLM. Twenty local tasks are driven in Chromium with ahttp action ids. Raw HTML and Playwright ariaSnapshot are sampled after each step as observation-only baselines. Token counts use gpt-tokenizer 4.1.0 countTokens (o200k_base).',
+    methodology: 'Scripted agent, not an LLM. Twenty local tasks are driven in Chromium with aihttp action ids. Raw HTML and Playwright ariaSnapshot are sampled after each step as observation-only baselines. Token counts use gpt-tokenizer 4.1.0 countTokens (o200k_base).',
     tasks: results.length,
-    ahttpSuccess: passed,
-    ahttpSuccessRate: results.length ? Math.round((passed / results.length) * 1000) / 10 : 0,
+    aihttpSuccess: passed,
+    aihttpSuccessRate: results.length ? Math.round((passed / results.length) * 1000) / 10 : 0,
     staticSuccess: 0,
-    ahttpTokens: ahttpTokens,
+    aihttpTokens: aihttpTokens,
     rawTokens: rawTokens,
     axTokens: axTokens,
-    rawToAhttp: ahttpTokens ? Math.round((rawTokens / ahttpTokens) * 10) / 10 : 0,
-    axToAhttp: ahttpTokens ? Math.round((axTokens / ahttpTokens) * 10) / 10 : 0,
+    rawToAihttp: aihttpTokens ? Math.round((rawTokens / aihttpTokens) * 10) / 10 : 0,
+    axToAihttp: aihttpTokens ? Math.round((axTokens / aihttpTokens) * 10) / 10 : 0,
     results: results
   };
 }

@@ -27,31 +27,31 @@ function load(attributes, url) {
 }
 
 test('a page cannot point the auth endpoint at another origin', async (t) => {
-  const loaded = load('data-ahttp-access="owner" data-ahttp-auth-endpoint="https://evil.test/auth"');
+  const loaded = load('data-aihttp-access="owner" data-aihttp-auth-endpoint="https://evil.test/auth"');
   t.after(function () { loaded.window.close(); });
-  const result = await loaded.window.ahttp.authorize({ token: 'secret' });
+  const result = await loaded.window.aihttp.authorize({ token: 'secret' });
   assert.equal(result.ok, false);
   assert.equal(result.error, 'auth_endpoint_origin');
   assert.equal(loaded.calls.length, 0);
 });
 
 test('same-origin auth keeps the session cookie', async (t) => {
-  const loaded = load('data-ahttp-access="owner" data-ahttp-auth-endpoint="/api/ahttp/authorize"');
+  const loaded = load('data-aihttp-access="owner" data-aihttp-auth-endpoint="/api/aihttp/authorize"');
   t.after(function () { loaded.window.close(); });
-  const result = await loaded.window.ahttp.authorize({ token: 'secret' });
+  const result = await loaded.window.aihttp.authorize({ token: 'secret' });
   assert.equal(result.ok, true);
   assert.equal(loaded.calls.length, 1);
-  assert.equal(loaded.calls[0].target, 'https://site.test/api/ahttp/authorize');
+  assert.equal(loaded.calls[0].target, 'https://site.test/api/aihttp/authorize');
   assert.equal(loaded.calls[0].init.credentials, 'include');
   assert.equal(loaded.calls[0].init.headers.authorization, 'Bearer secret');
 });
 
 test('an explicit auth origin allowlist permits cross-origin without cookies', async (t) => {
-  const loaded = load('data-ahttp-access="owner" ' +
-    'data-ahttp-auth-endpoint="https://auth.test/session" ' +
-    'data-ahttp-auth-origins="https://auth.test"');
+  const loaded = load('data-aihttp-access="owner" ' +
+    'data-aihttp-auth-endpoint="https://auth.test/session" ' +
+    'data-aihttp-auth-origins="https://auth.test"');
   t.after(function () { loaded.window.close(); });
-  const result = await loaded.window.ahttp.authorize({ token: 'secret' });
+  const result = await loaded.window.aihttp.authorize({ token: 'secret' });
   assert.equal(result.ok, true);
   assert.equal(loaded.calls.length, 1);
   assert.equal(loaded.calls[0].target, 'https://auth.test/session');
@@ -59,11 +59,11 @@ test('an explicit auth origin allowlist permits cross-origin without cookies', a
 });
 
 test('a different origin is still rejected when only another origin is allowed', async (t) => {
-  const loaded = load('data-ahttp-access="owner" ' +
-    'data-ahttp-auth-endpoint="https://evil.test/session" ' +
-    'data-ahttp-auth-origins="https://auth.test"');
+  const loaded = load('data-aihttp-access="owner" ' +
+    'data-aihttp-auth-endpoint="https://evil.test/session" ' +
+    'data-aihttp-auth-origins="https://auth.test"');
   t.after(function () { loaded.window.close(); });
-  const result = await loaded.window.ahttp.authorize({ token: 'secret' });
+  const result = await loaded.window.aihttp.authorize({ token: 'secret' });
   assert.equal(result.ok, false);
   assert.equal(result.error, 'auth_endpoint_origin');
   assert.equal(loaded.calls.length, 0);

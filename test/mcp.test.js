@@ -9,11 +9,11 @@ const pkg = require('../package.json');
 
 const { chromiumAvailable, detectChromiumVersion, browserGate } = require('../tools/browser-env');
 
-const gate = browserGate(chromiumAvailable(), process.env.AHTTP_REQUIRE_BROWSER === '1');
+const gate = browserGate(chromiumAvailable(), process.env.AIHTTP_REQUIRE_BROWSER === '1');
 
 const MODERN_META = {
   'io.modelcontextprotocol/protocolVersion': '2026-07-28',
-  'io.modelcontextprotocol/clientInfo': { name: 'ahttp-test', version: pkg.version },
+  'io.modelcontextprotocol/clientInfo': { name: 'aihttp-test', version: pkg.version },
   'io.modelcontextprotocol/clientCapabilities': {}
 };
 
@@ -81,7 +81,7 @@ test('MCP supports modern discovery, page handles, confirmation tokens and cance
     }
     res.writeHead(200, { 'content-type': 'text/html' });
     res.end('<!doctype html><html><head><title>MCP modern</title></head><body>' +
-      '<main><h1>Modern</h1><button data-ahttp-confirm="Delete everything">Delete account</button></main>' +
+      '<main><h1>Modern</h1><button data-aihttp-confirm="Delete everything">Delete account</button></main>' +
       '</body></html>');
   });
   const proc = spawn(process.execPath, [path.join(__dirname, '..', 'bin', 'aihttp-mcp.js'), '--allow-private'], {
@@ -92,15 +92,15 @@ test('MCP supports modern discovery, page handles, confirmation tokens and cance
     const discovered = await client.call('server/discover', { _meta: MODERN_META });
     assert.equal(discovered.resultType, 'complete');
     assert.ok(discovered.supportedVersions.includes('2026-07-28'));
-    assert.equal(discovered._meta['io.modelcontextprotocol/serverInfo'].name, 'ahttp-mcp');
+    assert.equal(discovered._meta['io.modelcontextprotocol/serverInfo'].name, 'aihttp-mcp');
 
     const listed = await client.call('tools/list', { _meta: MODERN_META });
     assert.equal(listed.resultType, 'complete');
     assert.equal(listed.tools.length, 5);
     assert.equal(listed.tools[2].annotations.destructiveHint, true);
     assert.ok(listed.tools[2].inputSchema.properties.confirmationToken);
-    assert.ok(listed.tools.some((tool) => tool.name === 'ahttp_trace'));
-    assert.ok(listed.tools.some((tool) => tool.name === 'ahttp_replay'));
+    assert.ok(listed.tools.some((tool) => tool.name === 'aihttp_trace'));
+    assert.ok(listed.tools.some((tool) => tool.name === 'aihttp_replay'));
 
     await assert.rejects(
       client.call('tools/call', { name: 'not_a_tool', arguments: {}, _meta: MODERN_META }),
@@ -108,7 +108,7 @@ test('MCP supports modern discovery, page handles, confirmation tokens and cance
     );
 
     const opened = await client.call('tools/call', {
-      name: 'ahttp_open',
+      name: 'aihttp_open',
       arguments: { url: local.url },
       _meta: MODERN_META
     });
@@ -118,12 +118,12 @@ test('MCP supports modern discovery, page handles, confirmation tokens and cance
     assert.match(opened.content[0].text, /pageId: page_/);
 
     await assert.rejects(
-      client.call('tools/call', { name: 'ahttp_snapshot', arguments: {}, _meta: MODERN_META }),
+      client.call('tools/call', { name: 'aihttp_snapshot', arguments: {}, _meta: MODERN_META }),
       (err) => err.code === -32602 && /pageId/.test(err.message)
     );
 
     const snapshot = await client.call('tools/call', {
-      name: 'ahttp_snapshot',
+      name: 'aihttp_snapshot',
       arguments: { pageId, includeText: false },
       _meta: MODERN_META
     });
@@ -132,7 +132,7 @@ test('MCP supports modern discovery, page handles, confirmation tokens and cance
 
     const actionId = (/^(a\d+) button "Delete account"/m.exec(snapshot.content[0].text) || [])[1];
     const guarded = await client.call('tools/call', {
-      name: 'ahttp_act',
+      name: 'aihttp_act',
       arguments: { pageId, id: actionId },
       _meta: MODERN_META
     });
@@ -142,14 +142,14 @@ test('MCP supports modern discovery, page handles, confirmation tokens and cance
     assert.match(token, /^ct_/);
 
     const confirmed = await client.call('tools/call', {
-      name: 'ahttp_act',
+      name: 'aihttp_act',
       arguments: { pageId, id: actionId, confirmationToken: token },
       _meta: MODERN_META
     });
     assert.equal(confirmed.isError, false);
 
     const replay = await client.call('tools/call', {
-      name: 'ahttp_act',
+      name: 'aihttp_act',
       arguments: { pageId, id: actionId, confirmationToken: token },
       _meta: MODERN_META
     });
@@ -157,7 +157,7 @@ test('MCP supports modern discovery, page handles, confirmation tokens and cance
     assert.match(replay.content[0].text, /INVALID/);
 
     const exported = await client.call('tools/call', {
-      name: 'ahttp_trace',
+      name: 'aihttp_trace',
       arguments: { pageId },
       _meta: MODERN_META
     });
@@ -168,7 +168,7 @@ test('MCP supports modern discovery, page handles, confirmation tokens and cance
     assert.equal(trace.steps[0].payload.value, undefined);
 
     const dryRun = await client.call('tools/call', {
-      name: 'ahttp_replay',
+      name: 'aihttp_replay',
       arguments: { pageId, trace, dryRun: true },
       _meta: MODERN_META
     });
@@ -177,7 +177,7 @@ test('MCP supports modern discovery, page handles, confirmation tokens and cance
     assert.equal(dryResult.steps[0].status, 'would_run');
 
     const guardedReplay = await client.call('tools/call', {
-      name: 'ahttp_replay',
+      name: 'aihttp_replay',
       arguments: { pageId, trace },
       _meta: MODERN_META
     });
@@ -185,7 +185,7 @@ test('MCP supports modern discovery, page handles, confirmation tokens and cance
     assert.equal(JSON.parse(guardedReplay.content[0].text).steps[0].requiresConfirmation, true);
 
     const cancelledCall = client.call('tools/call', {
-      name: 'ahttp_open',
+      name: 'aihttp_open',
       arguments: { url: local.url + '/slow' },
       _meta: MODERN_META
     }).catch((err) => err);
@@ -218,7 +218,7 @@ test('MCP browser mode executes page JavaScript', { skip: gate.skip, timeout: 60
   const client = createClient(proc);
   try {
     const opened = await client.call('tools/call', {
-      name: 'ahttp_open',
+      name: 'aihttp_open',
       arguments: { url: local.url },
       _meta: MODERN_META
     });
@@ -244,14 +244,14 @@ test('MCP reports ambiguous when a label matches several actions', { timeout: 30
   const client = createClient(proc);
   try {
     const opened = await client.call('tools/call', {
-      name: 'ahttp_open',
+      name: 'aihttp_open',
       arguments: { url: local.url },
       _meta: MODERN_META
     });
     assert.equal(opened.isError, false);
     const pageId = opened.structuredContent.pageId;
     const result = await client.call('tools/call', {
-      name: 'ahttp_act',
+      name: 'aihttp_act',
       arguments: { pageId, id: 'OK' },
       _meta: MODERN_META
     });
@@ -269,11 +269,11 @@ test('two MCP pages keep independent snapshots and actions', { timeout: 30000 },
   const local = await listen((req, res) => {
     res.writeHead(200, { 'content-type': 'text/html' });
     if (req.url === '/one') {
-      res.end('<!doctype html><body><main><h1>One</h1><button data-ahttp-intent="one">Only one</button></main></body>');
+      res.end('<!doctype html><body><main><h1>One</h1><button data-aihttp-intent="one">Only one</button></main></body>');
       return;
     }
     if (req.url === '/two') {
-      res.end('<!doctype html><body><main><h1>Two</h1><button data-ahttp-intent="two">Only two</button></main></body>');
+      res.end('<!doctype html><body><main><h1>Two</h1><button data-aihttp-intent="two">Only two</button></main></body>');
       return;
     }
     res.end('<!doctype html><body><main><h1>Home</h1><a href="/one">One</a><a href="/two">Two</a></main></body>');
@@ -283,23 +283,23 @@ test('two MCP pages keep independent snapshots and actions', { timeout: 30000 },
   });
   const client = createClient(proc);
   try {
-    const first = await client.call('tools/call', { name: 'ahttp_open', arguments: { url: local.url + '/one' } });
-    const second = await client.call('tools/call', { name: 'ahttp_open', arguments: { url: local.url + '/two' } });
+    const first = await client.call('tools/call', { name: 'aihttp_open', arguments: { url: local.url + '/one' } });
+    const second = await client.call('tools/call', { name: 'aihttp_open', arguments: { url: local.url + '/two' } });
     const firstId = (/pageId: (page_[A-Za-z0-9_-]+)/.exec(first.content[0].text) || [])[1];
     const secondId = (/pageId: (page_[A-Za-z0-9_-]+)/.exec(second.content[0].text) || [])[1];
     assert.notEqual(firstId, secondId);
 
-    const firstSnap = await client.call('tools/call', { name: 'ahttp_snapshot', arguments: { pageId: firstId } });
-    const secondSnap = await client.call('tools/call', { name: 'ahttp_snapshot', arguments: { pageId: secondId } });
+    const firstSnap = await client.call('tools/call', { name: 'aihttp_snapshot', arguments: { pageId: firstId } });
+    const secondSnap = await client.call('tools/call', { name: 'aihttp_snapshot', arguments: { pageId: secondId } });
     assert.match(firstSnap.content[0].text, /button "one"/);
     assert.doesNotMatch(firstSnap.content[0].text, /button "two"/);
     assert.match(secondSnap.content[0].text, /button "two"/);
 
     const actionId = (/^(a\d+) button "two"/m.exec(secondSnap.content[0].text) || [])[1];
-    const acted = await client.call('tools/call', { name: 'ahttp_act', arguments: { pageId: secondId, id: actionId } });
+    const acted = await client.call('tools/call', { name: 'aihttp_act', arguments: { pageId: secondId, id: actionId } });
     assert.equal(acted.isError, false);
 
-    const firstAgain = await client.call('tools/call', { name: 'ahttp_snapshot', arguments: { pageId: firstId } });
+    const firstAgain = await client.call('tools/call', { name: 'aihttp_snapshot', arguments: { pageId: firstId } });
     assert.match(firstAgain.content[0].text, /button "one"/);
     assert.doesNotMatch(firstAgain.content[0].text, /button "two"/);
   } finally {

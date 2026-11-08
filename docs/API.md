@@ -1,8 +1,8 @@
 # API reference
 
-The browser file exposes one global, `ahttp`. It is a UMD build; `require('ahttp')` also works in Node. The API is pre-1.0.
+The browser file exposes one global, `aihttp`. It is a UMD build; `require('aihttp')` also works in Node. The API is pre-1.0.
 
-## `ahttp.snapshot(options)`
+## `aihttp.snapshot(options)`
 
 Returns a text action graph by default, or a JSON object with `format: 'json'`.
 
@@ -20,16 +20,16 @@ Returns a text action graph by default, or a JSON object with `format: 'json'`.
 | `compact` | false | Drop placeholder, value and state suffixes |
 | `verbose` | false | Add scan diagnostics to the text meta line |
 
-Text output starts with `ahttp | title | URL`. URLs longer than 72 characters are shortened to the origin (or `file:`) plus the last two path segments; `verbose` restores the full URL in the meta line. Actions are printed as `a1 button "Label"` with no brackets, one per line; the default text input prints as `a1 input "Label"`, while other types keep `input[email]`, `input[password]` and so on. `[modal]`, `[main]` and `[nav]` headers appear only when more than one region has actions, or when the only region is not `main`. Page text follows `[text: untrusted]`, one entry per line, with a line identical to the page title dropped. A `[meta]` line is emitted only when actions were capped, nodes were sanitized, the page is owned or locked, or `verbose` is set; `verbose` also adds forms, controls, nodes, layout, scan time and the version.
+Text output starts with `aihttp | title | URL`. URLs longer than 72 characters are shortened to the origin (or `file:`) plus the last two path segments; `verbose` restores the full URL in the meta line. Actions are printed as `a1 button "Label"` with no brackets, one per line; the default text input prints as `a1 input "Label"`, while other types keep `input[email]`, `input[password]` and so on. `[modal]`, `[main]` and `[nav]` headers appear only when more than one region has actions, or when the only region is not `main`. Page text follows `[text: untrusted]`, one entry per line, with a line identical to the page title dropped. A `[meta]` line is emitted only when actions were capped, nodes were sanitized, the page is owned or locked, or `verbose` is set; `verbose` also adds forms, controls, nodes, layout, scan time and the version.
 
 ```js
-ahttp.snapshot({ maxActions: 40, maxText: 600 });
-ahttp.snapshot({ format: 'json', includeText: false });
+aihttp.snapshot({ maxActions: 40, maxText: 600 });
+aihttp.snapshot({ format: 'json', includeText: false });
 ```
 
 The JSON shape contains `version`, `url`, `title`, `locked`, `owner`, `modal`, `layout`, `regions`, `actions`, `text`, `textTrust: 'untrusted'`, and `meta`. The `meta.tokens` field is the engine's `ceil(chars / 4)` estimate, not a model tokenizer.
 
-## `ahttp.act(id, payload, options)`
+## `aihttp.act(id, payload, options)`
 
 Returns a promise. `payload` can be a string for a fill, or an object:
 
@@ -54,13 +54,13 @@ Returns a promise. `payload` can be a string for a fill, or an object:
 | `maxActions` | Snapshot action cap |
 
 ```js
-await ahttp.act('a4');
-await ahttp.act('a1', 'agent@example.com');
-await ahttp.act('a1', { value: 'US' });
-await ahttp.act('a2', { checked: true });
-await ahttp.act('a5', { key: 'Enter' });
-await ahttp.act('a2', null, { confirm: true });
-await ahttp.act('a3', { read: true });
+await aihttp.act('a4');
+await aihttp.act('a1', 'agent@example.com');
+await aihttp.act('a1', { value: 'US' });
+await aihttp.act('a2', { checked: true });
+await aihttp.act('a5', { key: 'Enter' });
+await aihttp.act('a2', null, { confirm: true });
+await aihttp.act('a3', { read: true });
 ```
 
 Result shape:
@@ -122,7 +122,7 @@ action still runs; if the check fails, the result keeps `ok: true` but reports
 `status: 'no_effect'` and `effect.failures`:
 
 ```js
-const result = await ahttp.act('a2', {
+const result = await aihttp.act('a2', {
   expect: { diff: true, textAdded: ['Added to cart'], pageText: { selector: '#cart', includes: ['1 item'] } }
 });
 // { ok: true, status: 'no_effect', warning: '...', effect: { ok: false, failures: [...] } }
@@ -164,16 +164,16 @@ Errors are returned, not thrown:
 { ok: false, blocked: true, error: 'unauthorized', status: 'blocked' }
 ```
 
-## `ahttp.tools()`
+## `aihttp.tools()`
 
 Returns a schema for OpenAI/Anthropic-style function calling:
 
 ```js
 {
-  version: '0.1.0',
+  version: '1.0.0',
   url: '...',
   generatedAt: '...',
-  tools: [{ name: 'ahttp_act', description: '...', parameters: { ... } }],
+  tools: [{ name: 'aihttp_act', description: '...', parameters: { ... } }],
   actions: [{ id: 'a1', label: 'Pay', kind: 'click', role: 'button', region: 'main' }],
   snapshotMeta: { ... }
 }
@@ -181,7 +181,7 @@ Returns a schema for OpenAI/Anthropic-style function calling:
 
 The `id` enum is the current screen. `confirm` is added only when at least one visible action requires confirmation. The schema is a snapshot; re-read it after a mutation.
 
-## `ahttp.status()`
+## `aihttp.status()`
 
 Does not wake the engine.
 
@@ -189,7 +189,7 @@ Does not wake the engine.
 {
   state: 'dormant',
   dormant: true,
-  version: '0.1.0',
+  version: '1.0.0',
   mode: 'public',
   access: 'public',
   locked: false,
@@ -225,67 +225,67 @@ Locked examples:
 { mode: 'dev', access: 'dev', locked: true, lockedReason: 'dev_only' }
 ```
 
-## `ahttp.configure(options)`
+## `aihttp.configure(options)`
 
 Merges a configuration, resets the runtime, and re-evaluates the lock. Options: `owner`, `access` (`public`, `dev`, `gate`, `owner`), `private`, `key`, `keyHash`, `authEndpoint`, `authTimeoutMs`, `authorizeAction`, `allow`, `deny`, `confirm`, `readOnly`, `maxActions`.
 
 ```js
-ahttp.configure({
+aihttp.configure({
   access: 'owner',
   owner: 'acme',
-  authEndpoint: '/api/ahttp/authorize',
+  authEndpoint: '/api/aihttp/authorize',
   allow: ['checkout_submit'],
   confirm: ['checkout_submit']
 });
-await ahttp.authorize({ token: process.env.AHTTP_AUTH_TOKEN });
+await aihttp.authorize({ token: process.env.AIHTTP_AUTH_TOKEN });
 ```
 
 The returned policy summary never includes keys, tokens, or hashes. `authorizeAction` is called before each mutation and can return `false`, `{ ok: false }`, or throw to block the action. The server that performs the mutation must still authorize it.
 
-## `ahttp.authorize(options)`
+## `aihttp.authorize(options)`
 
 Uses the configured `authEndpoint`. Sends a POST with `credentials: 'include'` and an optional `Authorization: Bearer <token>` header. Accepts HTTPS, or HTTP on localhost. Rejects URL credentials. Caps the response at 65,536 characters. Applies the returned policy and relocks at `expiresAt`.
 
 ```js
-await ahttp.authorize({ token: 'short-lived-token' });
+await aihttp.authorize({ token: 'short-lived-token' });
 // { ok: true, locked: false, mode: 'server', owner: 'acme', expiresAt: 1760000000000 }
 ```
 
 Errors: `invalid_auth_endpoint`, `insecure_auth_endpoint`, `fetch_unavailable`, `server_denied`, `server_response_too_large`, `auth_request_failed`.
 
-## `ahttp.unlock(key)` and `ahttp.lock()`
+## `aihttp.unlock(key)` and `aihttp.lock()`
 
 `unlock` compares the key with `keyHash` using SHA-256 and a constant-time comparison. Plaintext keys are accepted only on localhost or `file:`. Five failures trigger a client-side delay.
 
 ```js
-ahttp.unlock('owner-secret');
+aihttp.unlock('owner-secret');
 // { ok: true, locked: false, mode: 'key', owner: 'acme' }
-ahttp.lock();
+aihttp.lock();
 ```
 
 `lock()` drops the scan and observer and returns to a locked dormant state. It is not a server-side logout; call your backend logout as well.
 
-## `ahttp.installWebMCP(options)`
+## `aihttp.installWebMCP(options)`
 
-Opt-in adapter for the draft WebMCP API. It feature-detects `document.modelContext`, registers `ahttp_snapshot` and `ahttp_act`, and returns a `close()` function that aborts the registration signal. It does not auto-register and does not claim the draft is stable.
+Opt-in adapter for the draft WebMCP API. It feature-detects `document.modelContext`, registers `aihttp_snapshot` and `aihttp_act`, and returns a `close()` function that aborts the registration signal. It does not auto-register and does not claim the draft is stable.
 
 ```js
-const installed = await ahttp.installWebMCP();
-// { ok: true, names: ['ahttp_snapshot', 'ahttp_act'], close: [Function] }
+const installed = await aihttp.installWebMCP();
+// { ok: true, names: ['aihttp_snapshot', 'aihttp_act'], close: [Function] }
 // or { ok: false, error: 'webmcp_unavailable' }
 ```
 
 Tools get `readOnlyHint` for snapshots, `untrustedContentHint` for page content, and `consequentialHint` for actions. The guarded-action `confirm` argument is still a model-controlled flag in this adapter; the MCP server's one-time token flow is stronger.
 
-## `ahttp.hashKey(value)`
+## `aihttp.hashKey(value)`
 
-Returns the SHA-256 hex for `data-ahttp-key-hash`. Also available through `node bin/aihttp-cli.js --hash-key <value>`.
+Returns the SHA-256 hex for `data-aihttp-key-hash`. Also available through `node bin/aihttp-cli.js --hash-key <value>`.
 
-## `ahttp.sleep()`
+## `aihttp.sleep()`
 
 Disconnects the observer, restores patched `fetch` and `XMLHttpRequest`, clears the registry, and forgets the runtime. The next API call reads the page configuration again.
 
-## `ahttp.wake()`
+## `aihttp.wake()`
 
 Wakes the engine and returns `status()`. It does not scan the DOM; the first snapshot does.
 
@@ -295,7 +295,7 @@ Wakes the engine and returns `status()`. It does not scan the DOM; the first sna
 
 ## MCP result notes
 
-- Static backend: `ahttp_open` returns a snapshot and a `pageId`. SPAs need `--browser`.
+- Static backend: `aihttp_open` returns a snapshot and a `pageId`. SPAs need `--browser`.
 - Legacy clients may omit `pageId`; modern `2026-07-28` clients must include it.
-- `ahttp_act` returns a `confirmationToken` for guarded actions and does not execute them. Repeat with the token.
+- `aihttp_act` returns a `confirmationToken` for guarded actions and does not execute them. Repeat with the token.
 - Tool results use standard MCP `content`/`isError`; invalid arguments and unknown tools use JSON-RPC errors.

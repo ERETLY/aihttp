@@ -1,8 +1,8 @@
 {
   "mcpServers": {
-    "ahttp": {
+    "aihttp": {
       "command": "node",
-      "args": ["/absolute/path/to/ahttp/bin/aihttp-mcp.js", "--browser"]
+      "args": ["/absolute/path/to/aiweb/bin/aihttp-mcp.js", "--browser"]
     }
   }
 }

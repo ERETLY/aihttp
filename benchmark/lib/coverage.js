@@ -53,7 +53,7 @@ async function measurePage(page, options) {
       var cap = input.cap;
       var oracleSrc = input.oracleSrc;
       var t0 = performance.now();
-      var result = window.ahttp.snapshot({ format: 'json', maxActions: cap, force: true });
+      var result = window.aihttp.snapshot({ format: 'json', maxActions: cap, force: true });
       var inPageMs = performance.now() - t0;
       var items = { items: [] };
       var error = null;
@@ -71,7 +71,7 @@ async function measurePage(page, options) {
   const wallMs = Date.now() - started;
 
   const text = await page.evaluate(function (cap) {
-    return window.ahttp.snapshot({ format: 'text', maxActions: cap, force: true });
+    return window.aihttp.snapshot({ format: 'text', maxActions: cap, force: true });
   }, maxActions).catch(function () { return ''; });
 
   let rawHtml = '';

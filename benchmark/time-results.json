@@ -16,7 +16,7 @@
       "jina": null,
       "firecrawl": null,
       "axtree": 95.4,
-      "ahttp": 16,
+      "aihttp": 16,
       "self": 33.5
     },
     {
@@ -27,7 +27,7 @@
       "jina": null,
       "firecrawl": null,
       "axtree": 310.2,
-      "ahttp": 92,
+      "aihttp": 92,
       "self": 163.4
     },
     {
@@ -38,7 +38,7 @@
       "jina": null,
       "firecrawl": null,
       "axtree": 77,
-      "ahttp": 6,
+      "aihttp": 6,
       "self": 31.5
     },
     {
@@ -49,7 +49,7 @@
       "jina": null,
       "firecrawl": null,
       "axtree": 85.4,
-      "ahttp": 20,
+      "aihttp": 20,
       "self": 52.5
     },
     {
@@ -60,7 +60,7 @@
       "jina": null,
       "firecrawl": null,
       "axtree": 97.2,
-      "ahttp": 25,
+      "aihttp": 25,
       "self": 30.2
     }
   ],
@@ -68,7 +68,7 @@
     {
       "name": "Hacker News",
       "url": "https://news.ycombinator.com",
-      "ahttp": 1870.6,
+      "aihttp": 1870.6,
       "self": 1462.2,
       "jina": 1178.5,
       "firecrawl": 1319.9
@@ -76,7 +76,7 @@
     {
       "name": "Wikipedia (HTTP)",
       "url": "https://en.wikipedia.org/wiki/HTTP",
-      "ahttp": 1137,
+      "aihttp": 1137,
       "self": 1464.5,
       "jina": 1505.6,
       "firecrawl": 1576.1
@@ -84,7 +84,7 @@
     {
       "name": "Lobsters",
       "url": "https://lobste.rs",
-      "ahttp": 2130.4,
+      "aihttp": 2130.4,
       "self": 1408.7,
       "jina": 748,
       "firecrawl": 1168.7
@@ -92,7 +92,7 @@
     {
       "name": "GitHub (torvalds/linux)",
       "url": "https://github.com/torvalds/linux",
-      "ahttp": 2512.8,
+      "aihttp": 2512.8,
       "self": 2686.5,
       "jina": 756.4,
       "firecrawl": 1589.2
@@ -100,7 +100,7 @@
     {
       "name": "MDN (HTTP)",
       "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
-      "ahttp": 1375.8,
+      "aihttp": 1375.8,
       "self": 1050.7,
       "jina": 426.6,
       "firecrawl": 467.6

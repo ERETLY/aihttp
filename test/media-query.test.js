@@ -38,7 +38,7 @@ function snapshotAt(width, height) {
   Object.defineProperty(dom.window, 'innerWidth', { configurable: true, value: width });
   Object.defineProperty(dom.window, 'innerHeight', { configurable: true, value: height || 800 });
   dom.window.eval(ENGINE);
-  const text = dom.window.ahttp.snapshot({ format: 'text', force: true });
+  const text = dom.window.aihttp.snapshot({ format: 'text', force: true });
   dom.window.close();
   return text;
 }

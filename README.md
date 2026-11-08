@@ -6,17 +6,17 @@
 
 **aihttp is the AI-First Web Format.** It turns a page into a compact, executable graph: the controls an agent can use, the text it can read, and the effect of each action. No screenshots, no raw DOM, no token bonfire.
 
-One engine with no runtime dependencies. It ships as a browser file, a CLI, an HTTP server (`aihttp-serve`) and an MCP server. The engine file is `aihttp.js`; `ahttp` remains the compatibility name for the MCP tools and globals, while the format and the product are `aihttp`.
+One engine with no runtime dependencies. It ships as a browser file, a CLI, an HTTP server (`aihttp-serve`) and an MCP server. The package, the engine file, the browser global (`window.aihttp`) and the MCP tool names are all `aihttp`.
 
-**Pre-2.0, one maintainer.** The format is stable enough to build on: additive changes are documented before any breaking one, and every release keeps the previous wire version readable. The spec is in [docs/AIHTTP.md](docs/AIHTTP.md).
+**1.0.0, stable.** The first stable release. The wire format is versioned (`aihttp/1`): additive changes are documented before any breaking one, and every release keeps the previous wire version readable. One maintainer, no third-party security audit yet; the repository's own suites pass. The spec is in [docs/AIHTTP.md](docs/AIHTTP.md).
 
 ## Should you use it?
 
 Use it when the agent has to do something on the page: click, type, choose, follow a link. It keeps working after a rerender without new selectors, sends a few thousand tokens per page instead of the full HTML, and needs no browser grid.
 
-Skip it when the agent only needs to read. A static article: fetch it and use Readability. Clean Markdown for an LLM: Jina Reader or Firecrawl. Screenshots: ahttp does not take them.
+Skip it when the agent only needs to read. A static article: fetch it and use Readability. Clean Markdown for an LLM: Jina Reader or Firecrawl. Screenshots: aihttp does not take them.
 
-Jina, Firecrawl, and Readability turn a page into text. ahttp turns it into things an agent can operate. If you do not need the second part, use the first group. The benchmark is a tradeoff, not a winner.
+Jina, Firecrawl, and Readability turn a page into text. aihttp turns it into things an agent can operate. If you do not need the second part, use the first group. The benchmark is a tradeoff, not a winner.
 
 ## Quick start
 
@@ -30,25 +30,25 @@ Jina, Firecrawl, and Readability turn a page into text. ahttp turns it into thin
 
 ```bash
 git clone https://github.com/ERETLY/aiweb.git
-cd ahttp
+cd aiweb
 npm ci
 npx playwright install chromium
 ```
 
-Paste this into Claude Desktop or Cursor, replacing `/absolute/path/to/ahttp`:
+Paste this into Claude Desktop or Cursor, replacing `/absolute/path/to/aiweb`:
 
 ```json
 {
   "mcpServers": {
-    "ahttp": {
+    "aihttp": {
       "command": "node",
-      "args": ["/absolute/path/to/ahttp/bin/aihttp-mcp.js", "--browser"]
+      "args": ["/absolute/path/to/aiweb/bin/aihttp-mcp.js", "--browser"]
     }
   }
 }
 ```
 
-Restart the client, call `ahttp_open` with a URL, then `ahttp_snapshot` or `ahttp_act`. `--browser` runs a real Chromium and page JavaScript; without it the server parses static HTML only. Node 18 or newer; the Playwright step is only needed for `--browser`.
+Restart the client, call `aihttp_open` with a URL, then `aihttp_snapshot` or `aihttp_act`. The MCP tool names are `aihttp_open`, `aihttp_snapshot`, `aihttp_act`, `aihttp_trace` and `aihttp_replay`. `--browser` runs a real Chromium and page JavaScript; without it the server parses static HTML only. Node 18 or newer; the Playwright step is only needed for `--browser`.
 
 ### CLI and local loop
 
@@ -71,7 +71,7 @@ curl 'http://127.0.0.1:8787/?url=https%3A%2F%2Fexample.com'
 ## What it looks like
 
 ```text
-ahttp | Widget shop | https://shop.test/cart
+aihttp | Widget shop | https://shop.test/cart
 a1 input "Email" ph="you@example.com"
 a2 button "Add to cart"
 a3 a "Shipping help" -> /help
@@ -82,7 +82,7 @@ $49.00
 
 Each action has an id, a tag, a label, and optional state or target. Page text is marked untrusted because it comes from the page.
 
-`const step = await ahttp.act('a2')` returns `{ ok: true, action, diff }` plus a fresh snapshot. `act` waits for the page to settle; errors come back as values, not exceptions.
+`const step = await aihttp.act('a2')` returns `{ ok: true, action, diff }` plus a fresh snapshot. `act` waits for the page to settle; errors come back as values, not exceptions.
 
 ## Record once, replay deterministically
 
@@ -91,11 +91,11 @@ recorded as a portable fingerprint, not as `a12`. Export the trace, reload the
 page, redeploy the site, then replay it:
 
 ```js
-const trace = ahttp.trace();                 // { steps: [...] }
-const check = await ahttp.replay(trace, { dryRun: true });
+const trace = aihttp.trace();                 // { steps: [...] }
+const check = await aihttp.replay(trace, { dryRun: true });
 // check.steps[0] => { status: 'would_run', signals: ['intent'], score: 100 }
 
-const run = await ahttp.replay(trace);       // follows navigations
+const run = await aihttp.replay(trace);       // follows navigations
 // run.steps[1] => { status: 'ambiguous', candidates: [...] }
 ```
 
@@ -113,13 +113,13 @@ identical twins stop the run. The result says exactly what happened:
 | `requires_confirmation` | The action is guarded; pass `confirm: true` |
 | `url_mismatch` | `requireSameUrl` saw a different page |
 
-Over MCP the same feature is `ahttp_trace` and `ahttp_replay`. Password values
+Over MCP the same feature is `aihttp_trace` and `aihttp_replay`. Password values
 never enter a trace: only their length is recorded, and replay takes the value
 from `values`.
 
 ## Using it well
 
-- Put `data-ahttp-intent` on controls that matter. Text labels change with copy; the intent attribute does not.
+- Put `data-aihttp-intent` on controls that matter. Text labels change with copy; the intent attribute does not.
 - Narrow the snapshot with `query` or `scope` instead of raising `maxActions`.
 - Pass an `expect` rule so a missing effect returns `no_effect` instead of a silent success.
 - Keep the `pageId` and re-snapshot after each action instead of reusing old ids.
@@ -158,16 +158,16 @@ You do not have to change your markup. These attributes declare intent and limit
 
 | Attribute | Effect |
 |---|---|
-| `data-ahttp-intent` | Stable name for policy and agent code |
-| `data-ahttp-confirm="reason"` | Requires confirmation |
-| `data-ahttp-readonly` | Readable, not writable |
-| `data-ahttp-ignore` | Removes the subtree from actions and text |
-| `data-ahttp-access` | `public`, `dev`, `gate`, or `owner` |
-| `data-ahttp-auth-endpoint` | Server-verified authorization endpoint |
-| `data-ahttp-allow` / `data-ahttp-deny` | Policy filters |
-| `data-ahttp-max-actions` | Hard action cap |
+| `data-aihttp-intent` | Stable name for policy and agent code |
+| `data-aihttp-confirm="reason"` | Requires confirmation |
+| `data-aihttp-readonly` | Readable, not writable |
+| `data-aihttp-ignore` | Removes the subtree from actions and text |
+| `data-aihttp-access` | `public`, `dev`, `gate`, or `owner` |
+| `data-aihttp-auth-endpoint` | Server-verified authorization endpoint |
+| `data-aihttp-allow` / `data-aihttp-deny` | Policy filters |
+| `data-aihttp-max-actions` | Hard action cap |
 
-`public` is open. `dev` only works on localhost or `file:`. `gate` hides the graph behind a SHA-256 in the page; it is a hint, not authentication. `owner` is the production path: the agent authenticates with your backend, gets a short-lived token and policy, and the engine relocks when it expires.
+The `data-aihttp-*` namespace is part of the 1.0 contract. `public` is open. `dev` only works on localhost or `file:`. `gate` hides the graph behind a SHA-256 in the page; it is a hint, not authentication. `owner` is the production path: the agent authenticates with your backend, gets a short-lived token and policy, and the engine relocks when it expires.
 
 Client-side JavaScript cannot enforce authorization. The server that performs the mutation must check agent, tenant, object, and intent. See [docs/OWNER_MODE.md](docs/OWNER_MODE.md), [docs/SECURITY.md](docs/SECURITY.md), and [`examples/auth-server/`](examples/auth-server/).
 
@@ -176,14 +176,14 @@ Client-side JavaScript cannot enforce authorization. The server that performs th
 Three levels, each useful on its own:
 
 1. **Proxy.** Run `aihttp-serve` in front of any site. The agent gets the graph; the site stays untouched.
-2. **Declare.** Add `data-ahttp-*` attributes to name actions, require confirmation, mark read-only controls and set a policy. This is the smallest change that makes an agent's actions auditable.
+2. **Declare.** Add `data-aihttp-*` attributes to name actions, require confirmation, mark read-only controls and set a policy. This is the smallest change that makes an agent's actions auditable.
 3. **Emit.** Return `application/aihttp+json` from your own app. The envelope is `{ protocol: "aihttp/1", format: "aihttp", formatVersion: 1, ... }`; the action schema and statuses are in [docs/AIHTTP.md](docs/AIHTTP.md). You can also embed the engine: it is one dependency-free file and `window.aihttp.snapshot()` returns the same graph.
 
 A site that emits the format natively does not need a browser or a proxy: it is the data the agent would have scraped, shaped for the context window.
 
 ## Security
 
-- Locks, hidden actions, and `data-ahttp-confirm` are not authorization; `gate` is a hint and the hash is in the page source.
+- Locks, hidden actions, and `data-aihttp-confirm` are not authorization; `gate` is a hint and the hash is in the page source.
 - Treat labels, URLs, values, and text from the page as untrusted. `includeText: false` drops the text block.
 - The static backend does not run JavaScript. Use `--browser` when scripts matter.
 - `confirmationToken` is one-time and expiring. It is not proof of human approval.
@@ -194,27 +194,16 @@ A site that emits the format natively does not need a browser or a proxy: it is 
 
 ## Benchmarks
 
-If you only need text, Jina or Firecrawl are faster and cheaper. If you need to click, only the ahttp rows can. Jina and Firecrawl were called as real services; the accessibility row is Playwright's `ariaSnapshot`, not Playwright MCP.
+If you only need text, Jina or Firecrawl are faster and cheaper. If you need to click, only the aihttp rows can. Jina and Firecrawl were called as real services; the accessibility row is Playwright's `ariaSnapshot`, not Playwright MCP.
 
-Five pinned pages, one snapshot each:
-
-| Method | Tokens | Can act |
-|---|---:|---|
-| Raw HTML | 386,363 | no |
-| Markdown (Readability) | 42,652 | no |
-| Jina Reader | 44,328 | no |
-| Firecrawl | 98,527 | no |
-| Chromium accessibility tree | 102,206 | no |
-| ahttp | 8,750 | yes |
-
-On a five-step checkout ahttp uses 289 tokens against 3,983 for raw HTML. On 20 scripted tasks it uses 5,104 against 25,896 raw and 5,360 accessibility tree. Live time is 1.1–2.5 s per page; Jina and Firecrawl are 0.4–1.6 s, but they only return text. Scan time is 6–25 ms, Wikipedia 92 ms.
+Across the full token matrix, aihttp uses **6,128 tokens** where raw HTML needs **390,346**, the Chromium accessibility tree **102,552**, Readability Markdown **42,720**, and Jina Reader **45,454**. On a five-step checkout aihttp uses **289 tokens** against **3,983** for raw HTML. On 20 scripted tasks it uses **5,104** against **25,896** raw and **5,360** accessibility tree. Live time is 1.1–2.5 s per page; Jina and Firecrawl are 0.4–1.6 s, but they only return text. Scan time is 6–25 ms, Wikipedia 92 ms.
 
 <details>
 <summary>Full benchmark tables and method</summary>
 
 <!-- BENCH:START -->
 
-Token run: `2026-11-08T12:14:24.626Z`. ahttp 1.0.0 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
+Token run: `2026-11-08T12:51:18.108Z`. aihttp 1.0.0 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
 
 ### Tokens
 
@@ -224,12 +213,12 @@ Tokens an agent reads, lower is better. Checkout is five snapshots of one purcha
 |---|---|---|---|---|---|---|---|---|---|---|
 | Raw HTML | serialized DOM | no | 3,983 | 11,771 | 191,129 | 17,909 | 105,767 | 59,787 | 390,346 | 25,896 |
 | Markdown | Readability + Turndown | no | 68 | 5,136 | 26,579 | 6,542 | 1,387 | 3,008 | 42,720 | n/a |
-| Jina Reader | hosted Markdown | no | n/a | 5,408 | 27,711 | 7,906 | 1,342 | 3,087 | 45,454 | n/a |
+| Jina Reader | hosted Markdown | no | n/a | 5,274 | 27,977 | 7,700 | 1,342 | 3,106 | 45,399 | n/a |
 | Accessibility tree | roles and names | no | 346 | 10,099 | 73,404 | 5,918 | 5,404 | 7,381 | 102,552 | 5,360 |
-| ahttp | actions, text, ids | yes | 289 | 1,162 | 1,130 | 1,105 | 1,286 | 1,156 | 6,128 | 5,104 |
-| ahttp self | actions, text, ids | yes | 289 | 1,170 | 1,148 | 1,116 | 4,208 | 1,242 | 9,173 | 5,104 |
+| aihttp | actions, text, ids | yes | 289 | 1,162 | 1,130 | 1,105 | 1,286 | 1,156 | 6,128 | 5,104 |
+| aihttp self | actions, text, ids | yes | 289 | 1,170 | 1,148 | 1,116 | 4,208 | 1,242 | 9,173 | 5,104 |
 
-Only the two ahttp rows can click; the baselines score 0/20 on the task suite because they only read. `ahttp self` is the same engine loaded as `self/aihttp.user.js` in Chromium.
+Only the two aihttp rows can click; the baselines score 0/20 on the task suite because they only read. `aihttp self` is the same engine loaded as `self/aihttp.user.js` in Chromium.
 
 ### Time
 
@@ -239,32 +228,32 @@ Wall-clock numbers from one machine, relative at best. Scan from `2026-11-05T07:
 
 | Method | Time per step |
 |---|---:|
-| Raw HTML | 4.2 ms |
-| Accessibility tree | 5.7 ms |
-| Markdown | 13.4 ms |
-| ahttp | 86.2 ms |
-| ahttp self | 84.9 ms |
+| Accessibility tree | 4.6 ms |
+| Raw HTML | 4.6 ms |
+| Markdown | 13.6 ms |
+| aihttp | 86.8 ms |
+| aihttp self | 84.9 ms |
 
 **Live.** URL to content, one request per page, 2026-11-05:
 
 | Method | Hacker News | Wikipedia | Lobsters | GitHub | MDN |
 |---|---:|---:|---:|---:|---:|
-| ahttp | 1,871 ms | 1,137 ms | 2,130 ms | 2,513 ms | 1,376 ms |
-| ahttp self | 1,462 ms | 1,465 ms | 1,409 ms | 2,687 ms | 1,051 ms |
+| aihttp | 1,871 ms | 1,137 ms | 2,130 ms | 2,513 ms | 1,376 ms |
+| aihttp self | 1,462 ms | 1,465 ms | 1,409 ms | 2,687 ms | 1,051 ms |
 | Jina Reader | 1,179 ms | 1,506 ms | 748 ms | 756 ms | 427 ms |
 | Firecrawl | 1,320 ms | 1,576 ms | 1,169 ms | 1,589 ms | 468 ms |
 
-Single runs, not medians. `ahttp` fetches the page and its linked stylesheets in Node and scans it. `ahttp self` loads the page in Chromium with the userscript injected and takes a snapshot. The hosted readers return Markdown only.
+Single runs, not medians. `aihttp` fetches the page and its linked stylesheets in Node and scans it. `aihttp self` loads the page in Chromium with the userscript injected and takes a snapshot. The hosted readers return Markdown only.
 
-**Scan.** One snapshot per pinned page. Raw HTML, the accessibility tree and `ahttp self` run in Chromium on the page served from localhost; Markdown and `ahttp` run in Node.
+**Scan.** One snapshot per pinned page. Raw HTML, the accessibility tree and `aihttp self` run in Chromium on the page served from localhost; Markdown and `aihttp` run in Node.
 
 | Method | Hacker News | Wikipedia | Lobsters | GitHub | MDN |
 |---|---:|---:|---:|---:|---:|
 | Raw HTML | 29 ms | 249 ms | 48 ms | 45 ms | 16 ms |
 | Markdown | 331 ms | 1,032 ms | 484 ms | 262 ms | 309 ms |
 | Accessibility tree | 95 ms | 310 ms | 77 ms | 85 ms | 97 ms |
-| ahttp | 16 ms | 92 ms | 6 ms | 20 ms | 25 ms |
-| ahttp self | 34 ms | 163 ms | 32 ms | 53 ms | 30 ms |
+| aihttp | 16 ms | 92 ms | 6 ms | 20 ms | 25 ms |
+| aihttp self | 34 ms | 163 ms | 32 ms | 53 ms | 30 ms |
 
 Hosted readers have no separate scan step; their time is in Live time.
 
@@ -326,7 +315,7 @@ separately instead of counting the page behind it as missed.
 ### Matching and rerenders
 
 - Matching is heuristic. Stable anchors are tried first; the old fingerprint is a low-weight fallback.
-- Two close candidates return `status: 'ambiguous'` with no event. Re-snapshot, or add `data-ahttp-intent`/`data-testid`.
+- Two close candidates return `status: 'ambiguous'` with no event. Re-snapshot, or add `data-aihttp-intent`/`data-testid`.
 - A disabled replacement is not an active target. With an `expect` rule, a missing change returns `status: 'no_effect'` after `timeout` (1200 ms by default).
 
 ### Shadow DOM and iframes
@@ -344,7 +333,7 @@ separately instead of counting the page behind it as missed.
 ### Virtualized lists
 
 - Only mounted rows exist. An id from an unmounted row cannot be matched.
-- ahttp does not scroll the container to revive a row. Scroll it, then re-snapshot.
+- aihttp does not scroll the container to revive a row. Scroll it, then re-snapshot.
 
 ### Other
 
@@ -354,6 +343,8 @@ separately instead of counting the page behind it as missed.
 - The static backend is a small HTML parser, not a full HTML5 tree builder. Use `--browser` when exact parsing matters.
 
 ## Breaking changes
+
+`1.0.0` renamed everything from `ahttp` to `aihttp` with no aliases. The npm package is `aihttp`, the engine file is `aihttp.js`, the browser global is `window.aihttp`, the binaries are `aihttp`/`aihttp-mcp`/`aihttp-serve`, the attributes are `data-aihttp-*`, and the MCP tool names are `aihttp_*`. The text snapshot header is now `aihttp | title | url`; JSON consumers should read `protocol: "aihttp/1"`.
 
 `0.2.0` made ambiguity explicit. `act` no longer clicks a near-tie: it returns `status: 'ambiguous'`. Results also carry `status`, and `expect` can return `status: 'no_effect'`. Existing fields and error codes are unchanged.
 
@@ -369,7 +360,7 @@ npm run test:bench
 npm run build
 ```
 
-`npm test` skips Playwright tests when Chromium is missing; `AHTTP_REQUIRE_BROWSER=1` makes that a failure. The corpus runs in jsdom against local HTML: `npm run test:corpus` writes `bench/results.json` and exits non-zero on a failure. Release with `npm run bump -- patch|minor|major|X.Y.Z`.
+`npm test` skips Playwright tests when Chromium is missing; `AIHTTP_REQUIRE_BROWSER=1` makes that a failure. The corpus runs in jsdom against local HTML: `npm run test:corpus` writes `bench/results.json` and exits non-zero on a failure. Release with `npm run bump -- patch|minor|major|X.Y.Z`.
 
 ## License
 

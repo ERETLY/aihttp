@@ -13,7 +13,7 @@ const pkg = require(path.join(ROOT, 'package.json'));
 function header() {
   return [
     '// ==UserScript==',
-    '// @name         ahttp self-use',
+    '// @name         aihttp self-use',
     '// @namespace    https://github.com/ERETLY/aiweb',
     '// @version      ' + pkg.version,
     '// @description  Snapshot and act on any page without a server.',
@@ -25,7 +25,7 @@ function header() {
     '// @grant        none',
     '// @noframes',
     '// ==/UserScript==',
-    '/*! ahttp self-use | MIT | generated from aihttp.min.js and self/panel.js */',
+    '/*! aihttp self-use | MIT | generated from aihttp.min.js and self/panel.js */',
     ''
   ].join('\n');
 }

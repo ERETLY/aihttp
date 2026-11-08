@@ -25,7 +25,7 @@ async function runComparison(options) {
     raw: { name: 'Raw HTML (DOM serialization)', steps: [], latencies: [], actionable: false, guardrails: false, spa: false },
     markdown: { name: 'Readability + Turndown Markdown', steps: [], latencies: [], actionable: false, guardrails: false, spa: false },
     axtree: { name: 'Playwright ariaSnapshot (Chromium)', steps: [], latencies: [], actionable: false, guardrails: false, spa: true },
-    ahttp: { name: engineName, steps: [], latencies: [], actionable: true, guardrails: true, spa: true }
+    aihttp: { name: engineName, steps: [], latencies: [], actionable: true, guardrails: true, spa: true }
   };
   let success = false;
   let finalSnapshot = '';
@@ -50,46 +50,46 @@ async function runComparison(options) {
       methods.axtree.steps.push(tokenCount(aria));
       methods.axtree.latencies.push(Number(process.hrtime.bigint() - axStarted) / 1e6);
 
-      const ahttpText = await page.evaluate(() => window.ahttp.snapshot({ format: 'text', maxActions: 60, maxText: 900 }));
-      methods.ahttp.steps.push(tokenCount(ahttpText));
-      methods.ahttp.latencies.push(stepLatency || 0);
-      return { raw: raw, aria: aria, ahttp: ahttpText };
+      const aihttpText = await page.evaluate(() => window.aihttp.snapshot({ format: 'text', maxActions: 60, maxText: 900 }));
+      methods.aihttp.steps.push(tokenCount(aihttpText));
+      methods.aihttp.latencies.push(stepLatency || 0);
+      return { raw: raw, aria: aria, aihttp: aihttpText };
     }
 
     async function act(id, payload) {
       const started = process.hrtime.bigint();
-      const result = await page.evaluate((args) => window.ahttp.act(args[0], args[1]), [id, payload || null]);
+      const result = await page.evaluate((args) => window.aihttp.act(args[0], args[1]), [id, payload || null]);
       return { result: result, ms: Number(process.hrtime.bigint() - started) / 1e6 };
     }
 
-    let snapshot = await page.evaluate(() => window.ahttp.snapshot({ format: 'json', maxActions: 60, maxText: 900 }));
+    let snapshot = await page.evaluate(() => window.aihttp.snapshot({ format: 'json', maxActions: 60, maxText: 900 }));
     let choose = findAction(snapshot, (action) => action.label === 'Choose Pro');
     let step = await act(choose.id);
     await sample(step.ms);
 
-    snapshot = await page.evaluate(() => window.ahttp.snapshot({ format: 'json', maxActions: 60, maxText: 900 }));
+    snapshot = await page.evaluate(() => window.aihttp.snapshot({ format: 'json', maxActions: 60, maxText: 900 }));
     const checkout = findAction(snapshot, (action) => action.label === 'Checkout');
     step = await act(checkout.id);
     await sample(step.ms);
 
-    snapshot = await page.evaluate(() => window.ahttp.snapshot({ format: 'json', maxActions: 60, maxText: 900 }));
+    snapshot = await page.evaluate(() => window.aihttp.snapshot({ format: 'json', maxActions: 60, maxText: 900 }));
     const email = findAction(snapshot, (action) => action.name === 'email');
     step = await act(email.id, 'agent@example.com');
     await sample(step.ms);
 
-    snapshot = await page.evaluate(() => window.ahttp.snapshot({ format: 'json', maxActions: 60, maxText: 900 }));
+    snapshot = await page.evaluate(() => window.aihttp.snapshot({ format: 'json', maxActions: 60, maxText: 900 }));
     const promo = findAction(snapshot, (action) => action.name === 'promo');
     const fillPromo = await act(promo.id, 'AGENT20');
-    snapshot = await page.evaluate(() => window.ahttp.snapshot({ format: 'json', maxActions: 60, maxText: 900 }));
+    snapshot = await page.evaluate(() => window.aihttp.snapshot({ format: 'json', maxActions: 60, maxText: 900 }));
     const apply = findAction(snapshot, (action) => action.label === 'Apply promo');
     const applyPromo = await act(apply.id);
     await sample(fillPromo.ms + applyPromo.ms);
 
-    snapshot = await page.evaluate(() => window.ahttp.snapshot({ format: 'json', maxActions: 60, maxText: 900 }));
+    snapshot = await page.evaluate(() => window.aihttp.snapshot({ format: 'json', maxActions: 60, maxText: 900 }));
     const place = findAction(snapshot, (action) => action.label === 'Place order');
     step = await act(place.id);
     const final = await sample(step.ms);
-    finalSnapshot = final.ahttp;
+    finalSnapshot = final.aihttp;
     success = /Order confirmed/.test(final.raw) && /Order confirmed/.test(finalSnapshot);
   } finally {
     await context.close();
@@ -97,7 +97,7 @@ async function runComparison(options) {
   }
 
   const result = [];
-  for (const key of ['raw', 'markdown', 'axtree', 'ahttp']) {
+  for (const key of ['raw', 'markdown', 'axtree', 'aihttp']) {
     const method = methods[key];
     const totalTokens = method.steps.reduce((sum, value) => sum + value, 0);
     const avgLatency = method.latencies.length
@@ -117,7 +117,7 @@ async function runComparison(options) {
     });
   }
   const raw = result.find((method) => method.key === 'raw');
-  const ahttp = result.find((method) => method.key === 'ahttp');
+  const aihttp = result.find((method) => method.key === 'aihttp');
   const ax = result.find((method) => method.key === 'axtree');
   return {
     scenario: 'ecommerce-checkout-5-steps',
@@ -126,8 +126,8 @@ async function runComparison(options) {
     browserVersion: browserVersion,
     steps: 5,
     success: success,
-    totalTokenRatio: ahttp && ahttp.totalTokens ? Math.round((raw.totalTokens / ahttp.totalTokens) * 10) / 10 : 0,
-    ahttpVsAx: ahttp && ahttp.totalTokens && ax ? Math.round((ax.totalTokens / ahttp.totalTokens) * 10) / 10 : null,
+    totalTokenRatio: aihttp && aihttp.totalTokens ? Math.round((raw.totalTokens / aihttp.totalTokens) * 10) / 10 : 0,
+    aihttpVsAx: aihttp && aihttp.totalTokens && ax ? Math.round((ax.totalTokens / aihttp.totalTokens) * 10) / 10 : null,
     methods: result
   };
 }

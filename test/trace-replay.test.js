@@ -8,10 +8,10 @@ const URL = 'https://trace.test/';
 
 const FORM = '<!doctype html><body><main>' +
   '<label for="email">Email</label>' +
-  '<input id="email" name="email" data-ahttp-intent="email">' +
+  '<input id="email" name="email" data-aihttp-intent="email">' +
   '<label for="pw">Password</label>' +
-  '<input id="pw" name="pw" type="password" data-ahttp-intent="password">' +
-  '<button data-ahttp-intent="subscribe">Subscribe</button>' +
+  '<input id="pw" name="pw" type="password" data-aihttp-intent="password">' +
+  '<button data-aihttp-intent="subscribe">Subscribe</button>' +
   '</main></body>';
 
 function load(html) {
@@ -64,7 +64,7 @@ test('a replay resolves a renamed label by intent', async () => {
 });
 
 test('a replay reports ambiguity instead of clicking the wrong twin', async () => {
-  const first = load('<!doctype html><body><main><button data-ahttp-intent="buy">Buy</button></main></body>');
+  const first = load('<!doctype html><body><main><button data-aihttp-intent="buy">Buy</button></main></body>');
   const buy = first.api.snapshot({ format: 'json' }).actions.find((action) => action.intent === 'buy');
   await first.api.act(buy.id, {}, { settle: false, snapshot: false });
   const trace = first.api.trace();

@@ -12,14 +12,14 @@ const { chromium } = require('playwright');
   try {
     await page.goto(url, { waitUntil: 'domcontentloaded' });
     await page.addScriptTag({ content: engine });
-    const snapshot = await page.evaluate(() => window.ahttp.snapshot({ maxActions: 60, maxText: 800 }));
+    const snapshot = await page.evaluate(() => window.aihttp.snapshot({ maxActions: 60, maxText: 800 }));
     process.stdout.write(snapshot + '\n');
     const first = await page.evaluate(() => {
-      const data = window.ahttp.snapshot({ format: 'json', maxActions: 1 });
+      const data = window.aihttp.snapshot({ format: 'json', maxActions: 1 });
       return data.actions[0] || null;
     });
     if (!first) return;
-    const result = await page.evaluate((id) => window.ahttp.act(id, null, { confirm: false }), first.id);
+    const result = await page.evaluate((id) => window.aihttp.act(id, null, { confirm: false }), first.id);
     process.stdout.write('\n' + (result.diff ? result.diff.text : JSON.stringify(result)) + '\n');
   } finally {
     await browser.close();

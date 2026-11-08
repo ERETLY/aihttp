@@ -1,6 +1,6 @@
 # Matching and relocation
 
-ahttp prints ids (`a1`, `a2`, ...). An id stays valid while its node is connected.
+aihttp prints ids (`a1`, `a2`, ...). An id stays valid while its node is connected.
 When a framework replaces the node, `act(id)` rescans and tries to find the
 replacement. This document defines that search. The implementation is the
 `MATCH` object at the top of `aihttp.js` and `scoreMatch()` / `relocate()`.
@@ -32,7 +32,7 @@ its `title` scores `title`, not `title` plus `name`).
 
 | Signal | Weight | Why |
 |---|---:|---|
-| `data-ahttp-intent` | 100 | author-declared stable identity |
+| `data-aihttp-intent` | 100 | author-declared stable identity |
 | `data-testid` / `data-test` / `data-qa` | 90 | explicit test anchor |
 | DOM `id` | 80 | survives many rerenders |
 | `name` | 70 | authored form identity, not copy |
@@ -115,16 +115,16 @@ does not mutate the registry.
 ## Label and intent lookup
 
 When the id is not in the registry, `act(id)` also accepts a
-`data-ahttp-intent` value (case-insensitive) or a visible label. Matching is
+`data-aihttp-intent` value (case-insensitive) or a visible label. Matching is
 ordered:
 
-1. `data-ahttp-intent` (case-insensitive);
+1. `data-aihttp-intent` (case-insensitive);
 2. label with the exact case;
 3. label case-insensitive.
 
 The first step that has a match decides. One match is used; two or more matches
 return `status: 'ambiguous'` with up to five candidates and dispatch nothing,
-including a duplicate `data-ahttp-intent`. `confirm: true` does not override it.
+including a duplicate `data-aihttp-intent`. `confirm: true` does not override it.
 A unique label still resolves, and an exact-case label wins over a
 case-insensitive sibling.
 

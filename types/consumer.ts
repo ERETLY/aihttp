@@ -1,11 +1,11 @@
-import ahttp = require('../aihttp');
+import aihttp = require('../aihttp');
 
-const text: string = ahttp.snapshot({ maxActions: 10, maxText: 200 });
-const json = ahttp.snapshot({ format: 'json' });
-const status = ahttp.status();
-const action = ahttp.tools();
+const text: string = aihttp.snapshot({ maxActions: 10, maxText: 200 });
+const json = aihttp.snapshot({ format: 'json' });
+const status = aihttp.status();
+const action = aihttp.tools();
 
-ahttp.act('a1', { value: 'hello' }).then((result) => {
+aihttp.act('a1', { value: 'hello' }).then((result) => {
   if (result.ok && result.diff) {
     console.log(result.diff.summary);
   }

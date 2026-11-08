@@ -21,7 +21,7 @@ module.exports = [
     languageOptions: {
       ecmaVersion: 2023,
       sourceType: 'commonjs',
-      globals: Object.assign({}, globals.node, globals.browser, { ahttp: 'readonly', define: 'readonly' })
+      globals: Object.assign({}, globals.node, globals.browser, { aihttp: 'readonly', define: 'readonly' })
     },
     rules: {
       'no-unused-vars': ['warn', { args: 'none', caughtErrors: 'none', varsIgnorePattern: '^_' }],

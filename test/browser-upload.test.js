@@ -8,7 +8,7 @@ const path = require('node:path');
 const http = require('node:http');
 const { chromiumAvailable, browserGate } = require('../tools/browser-env');
 
-const gate = browserGate(chromiumAvailable(), process.env.AHTTP_REQUIRE_BROWSER === '1');
+const gate = browserGate(chromiumAvailable(), process.env.AIHTTP_REQUIRE_BROWSER === '1');
 const { openBrowserPage, closeBrowser } = require('../lib/browser');
 
 function listen(handler) {
@@ -26,9 +26,9 @@ function close(server) {
 
 test('a file action uploads a real local file', { skip: gate.skip, timeout: 60000 }, async (t) => {
   if (gate.fail) assert.fail(gate.reason);
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'ahttp-upload-'));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'aihttp-upload-'));
   const file = path.join(dir, 'receipt.txt');
-  fs.writeFileSync(file, 'ahttp upload fixture');
+  fs.writeFileSync(file, 'aihttp upload fixture');
   t.after(() => { try { fs.rmSync(dir, { recursive: true, force: true }); } catch (e) {} });
 
   const local = await listen((req, res) => {
@@ -51,7 +51,8 @@ test('a file action uploads a real local file', { skip: gate.skip, timeout: 6000
     const result = await page.api.act(input.id, { files: [file] }, { settle: true });
     assert.equal(result.ok, true);
     assert.equal(result.method, 'setInputFiles');
-    assert.equal(await page.page.evaluate(() => document.getElementById('out').textContent), 'receipt.txt:20');
+    assert.equal(await page.page.evaluate(() => document.getElementById('out').textContent),
+      'receipt.txt:' + fs.statSync(file).size);
     assert.equal(await page.page.evaluate(() => document.getElementById('f').files.length), 1);
   } finally {
     await close(local.server);

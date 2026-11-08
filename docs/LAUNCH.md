@@ -12,7 +12,7 @@ The browser demo is a single static page at `docs/demo/index.html`. It loads `ai
 4. Under **Build and deployment**, set **Source** to **Deploy from a branch**.
 5. Choose branch **main** and folder **/docs**, then **Save**.
 6. Wait for the Pages deployment to finish (the Actions run is named `pages build and deployment`).
-7. Open `https://<owner>.github.io/ahttp/demo/` and check that the preview renders and the snapshot panel fills after **Run**.
+7. Open `https://<owner>.github.io/aiweb/demo/` and check that the preview renders and the snapshot panel fills after **Run**.
 8. In the browser DevTools **Network** panel, confirm the page requests only `index.html` and `aihttp.js` from the same origin.
 9. If the site uses a custom domain, add it under **Settings → Pages → Custom domain** and enable **Enforce HTTPS**.
 
@@ -38,7 +38,7 @@ Any static file server works; the page has no server-side dependency.
 
 ## Publish to npm
 
-The package name is `aihttp`; the engine file and MCP tool names stay `ahttp` for compatibility.
+The package name is `aihttp`; the browser global and MCP tool names are `aihttp`.
 
 ```bash
 npm login

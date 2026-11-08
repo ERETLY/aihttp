@@ -7,7 +7,7 @@ without parsing the DOM or looking at pixels.
 - Media type: `application/aihttp+json`
 - Protocol id: `aihttp/1`
 - Current implementation version: `1.0.0`
-- Compatibility: the engine file and MCP tools still use the `ahttp` prefix.
+- Naming: the browser global is `window.aihttp` and the MCP tools use the `aihttp_` prefix.
 
 ## Envelope
 
@@ -100,8 +100,8 @@ redacted; supply them through `values`.
 ## Transport
 
 - HTTP: `aihttp-serve`, `GET /?url=...`, `POST /act`
-- MCP: `ahttp_open`, `ahttp_snapshot`, `ahttp_act`, `ahttp_trace`, `ahttp_replay`
-- Library: `require('aihttp')` / `window.aihttp` (`window.ahttp` is an alias)
+- MCP: `aihttp_open`, `aihttp_snapshot`, `aihttp_act`, `aihttp_trace`, `aihttp_replay`
+- Library: `require('aihttp')` / `window.aihttp` (`window.aiweb` is an alias)
 
 ## Versioning
 
@@ -113,6 +113,6 @@ fields and new action kinds are additive. Unknown fields must be ignored.
 
 The format is page-derived data. Authorization is origin-bound: the auth
 endpoint must share the page origin or be listed in
-`data-ahttp-auth-origins`. Browser mode runs the engine in an isolated world;
+`data-aihttp-auth-origins`. Browser mode runs the engine in an isolated world;
 static mode binds a guarded fetch. Private targets are blocked unless
 `allowPrivate` / `AIHTTP_ALLOW_PRIVATE=1` is set.

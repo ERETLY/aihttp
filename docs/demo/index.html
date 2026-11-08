@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ahttp preview</title>
+  <title>aihttp preview</title>
   <style>
     :root { color-scheme: light; --ink: #17212b; --muted: #5b6773; --line: #d7dde3; --bg: #f6f8fa; }
     * { box-sizing: border-box; }
@@ -27,7 +27,7 @@
 </head>
 <body>
   <header>
-    <h1>ahttp preview</h1>
+    <h1>aihttp preview</h1>
     <p>Paste HTML. The iframe renders it, injects aihttp.js, and shows the raw token estimate next to the action snapshot.</p>
   </header>
   <main>
@@ -38,10 +38,10 @@
     &lt;h1&gt;Widget shop&lt;/h1&gt;
     &lt;label for="email"&gt;Email&lt;/label&gt;
     &lt;input id="email" name="email" placeholder="agent@example.com"&gt;
-    &lt;button data-ahttp-intent="add"&gt;Add Widget Pro&lt;/button&gt;
-    &lt;button data-ahttp-confirm="Charges $49"&gt;Place order&lt;/button&gt;
-    &lt;input value="ACC-777" data-ahttp-readonly&gt;
-    &lt;div data-ahttp-ignore&gt;&lt;button&gt;Internal admin tool&lt;/button&gt;&lt;/div&gt;
+    &lt;button data-aihttp-intent="add"&gt;Add Widget Pro&lt;/button&gt;
+    &lt;button data-aihttp-confirm="Charges $49"&gt;Place order&lt;/button&gt;
+    &lt;input value="ACC-777" data-aihttp-readonly&gt;
+    &lt;div data-aihttp-ignore&gt;&lt;button&gt;Internal admin tool&lt;/button&gt;&lt;/div&gt;
     &lt;div style="color:#fff;background:#fff"&gt;HIDDEN_CANARY_DEMO&lt;/div&gt;
   &lt;/main&gt;
 &lt;/body&gt;&lt;/html&gt;</textarea>
@@ -53,7 +53,7 @@
     <div class="grid">
       <section class="panel"><h2>Rendered page</h2><iframe id="frame" sandbox="allow-scripts allow-same-origin"></iframe></section>
       <section class="panel"><h2>Raw HTML estimate</h2><pre id="raw">-</pre></section>
-      <section class="panel"><h2>ahttp snapshot</h2><pre id="snap">-</pre></section>
+      <section class="panel"><h2>aihttp snapshot</h2><pre id="snap">-</pre></section>
       <section class="panel"><h2>Metrics</h2><pre id="meta">-</pre></section>
     </div>
     <p class="note">The token estimate is UTF-8 bytes / 4, not a model tokenizer. The demo runs entirely in this page; it does not fetch a URL. Page text is untrusted content; do not paste secrets.</p>
@@ -87,7 +87,7 @@
         script.onload = function () {
           if (token !== runToken) return;
           try {
-            const snapshot = frame.contentWindow.ahttp.snapshot({ maxActions: 30, maxText: 500 });
+            const snapshot = frame.contentWindow.aihttp.snapshot({ maxActions: 30, maxText: 500 });
             const rawTokens = estimate(raw);
             const snapshotTokens = estimate(snapshot);
             document.getElementById('snap').textContent = snapshot;
@@ -98,7 +98,7 @@
               'snapshot chars: ' + snapshot.length;
             status.textContent = 'Done.';
           } catch (error) {
-            status.textContent = 'ahttp error: ' + error.message;
+            status.textContent = 'aihttp error: ' + error.message;
           }
         };
         script.onerror = function () { status.textContent = 'could not load ../../aihttp.js'; };

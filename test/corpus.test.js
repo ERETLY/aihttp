@@ -10,7 +10,7 @@ const CASES = loadCases();
 
 test('the matching corpus is green and has at least 20 cases', { timeout: 120000 }, async () => {
   assert.ok(CASES.length >= 20, 'corpus has ' + CASES.length + ' cases');
-  const result = await runCorpus({ write: process.env.AHTTP_CORPUS_WRITE !== '0' });
+  const result = await runCorpus({ write: process.env.AIHTTP_CORPUS_WRITE !== '0' });
   assert.equal(result.totals.failed, 0, 'failed cases: ' + result.cases
     .filter(function (item) { return item.status === 'FAIL'; })
     .map(function (item) { return item.id + ' [' + item.failures.join('; ') + ']'; })

@@ -26,7 +26,7 @@ const ENGINE = fs.readFileSync(path.join(ROOT, 'aihttp.js'), 'utf8');
 
   const snap = await page.evaluate(function () {
     var t = performance.now();
-    var json = window.ahttp.snapshot({ format: 'json', force: true });
+    var json = window.aihttp.snapshot({ format: 'json', force: true });
     var box = json.actions.filter(function (action) { return action.tag === 'input' && action.type === 'checkbox'; })[0];
     return { ms: performance.now() - t, id: box ? box.id : null, labels: json.actions.map(function (action) { return action.id + ':' + action.tag + ':' + action.label; }) };
   });
@@ -34,26 +34,26 @@ const ENGINE = fs.readFileSync(path.join(ROOT, 'aihttp.js'), 'utf8');
 
   const dispatchOnly = await page.evaluate(async function (id) {
     var t = performance.now();
-    var result = await window.ahttp.act(id, { checked: true }, { settle: false, snapshot: false, diff: false });
+    var result = await window.aihttp.act(id, { checked: true }, { settle: false, snapshot: false, diff: false });
     return { ms: performance.now() - t, status: result.status, checked: document.querySelectorAll('#checkboxes input')[0].checked };
   }, snap.id);
 
   const settled = await page.evaluate(async function (id) {
     var t = performance.now();
-    var result = await window.ahttp.act(id, { checked: false }, { quiet: 120, minWait: 60, timeout: 20000, snapshot: false, diff: false });
+    var result = await window.aihttp.act(id, { checked: false }, { quiet: 120, minWait: 60, timeout: 20000, snapshot: false, diff: false });
     return {
       ms: performance.now() - t,
       status: result.status,
       engineMs: result.latencyMs,
       mutations: result.meta && result.meta.mutations,
-      network: window.ahttp.status().network
+      network: window.aihttp.status().network
     };
   }, snap.id);
 
   const capped = await page.evaluate(async function (id) {
     var t = performance.now();
-    var result = await window.ahttp.act(id, { checked: true }, { quiet: 120, minWait: 60, timeout: 1500, snapshot: false, diff: false });
-    return { ms: performance.now() - t, status: result.status, engineMs: result.latencyMs, network: window.ahttp.status().network };
+    var result = await window.aihttp.act(id, { checked: true }, { quiet: 120, minWait: 60, timeout: 1500, snapshot: false, diff: false });
+    return { ms: performance.now() - t, status: result.status, engineMs: result.latencyMs, network: window.aihttp.status().network };
   }, snap.id);
 
   const mutations = await page.evaluate(function () {

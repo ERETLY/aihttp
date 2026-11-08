@@ -7,29 +7,33 @@
 - The public product and wire format are **aihttp** (AI HTTP). The package
   name is `aihttp`, the npm binaries are `aihttp`, `aihttp-mcp` and
   `aihttp-serve`, and `window.aihttp` is the browser global. The engine file is
-  `aihttp.js`; MCP tool names and `ahttp` globals stay as compatibility names.
-  `aiweb` was
-  the working name during development and remains an alias.
+  `aihttp.js`, the attributes are `data-aihttp-*`, and the MCP tool names are
+  `aihttp_open`, `aihttp_snapshot`, `aihttp_act`, `aihttp_trace` and
+  `aihttp_replay`. The rename is complete and breaking: no compatibility
+  aliases remain. `aiweb` is the repository name; `window.aiweb` is kept as a
+  browser alias.
 - `aihttp-serve` exposes the format over HTTP: `GET /?url=...` returns
   `application/aihttp+json`, `POST /act` runs one action, `GET /health` reports
   the protocol version. Supports `--browser`, `--allow-private` and an
   `AIHTTP_TOKEN` bearer token.
 - `docs/AIHTTP.md` specifies `aihttp/1`: envelope, action schema, statuses,
-  trace/replay, transport, versioning and security rules. `ahttp.trace()` exports executed actions as
-  portable fingerprints (`data-ahttp-intent`, test id, name, role, label,
-  href) instead of scan-local ids. `ahttp.replay(trace)` resolves each step
+  trace/replay, transport, versioning and security rules. `aihttp.trace()` exports executed actions as
+  portable fingerprints (`data-aihttp-intent`, test id, name, role, label,
+  href) instead of scan-local ids. `aihttp.replay(trace)` resolves each step
   against the current DOM, follows navigations, and reports `not_found`,
   `ambiguous`, `needs_value`, `needs_confirmation` or `url_mismatch` instead
   of silently clicking the wrong control. Password values are redacted from
   the trace; replay takes them through `values`. Exposed over MCP as
-  `ahttp_trace` and `ahttp_replay`.
+  `aihttp_trace` and `aihttp_replay`.
 - The static backend binds a guarded `fetch` into the page window, so server
   auth, `fetch`-based forms and page scripts work without a browser. Requests
   still pass through the same private-address guard as the document loader.
 - `benchmark/web-matrix.js` and `benchmark/web-sites.json` measure coverage on
   385 public sites against an independent oracle of reachable controls.
   `npm run bench:web` reports weighted recall, phantom actions, blocked sites
-  and network errors separately. `npm run bench:web:summary` prints the same
+  and network errors separately. Final run: 312 measured, 99.7% weighted recall,
+  99.8% mean, one site below 90% (Upwork 89.7%), 5,269 phantom actions.
+  `npm run bench:web:summary` prints the same
   weighted/mean/below-90/scan-time numbers from the last JSON. It is a finding
   tool, not a CI gate. Snapshot
   and oracle run in one synchronous evaluate, so a virtualized feed cannot
@@ -39,6 +43,12 @@
   `clip-path: inset(50%)` as hidden, matching the engine. `sr-only` navigation
   (Hashnode, Vaadin) is no longer counted as reachable: the engine was right
   to skip it, and the denominator was wrong.
+
+### Changed
+
+- The text snapshot header is now `aihttp | title | url`. JSON consumers
+  already read `protocol: "aihttp/1"`. The old global and MCP tool aliases are
+  removed.
 
 ### Fixed
 
@@ -107,11 +117,11 @@
   boundary: over HTTP they would let a caller read any file the server process
   can read and upload it to a page. Use the MCP server for uploads.
 - The server authorization endpoint must share the page origin unless
-  `data-ahttp-auth-origins` explicitly allows it. A page can no longer point
-  `data-ahttp-auth-endpoint` at an attacker's origin and receive the Bearer
+  `data-aihttp-auth-origins` explicitly allows it. A page can no longer point
+  `data-aihttp-auth-endpoint` at an attacker's origin and receive the Bearer
   token. Cross-origin authorization requests omit cookies.
 - The browser backend runs the engine in a CDP isolated world. Page scripts
-  cannot read, replace or shadow `window.ahttp`, and the auth token never
+  cannot read, replace or shadow `window.aihttp`, and the auth token never
   enters the page world.
 - Cross-origin frames get their own isolated world per frame target. The main
   engine still handles same-origin frames through `contentDocument`.
@@ -119,8 +129,8 @@
   `ws://127.0.0.1`, `wss://localhost` and link-local targets are blocked
   unless `allowPrivate` is set.
 - The static backend creates one engine per page instead of sharing a
-  module-level singleton and a single `globalThis.__AHTTP_ENV__`.
-- An MCP tool call now has a deadline (`AHTTP_CALL_TIMEOUT_MS`, 90 s by
+  module-level singleton and a single `globalThis.__AIHTTP_ENV__`.
+- An MCP tool call now has a deadline (`AIHTTP_CALL_TIMEOUT_MS`, 90 s by
   default). A stuck page load can no longer block the single request queue
   forever.
 
@@ -141,9 +151,9 @@
 
 - A link click that already navigated no longer reopens its `href`, so
   one-time links are not consumed twice.
-- `ahttp_act` accepts `files` (real uploads through the browser backend) and
+- `aihttp_act` accepts `files` (real uploads through the browser backend) and
   `dialog` / `promptText` for native alert, confirm and prompt.
-- `ahttp_snapshot` accepts `lazy` to scroll the page once and reveal sections
+- `aihttp_snapshot` accepts `lazy` to scroll the page once and reveal sections
   built by IntersectionObserver.
 
 ### Parsing
@@ -179,7 +189,7 @@
   custom combobox. `ElementInternals` `ariaLabel` and `role` are used for
   custom elements. ID references resolve across a shadow boundary into the
   light DOM.
-- MCP `ahttp_act` now waits for settle by default and accepts `expect`,
+- MCP `aihttp_act` now waits for settle by default and accepts `expect`,
   `checked`, `hover`, `read`, `choose`, `wait` and `timeout`.
 - A form with `<input name="hidden">` no longer hides itself: the engine reads
   the `hidden` attribute instead of the form's named property.
@@ -187,8 +197,8 @@
   is no longer treated as offscreen.
 - `aria-owns` subtrees are walked in the owner's region, including owned
   popups outside a modal.
-- `snapshot({ maxNodes, maxDepth })` and `data-ahttp-max-nodes` /
-  `data-ahttp-max-depth` make the scan budget explicit; `meta.truncated`
+- `snapshot({ maxNodes, maxDepth })` and `data-aihttp-max-nodes` /
+  `data-aihttp-max-depth` make the scan budget explicit; `meta.truncated`
   reports a cut scan.
 - Native `alert` / `confirm` / `prompt` follow an accept or dismiss policy
   per action.
@@ -274,10 +284,10 @@
   `data-testid`) still runs.
 
 - Label lookup: when the id is not in the registry, `act("Delete")` used to
-  take the first action with that label. It now tries `data-ahttp-intent`
+  take the first action with that label. It now tries `data-aihttp-intent`
   (case-insensitive), then the label with exact case, then the label
   case-insensitive. A step with more than one match returns `status: 'ambiguous'`
-  with candidates and dispatches nothing; a duplicate `data-ahttp-intent` does
+  with candidates and dispatches nothing; a duplicate `data-aihttp-intent` does
   the same. Unique labels still run, and `confirm: true` does not bypass it.
 
 - Matching: position, DOM order and the fingerprint add up to 14 points, more
@@ -329,7 +339,7 @@
   hiding mechanisms, a disabled twin, `pointer-events: none`, label lookup), `bench/results.json` metrics and no
   network access.
 - `test/realworld-layout.test.js`: five Chromium tests behind
-  `AHTTP_REQUIRE_BROWSER=1` (layout mode, anchors without `href`, label proxy,
+  `AIHTTP_REQUIRE_BROWSER=1` (layout mode, anchors without `href`, label proxy,
   partial opacity, `display: contents` and the security fixture).
 - `test/realworld-oracle.test.js`: a Chromium test pins that the oracle hides a
   closed `<details>` subtree, keeps its first `<summary>`, and still shows open

@@ -25,19 +25,19 @@ test('installWebMCP registers snapshot and action tools when document.modelConte
   const { dom, tools } = loadWithWebMCP('<!doctype html><body><main><button id="b">Go</button><p id="out">idle</p></main></body>');
   const button = dom.window.document.getElementById('b');
   button.addEventListener('click', () => { dom.window.document.getElementById('out').textContent = 'clicked'; });
-  const installed = await dom.window.ahttp.installWebMCP();
+  const installed = await dom.window.aihttp.installWebMCP();
   assert.equal(installed.ok, true);
-  assert.equal(installed.names.join(','), 'ahttp_snapshot,ahttp_act');
+  assert.equal(installed.names.join(','), 'aihttp_snapshot,aihttp_act');
   assert.equal(tools.size, 2);
-  assert.equal(tools.get('ahttp_snapshot').tool.annotations.readOnlyHint, true);
-  assert.equal(tools.get('ahttp_act').tool.annotations.consequentialHint, true);
+  assert.equal(tools.get('aihttp_snapshot').tool.annotations.readOnlyHint, true);
+  assert.equal(tools.get('aihttp_act').tool.annotations.consequentialHint, true);
 
-  const snapshot = await tools.get('ahttp_snapshot').tool.execute({});
+  const snapshot = await tools.get('aihttp_snapshot').tool.execute({});
   assert.equal(snapshot.format, undefined);
   assert.equal(snapshot.actions.length, 1);
   assert.match(snapshot.actions[0].label, /Go/);
 
-  const action = await tools.get('ahttp_act').tool.execute({ id: snapshot.actions[0].id });
+  const action = await tools.get('aihttp_act').tool.execute({ id: snapshot.actions[0].id });
   assert.equal(action.ok, true);
   assert.equal(dom.window.document.getElementById('out').textContent, 'clicked');
   installed.close();
@@ -46,7 +46,7 @@ test('installWebMCP registers snapshot and action tools when document.modelConte
 test('installWebMCP reports unavailable without document.modelContext', async () => {
   const dom = new JSDOM('<!doctype html><body><button>Go</button></body>', { url: 'https://webmcp.test/', runScripts: 'outside-only' });
   dom.window.eval(ENGINE);
-  const result = await dom.window.ahttp.installWebMCP();
+  const result = await dom.window.aihttp.installWebMCP();
   assert.equal(result.ok, false);
   assert.equal(result.error, 'webmcp_unavailable');
 });

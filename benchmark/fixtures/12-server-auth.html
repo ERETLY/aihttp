@@ -4,17 +4,17 @@
 <body>
 <main>
   <h1>Server Auth</h1>
-  <button data-ahttp-intent="checkout_submit" onclick="document.getElementById('r').textContent='charged'">Charge card</button>
-  <button data-ahttp-intent="delete_account" onclick="document.getElementById('r').textContent='deleted'">Delete account</button>
+  <button data-aihttp-intent="checkout_submit" onclick="document.getElementById('r').textContent='charged'">Charge card</button>
+  <button data-aihttp-intent="delete_account" onclick="document.getElementById('r').textContent='deleted'">Delete account</button>
   <label for="note">Note</label>
   <input id="note" name="note" value="ready">
   <p id="r">idle</p>
 </main>
 <script src="aihttp.js"
-        data-ahttp-owner="acme"
-        data-ahttp-access="owner"
-        data-ahttp-auth-endpoint="https://auth.test/authorize"
-        data-ahttp-auth-origins="https://auth.test"
-        data-ahttp-auth-timeout="5000"></script>
+        data-aihttp-owner="acme"
+        data-aihttp-access="owner"
+        data-aihttp-auth-endpoint="https://auth.test/authorize"
+        data-aihttp-auth-origins="https://auth.test"
+        data-aihttp-auth-timeout="5000"></script>
 </body>
 </html>

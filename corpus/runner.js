@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-// Regression corpus for ahttp. Every case is a local HTML fixture plus a list of
+// Regression corpus for aihttp. Every case is a local HTML fixture plus a list of
 // snapshot/action steps. No network access: jsdom only, no resources loader.
 //
 // Usage:
@@ -16,10 +16,10 @@ const { JSDOM } = require('jsdom');
 const { countTokens } = require('gpt-tokenizer');
 
 const ROOT = path.join(__dirname, '..');
-// AHTTP_ENGINE lets the same corpus run against an older engine for a
+// AIHTTP_ENGINE lets the same corpus run against an older engine for a
 // before/after report. It is not used by npm test.
-const ENGINE_PATH = process.env.AHTTP_ENGINE
-  ? path.resolve(process.env.AHTTP_ENGINE)
+const ENGINE_PATH = process.env.AIHTTP_ENGINE
+  ? path.resolve(process.env.AIHTTP_ENGINE)
   : path.join(ROOT, 'aihttp.js');
 const ENGINE = fs.readFileSync(ENGINE_PATH, 'utf8');
 const CASES_DIR = path.join(__dirname, 'cases');
@@ -63,7 +63,7 @@ function loadWindow(testCase) {
     resources: undefined
   });
   dom.window.eval(ENGINE);
-  return { dom: dom, window: dom.window, document: dom.window.document, ahttp: dom.window.ahttp };
+  return { dom: dom, window: dom.window, document: dom.window.document, aihttp: dom.window.aihttp };
 }
 
 function statusOf(result) {
@@ -196,7 +196,7 @@ function wire(window) {
 
 async function runCase(testCase) {
   const loaded = loadWindow(testCase);
-  const ahttp = loaded.ahttp;
+  const aihttp = loaded.aihttp;
   const window = loaded.window;
   const steps = [];
   const failures = [];
@@ -210,8 +210,8 @@ async function runCase(testCase) {
     try {
       if (step.action === 'snapshot') {
         const options = Object.assign({}, SNAPSHOT_OPTIONS, step.options || {});
-        const json = ahttp.snapshot(Object.assign({ format: 'json' }, options));
-        const text = ahttp.snapshot(Object.assign({ format: 'text' }, options));
+        const json = aihttp.snapshot(Object.assign({ format: 'json' }, options));
+        const text = aihttp.snapshot(Object.assign({ format: 'text' }, options));
         tokens += countTokens(text);
         const checks = snapshotChecks(step, text, json);
         const stepMatch = checks.match.every(function (item) { return item.pass; });
@@ -236,7 +236,7 @@ async function runCase(testCase) {
           : (step.payload || null);
         const actOptions = Object.assign({}, ACT_OPTIONS, step.options || {});
         if (step.actExpect) actOptions.expect = step.actExpect;
-        const result = await ahttp.act(step.expectedId, payload, actOptions);
+        const result = await aihttp.act(step.expectedId, payload, actOptions);
         const expectedStatus = step.expectStatus || (step.action === 'fill' ? 'ok' : 'ok');
         const actualStatus = statusOf(result);
         const status = check('status=' + expectedStatus, actualStatus === expectedStatus, actualStatus);

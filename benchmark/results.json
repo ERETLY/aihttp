@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-08T12:14:24.626Z",
+  "generatedAt": "2026-11-08T12:51:18.108Z",
   "version": "1.0.0",
   "node": "v26.13.0",
   "platform": "win32",
@@ -14,7 +14,7 @@
       "pass": true,
       "passed": 12,
       "total": 12,
-      "ms": 718,
+      "ms": 688,
       "checks": [
         {
           "name": "initial controls discovered",
@@ -79,7 +79,7 @@
       "pass": true,
       "passed": 7,
       "total": 7,
-      "ms": 460,
+      "ms": 473,
       "checks": [
         {
           "name": "five controls, nested spans deduplicated",
@@ -120,7 +120,7 @@
       "pass": true,
       "passed": 6,
       "total": 6,
-      "ms": 201,
+      "ms": 186,
       "checks": [
         {
           "name": "two nested open shadow roots traversed",
@@ -158,7 +158,7 @@
       "pass": true,
       "passed": 7,
       "total": 7,
-      "ms": 560,
+      "ms": 590,
       "checks": [
         {
           "name": "delayed modal detected in diff",
@@ -177,12 +177,12 @@
         {
           "name": "settle waited for the delayed UI",
           "pass": true,
-          "actual": "475ms"
+          "actual": "503ms"
         },
         {
           "name": "settle completed within the timeout",
           "pass": true,
-          "actual": "475ms"
+          "actual": "503ms"
         },
         {
           "name": "fetch call intercepted",
@@ -202,7 +202,7 @@
       "pass": true,
       "passed": 23,
       "total": 23,
-      "ms": 27,
+      "ms": 32,
       "checks": [
         {
           "name": "engine dormant before first call",
@@ -231,7 +231,7 @@
           "pass": true
         },
         {
-          "name": "data-ahttp-ignore subtree removed",
+          "name": "data-aihttp-ignore subtree removed",
           "pass": true
         },
         {
@@ -240,12 +240,12 @@
           "actual": "4"
         },
         {
-          "name": "data-ahttp-intent wins over visible text",
+          "name": "data-aihttp-intent wins over visible text",
           "pass": true,
           "actual": "checkout_submit"
         },
         {
-          "name": "data-ahttp-confirm exposed in JSON",
+          "name": "data-aihttp-confirm exposed in JSON",
           "pass": true
         },
         {
@@ -311,7 +311,7 @@
       "pass": true,
       "passed": 8,
       "total": 8,
-      "ms": 270,
+      "ms": 294,
       "checks": [
         {
           "name": "initial page summary",
@@ -347,7 +347,7 @@
         {
           "name": "grid snapshot remains compact",
           "pass": true,
-          "actual": "251"
+          "actual": "252"
         }
       ]
     },
@@ -399,7 +399,7 @@
       "pass": true,
       "passed": 7,
       "total": 7,
-      "ms": 278,
+      "ms": 233,
       "checks": [
         {
           "name": "contenteditable registered",
@@ -440,7 +440,7 @@
       "pass": true,
       "passed": 10,
       "total": 10,
-      "ms": 435,
+      "ms": 454,
       "checks": [
         {
           "name": "3500+ element nodes traversed",
@@ -450,12 +450,12 @@
         {
           "name": "median native DOM scan (advisory)",
           "pass": true,
-          "actual": "15ms; advisory budget 150ms; reference machine 25ms"
+          "actual": "17ms; advisory budget 150ms; reference machine 25ms"
         },
         {
           "name": "default snapshot stays compact",
           "pass": true,
-          "actual": "3224 chars"
+          "actual": "3225 chars"
         },
         {
           "name": "first repeated action preserved",
@@ -482,12 +482,12 @@
         {
           "name": "jsdom reference traversal completed",
           "pass": true,
-          "actual": "3759 nodes in 147ms"
+          "actual": "3759 nodes in 156ms"
         },
         {
           "name": "scan samples",
           "pass": true,
-          "actual": "14,15,15,18,38"
+          "actual": "15,15,17,19,43"
         }
       ]
     }
@@ -503,12 +503,12 @@
       "httpStatus": 200,
       "rawBytes": 34839,
       "rawTokens": 11771,
-      "snapshotBytes": 3513,
+      "snapshotBytes": 3514,
       "snapshotTokens": 1162,
       "ratio": 10.1,
       "markdownTokens": 5136,
       "markdownRatio": 4.4,
-      "jinaTokens": 5408,
+      "jinaTokens": 5274,
       "jinaStatus": "ok",
       "firecrawlTokens": null,
       "firecrawlStatus": "no key",
@@ -523,13 +523,13 @@
       "nodes": 745,
       "sanitized": 0,
       "shadowRoots": 0,
-      "scanMs": 10,
+      "scanMs": 13,
       "fetchMs": 0,
       "parseMs": 0,
-      "totalMs": 4,
+      "totalMs": 6,
       "liveMs": {
-        "ahttp": 2239,
-        "jina": 932,
+        "aihttp": 1218,
+        "jina": 1004,
         "firecrawl": null
       },
       "layout": "css"
@@ -544,12 +544,12 @@
       "httpStatus": 200,
       "rawBytes": 604882,
       "rawTokens": 191129,
-      "snapshotBytes": 4110,
+      "snapshotBytes": 4111,
       "snapshotTokens": 1130,
       "ratio": 169.1,
       "markdownTokens": 26579,
       "markdownRatio": 23.5,
-      "jinaTokens": 27711,
+      "jinaTokens": 27977,
       "jinaStatus": "ok",
       "firecrawlTokens": null,
       "firecrawlStatus": "no key",
@@ -564,13 +564,13 @@
       "nodes": 4944,
       "sanitized": 0,
       "shadowRoots": 0,
-      "scanMs": 88,
+      "scanMs": 99,
       "fetchMs": 0,
-      "parseMs": 0,
-      "totalMs": 51,
+      "parseMs": 3,
+      "totalMs": 102,
       "liveMs": {
-        "ahttp": 1117,
-        "jina": 2538,
+        "aihttp": 1183,
+        "jina": 911,
         "firecrawl": null
       },
       "layout": "css"
@@ -585,12 +585,12 @@
       "httpStatus": 200,
       "rawBytes": 56731,
       "rawTokens": 17909,
-      "snapshotBytes": 3110,
+      "snapshotBytes": 3111,
       "snapshotTokens": 1105,
       "ratio": 16.2,
       "markdownTokens": 6542,
       "markdownRatio": 5.9,
-      "jinaTokens": 7906,
+      "jinaTokens": 7700,
       "jinaStatus": "ok",
       "firecrawlTokens": null,
       "firecrawlStatus": "no key",
@@ -605,13 +605,13 @@
       "nodes": 638,
       "sanitized": 0,
       "shadowRoots": 0,
-      "scanMs": 6,
+      "scanMs": 5,
       "fetchMs": 0,
       "parseMs": 0,
-      "totalMs": 3,
+      "totalMs": 5,
       "liveMs": {
-        "ahttp": 2665,
-        "jina": 3048,
+        "aihttp": 2075,
+        "jina": 510,
         "firecrawl": null
       },
       "layout": "css"
@@ -626,7 +626,7 @@
       "httpStatus": 200,
       "rawBytes": 293132,
       "rawTokens": 105767,
-      "snapshotBytes": 4774,
+      "snapshotBytes": 4775,
       "snapshotTokens": 1286,
       "ratio": 82.2,
       "markdownTokens": 1387,
@@ -646,13 +646,13 @@
       "nodes": 1412,
       "sanitized": 0,
       "shadowRoots": 0,
-      "scanMs": 15,
+      "scanMs": 17,
       "fetchMs": 0,
-      "parseMs": 3,
+      "parseMs": 1,
       "totalMs": 18,
       "liveMs": {
-        "ahttp": 2415,
-        "jina": 459,
+        "aihttp": 2560,
+        "jina": 407,
         "firecrawl": null
       },
       "layout": "css"
@@ -667,12 +667,12 @@
       "httpStatus": 200,
       "rawBytes": 222231,
       "rawTokens": 59787,
-      "snapshotBytes": 4231,
+      "snapshotBytes": 4232,
       "snapshotTokens": 1156,
       "ratio": 51.7,
       "markdownTokens": 3008,
       "markdownRatio": 2.6,
-      "jinaTokens": 3087,
+      "jinaTokens": 3106,
       "jinaStatus": "ok",
       "firecrawlTokens": null,
       "firecrawlStatus": "no key",
@@ -687,13 +687,13 @@
       "nodes": 760,
       "sanitized": 0,
       "shadowRoots": 0,
-      "scanMs": 17,
+      "scanMs": 24,
       "fetchMs": 0,
-      "parseMs": 2,
-      "totalMs": 19,
+      "parseMs": 0,
+      "totalMs": 21,
       "liveMs": {
-        "ahttp": 2604,
-        "jina": 3143,
+        "aihttp": 1429,
+        "jina": 390,
         "firecrawl": null
       },
       "layout": "css"
@@ -707,7 +707,7 @@
     "steps": 5,
     "success": true,
     "totalTokenRatio": 13.8,
-    "ahttpVsAx": 1.2,
+    "aihttpVsAx": 1.2,
     "methods": [
       {
         "key": "raw",
@@ -722,7 +722,7 @@
         ],
         "totalTokens": 3983,
         "avgStepTokens": 797,
-        "avgLatencyMs": 4.22,
+        "avgLatencyMs": 4.56,
         "actionable": false,
         "guardrails": false,
         "spa": false
@@ -740,7 +740,7 @@
         ],
         "totalTokens": 68,
         "avgStepTokens": 14,
-        "avgLatencyMs": 13.39,
+        "avgLatencyMs": 13.6,
         "actionable": false,
         "guardrails": false,
         "spa": false
@@ -758,13 +758,13 @@
         ],
         "totalTokens": 346,
         "avgStepTokens": 69,
-        "avgLatencyMs": 5.71,
+        "avgLatencyMs": 4.55,
         "actionable": false,
         "guardrails": false,
         "spa": true
       },
       {
-        "key": "ahttp",
+        "key": "aihttp",
         "name": "aihttp.js in Chromium",
         "steps": 5,
         "stepTokens": [
@@ -776,7 +776,7 @@
         ],
         "totalTokens": 289,
         "avgStepTokens": 58,
-        "avgLatencyMs": 86.17,
+        "avgLatencyMs": 86.8,
         "actionable": true,
         "guardrails": true,
         "spa": true
@@ -784,16 +784,16 @@
     ]
   },
   "tasks": {
-    "methodology": "Scripted agent, not an LLM. Twenty local tasks are driven in Chromium with ahttp action ids. Raw HTML and Playwright ariaSnapshot are sampled after each step as observation-only baselines. Token counts use gpt-tokenizer 4.1.0 countTokens (o200k_base).",
+    "methodology": "Scripted agent, not an LLM. Twenty local tasks are driven in Chromium with aihttp action ids. Raw HTML and Playwright ariaSnapshot are sampled after each step as observation-only baselines. Token counts use gpt-tokenizer 4.1.0 countTokens (o200k_base).",
     "tasks": 20,
-    "ahttpSuccess": 20,
-    "ahttpSuccessRate": 100,
+    "aihttpSuccess": 20,
+    "aihttpSuccessRate": 100,
     "staticSuccess": 0,
-    "ahttpTokens": 5104,
+    "aihttpTokens": 5104,
     "rawTokens": 25896,
     "axTokens": 5360,
-    "rawToAhttp": 5.1,
-    "axToAhttp": 1.1,
+    "rawToAihttp": 5.1,
+    "axToAihttp": 1.1,
     "results": [
       {
         "id": 1,
@@ -802,10 +802,10 @@
         "completedSteps": 1,
         "success": true,
         "error": null,
-        "ahttpTokens": 90,
+        "aihttpTokens": 90,
         "rawTokens": 470,
         "axTokens": 94,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           90
         ],
         "rawStepTokens": [
@@ -814,7 +814,7 @@
         "axStepTokens": [
           94
         ],
-        "avgLatencyMs": 6.5
+        "avgLatencyMs": 7.29
       },
       {
         "id": 2,
@@ -823,10 +823,10 @@
         "completedSteps": 2,
         "success": true,
         "error": null,
-        "ahttpTokens": 180,
+        "aihttpTokens": 180,
         "rawTokens": 948,
         "axTokens": 188,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           90,
           90
         ],
@@ -838,7 +838,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 4.71
+        "avgLatencyMs": 4.63
       },
       {
         "id": 3,
@@ -847,10 +847,10 @@
         "completedSteps": 3,
         "success": true,
         "error": null,
-        "ahttpTokens": 270,
+        "aihttpTokens": 270,
         "rawTokens": 1434,
         "axTokens": 282,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           90,
           90,
           90
@@ -865,7 +865,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 4.25
+        "avgLatencyMs": 4.38
       },
       {
         "id": 4,
@@ -874,10 +874,10 @@
         "completedSteps": 4,
         "success": true,
         "error": null,
-        "ahttpTokens": 360,
+        "aihttpTokens": 360,
         "rawTokens": 1928,
         "axTokens": 376,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           90,
           90,
           90,
@@ -895,7 +895,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 4.41
+        "avgLatencyMs": 3.9
       },
       {
         "id": 5,
@@ -904,10 +904,10 @@
         "completedSteps": 2,
         "success": true,
         "error": null,
-        "ahttpTokens": 192,
+        "aihttpTokens": 192,
         "rawTokens": 960,
         "axTokens": 196,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           96,
           96
         ],
@@ -919,7 +919,7 @@
           98,
           98
         ],
-        "avgLatencyMs": 7.04
+        "avgLatencyMs": 6.01
       },
       {
         "id": 6,
@@ -928,10 +928,10 @@
         "completedSteps": 2,
         "success": true,
         "error": null,
-        "ahttpTokens": 192,
+        "aihttpTokens": 192,
         "rawTokens": 960,
         "axTokens": 196,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           96,
           96
         ],
@@ -943,7 +943,7 @@
           98,
           98
         ],
-        "avgLatencyMs": 5.08
+        "avgLatencyMs": 5.19
       },
       {
         "id": 7,
@@ -952,10 +952,10 @@
         "completedSteps": 2,
         "success": true,
         "error": null,
-        "ahttpTokens": 192,
+        "aihttpTokens": 192,
         "rawTokens": 960,
         "axTokens": 196,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           96,
           96
         ],
@@ -967,7 +967,7 @@
           98,
           98
         ],
-        "avgLatencyMs": 5.35
+        "avgLatencyMs": 5.13
       },
       {
         "id": 8,
@@ -976,10 +976,10 @@
         "completedSteps": 2,
         "success": true,
         "error": null,
-        "ahttpTokens": 192,
+        "aihttpTokens": 192,
         "rawTokens": 960,
         "axTokens": 196,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           96,
           96
         ],
@@ -991,7 +991,7 @@
           98,
           98
         ],
-        "avgLatencyMs": 6.16
+        "avgLatencyMs": 4.85
       },
       {
         "id": 9,
@@ -1000,10 +1000,10 @@
         "completedSteps": 2,
         "success": true,
         "error": null,
-        "ahttpTokens": 196,
+        "aihttpTokens": 196,
         "rawTokens": 946,
         "axTokens": 212,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           98,
           98
         ],
@@ -1015,7 +1015,7 @@
           106,
           106
         ],
-        "avgLatencyMs": 6.91
+        "avgLatencyMs": 5.34
       },
       {
         "id": 10,
@@ -1024,10 +1024,10 @@
         "completedSteps": 3,
         "success": true,
         "error": null,
-        "ahttpTokens": 294,
+        "aihttpTokens": 294,
         "rawTokens": 1431,
         "axTokens": 318,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           98,
           98,
           98
@@ -1042,7 +1042,7 @@
           106,
           106
         ],
-        "avgLatencyMs": 4.81
+        "avgLatencyMs": 4.55
       },
       {
         "id": 11,
@@ -1051,10 +1051,10 @@
         "completedSteps": 4,
         "success": true,
         "error": null,
-        "ahttpTokens": 392,
+        "aihttpTokens": 392,
         "rawTokens": 1924,
         "axTokens": 424,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           98,
           98,
           98,
@@ -1072,7 +1072,7 @@
           106,
           106
         ],
-        "avgLatencyMs": 4.41
+        "avgLatencyMs": 4.85
       },
       {
         "id": 12,
@@ -1081,10 +1081,10 @@
         "completedSteps": 5,
         "success": true,
         "error": null,
-        "ahttpTokens": 490,
+        "aihttpTokens": 490,
         "rawTokens": 2425,
         "axTokens": 530,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           98,
           98,
           98,
@@ -1105,7 +1105,7 @@
           106,
           106
         ],
-        "avgLatencyMs": 4.12
+        "avgLatencyMs": 4.11
       },
       {
         "id": 13,
@@ -1114,10 +1114,10 @@
         "completedSteps": 2,
         "success": true,
         "error": null,
-        "ahttpTokens": 180,
+        "aihttpTokens": 180,
         "rawTokens": 956,
         "axTokens": 188,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           90,
           90
         ],
@@ -1129,7 +1129,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 4.81
+        "avgLatencyMs": 4.78
       },
       {
         "id": 14,
@@ -1138,10 +1138,10 @@
         "completedSteps": 2,
         "success": true,
         "error": null,
-        "ahttpTokens": 180,
+        "aihttpTokens": 180,
         "rawTokens": 956,
         "axTokens": 188,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           90,
           90
         ],
@@ -1153,7 +1153,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 4.35
+        "avgLatencyMs": 4.46
       },
       {
         "id": 15,
@@ -1162,10 +1162,10 @@
         "completedSteps": 2,
         "success": true,
         "error": null,
-        "ahttpTokens": 180,
+        "aihttpTokens": 180,
         "rawTokens": 956,
         "axTokens": 188,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           90,
           90
         ],
@@ -1177,7 +1177,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 5.63
+        "avgLatencyMs": 4.86
       },
       {
         "id": 16,
@@ -1186,10 +1186,10 @@
         "completedSteps": 2,
         "success": true,
         "error": null,
-        "ahttpTokens": 180,
+        "aihttpTokens": 180,
         "rawTokens": 956,
         "axTokens": 188,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           90,
           90
         ],
@@ -1201,7 +1201,7 @@
           94,
           94
         ],
-        "avgLatencyMs": 5.82
+        "avgLatencyMs": 4.95
       },
       {
         "id": 17,
@@ -1210,10 +1210,10 @@
         "completedSteps": 2,
         "success": true,
         "error": null,
-        "ahttpTokens": 192,
+        "aihttpTokens": 192,
         "rawTokens": 946,
         "axTokens": 200,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           96,
           96
         ],
@@ -1225,7 +1225,7 @@
           100,
           100
         ],
-        "avgLatencyMs": 5.91
+        "avgLatencyMs": 5
       },
       {
         "id": 18,
@@ -1234,10 +1234,10 @@
         "completedSteps": 3,
         "success": true,
         "error": null,
-        "ahttpTokens": 288,
+        "aihttpTokens": 288,
         "rawTokens": 1431,
         "axTokens": 300,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           96,
           96,
           96
@@ -1252,7 +1252,7 @@
           100,
           100
         ],
-        "avgLatencyMs": 4.4
+        "avgLatencyMs": 4.31
       },
       {
         "id": 19,
@@ -1261,10 +1261,10 @@
         "completedSteps": 4,
         "success": true,
         "error": null,
-        "ahttpTokens": 384,
+        "aihttpTokens": 384,
         "rawTokens": 1924,
         "axTokens": 400,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           96,
           96,
           96,
@@ -1282,7 +1282,7 @@
           100,
           100
         ],
-        "avgLatencyMs": 4.62
+        "avgLatencyMs": 3.93
       },
       {
         "id": 20,
@@ -1291,10 +1291,10 @@
         "completedSteps": 5,
         "success": true,
         "error": null,
-        "ahttpTokens": 480,
+        "aihttpTokens": 480,
         "rawTokens": 2425,
         "axTokens": 500,
-        "ahttpStepTokens": [
+        "aihttpStepTokens": [
           96,
           96,
           96,
@@ -1315,7 +1315,7 @@
           100,
           100
         ],
-        "avgLatencyMs": 3.94
+        "avgLatencyMs": 3.9
       }
     ]
   },
@@ -1370,7 +1370,7 @@
     {
       "name": "locked snapshot exposes no actions or content",
       "pass": true,
-      "actual": "ahttp 1.0.0 | gate-locked | owner=acme\n[LOCKED] gate_key_required\nThis page expo"
+      "actual": "aihttp 1.0.0 | gate-locked | owner=acme\n[LOCKED] gate_key_required\nThis page exp"
     },
     {
       "name": "locked JSON has no actions",
@@ -1657,7 +1657,7 @@
       {
         "name": "initialize handshake",
         "pass": true,
-        "actual": "ahttp-mcp"
+        "actual": "aihttp-mcp"
       },
       {
         "name": "protocol version negotiated",
@@ -1671,20 +1671,20 @@
       {
         "name": "five tools listed",
         "pass": true,
-        "actual": "ahttp_open,ahttp_snapshot,ahttp_act,ahttp_trace,ahttp_replay"
+        "actual": "aihttp_open,aihttp_snapshot,aihttp_act,aihttp_trace,aihttp_replay"
       },
       {
         "name": "tool names are correct",
         "pass": true,
-        "actual": "ahttp_open,ahttp_snapshot,ahttp_act,ahttp_trace,ahttp_replay"
+        "actual": "aihttp_open,aihttp_snapshot,aihttp_act,aihttp_trace,aihttp_replay"
       },
       {
         "name": "trace and replay tools listed",
         "pass": true,
-        "actual": "ahttp_open,ahttp_snapshot,ahttp_act,ahttp_trace,ahttp_replay"
+        "actual": "aihttp_open,aihttp_snapshot,aihttp_act,aihttp_trace,aihttp_replay"
       },
       {
-        "name": "ahttp_open succeeded",
+        "name": "aihttp_open succeeded",
         "pass": true
       },
       {
@@ -1700,7 +1700,7 @@
         "pass": true
       },
       {
-        "name": "ahttp_act fill succeeded",
+        "name": "aihttp_act fill succeeded",
         "pass": true
       },
       {
@@ -1748,7 +1748,7 @@
         "actual": "/next"
       },
       {
-        "name": "ahttp_snapshot reads the current page",
+        "name": "aihttp_snapshot reads the current page",
         "pass": true
       },
       {
@@ -1838,9 +1838,9 @@
     ],
     "passed": 43,
     "total": 43,
-    "ms": 632,
+    "ms": 603,
     "stderr": [
-      "ahttp-mcp 1.0.0 ready (stdio, http backend, private targets allowed)"
+      "aihttp-mcp 1.0.0 ready (stdio, http backend, private targets allowed)"
     ]
   },
   "summary": {

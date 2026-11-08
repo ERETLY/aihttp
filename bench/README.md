@@ -13,8 +13,8 @@ npm run test:corpus
 Regenerate the baseline (any engine file works):
 
 ```bash
-git show main:aihttp.js > /tmp/ahttp.before.js
-AHTTP_ENGINE=/tmp/ahttp.before.js node corpus/runner.js --out=bench/results.before.json
+git show main:aihttp.js > /tmp/aihttp.before.js
+AIHTTP_ENGINE=/tmp/aihttp.before.js node corpus/runner.js --out=bench/results.before.json
 ```
 
 Both files contain `totals` (`cases`, `passed`, `failed`, `pending`,

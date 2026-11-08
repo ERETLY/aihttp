@@ -30,7 +30,7 @@ test('aihttp serve returns the format envelope and a snapshot', { timeout: 30000
   const page = await target((req, res) => {
     res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
     res.end('<!doctype html><body><main><h1>Format</h1>' +
-      '<button data-ahttp-intent="save">Save</button></main></body>');
+      '<button data-aihttp-intent="save">Save</button></main></body>');
   });
   const server = createServer({ allowPrivate: true, browser: false, token: '' });
   const base = await listen(server);

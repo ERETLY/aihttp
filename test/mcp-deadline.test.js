@@ -62,13 +62,13 @@ test('a stuck tool call cannot block the MCP queue', { timeout: 30000 }, async (
   });
   const proc = spawn(process.execPath, [path.join(__dirname, '..', 'bin', 'aihttp-mcp.js'), '--allow-private'], {
     stdio: ['pipe', 'pipe', 'pipe'],
-    env: Object.assign({}, process.env, { AHTTP_CALL_TIMEOUT_MS: '1500' })
+    env: Object.assign({}, process.env, { AIHTTP_CALL_TIMEOUT_MS: '1500' })
   });
   const client = createClient(proc);
   try {
     const started = Date.now();
     const result = await client.call('tools/call', {
-      name: 'ahttp_open',
+      name: 'aihttp_open',
       arguments: { url: local.url }
     }, 10000);
     const elapsed = Date.now() - started;

@@ -30,7 +30,7 @@ function loadHtml(html, url, options) {
     dom: dom,
     window: window,
     document: window.document,
-    ahttp: window.ahttp,
+    aihttp: window.aihttp,
     html: html,
     url: url || 'https://fixture.test/'
   };
@@ -49,13 +49,13 @@ function checker() {
   return { ok: ok, checks: checks };
 }
 
-function json(ahttp, options) {
+function json(aihttp, options) {
   const opts = Object.assign({ format: 'json' }, options || {});
-  return ahttp.snapshot(opts);
+  return aihttp.snapshot(opts);
 }
 
-function text(ahttp, options) {
-  return ahttp.snapshot(Object.assign({ format: 'text' }, options || {}));
+function text(aihttp, options) {
+  return aihttp.snapshot(Object.assign({ format: 'text' }, options || {}));
 }
 
 function findAction(snapshot, predicate) {
@@ -76,9 +76,9 @@ function containsLabel(snapshot, fragment) {
   });
 }
 
-async function act(ahttp, action, payload, options) {
+async function act(aihttp, action, payload, options) {
   if (!action) throw new Error('action not found');
-  return ahttp.act(action.id, payload, options);
+  return aihttp.act(action.id, payload, options);
 }
 
 module.exports = {

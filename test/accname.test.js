@@ -16,8 +16,8 @@ const HTML = '<!doctype html><html><body><main>' +
   '</main></body></html>';
 
 test('common accessible names match dom-accessibility-api', () => {
-  const { ahttp, document } = loadHtml(HTML, 'https://accname.test/');
-  const snapshot = ahttp.snapshot({ format: 'json', maxActions: 40 });
+  const { aihttp, document } = loadHtml(HTML, 'https://accname.test/');
+  const snapshot = aihttp.snapshot({ format: 'json', maxActions: 40 });
   const ids = ['b1', 'i1', 'i2', 'b2', 'b3', 'l1'];
   const labels = snapshot.actions.map((action) => action.label);
   for (const id of ids) {
@@ -28,5 +28,5 @@ test('common accessible names match dom-accessibility-api', () => {
   }
   const placeholder = document.getElementById('i3');
   assert.equal(computeAccessibleName(placeholder), '', 'the reference algorithm does not use placeholder as a name');
-  assert.ok(labels.indexOf('Search') >= 0, 'ahttp uses placeholder as a practical fallback label');
+  assert.ok(labels.indexOf('Search') >= 0, 'aihttp uses placeholder as a practical fallback label');
 });

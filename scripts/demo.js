@@ -59,7 +59,7 @@ async function main() {
       throw new Error('CLI failed: ' + (full.stderr || filtered.stderr));
     }
     const lines = [
-      '# ahttp terminal demo',
+      '# aihttp terminal demo',
       '',
       'Runs against a local page; no network access is required. Regenerate with `node scripts/demo.js`.',
       '',

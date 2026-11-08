@@ -1,8 +1,8 @@
 {
-  "name": "ahttp-auth-example",
+  "name": "aihttp-auth-example",
   "private": true,
   "version": "0.0.0",
-  "description": "Reference server-verified ahttp authorization endpoint",
+  "description": "Reference server-verified aihttp authorization endpoint",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

@@ -2,7 +2,7 @@
   "id": "act-by-duplicate-intent-ambiguous",
   "html": "fixtures/duplicate-intent.html",
   "url": "https://corpus.test/act-by-duplicate-intent",
-  "notes": "two actions share data-ahttp-intent=remove; act(\"remove\") must refuse",
+  "notes": "two actions share data-aihttp-intent=remove; act(\"remove\") must refuse",
   "steps": [
     {
       "action": "snapshot",
@@ -14,7 +14,7 @@
     {
       "action": "click",
       "expectedId": "remove",
-      "targetHint": "duplicate data-ahttp-intent",
+      "targetHint": "duplicate data-aihttp-intent",
       "expectStatus": "ambiguous",
       "expectEffect": {
         "candidates": 2,

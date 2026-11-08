@@ -1,12 +1,12 @@
 (function () {
   'use strict';
-  if (window.top !== window.self || window.__ahttpSelf) return;
-  window.__ahttpSelf = true;
-  if (!window.ahttp) return;
+  if (window.top !== window.self || window.__aihttpSelf) return;
+  window.__aihttpSelf = true;
+  if (!window.aihttp) return;
 
   var host = document.createElement('div');
-  host.setAttribute('data-ahttp-self', '');
-  host.setAttribute('data-ahttp-ignore', '');
+  host.setAttribute('data-aihttp-self', '');
+  host.setAttribute('data-aihttp-ignore', '');
   host.style.cssText = 'all:initial;position:fixed;right:16px;bottom:16px;z-index:2147483647;';
   (document.documentElement || document.body).appendChild(host);
   var root = host.attachShadow ? host.attachShadow({ mode: 'open' }) : host;
@@ -29,12 +29,12 @@
     return node;
   }
 
-  var toggle = make('button', 'toggle', 'ahttp');
+  var toggle = make('button', 'toggle', 'aihttp');
   toggle.type = 'button';
-  toggle.title = 'ahttp self-use (Alt+Shift+A)';
+  toggle.title = 'aihttp self-use (Alt+Shift+A)';
   var panel = make('section', 'panel');
   var head = make('div', 'head');
-  head.appendChild(make('span', 'title', 'ahttp · self-use'));
+  head.appendChild(make('span', 'title', 'aihttp · self-use'));
   var close = make('button', 'close', '×');
   close.type = 'button';
   close.title = 'Close';
@@ -88,7 +88,7 @@
 
   function scan() {
     try {
-      show(window.ahttp.snapshot({ format: 'text', maxActions: 80, maxText: 1200 }));
+      show(window.aihttp.snapshot({ format: 'text', maxActions: 80, maxText: 1200 }));
       setStatus('Snapshot updated.', 'ok');
     } catch (error) {
       setStatus(String(error && error.message ? error.message : error), 'err');
@@ -124,7 +124,7 @@
     var payload = value === '' ? null : value;
     var options = { confirm: confirmed === true || (pendingConfirm && confirmed === true) };
     setStatus('Running…');
-    window.ahttp.act(id, payload, options).then(report, function (error) {
+    window.aihttp.act(id, payload, options).then(report, function (error) {
       setStatus(String(error && error.message ? error.message : error), 'err');
     });
   }
@@ -165,5 +165,5 @@
     }
   }, true);
 
-  window.ahttpSelf = { open: function () { panel.classList.add('open'); scan(); }, scan: scan, act: act };
+  window.aihttpSelf = { open: function () { panel.classList.add('open'); scan(); }, scan: scan, act: act };
 })();

@@ -5,10 +5,10 @@ const assert = require('node:assert/strict');
 const { loadHtml } = require('../benchmark/lib/harness');
 
 function snapshot(html) {
-  const { ahttp } = loadHtml('<!doctype html><html><head><title>Pointer hosts</title><style>' +
+  const { aihttp } = loadHtml('<!doctype html><html><head><title>Pointer hosts</title><style>' +
     'shreddit-card{cursor:pointer}.card{cursor:pointer}my-tab{cursor:pointer}.term{cursor:pointer}' +
     '</style></head><body><main>' + html + '</main></body></html>', 'https://pointer.test/');
-  return ahttp.snapshot({ format: 'json', maxActions: 40 }).actions;
+  return aihttp.snapshot({ format: 'json', maxActions: 40 }).actions;
 }
 
 test('a pointer host does not swallow the button in its light DOM', () => {
@@ -19,7 +19,7 @@ test('a pointer host does not swallow the button in its light DOM', () => {
 });
 
 test('an inherited pointer cursor does not make a text span a second control', () => {
-  const actions = snapshot('<div class="card" data-ahttp-intent="Open card"><span class="title">Title</span></div>');
+  const actions = snapshot('<div class="card" data-aihttp-intent="Open card"><span class="title">Title</span></div>');
   const labels = Array.from(actions, function (a) { return a.label; });
   assert.equal(labels.join('|'), 'Open card');
 });

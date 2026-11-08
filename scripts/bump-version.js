@@ -197,7 +197,7 @@ function main() {
   if (nextSpec) fs.writeFileSync(path.join(ROOT, FILES.spec), nextSpec, 'utf8');
   process.stdout.write('bump-version: ' + currentText + ' -> ' + next + '\n');
 
-  if (process.env.AHTTP_BUMP_SKIP_BUILD !== '1') {
+  if (process.env.AIHTTP_BUMP_SKIP_BUILD !== '1') {
     runStep('npm run build', 'npm run build', [], true);
     runStep('scripts/smoke-runtime.js', process.execPath, [path.join(__dirname, 'smoke-runtime.js')], false);
   }

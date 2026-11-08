@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const http = require('node:http');
 const { chromiumAvailable, browserGate } = require('../tools/browser-env');
 
-const gate = browserGate(chromiumAvailable(), process.env.AHTTP_REQUIRE_BROWSER === '1');
+const gate = browserGate(chromiumAvailable(), process.env.AIHTTP_REQUIRE_BROWSER === '1');
 const { openBrowserPage, closeBrowser } = require('../lib/browser');
 
 function listen(handler) {

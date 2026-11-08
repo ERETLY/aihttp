@@ -9,7 +9,7 @@ const browser = require('../lib/browser');
 
 test('User-Agent version is derived from package.json', () => {
   assert.equal(page.DEFAULT_UA, browser.DEFAULT_UA);
-  assert.match(page.DEFAULT_UA, new RegExp('ahttp/' + pkg.version.replace(/\./g, '\\.') + ';'));
+  assert.match(page.DEFAULT_UA, new RegExp('aihttp/' + pkg.version.replace(/\./g, '\\.') + ';'));
 });
 
 test('fetchUrl sends the package version in the User-Agent header', async () => {
@@ -23,7 +23,7 @@ test('fetchUrl sends the package version in the User-Agent header', async () => 
   try {
     await page.fetchUrl('http://127.0.0.1:' + server.address().port + '/', { allowPrivate: true });
     assert.equal(seen, page.DEFAULT_UA);
-    assert.ok(seen.indexOf('ahttp/' + pkg.version) >= 0, 'request carries the package version');
+    assert.ok(seen.indexOf('aihttp/' + pkg.version) >= 0, 'request carries the package version');
   } finally {
     await new Promise((resolve) => server.close(resolve));
   }

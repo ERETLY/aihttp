@@ -19,8 +19,8 @@ const ENGINE = fs.readFileSync(path.join(ROOT, 'aihttp.js'), 'utf8');
   await page.addInitScript({ content: ENGINE });
   await page.goto('file:///' + path.join(__dirname, 'fixture.html').replace(/\\/g, '/'));
   await page.waitForTimeout(300);
-  const json = await page.evaluate(() => window.ahttp.snapshot({ format: 'json', maxActions: 200 }));
-  const text = await page.evaluate(() => window.ahttp.snapshot({ format: 'text' }));
+  const json = await page.evaluate(() => window.aihttp.snapshot({ format: 'json', maxActions: 200 }));
+  const text = await page.evaluate(() => window.aihttp.snapshot({ format: 'text' }));
   const select = json.actions.find(function (action) { return action.tag === 'select'; });
   const proxy = json.actions.find(function (action) { return action.tag === 'span'; });
   console.log('actions: ' + JSON.stringify(json.actions.map(function (action) {
@@ -30,7 +30,7 @@ const ENGINE = fs.readFileSync(path.join(ROOT, 'aihttp.js'), 'utf8');
   console.log('proxy action: ' + (proxy ? 'present (' + proxy.label + ')' : 'absent'));
   if (proxy) {
     const before = await page.evaluate(() => document.querySelector('select').value);
-    const acted = await page.evaluate(function (id) { return window.ahttp.act(id, null, { timeout: 2000 }); }, proxy.id);
+    const acted = await page.evaluate(function (id) { return window.aihttp.act(id, null, { timeout: 2000 }); }, proxy.id);
     const after = await page.evaluate(() => document.querySelector('select').value);
     console.log('proxy click: status=' + acted.status + ' value ' + before + ' -> ' + after);
   }

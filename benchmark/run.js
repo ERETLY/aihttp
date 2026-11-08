@@ -37,9 +37,9 @@ function round(value) {
 }
 
 // URL to snapshot with the real engine: fetch, linked stylesheets, scan.
-// One request, no retries. Returns null if the request fails or AHTTP_LIVE=0.
-async function timeLiveAhttp(url) {
-  if (process.env.AHTTP_LIVE === '0') return null;
+// One request, no retries. Returns null if the request fails or AIHTTP_LIVE=0.
+async function timeLiveAihttp(url) {
+  if (process.env.AIHTTP_LIVE === '0') return null;
   const started = performance.now();
   try {
     const page = await openPage(url, { timeout: 30000 });
@@ -143,8 +143,8 @@ async function runWebBenchmark() {
         const markdownTokens = tokenCount(markdownFromHtml(raw, site.url));
         let jinaTokens = null;
         let jinaMs = null;
-        let jinaStatus = process.env.AHTTP_JINA === '0' ? 'skipped' : 'unavailable';
-        if (process.env.AHTTP_JINA !== '0') {
+        let jinaStatus = process.env.AIHTTP_JINA === '0' ? 'skipped' : 'unavailable';
+        if (process.env.AIHTTP_JINA !== '0') {
           const jinaStarted = performance.now();
           try {
             const headers = process.env.JINA_API_KEY ? { Authorization: 'Bearer ' + process.env.JINA_API_KEY } : {};
@@ -160,8 +160,8 @@ async function runWebBenchmark() {
         }
         let firecrawlTokens = null;
         let firecrawlMs = null;
-        let firecrawlStatus = process.env.AHTTP_FIRECRAWL === '0' ? 'skipped' : (!process.env.FIRECRAWL_API_KEY ? 'no key' : 'unavailable');
-        if (process.env.AHTTP_FIRECRAWL !== '0' && process.env.FIRECRAWL_API_KEY) {
+        let firecrawlStatus = process.env.AIHTTP_FIRECRAWL === '0' ? 'skipped' : (!process.env.FIRECRAWL_API_KEY ? 'no key' : 'unavailable');
+        if (process.env.AIHTTP_FIRECRAWL !== '0' && process.env.FIRECRAWL_API_KEY) {
           const firecrawlStarted = performance.now();
           try {
             const response = await fetch('https://api.firecrawl.dev/v2/scrape', {
@@ -182,7 +182,7 @@ async function runWebBenchmark() {
             firecrawlStatus = 'error: ' + (e && e.message ? e.message : String(e));
           }
         }
-        const ahttpLiveMs = await timeLiveAhttp(site.url);
+        const aihttpLiveMs = await timeLiveAihttp(site.url);
         const result = {
           name: site.name,
           url: site.url,
@@ -217,11 +217,11 @@ async function runWebBenchmark() {
           fetchMs: page.fetchMs,
           parseMs: Math.max(0, totalMs - page.fetchMs - Math.round(data.meta.scanMs)),
           totalMs: totalMs,
-          liveMs: { ahttp: ahttpLiveMs, jina: jinaMs, firecrawl: firecrawlMs },
+          liveMs: { aihttp: aihttpLiveMs, jina: jinaMs, firecrawl: firecrawlMs },
           layout: data.meta.layout
         };
         out.push(result);
-        process.stdout.write('PASS  ' + pad(site.name, 26) + lpad(rawTokens, 9) + ' raw  ' + lpad(snapshotTokens, 7) + ' ahttp  ' +
+        process.stdout.write('PASS  ' + pad(site.name, 26) + lpad(rawTokens, 9) + ' raw  ' + lpad(snapshotTokens, 7) + ' aihttp  ' +
           lpad(ariaTokens == null ? 'n/a' : ariaTokens, 7) + ' AX  ' + lpad(markdownTokens, 7) + ' md  ' +
           lpad(jinaTokens == null ? 'n/a' : jinaTokens, 7) + ' jina  ' + lpad(firecrawlTokens == null ? 'n/a' : firecrawlTokens, 7) + ' fc  ' +
           lpad(result.ratio + 'x', 7) + '  ' + lpad(result.actions, 4) + ' actions  ' + lpad(result.scanMs + 'ms', 8) + '\n');
@@ -237,7 +237,7 @@ async function runWebBenchmark() {
 }
 
 async function main() {
-  process.stdout.write('\nahttp benchmark ' + pkg.version + ' | node ' + process.version + ' ' + process.platform + '\n\n');
+  process.stdout.write('\naihttp benchmark ' + pkg.version + ' | node ' + process.version + ' ' + process.platform + '\n\n');
   const results = {
     generatedAt: new Date().toISOString(),
     version: pkg.version,
@@ -285,7 +285,7 @@ async function main() {
     for (const method of results.comparison.methods) {
       process.stdout.write(pad(method.name, 48) + lpad(method.totalTokens, 9) + ' tokens  ' + lpad(method.stepTokens.join('/'), 30) + '  ' + lpad(method.avgLatencyMs + 'ms', 9) + '\n');
     }
-    process.stdout.write(pad('total token ratio (raw / ahttp)', 48) + lpad(results.comparison.totalTokenRatio + 'x', 9) + '\n');
+    process.stdout.write(pad('total token ratio (raw / aihttp)', 48) + lpad(results.comparison.totalTokenRatio + 'x', 9) + '\n');
   } catch (err) {
     results.comparison = { error: err && err.message ? err.message : String(err) };
     process.stdout.write('FAIL  comparison: ' + results.comparison.error + '\n');
@@ -294,11 +294,11 @@ async function main() {
   process.stdout.write('\n[TASK BENCHMARK]\n');
   try {
     results.tasks = await runTaskBenchmark();
-    process.stdout.write((results.tasks.ahttpSuccess === results.tasks.tasks ? 'PASS' : 'FAIL') +
-      '  scripted agent ' + results.tasks.ahttpSuccess + '/' + results.tasks.tasks +
-      '  ahttp tokens ' + results.tasks.ahttpTokens +
+    process.stdout.write((results.tasks.aihttpSuccess === results.tasks.tasks ? 'PASS' : 'FAIL') +
+      '  scripted agent ' + results.tasks.aihttpSuccess + '/' + results.tasks.tasks +
+      '  aihttp tokens ' + results.tasks.aihttpTokens +
       '  raw/AX ' + results.tasks.rawTokens + '/' + results.tasks.axTokens + '\n');
-    if (results.tasks.ahttpSuccess !== results.tasks.tasks) {
+    if (results.tasks.aihttpSuccess !== results.tasks.tasks) {
       for (const task of results.tasks.results) {
         if (!task.success) process.stdout.write('      x ' + task.name + ' [' + task.error + ']\n');
       }
@@ -318,7 +318,7 @@ async function main() {
   }
 
   const torturePassed = results.torture.filter(function (test) { return test.pass; }).length;
-  const tasksPass = !!results.tasks && !results.tasks.error && results.tasks.ahttpSuccess === results.tasks.tasks;
+  const tasksPass = !!results.tasks && !results.tasks.error && results.tasks.aihttpSuccess === results.tasks.tasks;
   const allPass = torturePassed === SUITE.length && ownerPass && results.mcp.pass && webPassed === results.web.length && results.web.length > 0 && !!results.comparison && !results.comparison.error && tasksPass;
   results.summary = {
     torturePassed: torturePassed,
@@ -331,7 +331,7 @@ async function main() {
     mcpPass: results.mcp.pass,
     webPassed: webPassed,
     webTotal: results.web.length,
-    tasksPassed: results.tasks ? results.tasks.ahttpSuccess : 0,
+    tasksPassed: results.tasks ? results.tasks.aihttpSuccess : 0,
     tasksTotal: results.tasks ? results.tasks.tasks : 0,
     tasksPass: tasksPass,
     allPass: allPass

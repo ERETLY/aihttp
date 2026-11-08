@@ -14,7 +14,7 @@ Include the affected version, the environment, a minimal reproduction, and the i
 
 The browser engine, the static MCP server, the CLI, the browser backend, and the example authorization servers are in scope. The benchmark fixtures and documentation are not production code.
 
-Client-side JavaScript cannot enforce authorization. A static hash gate, hidden actions, and `data-ahttp-confirm` are coordination features. Server-side authorization of every mutation is required. A report that says "the client gate can be bypassed" is a known limitation, not a vulnerability, unless it also bypasses a documented server check.
+Client-side JavaScript cannot enforce authorization. A static hash gate, hidden actions, and `data-aihttp-confirm` are coordination features. Server-side authorization of every mutation is required. A report that says "the client gate can be bypassed" is a known limitation, not a vulnerability, unless it also bypasses a documented server check.
 
 ## Deployment requirements
 
@@ -29,6 +29,6 @@ Client-side JavaScript cannot enforce authorization. A static hash gate, hidden 
 - Do not enable `--cdp-use-existing-profile` against your personal browser profile. It lets the agent act inside your signed-in sessions.
 
 > [!WARNING]
-> CDP mode attaches to a real browser. ahttp uses a fresh context by default; `--cdp-use-existing-profile` opts into the existing profile and its cookies. Use a dedicated profile for agent work.
+> CDP mode attaches to a real browser. aihttp uses a fresh context by default; `--cdp-use-existing-profile` opts into the existing profile and its cookies. Use a dedicated profile for agent work.
 
 See `docs/SECURITY.md` for the full contract.

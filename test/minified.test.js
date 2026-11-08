@@ -14,8 +14,8 @@ test('minified build exposes the same public version and a working snapshot', ()
     runScripts: 'outside-only'
   });
   dom.window.eval(source);
-  assert.equal(dom.window.ahttp.version, pkg.version);
-  const snapshot = dom.window.ahttp.snapshot({ format: 'json' });
+  assert.equal(dom.window.aihttp.version, pkg.version);
+  const snapshot = dom.window.aihttp.snapshot({ format: 'json' });
   assert.equal(snapshot.actions.length, 1);
   assert.equal(snapshot.actions[0].label, 'Place order');
 });

@@ -39,7 +39,7 @@ function sleep(ms) { return new Promise(function (resolve) { setTimeout(resolve,
 
 async function snapshot(page, options) {
   return page.evaluate(function (opts) {
-    return window.ahttp.snapshot(opts);
+    return window.aihttp.snapshot(opts);
   }, options || { format: 'json' });
 }
 
@@ -50,7 +50,7 @@ async function snapshotTimed(page, options) {
   const started = nowMs();
   const data = await page.evaluate(function (opts) {
     var t0 = performance.now();
-    var result = window.ahttp.snapshot(opts);
+    var result = window.aihttp.snapshot(opts);
     return { result: result, inPageMs: performance.now() - t0 };
   }, options || { format: 'json' });
   return { result: data.result, inPageMs: data.inPageMs, wallMs: nowMs() - started };
@@ -348,7 +348,7 @@ async function runScenarios(page, site, out) {
           let navigationLost = null;
           try {
             result = await page.evaluate(function (args) {
-              return window.ahttp.act(args.id, args.payload, { timeout: args.timeout, quiet: 120, minWait: 60 });
+              return window.aihttp.act(args.id, args.payload, { timeout: args.timeout, quiet: 120, minWait: 60 });
             }, { id: resolved.id, payload: payload, timeout: timeout });
           } catch (e) {
             const message = String(e.message || e);

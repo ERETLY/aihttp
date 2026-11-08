@@ -69,7 +69,7 @@ async function scanBenchmark() {
       await engine.evaluate((element) => element.remove());
       const selfMs = await page.evaluate((options) => {
         const before = performance.now();
-        window.ahttp.snapshot(options);
+        window.aihttp.snapshot(options);
         return performance.now() - before;
       }, OPTIONS);
 
@@ -88,12 +88,12 @@ async function scanBenchmark() {
         jina: null,
         firecrawl: null,
         axtree: ms(axMs),
-        ahttp: ms(staticData.meta.scanMs),
+        aihttp: ms(staticData.meta.scanMs),
         self: ms(selfMs)
       });
       process.stdout.write('SCAN  ' + site.name.padEnd(24) +
         ('raw ' + ms(rawMs)).padEnd(14) + ('md ' + ms(markdownMs)).padEnd(14) +
-        ('ax ' + ms(axMs)).padEnd(14) + ('ahttp ' + ms(staticData.meta.scanMs)).padEnd(18) +
+        ('ax ' + ms(axMs)).padEnd(14) + ('aihttp ' + ms(staticData.meta.scanMs)).padEnd(18) +
         'self ' + ms(selfMs) + '\n');
     }
   } finally {
@@ -110,15 +110,15 @@ async function liveBenchmark(options) {
   const out = [];
   try {
     for (const site of INDEX) {
-      const row = { name: site.name, url: site.url, ahttp: null, self: null, jina: null, firecrawl: null };
+      const row = { name: site.name, url: site.url, aihttp: null, self: null, jina: null, firecrawl: null };
 
       let started = performance.now();
       try {
         const page = await openPage(site.url, { timeout: 30000 });
         page.api.snapshot(OPTIONS);
-        row.ahttp = ms(performance.now() - started);
+        row.aihttp = ms(performance.now() - started);
       } catch (error) {
-        row.ahttpError = String(error && error.message ? error.message : error);
+        row.aihttpError = String(error && error.message ? error.message : error);
       }
 
       const context = await browser.newContext({ serviceWorkers: 'block' });
@@ -130,8 +130,8 @@ async function liveBenchmark(options) {
         await page.goto(site.url, { waitUntil: 'domcontentloaded', timeout: 40000 });
         await page.waitForLoadState('load', { timeout: 15000 }).catch(() => {});
         const ok = await page.evaluate((options) => {
-          if (!window.ahttp) return false;
-          window.ahttp.snapshot(options);
+          if (!window.aihttp) return false;
+          window.aihttp.snapshot(options);
           return true;
         }, OPTIONS);
         if (!ok) throw new Error('userscript did not load');
@@ -177,7 +177,7 @@ async function liveBenchmark(options) {
 
       out.push(row);
       process.stdout.write('LIVE  ' + site.name.padEnd(24) +
-        ('ahttp ' + row.ahttp).padEnd(16) + ('self ' + row.self).padEnd(16) +
+        ('aihttp ' + row.aihttp).padEnd(16) + ('self ' + row.self).padEnd(16) +
         ('jina ' + row.jina).padEnd(16) + 'firecrawl ' + row.firecrawl + '\n');
     }
   } finally {

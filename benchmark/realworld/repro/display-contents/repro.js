@@ -21,8 +21,8 @@ const ENGINE = fs.readFileSync(path.join(ROOT, 'aihttp.js'), 'utf8');
   await page.addInitScript({ content: ENGINE });
   await page.goto('file:///' + path.join(__dirname, 'fixture.html').replace(/\\/g, '/'));
   await page.waitForTimeout(300);
-  const json = await page.evaluate(() => window.ahttp.snapshot({ format: 'json', maxActions: 200 }));
-  const text = await page.evaluate(() => window.ahttp.snapshot({ format: 'text' }));
+  const json = await page.evaluate(() => window.aihttp.snapshot({ format: 'json', maxActions: 200 }));
+  const text = await page.evaluate(() => window.aihttp.snapshot({ format: 'text' }));
   const save = json.actions.find(function (action) { return action.label === 'Save'; });
   console.log('actions: ' + JSON.stringify(json.actions.map(function (action) {
     return action.id + ' ' + action.tag + ' ' + action.role + ' ' + JSON.stringify(action.label);

@@ -20,12 +20,12 @@ const { chromium } = require('playwright');
     });
     await page.addScriptTag({ content: engine });
 
-    const snapshot = await page.evaluate(() => window.ahttp.snapshot({ format: 'json' }));
+    const snapshot = await page.evaluate(() => window.aihttp.snapshot({ format: 'json' }));
     process.stdout.write(snapshot.actions.map((a) => a.id + ' ' + a.role + ' "' + a.label + '"').join('\n') + '\n');
 
     const target = snapshot.actions.find((action) => /add to cart/i.test(action.label));
     if (!target) throw new Error('target control not found');
-    const step = await page.evaluate((id) => window.ahttp.act(id, null, {
+    const step = await page.evaluate((id) => window.aihttp.act(id, null, {
       expect: { diff: true, textAdded: ['Item added'] }
     }), target.id);
     process.stdout.write(step.status + ': ' + (step.diff ? step.diff.text : JSON.stringify(step)) + '\n');

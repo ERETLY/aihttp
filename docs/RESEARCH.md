@@ -6,10 +6,10 @@ Checked 2026-10-31. This file records what was verified and what remains a claim
 
 The WebMCP specification is a Draft Community Group Report from the W3C Web Machine Learning Community Group, dated 27 October 2026 (checked again on 31 October 2026). It is not a W3C Standard and is not on the Standards Track. The report defines `document.modelContext` (not `navigator.modelContext`, which appears in older previews and blog posts). It registers tools with `registerTool(tool, options)`, exposes `getTools()`, executes with `executeTool(tool, input, options)`, and carries annotations including `readOnlyHint`, `untrustedContentHint`, `consequentialHint` and `debugging`. `registerTool()` resolves to `undefined`; aborting the registration signal removes the tool.
 
-What this means for ahttp:
+What this means for aihttp:
 
-- ahttp's `data-ahttp-*` contract is independent of WebMCP and works today.
-- `ahttp.installWebMCP()` is an opt-in adapter. It feature-detects `document.modelContext`, registers `ahttp_snapshot` and `ahttp_act`, and returns `webmcp_unavailable` when the API is absent. It does not auto-register.
+- aihttp's `data-aihttp-*` contract is independent of WebMCP and works today.
+- `aihttp.installWebMCP()` is an opt-in adapter. It feature-detects `document.modelContext`, registers `aihttp_snapshot` and `aihttp_act`, and returns `webmcp_unavailable` when the API is absent. It does not auto-register.
 - The adapter returns a `close()` function that aborts the registration signal.
 - Treat the adapter as draft compatibility, not a stable API promise. The context moved from `navigator` to `document` in [webmachinelearning/webmcp#184](https://github.com/webmachinelearning/webmcp/pull/184), and Chromium removed the old `navigator.modelContext` API.
 
@@ -25,13 +25,13 @@ Sources: [Playwright MCP snapshots](https://playwright.dev/mcp/snapshots), [micr
 
 ## Stagehand
 
-Stagehand is an SDK with AI primitives (`act`, `extract`, `observe`) plus Playwright-style page methods, built by Browserbase. It is a browser automation framework, not a site-owner contract. It does not define `data-ahttp-*` attributes and it does not return a per-action diff from a page-declared graph.
+Stagehand is an SDK with AI primitives (`act`, `extract`, `observe`) plus Playwright-style page methods, built by Browserbase. It is a browser automation framework, not a site-owner contract. It does not define `data-aihttp-*` attributes and it does not return a per-action diff from a page-declared graph.
 
 Source: [Stagehand introduction](https://docs.stagehand.dev/).
 
 ## Browser Use
 
-Browser Use provides an open-source agent library and a cloud browser/run API. Its quickstart focuses on giving an agent a task and getting a result, or connecting Playwright/its SDK to a cloud browser over CDP. It is complementary to ahttp: ahttp could be one observation/action layer inside an agent that uses Browser Use for the browser.
+Browser Use provides an open-source agent library and a cloud browser/run API. Its quickstart focuses on giving an agent a task and getting a result, or connecting Playwright/its SDK to a cloud browser over CDP. It is complementary to aihttp: aihttp could be one observation/action layer inside an agent that uses Browser Use for the browser.
 
 Source: [Browser Use quickstart](https://docs.browser-use.com/cloud/quickstart).
 
@@ -39,19 +39,19 @@ Source: [Browser Use quickstart](https://docs.browser-use.com/cloud/quickstart).
 
 `llms.txt` is a proposal for a Markdown file at the site root or a subpath, with links to LLM-friendly content. Version 2 was modified in August 2026 and recommends Markdown versions of pages and `rel="alternate" type="text/markdown"` links. It is static content guidance; it cannot describe a logged-in cart, a modal that appeared after a fetch, or execute an action.
 
-ahttp complements it: an owner can publish `llms.txt` for documentation and use `data-ahttp-*` for interactive controls. The repository's own `llms.txt` is a manifest for coding agents, not a runtime feature.
+aihttp complements it: an owner can publish `llms.txt` for documentation and use `data-aihttp-*` for interactive controls. The repository's own `llms.txt` is a manifest for coding agents, not a runtime feature.
 
 Source: [The /llms.txt file, v2](https://llmstxt.org/).
 
 ## MCP
 
-The MCP specification has a legacy handshake era through `2025-11-25` and a modern per-request era starting with `2026-07-28`. Modern requests carry version, client info and capabilities in `_meta`; `server/discover` is mandatory; tool results use `resultType`. The ahttp server implements both eras and explicit `pageId` handles for the modern path.
+The MCP specification has a legacy handshake era through `2025-11-25` and a modern per-request era starting with `2026-07-28`. Modern requests carry version, client info and capabilities in `_meta`; `server/discover` is mandatory; tool results use `resultType`. The aihttp server implements both eras and explicit `pageId` handles for the modern path.
 
 Source: [MCP versioning](https://modelcontextprotocol.io/specification/2026-07-28/basic/versioning), [MCP tools](https://modelcontextprotocol.io/specification/2026-07-28/server/tools).
 
 ## Positioning
 
-In one sentence: ahttp is a small, site-declarable action layer for agents, with stable ids, guardrails and diffs; it is not a general browser agent and it is not always the smallest context.
+In one sentence: aihttp is a small, site-declarable action layer for agents, with stable ids, guardrails and diffs; it is not a general browser agent and it is not always the smallest context.
 
 The strongest differentiators are:
 
@@ -64,5 +64,5 @@ The weakest differentiators are:
 
 1. Token size. A compact accessibility snapshot or Markdown can be smaller, especially on small forms.
 2. Browser coverage. Playwright MCP is far more capable as a general browser tool.
-3. Ecosystem. WebMCP may become the browser-native path; ahttp's adapter is draft compatibility.
+3. Ecosystem. WebMCP may become the browser-native path; aihttp's adapter is draft compatibility.
 4. Evidence. There is no independent user study or LLM task benchmark yet.
