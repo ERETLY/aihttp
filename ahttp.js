@@ -2774,8 +2774,10 @@
     // A role inferred from cursor:pointer is not a declaration. Reddit's
     // <shreddit-post-overflow-menu> has a pointer cursor and a real <button>
     // in its light DOM; treating the host as the control swallowed the button.
-    // Only an explicit role makes the host the accessible control.
-    return normText(attr(el, 'role')) !== '';
+    // Only an explicit interactive role makes the host the accessible control.
+    // A role="group" carousel slide with cursor:pointer is a container: it
+    // must not swallow the channel links inside it (ArtStation).
+    return !!CLICK_HOST_ROLES[normText(attr(el, 'role'))];
   }
 
   function closestAttr(el, name) {

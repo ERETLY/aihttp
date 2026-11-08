@@ -41,6 +41,10 @@
 
 ### Fixed
 
+- A custom element with `role="group"` and `cursor:pointer` no longer
+  swallows its children. ArtStation's `swiper-slide role="group"` was
+  registered as a button and the 64 channel links inside it were lost.
+  ArtStation 55.6% -> 100%.
 - Identical links (same role, label and destination) are one action. A spec
   table repeats the same term link in every cell; html.spec.whatwg.org tables
   went from 1,046 to 213 actions and 845 to 16 phantom actions, with recall

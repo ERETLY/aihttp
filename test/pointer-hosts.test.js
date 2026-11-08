@@ -59,3 +59,10 @@ test('the same destination with different labels stays separate', () => {
   const actions = snapshot('<a href="/x">One</a><a href="/x">Two</a>');
   assert.equal(actions.length, 2, JSON.stringify(actions.map(function (a) { return a.label; })));
 });
+
+test('a role=group pointer container does not swallow its links', () => {
+  const actions = snapshot('<my-tab role="group" aria-label="1 / 3"><a href="/channel">Channel</a></my-tab>');
+  const labels = actions.map(function (a) { return a.label; });
+  assert.ok(labels.indexOf('Channel') >= 0, 'the link is registered: ' + JSON.stringify(labels));
+  assert.equal(actions.filter(function (a) { return a.tag === 'my-tab'; }).length, 0, 'the group container is not an action');
+});

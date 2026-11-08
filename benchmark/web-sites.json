@@ -2069,6 +2069,246 @@
       "url": "https://kottke.org/",
       "category": "blog",
       "note": "personal blog"
+    },
+    {
+      "id": "forum-gitlab",
+      "url": "https://forum.gitlab.com/",
+      "category": "forum",
+      "note": "GitLab Discourse"
+    },
+    {
+      "id": "joomla-forum",
+      "url": "https://forum.joomla.org/",
+      "category": "forum",
+      "note": "phpBB forum"
+    },
+    {
+      "id": "swift-forums",
+      "url": "https://forums.swift.org/",
+      "category": "forum",
+      "note": "Swift Discourse"
+    },
+    {
+      "id": "elastic-discuss",
+      "url": "https://discuss.elastic.co/",
+      "category": "forum",
+      "note": "Elastic Discourse"
+    },
+    {
+      "id": "arduino-forum",
+      "url": "https://forum.arduino.cc/",
+      "category": "forum",
+      "note": "Arduino Discourse"
+    },
+    {
+      "id": "home-assistant-community",
+      "url": "https://community.home-assistant.io/",
+      "category": "forum",
+      "note": "Home Assistant Discourse"
+    },
+    {
+      "id": "gocardless",
+      "url": "https://gocardless.com/",
+      "category": "payments",
+      "note": "bank payments"
+    },
+    {
+      "id": "chargebee",
+      "url": "https://www.chargebee.com/",
+      "category": "payments",
+      "note": "subscription billing"
+    },
+    {
+      "id": "fastspring",
+      "url": "https://fastspring.com/",
+      "category": "payments",
+      "note": "merchant of record"
+    },
+    {
+      "id": "airwallex",
+      "url": "https://www.airwallex.com/",
+      "category": "payments",
+      "note": "cross-border payments"
+    },
+    {
+      "id": "remitly",
+      "url": "https://www.remitly.com/",
+      "category": "payments",
+      "note": "remittances"
+    },
+    {
+      "id": "kofi",
+      "url": "https://ko-fi.com/",
+      "category": "payments",
+      "note": "creator tips"
+    },
+    {
+      "id": "artstation",
+      "url": "https://www.artstation.com/",
+      "category": "social",
+      "note": "artist portfolio"
+    },
+    {
+      "id": "500px",
+      "url": "https://500px.com/",
+      "category": "social",
+      "note": "photo community"
+    },
+    {
+      "id": "cara",
+      "url": "https://cara.app/",
+      "category": "social",
+      "note": "artist community"
+    },
+    {
+      "id": "bookwyrm",
+      "url": "https://bookwyrm.social/",
+      "category": "social",
+      "note": "federated books"
+    },
+    {
+      "id": "friendica",
+      "url": "https://friendi.ca/",
+      "category": "social",
+      "note": "federated social"
+    },
+    {
+      "id": "microblog",
+      "url": "https://micro.blog/",
+      "category": "social",
+      "note": "microblogging"
+    },
+    {
+      "id": "neal-fun",
+      "url": "https://neal.fun/",
+      "category": "misc",
+      "note": "interactive toys"
+    },
+    {
+      "id": "htmx",
+      "url": "https://htmx.org/",
+      "category": "dev",
+      "note": "hypermedia docs"
+    },
+    {
+      "id": "marginalian",
+      "url": "https://www.themarginalian.org/",
+      "category": "blog",
+      "note": "long-form blog"
+    },
+    {
+      "id": "astral-codex",
+      "url": "https://astralcodexten.com/",
+      "category": "blog",
+      "note": "Substack blog"
+    },
+    {
+      "id": "lesswrong",
+      "url": "https://www.lesswrong.com/",
+      "category": "blog",
+      "note": "community blog"
+    },
+    {
+      "id": "gwern",
+      "url": "https://gwern.net/",
+      "category": "blog",
+      "note": "long-form personal site"
+    },
+    {
+      "id": "magento",
+      "url": "https://magento.com/",
+      "category": "ecommerce",
+      "note": "commerce platform"
+    },
+    {
+      "id": "prestashop",
+      "url": "https://www.prestashop.com/",
+      "category": "ecommerce",
+      "note": "commerce platform"
+    },
+    {
+      "id": "opencart",
+      "url": "https://www.opencart.com/",
+      "category": "ecommerce",
+      "note": "commerce platform"
+    },
+    {
+      "id": "freshdesk",
+      "url": "https://freshdesk.com/",
+      "category": "misc",
+      "note": "support SaaS"
+    },
+    {
+      "id": "postmark",
+      "url": "https://postmarkapp.com/",
+      "category": "misc",
+      "note": "email SaaS"
+    },
+    {
+      "id": "klaviyo",
+      "url": "https://www.klaviyo.com/",
+      "category": "misc",
+      "note": "marketing SaaS"
+    },
+    {
+      "id": "bandcamp",
+      "url": "https://bandcamp.com/",
+      "category": "media",
+      "note": "music marketplace"
+    },
+    {
+      "id": "lastfm",
+      "url": "https://www.last.fm/",
+      "category": "media",
+      "note": "music profiles"
+    },
+    {
+      "id": "discogs",
+      "url": "https://www.discogs.com/",
+      "category": "media",
+      "note": "music database"
+    },
+    {
+      "id": "rottentomatoes",
+      "url": "https://www.rottentomatoes.com/",
+      "category": "media",
+      "note": "film reviews"
+    },
+    {
+      "id": "myanimelist",
+      "url": "https://myanimelist.net/",
+      "category": "media",
+      "note": "anime database"
+    },
+    {
+      "id": "semanticscholar",
+      "url": "https://www.semanticscholar.org/",
+      "category": "science",
+      "note": "paper search"
+    },
+    {
+      "id": "openreview",
+      "url": "https://openreview.net/",
+      "category": "science",
+      "note": "paper reviews"
+    },
+    {
+      "id": "biorxiv",
+      "url": "https://www.biorxiv.org/",
+      "category": "science",
+      "note": "preprints"
+    },
+    {
+      "id": "brilliant",
+      "url": "https://brilliant.org/",
+      "category": "education",
+      "note": "interactive courses"
+    },
+    {
+      "id": "duolingo",
+      "url": "https://www.duolingo.com/",
+      "category": "education",
+      "note": "language learning"
     }
   ]
 }
