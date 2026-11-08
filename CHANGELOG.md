@@ -39,6 +39,11 @@
 
 ### Fixed
 
+- `font-size:0` and `text-indent:-9999px` on a wrapper no longer hide its
+  subtree when a descendant has a real box. W3Schools sets `font-size:0` on
+  the top nav to remove whitespace between inline-block links; the whole nav
+  was pruned. W3Schools forms measured 78.7% before and 98.7% after, tables
+  82.1% to 100%.
 - A custom element with `cursor:pointer` no longer swallows the real controls
   in its light DOM. Reddit's `<shreddit-post-overflow-menu>` is a pointer
   container with a native `<button>` inside; the host was registered and the

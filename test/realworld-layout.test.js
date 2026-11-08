@@ -231,3 +231,20 @@ test('a CSS hover card is a hover action and its hidden text stays out until hov
     await browser.close();
   }
 });
+
+test('font-size:0 on a wrapper does not hide its visible links', { skip: gate.skip, timeout: 90000 }, async () => {
+  if (gate.fail) assert.fail(gate.reason);
+  const browser = await playwright.chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+    const out = await snapshotOf(page, '<!doctype html><html><head><title>fs0 nav</title>' +
+      '<style>#nav{font-size:0}#nav a{font-size:16px;display:inline-block;padding:8px}</style>' +
+      '</head><body><main><h1>Page</h1></main>' +
+      '<div id="nav"><a href="/sql">SQL</a><a href="/css">CSS</a></div></body></html>');
+    const labels = Array.from(out.json.actions, function (action) { return action.label; });
+    assert.ok(labels.indexOf('SQL') >= 0, 'SQL link survives font-size:0: ' + JSON.stringify(labels));
+    assert.ok(labels.indexOf('CSS') >= 0, 'CSS link survives font-size:0: ' + JSON.stringify(labels));
+  } finally {
+    await browser.close();
+  }
+});

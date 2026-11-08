@@ -2085,11 +2085,15 @@
       if (s.visibility === 'hidden' || s.visibility === 'collapse') return { hidden: true, suspicious: false };
       if (isZeroOpacity(s.opacity)) return { hidden: true, suspicious: false };
       var fs = pxNum(s.fontSize);
-      if (fs === 0) return { hidden: true, suspicious: true };
+      // font-size:0 and text-indent:-9999px are inherited, and a child can
+      // reset them. W3Schools uses font-size:0 on the nav wrapper to remove
+      // whitespace between inline-block links; the links are visible. Only a
+      // leaf, or a subtree with no visible box, is actually hidden.
+      if (fs === 0 && !hasVisibleDescendantBox(el, ctx)) return { hidden: true, suspicious: true };
       if (s.clip && /rect\(\s*0(px)?[\s,]+0(px)?[\s,]+0(px)?[\s,]+0(px)?\s*\)/i.test(s.clip)) return { hidden: true, suspicious: true };
       if (s.clipPath && /inset\(\s*50%/.test(s.clipPath)) return { hidden: true, suspicious: true };
       var ti = pxNum(s.textIndent);
-      if (ti != null && ti <= -999) return { hidden: true, suspicious: true };
+      if (ti != null && ti <= -999 && !hasVisibleDescendantBox(el, ctx)) return { hidden: true, suspicious: true };
       var op = opacityNum(s.opacity);
       if (!isNaN(op) && op > 0 && op <= 0.05) return { hidden: true, suspicious: true };
       var left = pxNum(s.left);

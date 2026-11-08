@@ -312,7 +312,9 @@ counts as visible, cross-origin iframe content (MDN), and bot-variant pages
 `w3schools-form-elements` 79.9%, `w3schools-tables` 82.1%, `archive-org`
 72.7%, `squarespace` 71.8%, `temu` 60%, `imgur` 82.9%, `spiegel` 86.3%,
 `checkout-com` 88.1%, `klarna` 89.2%, `lemonsqueezy` 89.5%. The matrix is a
-finding tool, not a scoreboard.
+finding tool, not a scoreboard. Engine scan time across the measured pages:
+median 37 ms, p95 171 ms, max 363 ms. The wall time is page load, not the
+scan.
 
 A blocked site is not a coverage failure. A consent dialog with Accept/Reject
 controls is the page until a decision is made, so the matrix reports it
