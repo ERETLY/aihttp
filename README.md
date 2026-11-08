@@ -216,7 +216,7 @@ Tokens an agent reads, lower is better. Checkout is five snapshots of one purcha
 | Jina Reader | hosted Markdown | no | n/a | 5,274 | 27,977 | 7,700 | 1,342 | 3,106 | 45,399 | n/a |
 | Accessibility tree | roles and names | no | 346 | 10,099 | 73,404 | 5,918 | 5,404 | 7,381 | 102,552 | 5,360 |
 | aihttp | actions, text, ids | yes | 289 | 1,162 | 1,130 | 1,105 | 1,286 | 1,156 | 6,128 | 5,104 |
-| aihttp self | actions, text, ids | yes | 289 | 1,170 | 1,148 | 1,116 | 4,208 | 1,242 | 9,173 | 5,104 |
+| aihttp self | actions, text, ids | yes | 289 | 1,170 | 1,138 | 1,116 | 1,288 | 882 | 5,883 | 5,104 |
 
 Only the two aihttp rows can click; the baselines score 0/20 on the task suite because they only read. `aihttp self` is the same engine loaded as `self/aihttp.user.js` in Chromium.
 
@@ -232,7 +232,7 @@ Wall-clock numbers from one machine, relative at best. Scan from `2026-11-05T07:
 | Raw HTML | 4.6 ms |
 | Markdown | 13.6 ms |
 | aihttp | 86.8 ms |
-| aihttp self | 84.9 ms |
+| aihttp self | 85.7 ms |
 
 **Live.** URL to content, one request per page, 2026-11-05:
 
