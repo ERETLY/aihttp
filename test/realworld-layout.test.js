@@ -248,3 +248,47 @@ test('font-size:0 on a wrapper does not hide its visible links', { skip: gate.sk
     await browser.close();
   }
 });
+
+test('a visually hidden duplicate does not double the label', { skip: gate.skip, timeout: 90000 }, async () => {
+  if (gate.fail) assert.fail(gate.reason);
+  const browser = await playwright.chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+    const out = await snapshotOf(page, '<!doctype html><html><head><title>Visible label</title>' +
+      '<style>.mobile{display:none}</style></head><body><main>' +
+      '<a href="/products"><span>Products</span><span class="mobile">Products</span></a>' +
+      '<a href="/hero">&lt;img class="hero"&gt;</a>' +
+      '</main></body></html>');
+    const labels = Array.from(out.json.actions, function (action) { return action.label; });
+    assert.ok(labels.indexOf('Products') >= 0, 'the visible text is the label: ' + JSON.stringify(labels));
+    assert.equal(labels.indexOf('Products Products'), -1, 'the hidden duplicate is not joined');
+    assert.equal(labels.some(function (label) { return label.charAt(0) === '<'; }), false,
+      'markup is not a label: ' + JSON.stringify(labels));
+  } finally {
+    await browser.close();
+  }
+});
+
+test('font-size:0 does not hide links inside a shadow root', { skip: gate.skip, timeout: 90000 }, async () => {
+  if (gate.fail) assert.fail(gate.reason);
+  const browser = await playwright.chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+    await page.setContent('<!doctype html><html><head><title>Shadow nav</title>' +
+      '<style>#nav{font-size:0}</style></head><body><main><h1>Page</h1></main>' +
+      '<div id="nav"><x-nav></x-nav></div></body></html>', { waitUntil: 'load' });
+    await page.addScriptTag({ content: ENGINE });
+    await page.evaluate(function () {
+      var host = document.querySelector('x-nav');
+      host.attachShadow({ mode: 'open' }).innerHTML =
+        '<a href="/texts" style="font-size:16px;display:inline-block;padding:8px">TEXTS</a>';
+    });
+    const json = await page.evaluate(function () {
+      return window.ahttp.snapshot({ format: 'json', force: true });
+    });
+    const labels = Array.from(json.actions, function (action) { return action.label; });
+    assert.ok(labels.indexOf('TEXTS') >= 0, 'the shadow link survives font-size:0: ' + JSON.stringify(labels));
+  } finally {
+    await browser.close();
+  }
+});

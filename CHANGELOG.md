@@ -39,8 +39,23 @@
 
 ### Fixed
 
+- A control's label is the rendered text, so a visually hidden mobile
+  duplicate no longer doubles it ("Products Products"). A label that starts
+  with `<` (a CMS storing markup in `alt`, or a broken image rendering its alt)
+  is rejected instead of being sent to the model.
+- The coverage oracle counts one link per role + name + destination, so a
+  carousel clone or a repeated header/footer link no longer inflates the
+  denominator. It keeps the visible copy when a hidden clone comes first, and
+  same-named buttons stay separate controls. Squarespace 73.2% -> 100%, Imgur
+  80.6% -> 100%, Spiegel 82.6% -> 100%, Checkout.com 88.1% -> 100%, Klarna
+  89.2% -> 100%, the MDN iframe page 81.6% -> 92.6%.
+- The matcher pairs a long name truncated by the oracle even when
+  normalization shortens the common prefix below the 160-character cap.
 - `font-size:0` and `text-indent:-9999px` on a wrapper no longer hide its
-  subtree when a descendant has a real box. W3Schools sets `font-size:0` on
+  subtree when a descendant has a real box. The descendant search now follows
+  shadow roots. Archive.org sets `font-size:0` on the top-nav wrappers and
+  renders the links inside the shadow root of `<ia-topnav-media-button>`; the
+  whole media menu was pruned. W3Schools sets `font-size:0` on
   the top nav to remove whitespace between inline-block links; the whole nav
   was pruned. W3Schools forms measured 78.7% before and 98.7% after, tables
   82.1% to 100%.

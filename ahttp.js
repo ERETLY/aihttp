@@ -2059,18 +2059,29 @@
   // but its children are reachable, so pruning the subtree loses every slide.
   // Only prune an offscreen container when nothing inside it has a real box.
   function hasVisibleDescendantBox(el, ctx) {
-    var nodes = null;
-    try { nodes = el.querySelectorAll ? el.querySelectorAll('*') : null; } catch (e) { nodes = null; }
-    if (!nodes) return false;
-    var limit = Math.min(nodes.length, 800);
-    for (var i = 0; i < limit; i++) {
-      var node = nodes[i];
-      var tag = tagOf(node);
-      if (tag === 'script' || tag === 'style' || tag === 'template') continue;
-      var rect = null;
-      try { rect = node.getBoundingClientRect ? node.getBoundingClientRect() : null; } catch (e) { rect = null; }
-      if (!rect || !rect.width || !rect.height) continue;
-      if (rect.right > 0 && rect.bottom > 0) return true;
+    // querySelectorAll does not cross a shadow boundary. Archive.org sets
+    // font-size:0 on the top-nav wrappers, and the real links live in the
+    // shadow root of <ia-topnav-media-button>; the wrapper looked empty and
+    // the whole nav was pruned. Walk shadow roots too.
+    var stack = [];
+    if (el.shadowRoot) stack.push(el.shadowRoot);
+    stack.push(el);
+    var seen = 0;
+    while (stack.length && seen < 1200) {
+      var root = stack.pop();
+      var nodes = null;
+      try { nodes = root.querySelectorAll ? root.querySelectorAll('*') : null; } catch (e) { nodes = null; }
+      if (!nodes) continue;
+      for (var i = 0; i < nodes.length && seen < 1200; i++) {
+        var node = nodes[i];
+        seen++;
+        var tag = tagOf(node);
+        if (tag === 'script' || tag === 'style' || tag === 'template') continue;
+        var rect = null;
+        try { rect = node.getBoundingClientRect ? node.getBoundingClientRect() : null; } catch (e) { rect = null; }
+        if (rect && rect.width && rect.height && rect.right > 0 && rect.bottom > 0) return true;
+        if (node.shadowRoot) stack.push(node.shadowRoot);
+      }
     }
     return false;
   }
@@ -2854,12 +2865,18 @@
       if (inputValue) return inputValue;
     }
     if (!isField && !info.editable) {
-      var content = el.firstElementChild ? normText(joinedText(el)) : normText(el.textContent);
+      // innerText is the rendered text: it excludes a visually hidden mobile
+      // duplicate ("Products Products") and text inside display:none clones.
+      var content = normText(textOf(el));
+      if (content && content.charAt(0) === '<') content = '';
+      if (!content) content = el.firstElementChild ? normText(joinedText(el)) : normText(el.textContent);
+      if (content && content.charAt(0) === '<') content = '';
       if (!content) {
         // Slotted text is rendered but is not a DOM child of the anchor; only
         // innerText sees the assigned nodes.
         content = visibleInnerText(el);
       }
+      if (content && content.charAt(0) === '<') content = '';
       if (content) return content.length > 200 ? content.slice(0, 200) : content;
     }
     var generated = generatedText(el);
@@ -2871,7 +2888,9 @@
     var images = el.querySelectorAll ? el.querySelectorAll('img[alt]') : [];
     for (var im = 0; im < images.length; im++) {
       var imgText = normText(attr(images[im], 'alt'));
-      if (imgText) return imgText;
+      // A broken image can render its alt as text. Some CMSs store markup in
+      // alt, and innerText then returns "<img class=...>"; that is not a name.
+      if (imgText && imgText.charAt(0) !== '<') return imgText;
     }
     var svg = el.querySelector ? el.querySelector('svg title, svg > title') : null;
     if (svg) {

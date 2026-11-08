@@ -730,7 +730,7 @@
       "id": "archive-org",
       "url": "https://archive.org/",
       "category": "wiki",
-      "note": "library"
+      "note": "old table layout; the served page variant changes between runs (20-66 controls), so recall varies"
     },
     {
       "id": "openlibrary",

@@ -147,3 +147,50 @@ test('the oracle counts a nested role=button once, inside its native control', {
     await browser.close();
   }
 });
+
+test('the matcher pairs a punctuation-heavy long name truncated by the oracle', () => {
+  const full = 'Word — '.repeat(30);
+  const result = matchActions([action(full)], [item(full.slice(0, 160))]);
+  assert.equal(result.matchedVisible, 1);
+  assert.equal(result.missed.length, 0);
+  assert.equal(result.phantom.length, 0);
+});
+
+test('the oracle dedupes identical links but keeps same-named buttons', { skip: gate.skip, timeout: 90000 }, async () => {
+  if (gate.fail) assert.fail(gate.reason);
+  const browser = await playwright.chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+    await page.setContent('<!doctype html><html><body>' +
+      '<a href="/same">Same</a><a href="/same">Same</a>' +
+      '<button>JavaScript</button><button>JavaScript</button>' +
+      '</body></html>', { waitUntil: 'load' });
+
+    const result = await page.evaluate(oracle);
+    const same = result.items.filter(function (item) { return item.role === 'link' && item.name === 'Same'; });
+    const tabs = result.items.filter(function (item) { return item.role === 'button' && item.name === 'JavaScript'; });
+    assert.equal(same.length, 1, 'one link for one destination: ' + JSON.stringify(same));
+    assert.equal(tabs.length, 2, 'two tab buttons stay two controls: ' + JSON.stringify(tabs));
+  } finally {
+    await browser.close();
+  }
+});
+
+test('the oracle keeps the visible copy when a hidden clone comes first', { skip: gate.skip, timeout: 90000 }, async () => {
+  if (gate.fail) assert.fail(gate.reason);
+  const browser = await playwright.chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+    await page.setContent('<!doctype html><html><body>' +
+      '<div style="display:none"><a href="/same">Same</a></div>' +
+      '<a href="/same">Same</a>' +
+      '</body></html>', { waitUntil: 'load' });
+
+    const result = await page.evaluate(oracle);
+    const same = result.items.filter(function (item) { return item.role === 'link' && item.name === 'Same'; });
+    assert.equal(same.length, 1, 'one link: ' + JSON.stringify(same));
+    assert.equal(same[0].visible, true, 'the visible copy is kept');
+  } finally {
+    await browser.close();
+  }
+});

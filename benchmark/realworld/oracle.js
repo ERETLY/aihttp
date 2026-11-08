@@ -81,6 +81,17 @@ function oracle() {
     }
     if (tag === 'img') return norm(el.getAttribute('alt'));
     var inner = norm(el.innerText || el.textContent);
+    // Some anchors expose markup as their text (an image wrapper with no alt
+    // and a template string). A name that starts with "<" is not a name: use
+    // the image alt, then title, then href, which is what a user hears.
+    if (inner && inner.charAt(0) === '<') {
+      var pic = el.querySelector ? el.querySelector('img[alt]') : null;
+      var picAlt = pic ? norm(pic.getAttribute('alt')) : '';
+      if (picAlt) return picAlt.slice(0, 160);
+      if (el.title) return norm(el.title).slice(0, 160);
+      if (el.href) return norm(el.href).slice(0, 160);
+      return '';
+    }
     if (inner) return inner.slice(0, 160);
     var img = el.querySelector ? el.querySelector('img[alt]') : null;
     if (img) return norm(img.getAttribute('alt'));
@@ -269,6 +280,15 @@ function oracle() {
     return !!native;
   }
 
+  // Carousels clone a slide to make the loop seamless, and a page can repeat
+  // the same destination in the header and the footer. For coverage, the same
+  // role + name + href is one action; counting the clones inflates the
+  // denominator and reports a loss the engine cannot have.
+  var actionKeys = new Map();
+  function actionKey(item) {
+    return item.role + '|' + norm(item.name).toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim() + '|' + String(item.href || '').replace(/#.*$/, '').replace(/\/+$/, '').toLowerCase();
+  }
+
   function add(el) {
     if (!el || el.nodeType !== 1 || seen.has(el)) return;
     seen.add(el);
@@ -276,7 +296,21 @@ function oracle() {
     if (!role || ROLES.indexOf(role) < 0) return;
     if (nestedInNativeControl(el)) return;
     if (wrapsNativeControl(el)) return;
-    out.push(describe(el, role));
+    var item = describe(el, role);
+    // Only links have a stable destination. Two "JavaScript" tab buttons in
+    // different examples are different controls; two links to the same href
+    // with the same name are the same action.
+    if (!item.href) { out.push(item); return; }
+    var key = actionKey(item);
+    var idx = actionKeys.get(key);
+    if (idx != null) {
+      // Keep the visible copy: the first clone in the DOM can be the hidden
+      // one, and the engine registers the visible one.
+      if (!out[idx].visible && item.visible) out[idx] = item;
+      return;
+    }
+    actionKeys.set(key, out.length);
+    out.push(item);
   }
 
   function collect(root) {
@@ -318,7 +352,12 @@ function namesMatch(left, right) {
   var a = normalizeName(left);
   var b = normalizeName(right);
   if (a === b) return true;
+  // A long testimonial or card name is truncated by the oracle at 160 raw
+  // characters. Normalization removes punctuation, so the normalized prefix
+  // can be shorter than the cap even when both sides are the same control.
+  var rawShorter = Math.min(String(left == null ? '' : left).length, String(right == null ? '' : right).length);
   var shorter = Math.min(a.length, b.length);
+  if (rawShorter >= 120 && shorter >= 100) return a.slice(0, shorter) === b.slice(0, shorter);
   if (shorter < NAME_CAP - 1) return false;
   return a.slice(0, shorter) === b.slice(0, shorter);
 }
