@@ -2,7 +2,7 @@
 
 [![status: stable](https://img.shields.io/badge/status-stable-brightgreen)](#)
 [![version](https://img.shields.io/github/package-json/v/ERETLY/aihttp)](https://github.com/ERETLY/aihttp/blob/main/package.json)
-[![CI](https://github.com/ERETLY/aihttp/actions/workflows/ci.yml/badge.svg)](https://github.com/ERETLY/aihttp/actions/workflows/ci.yml)
+[![CI](https://github.com/ERETLY/aihttp/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ERETLY/aihttp/actions/workflows/ci.yml)
 
 **aihttp is the AI-First Web Format.** It turns a page into a compact, executable graph: the controls an agent can use, the text it can read, and the effect of each action. No screenshots, no raw DOM, no token bonfire.
 
