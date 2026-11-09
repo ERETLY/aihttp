@@ -8,7 +8,7 @@
 1. **Package & Binaries:**
    - Package name: `aihttp`
    - CLI / Binaries: `aihttp`, `aihttp-mcp`, `aihttp-serve`
-   - Repo link: `github.com/ERETLY/aiweb`
+   - Repo link: `github.com/ERETLY/aihttp`
 
 2. **Browser Global & Engine:**
    - Engine files: `aihttp.js`, `aihttp.min.js`, `self/aihttp.user.js`
@@ -54,3 +54,11 @@ The only remaining occurrences across the entire repository are immutable histor
 - `benchmark/realworld/results-latency.json`: 1 occurrence (immutable benchmark snapshot)
 - `benchmark/realworld/results.json`: 20 occurrences (immutable benchmark snapshot)
 - `benchmark/self-results.json`: 1 occurrence (immutable benchmark snapshot)
+
+## CI Fix (2026-11-09)
+
+- Root cause of the failing `npm test` on Node 20/22/26: the README benchmark block drifted from `scripts/render-bench.js` after the Jina caveat was removed manually. Generator and README now agree; `readme-bench.test.js` passes.
+- `version-check` accepted only `## X.Y.Z,` or end-of-line; CHANGELOG uses `## 1.0.0 — date`. The regex now accepts any non-version separator.
+- Added `workflow_dispatch` so CI can be run manually from the Actions page.
+- Gate: 185/185 tests (including browser gate), 79/79 corpus, bench 9/9 + owner 78/78 + MCP 43/43, lint/typecheck/smoke/pack pass.
+

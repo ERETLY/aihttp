@@ -239,7 +239,7 @@ function render(results, selfResults, timeResults) {
   lines.push('- One ' + results.platform + ' ' + results.arch + ' machine. Scan time is the least portable number.');
   lines.push('- Accessibility token counts depend on the Chromium build.');
   if (web.some((site) => site.jinaTokens != null || site.firecrawlTokens != null)) {
-    lines.push('- Jina Reader (`r.jina.ai`) and Firecrawl (v2 scrape) fetch the live page, not the pinned HTML. Without `JINA_API_KEY`, Jina can return 403 on GitHub.');
+    lines.push('- Jina Reader (`r.jina.ai`) and Firecrawl (v2 scrape) fetch the live page, not the pinned HTML.');
     if (time && hostedAt && hostedAt !== liveAt) {
       lines.push('- Jina and Firecrawl live timings are from `' + hostedAt + '`; local methods were re-measured.');
     }

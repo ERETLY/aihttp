@@ -196,7 +196,7 @@ If you only need text, Jina or Firecrawl return plain Markdown. If an agent need
 
 <!-- BENCH:START -->
 
-Token run: `2026-11-08T13:11:24.625Z`. aihttp 1.0.0 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
+Token run: `2026-11-09T13:32:45.243Z`. aihttp 1.0.0 on win32 x64, Node v26.13.0, Chromium 156.0.8078.4, gpt-tokenizer 4.1.0/o200k_base.
 
 ### Tokens
 
@@ -206,8 +206,7 @@ Tokens an agent reads, lower is better. Checkout is five snapshots of one purcha
 |---|---|---|---|---|---|---|---|---|---|---|
 | Raw HTML | serialized DOM | no | 3,983 | 11,771 | 191,129 | 17,909 | 105,767 | 59,787 | 390,346 | 25,896 |
 | Markdown | Readability + Turndown | no | 68 | 5,136 | 26,579 | 6,542 | 1,387 | 3,008 | 42,720 | n/a |
-| Jina Reader | hosted Markdown | no | n/a | 5,274 | 27,977 | 7,700 | 1,342 | 3,106 | 45,399 | n/a |
-| Firecrawl | hosted Markdown | no | n/a | 5,188 | 39,364 | 7,329 | 4,008 | 3,850 | 59,739 | n/a |
+| Jina Reader | hosted Markdown | no | n/a | 5,387 | 27,711 | 6,301 | 1,342 | 3,180 | 43,921 | n/a |
 | Accessibility tree | roles and names | no | 346 | 10,099 | 73,404 | 5,918 | 5,404 | 7,381 | 102,552 | 5,360 |
 | aihttp | actions, text, ids | yes | 289 | 1,162 | 1,130 | 1,105 | 1,286 | 1,156 | 6,128 | 5,104 |
 | aihttp self | actions, text, ids | yes | 289 | 1,170 | 1,138 | 1,116 | 1,288 | 882 | 5,883 | 5,104 |
@@ -222,10 +221,10 @@ Wall-clock numbers from one machine, relative at best. Scan from `2026-11-08T13:
 
 | Method | Time per step |
 |---|---:|
-| Raw HTML | 4.5 ms |
-| Accessibility tree | 4.8 ms |
-| Markdown | 12.2 ms |
-| aihttp | 86.5 ms |
+| Raw HTML | 5.1 ms |
+| Accessibility tree | 6.2 ms |
+| Markdown | 17.1 ms |
+| aihttp | 88.6 ms |
 | aihttp self | 86.4 ms |
 
 **Live.** URL to content, one request per page, 2026-11-08:
@@ -256,7 +255,7 @@ Hosted readers have no separate scan step; their time is in Live time.
 - No LLM in the loop. The task runner is a script.
 - One win32 x64 machine. Scan time is the least portable number.
 - Accessibility token counts depend on the Chromium build.
-- Jina Reader (`r.jina.ai`) and Firecrawl (v2 scrape) fetch the live page, not the pinned HTML. 
+- Jina Reader (`r.jina.ai`) and Firecrawl (v2 scrape) fetch the live page, not the pinned HTML.
 
 <!-- BENCH:END -->
 
